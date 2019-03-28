@@ -72,7 +72,11 @@ Vim教程
 
 Docker开发指南
 
+Go语言编程
+
 HTTP权威指南
+
+JSON必知必会
 
 Linux命令行与shell脚本编程大全
 
@@ -144,6 +148,10 @@ UNIX网络编程 卷1 套接字联网API
 
 UNIX网络编程 卷2 进程间通信
 
+TCP IP网络编程
+
+Linux就该这么学
+
 ## Docker
 
 Docker容器与容器云（第二版）
@@ -158,8 +166,48 @@ Docker容器技术使用指南
 
 企业IT架构转型之道  阿里巴巴中台战略思想与架构实战
 
+精益思想
+
+如何高效学习
+
+系统思考
+
+重新定义公司
+
 ## DDD
 
 领域驱动设计
 
 TLA+
+
+## TIPC
+
+Tipc Programmer's Guide
+
+## 算法
+
+数据结构与算法分析 C语言描述
+
+## 编译
+
+GNU make中文手册
+
+Linker and Loader
+
+makefile教程
+
+## 其他
+
+黑客与画家
+
+红楼梦脂评汇校本
+
+金庸全集 三联典藏版
+
+人月神话
+
+失控
+
+我们仨
+
+自由软件 自由社会
