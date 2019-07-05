@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Graphic User Interface FAQ &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="“Why is Python Installed on my Computer?” FAQ" href="installed.html" />
+    <link rel="prev" title="Python on Windows FAQ" href="windows.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/faq/gui.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="installed.html" title="“Why is Python Installed on my Computer?” FAQ"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="windows.html" title="Python on Windows FAQ"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python Frequently Asked Questions</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="graphic-user-interface-faq">
+<h1><a class="toc-backref" href="#id1">Graphic User Interface FAQ</a><a class="headerlink" href="#graphic-user-interface-faq" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#graphic-user-interface-faq" id="id1">Graphic User Interface FAQ</a></p>
+<ul>
+<li><p><a class="reference internal" href="#what-platform-independent-gui-toolkits-exist-for-python" id="id2">What platform-independent GUI toolkits exist for Python?</a></p>
+<ul>
+<li><p><a class="reference internal" href="#tkinter" id="id3">Tkinter</a></p></li>
+<li><p><a class="reference internal" href="#wxwidgets" id="id4">wxWidgets</a></p></li>
+<li><p><a class="reference internal" href="#qt" id="id5">Qt</a></p></li>
+<li><p><a class="reference internal" href="#gtk" id="id6">Gtk+</a></p></li>
+<li><p><a class="reference internal" href="#fltk" id="id7">FLTK</a></p></li>
+<li><p><a class="reference internal" href="#opengl" id="id8">OpenGL</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#what-platform-specific-gui-toolkits-exist-for-python" id="id9">What platform-specific GUI toolkits exist for Python?</a></p></li>
+<li><p><a class="reference internal" href="#tkinter-questions" id="id10">Tkinter questions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#how-do-i-freeze-tkinter-applications" id="id11">How do I freeze Tkinter applications?</a></p></li>
+<li><p><a class="reference internal" href="#can-i-have-tk-events-handled-while-waiting-for-i-o" id="id12">Can I have Tk events handled while waiting for I/O?</a></p></li>
+<li><p><a class="reference internal" href="#i-can-t-get-key-bindings-to-work-in-tkinter-why" id="id13">I can’t get key bindings to work in Tkinter: why?</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="what-platform-independent-gui-toolkits-exist-for-python">
+<h2><a class="toc-backref" href="#id2">What platform-independent GUI toolkits exist for Python?</a><a class="headerlink" href="#what-platform-independent-gui-toolkits-exist-for-python" title="Permalink to this headline">¶</a></h2>
+<p>Depending on what platform(s) you are aiming at, there are several.</p>
+<div class="section" id="tkinter">
+<h3><a class="toc-backref" href="#id3">Tkinter</a><a class="headerlink" href="#tkinter" title="Permalink to this headline">¶</a></h3>
+<p>Standard builds of Python include an object-oriented interface to the Tcl/Tk
+widget set, called Tkinter.  This is probably the easiest to install and use.
+For more info about Tk, including pointers to the source, see the Tcl/Tk home
+page at <a class="reference external" href="https://www.tcl.tk">https://www.tcl.tk</a>.  Tcl/Tk is fully portable to the Mac OS X, Windows,
+and Unix platforms.</p>
+</div>
+<div class="section" id="wxwidgets">
+<h3><a class="toc-backref" href="#id4">wxWidgets</a><a class="headerlink" href="#wxwidgets" title="Permalink to this headline">¶</a></h3>
+<p>wxWidgets (<a class="reference external" href="https://www.wxwidgets.org">https://www.wxwidgets.org</a>) is a free, portable GUI class
+library written in C++ that provides a native look and feel on a
+number of platforms, with Windows, Mac OS X, GTK, X11, all listed as
+current stable targets.  Language bindings are available for a number
+of languages including Python, Perl, Ruby, etc.</p>
+<p>wxPython (<a class="reference external" href="http://www.wxpython.org">http://www.wxpython.org</a>) is the Python binding for
+wxwidgets.  While it often lags slightly behind the official wxWidgets
+releases, it also offers a number of features via pure Python
+extensions that are not available in other language bindings.  There
+is an active wxPython user and developer community.</p>
+<p>Both wxWidgets and wxPython are free, open source, software with
+permissive licences that allow their use in commercial products as
+well as in freeware or shareware.</p>
+</div>
+<div class="section" id="qt">
+<h3><a class="toc-backref" href="#id5">Qt</a><a class="headerlink" href="#qt" title="Permalink to this headline">¶</a></h3>
+<p>There are bindings available for the Qt toolkit (using either <a class="reference external" href="https://riverbankcomputing.com/software/pyqt/intro">PyQt</a> or <a class="reference external" href="https://wiki.qt.io/PySide">PySide</a>) and for KDE (<a class="reference external" href="https://techbase.kde.org/Languages/Python/Using_PyKDE_4">PyKDE4</a>).
+PyQt is currently more mature than PySide, but you must buy a PyQt license from
+<a class="reference external" href="https://www.riverbankcomputing.com/commercial/license-faq">Riverbank Computing</a>
+if you want to write proprietary applications.  PySide is free for all applications.</p>
+<p>Qt 4.5 upwards is licensed under the LGPL license; also, commercial licenses
+are available from <a class="reference external" href="https://www.qt.io/licensing/">The Qt Company</a>.</p>
+</div>
+<div class="section" id="gtk">
+<h3><a class="toc-backref" href="#id6">Gtk+</a><a class="headerlink" href="#gtk" title="Permalink to this headline">¶</a></h3>
+<p>PyGtk bindings for the <a class="reference external" href="http://www.gtk.org">Gtk+ toolkit</a> have been
+implemented by James Henstridge; see &lt;<a class="reference external" href="http://www.pygtk.org">http://www.pygtk.org</a>&gt;.</p>
+</div>
+<div class="section" id="fltk">
+<h3><a class="toc-backref" href="#id7">FLTK</a><a class="headerlink" href="#fltk" title="Permalink to this headline">¶</a></h3>
+<p>Python bindings for <a class="reference external" href="http://www.fltk.org">the FLTK toolkit</a>, a simple yet
+powerful and mature cross-platform windowing system, are available from <a class="reference external" href="http://pyfltk.sourceforge.net">the
+PyFLTK project</a>.</p>
+</div>
+<div class="section" id="opengl">
+<h3><a class="toc-backref" href="#id8">OpenGL</a><a class="headerlink" href="#opengl" title="Permalink to this headline">¶</a></h3>
+<p>For OpenGL bindings, see <a class="reference external" href="http://pyopengl.sourceforge.net">PyOpenGL</a>.</p>
+</div>
+</div>
+<div class="section" id="what-platform-specific-gui-toolkits-exist-for-python">
+<h2><a class="toc-backref" href="#id9">What platform-specific GUI toolkits exist for Python?</a><a class="headerlink" href="#what-platform-specific-gui-toolkits-exist-for-python" title="Permalink to this headline">¶</a></h2>
+<p>By installing the <a class="reference external" href="https://pythonhosted.org/pyobjc/">PyObjc Objective-C bridge</a>, Python programs can use Mac OS X’s
+Cocoa libraries.</p>
+<p><a class="reference internal" href="windows.html#windows-faq"><span class="std std-ref">Pythonwin</span></a> by Mark Hammond includes an interface to the
+Microsoft Foundation Classes and a Python programming environment
+that’s written mostly in Python using the MFC classes.</p>
+</div>
+<div class="section" id="tkinter-questions">
+<h2><a class="toc-backref" href="#id10">Tkinter questions</a><a class="headerlink" href="#tkinter-questions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-i-freeze-tkinter-applications">
+<h3><a class="toc-backref" href="#id11">How do I freeze Tkinter applications?</a><a class="headerlink" href="#how-do-i-freeze-tkinter-applications" title="Permalink to this headline">¶</a></h3>
+<p>Freeze is a tool to create stand-alone applications.  When freezing Tkinter
+applications, the applications will not be truly stand-alone, as the application
+will still need the Tcl and Tk libraries.</p>
+<p>One solution is to ship the application with the Tcl and Tk libraries, and point
+to them at run-time using the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TCL_LIBRARY</span></code> and <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TK_LIBRARY</span></code>
+environment variables.</p>
+<p>To get truly stand-alone applications, the Tcl scripts that form the library
+have to be integrated into the application as well. One tool supporting that is
+SAM (stand-alone modules), which is part of the Tix distribution
+(<a class="reference external" href="http://tix.sourceforge.net/">http://tix.sourceforge.net/</a>).</p>
+<p>Build Tix with SAM enabled, perform the appropriate call to
+<code class="xref c c-func docutils literal notranslate"><span class="pre">Tclsam_init()</span></code>, etc. inside Python’s
+<code class="file docutils literal notranslate"><span class="pre">Modules/tkappinit.c</span></code>, and link with libtclsam and libtksam (you
+might include the Tix libraries as well).</p>
+</div>
+<div class="section" id="can-i-have-tk-events-handled-while-waiting-for-i-o">
+<h3><a class="toc-backref" href="#id12">Can I have Tk events handled while waiting for I/O?</a><a class="headerlink" href="#can-i-have-tk-events-handled-while-waiting-for-i-o" title="Permalink to this headline">¶</a></h3>
+<p>On platforms other than Windows, yes, and you don’t even
+need threads!  But you’ll have to restructure your I/O
+code a bit.  Tk has the equivalent of Xt’s <code class="xref c c-func docutils literal notranslate"><span class="pre">XtAddInput()</span></code> call, which allows you
+to register a callback function which will be called from the Tk mainloop when
+I/O is possible on a file descriptor.  See <a class="reference internal" href="../library/tkinter.html#tkinter-file-handlers"><span class="std std-ref">File Handlers</span></a>.</p>
+</div>
+<div class="section" id="i-can-t-get-key-bindings-to-work-in-tkinter-why">
+<h3><a class="toc-backref" href="#id13">I can’t get key bindings to work in Tkinter: why?</a><a class="headerlink" href="#i-can-t-get-key-bindings-to-work-in-tkinter-why" title="Permalink to this headline">¶</a></h3>
+<p>An often-heard complaint is that event handlers bound to events with the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">bind()</span></code> method don’t get handled even when the appropriate key is pressed.</p>
+<p>The most common cause is that the widget to which the binding applies doesn’t
+have “keyboard focus”.  Check out the Tk documentation for the focus command.
+Usually a widget is given the keyboard focus by clicking in it (but not for
+labels; see the takefocus option).</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Graphic User Interface FAQ</a><ul>
+<li><a class="reference internal" href="#what-platform-independent-gui-toolkits-exist-for-python">What platform-independent GUI toolkits exist for Python?</a></li>
+<li><a class="reference internal" href="#what-platform-specific-gui-toolkits-exist-for-python">What platform-specific GUI toolkits exist for Python?</a></li>
+<li><a class="reference internal" href="#tkinter-questions">Tkinter questions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="windows.html"
+                        title="previous chapter">Python on Windows FAQ</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installed.html"
+                        title="next chapter">“Why is Python Installed on my Computer?” FAQ</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/faq/gui.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="installed.html" title="“Why is Python Installed on my Computer?” FAQ"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="windows.html" title="Python on Windows FAQ"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python Frequently Asked Questions</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,737 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>16.1. select — Waiting for I/O completion &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="16.2. threading — Higher-level threading interface" href="threading.html" />
+    <link rel="prev" title="16. Optional Operating System Services" href="someos.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/select.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="threading.html" title="16.2. threading — Higher-level threading interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="someos.html" title="16. Optional Operating System Services"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="someos.html" accesskey="U">16. Optional Operating System Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-select">
+<span id="select-waiting-for-i-o-completion"></span><h1>16.1. <a class="reference internal" href="#module-select" title="select: Wait for I/O completion on multiple streams."><code class="xref py py-mod docutils literal notranslate"><span class="pre">select</span></code></a> — Waiting for I/O completion<a class="headerlink" href="#module-select" title="Permalink to this headline">¶</a></h1>
+<p>This module provides access to the <code class="xref c c-func docutils literal notranslate"><span class="pre">select()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">poll()</span></code> functions
+available in most operating systems, <code class="xref c c-func docutils literal notranslate"><span class="pre">epoll()</span></code> available on Linux 2.5+ and
+<code class="xref c c-func docutils literal notranslate"><span class="pre">kqueue()</span></code> available on most BSD.
+Note that on Windows, it only works for sockets; on other operating systems,
+it also works for other file types (in particular, on Unix, it works on pipes).
+It cannot be used on regular files to determine whether a file has grown since
+it was last read.</p>
+<p>The module defines the following:</p>
+<dl class="exception">
+<dt id="select.error">
+<em class="property">exception </em><code class="descclassname">select.</code><code class="descname">error</code><a class="headerlink" href="#select.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exception raised when an error occurs.  The accompanying value is a pair
+containing the numeric error code from <code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> and the corresponding
+string, as would be printed by the C function <code class="xref c c-func docutils literal notranslate"><span class="pre">perror()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="select.epoll">
+<code class="descclassname">select.</code><code class="descname">epoll</code><span class="sig-paren">(</span><span class="optional">[</span><em>sizehint=-1</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#select.epoll" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Only supported on Linux 2.5.44 and newer.)  Returns an edge polling object,
+which can be used as Edge or Level Triggered interface for I/O events; see
+section <a class="reference internal" href="#epoll-objects"><span class="std std-ref">Edge and Level Trigger Polling (epoll) Objects</span></a> below for the methods supported by epolling
+objects.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="select.poll">
+<code class="descclassname">select.</code><code class="descname">poll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#select.poll" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Not supported by all operating systems.)  Returns a polling object, which
+supports registering and unregistering file descriptors, and then polling them
+for I/O events; see section <a class="reference internal" href="#poll-objects"><span class="std std-ref">Polling Objects</span></a> below for the methods supported
+by polling objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="select.kqueue">
+<code class="descclassname">select.</code><code class="descname">kqueue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#select.kqueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Only supported on BSD.)  Returns a kernel queue object; see section
+<a class="reference internal" href="#kqueue-objects"><span class="std std-ref">Kqueue Objects</span></a> below for the methods supported by kqueue objects.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="select.kevent">
+<code class="descclassname">select.</code><code class="descname">kevent</code><span class="sig-paren">(</span><em>ident</em>, <em>filter=KQ_FILTER_READ</em>, <em>flags=KQ_EV_ADD</em>, <em>fflags=0</em>, <em>data=0</em>, <em>udata=0</em><span class="sig-paren">)</span><a class="headerlink" href="#select.kevent" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Only supported on BSD.)  Returns a kernel event object; see section
+<a class="reference internal" href="#kevent-objects"><span class="std std-ref">Kevent Objects</span></a> below for the methods supported by kevent objects.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="select.select">
+<code class="descclassname">select.</code><code class="descname">select</code><span class="sig-paren">(</span><em>rlist</em>, <em>wlist</em>, <em>xlist</em><span class="optional">[</span>, <em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#select.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a straightforward interface to the Unix <code class="xref c c-func docutils literal notranslate"><span class="pre">select()</span></code> system call.
+The first three arguments are sequences of ‘waitable objects’: either
+integers representing file descriptors or objects with a parameterless method
+named <a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fileno()</span></code></a> returning such an integer:</p>
+<ul class="simple">
+<li><p><em>rlist</em>: wait until ready for reading</p></li>
+<li><p><em>wlist</em>: wait until ready for writing</p></li>
+<li><p><em>xlist</em>: wait for an “exceptional condition” (see the manual page for what
+your system considers such a condition)</p></li>
+</ul>
+<p>Empty sequences are allowed, but acceptance of three empty sequences is
+platform-dependent. (It is known to work on Unix but not on Windows.)  The
+optional <em>timeout</em> argument specifies a time-out as a floating point number
+in seconds.  When the <em>timeout</em> argument is omitted the function blocks until
+at least one file descriptor is ready.  A time-out value of zero specifies a
+poll and never blocks.</p>
+<p>The return value is a triple of lists of objects that are ready: subsets of the
+first three arguments.  When the time-out is reached without a file descriptor
+becoming ready, three empty lists are returned.</p>
+<p id="index-0">Among the acceptable object types in the sequences are Python file objects (e.g.
+<code class="docutils literal notranslate"><span class="pre">sys.stdin</span></code>, or objects returned by <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> or <a class="reference internal" href="os.html#os.popen" title="os.popen"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.popen()</span></code></a>), socket
+objects returned by <a class="reference internal" href="socket.html#socket.socket" title="socket.socket"><code class="xref py py-func docutils literal notranslate"><span class="pre">socket.socket()</span></code></a>.  You may also define a <em class="dfn">wrapper</em>
+class yourself, as long as it has an appropriate <a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fileno()</span></code></a>
+method (that really returns a file descriptor, not just a random integer).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p id="index-1">File objects on Windows are not acceptable, but sockets are.  On Windows,
+the underlying <code class="xref c c-func docutils literal notranslate"><span class="pre">select()</span></code> function is provided by the WinSock
+library, and does not handle file descriptors that don’t originate from
+WinSock.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="select.select.PIPE_BUF">
+<code class="descclassname">select.</code><code class="descname">PIPE_BUF</code><a class="headerlink" href="#select.select.PIPE_BUF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Files reported as ready for writing by <a class="reference internal" href="#module-select" title="select: Wait for I/O completion on multiple streams."><code class="xref py py-func docutils literal notranslate"><span class="pre">select()</span></code></a>, <a class="reference internal" href="#select.poll" title="select.poll"><code class="xref py py-func docutils literal notranslate"><span class="pre">poll()</span></code></a> or
+similar interfaces in this module are guaranteed to not block on a write
+of up to <a class="reference internal" href="#select.select.PIPE_BUF" title="select.select.PIPE_BUF"><code class="xref py py-const docutils literal notranslate"><span class="pre">PIPE_BUF</span></code></a> bytes.
+This value is guaranteed by POSIX to be at least 512.  Availability: Unix.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.7.</span></p>
+</div>
+</dd></dl>
+
+<div class="section" id="edge-and-level-trigger-polling-epoll-objects">
+<span id="epoll-objects"></span><h2>16.1.1. Edge and Level Trigger Polling (epoll) Objects<a class="headerlink" href="#edge-and-level-trigger-polling-epoll-objects" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p><a class="reference external" href="http://linux.die.net/man/4/epoll">http://linux.die.net/man/4/epoll</a></p>
+<p><em>eventmask</em></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Constant</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLIN</span></code></p></td>
+<td><p>Available for read</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLOUT</span></code></p></td>
+<td><p>Available for write</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLPRI</span></code></p></td>
+<td><p>Urgent data for read</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLERR</span></code></p></td>
+<td><p>Error condition happened on the assoc. fd</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLHUP</span></code></p></td>
+<td><p>Hang up happened on the assoc. fd</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLET</span></code></p></td>
+<td><p>Set Edge Trigger behavior, the default is
+Level Trigger behavior</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLONESHOT</span></code></p></td>
+<td><p>Set one-shot behavior. After one event is
+pulled out, the fd is internally disabled</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLRDNORM</span></code></p></td>
+<td><p>Equivalent to <code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLIN</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLRDBAND</span></code></p></td>
+<td><p>Priority data band can be read.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLWRNORM</span></code></p></td>
+<td><p>Equivalent to <code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLOUT</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLWRBAND</span></code></p></td>
+<td><p>Priority data may be written.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EPOLLMSG</span></code></p></td>
+<td><p>Ignored.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="method">
+<dt id="select.epoll.close">
+<code class="descclassname">epoll.</code><code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#select.epoll.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the control file descriptor of the epoll object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.epoll.fileno">
+<code class="descclassname">epoll.</code><code class="descname">fileno</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#select.epoll.fileno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the file descriptor number of the control fd.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.epoll.fromfd">
+<code class="descclassname">epoll.</code><code class="descname">fromfd</code><span class="sig-paren">(</span><em>fd</em><span class="sig-paren">)</span><a class="headerlink" href="#select.epoll.fromfd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an epoll object from a given file descriptor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.epoll.register">
+<code class="descclassname">epoll.</code><code class="descname">register</code><span class="sig-paren">(</span><em>fd</em><span class="optional">[</span>, <em>eventmask</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#select.epoll.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a fd descriptor with the epoll object.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Registering a file descriptor that’s already registered raises an
+IOError – contrary to <a class="reference internal" href="#poll-objects"><span class="std std-ref">Polling Objects</span></a>’s register.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.epoll.modify">
+<code class="descclassname">epoll.</code><code class="descname">modify</code><span class="sig-paren">(</span><em>fd</em>, <em>eventmask</em><span class="sig-paren">)</span><a class="headerlink" href="#select.epoll.modify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify a register file descriptor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.epoll.unregister">
+<code class="descclassname">epoll.</code><code class="descname">unregister</code><span class="sig-paren">(</span><em>fd</em><span class="sig-paren">)</span><a class="headerlink" href="#select.epoll.unregister" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a registered file descriptor from the epoll object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.epoll.poll">
+<code class="descclassname">epoll.</code><code class="descname">poll</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout=-1</em><span class="optional">[</span>, <em>maxevents=-1</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#select.epoll.poll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for events. timeout in seconds (float)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="polling-objects">
+<span id="poll-objects"></span><h2>16.1.2. Polling Objects<a class="headerlink" href="#polling-objects" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="xref c c-func docutils literal notranslate"><span class="pre">poll()</span></code> system call, supported on most Unix systems, provides better
+scalability for network servers that service many, many clients at the same
+time. <code class="xref c c-func docutils literal notranslate"><span class="pre">poll()</span></code> scales better because the system call only requires listing
+the file descriptors of interest, while <code class="xref c c-func docutils literal notranslate"><span class="pre">select()</span></code> builds a bitmap, turns
+on bits for the fds of interest, and then afterward the whole bitmap has to be
+linearly scanned again. <code class="xref c c-func docutils literal notranslate"><span class="pre">select()</span></code> is O(highest file descriptor), while
+<code class="xref c c-func docutils literal notranslate"><span class="pre">poll()</span></code> is O(number of file descriptors).</p>
+<dl class="method">
+<dt id="select.poll.register">
+<code class="descclassname">poll.</code><code class="descname">register</code><span class="sig-paren">(</span><em>fd</em><span class="optional">[</span>, <em>eventmask</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#select.poll.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a file descriptor with the polling object.  Future calls to the
+<a class="reference internal" href="#select.poll" title="select.poll"><code class="xref py py-meth docutils literal notranslate"><span class="pre">poll()</span></code></a> method will then check whether the file descriptor has any
+pending I/O events.  <em>fd</em> can be either an integer, or an object with a
+<a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fileno()</span></code></a> method that returns an integer.  File objects
+implement <code class="xref py py-meth docutils literal notranslate"><span class="pre">fileno()</span></code>, so they can also be used as the argument.</p>
+<p><em>eventmask</em> is an optional bitmask describing the type of events you want to
+check for, and can be a combination of the constants <code class="xref py py-const docutils literal notranslate"><span class="pre">POLLIN</span></code>,
+<code class="xref py py-const docutils literal notranslate"><span class="pre">POLLPRI</span></code>, and <code class="xref py py-const docutils literal notranslate"><span class="pre">POLLOUT</span></code>, described in the table below.  If not
+specified, the default value used will check for all 3 types of events.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 69%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Constant</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">POLLIN</span></code></p></td>
+<td><p>There is data to read</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">POLLPRI</span></code></p></td>
+<td><p>There is urgent data to read</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">POLLOUT</span></code></p></td>
+<td><p>Ready for output: writing will not block</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">POLLERR</span></code></p></td>
+<td><p>Error condition of some sort</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">POLLHUP</span></code></p></td>
+<td><p>Hung up</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">POLLNVAL</span></code></p></td>
+<td><p>Invalid request: descriptor not open</p></td>
+</tr>
+</tbody>
+</table>
+<p>Registering a file descriptor that’s already registered is not an error, and has
+the same effect as registering the descriptor exactly once.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.poll.modify">
+<code class="descclassname">poll.</code><code class="descname">modify</code><span class="sig-paren">(</span><em>fd</em>, <em>eventmask</em><span class="sig-paren">)</span><a class="headerlink" href="#select.poll.modify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modifies an already registered fd. This has the same effect as
+<code class="docutils literal notranslate"><span class="pre">register(fd,</span> <span class="pre">eventmask)</span></code>.  Attempting to modify a file descriptor
+that was never registered causes an <a class="reference internal" href="exceptions.html#exceptions.IOError" title="exceptions.IOError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IOError</span></code></a> exception with errno
+<code class="xref py py-const docutils literal notranslate"><span class="pre">ENOENT</span></code> to be raised.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.poll.unregister">
+<code class="descclassname">poll.</code><code class="descname">unregister</code><span class="sig-paren">(</span><em>fd</em><span class="sig-paren">)</span><a class="headerlink" href="#select.poll.unregister" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a file descriptor being tracked by a polling object.  Just like the
+<a class="reference internal" href="#select.poll.register" title="select.poll.register"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register()</span></code></a> method, <em>fd</em> can be an integer or an object with a
+<a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fileno()</span></code></a> method that returns an integer.</p>
+<p>Attempting to remove a file descriptor that was never registered causes a
+<a class="reference internal" href="exceptions.html#exceptions.KeyError" title="exceptions.KeyError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> exception to be raised.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.poll.poll">
+<code class="descclassname">poll.</code><code class="descname">poll</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#select.poll.poll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Polls the set of registered file descriptors, and returns a possibly-empty list
+containing <code class="docutils literal notranslate"><span class="pre">(fd,</span> <span class="pre">event)</span></code> 2-tuples for the descriptors that have events or
+errors to report. <em>fd</em> is the file descriptor, and <em>event</em> is a bitmask with
+bits set for the reported events for that descriptor — <code class="xref py py-const docutils literal notranslate"><span class="pre">POLLIN</span></code> for
+waiting input, <code class="xref py py-const docutils literal notranslate"><span class="pre">POLLOUT</span></code> to indicate that the descriptor can be written
+to, and so forth. An empty list indicates that the call timed out and no file
+descriptors had any events to report. If <em>timeout</em> is given, it specifies the
+length of time in milliseconds which the system will wait for events before
+returning. If <em>timeout</em> is omitted, negative, or <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a>, the call will
+block until there is an event for this poll object.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="kqueue-objects">
+<span id="id1"></span><h2>16.1.3. Kqueue Objects<a class="headerlink" href="#kqueue-objects" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="select.kqueue.close">
+<code class="descclassname">kqueue.</code><code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#select.kqueue.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the control file descriptor of the kqueue object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.kqueue.fileno">
+<code class="descclassname">kqueue.</code><code class="descname">fileno</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#select.kqueue.fileno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the file descriptor number of the control fd.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.kqueue.fromfd">
+<code class="descclassname">kqueue.</code><code class="descname">fromfd</code><span class="sig-paren">(</span><em>fd</em><span class="sig-paren">)</span><a class="headerlink" href="#select.kqueue.fromfd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a kqueue object from a given file descriptor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="select.kqueue.control">
+<code class="descclassname">kqueue.</code><code class="descname">control</code><span class="sig-paren">(</span><em>changelist</em>, <em>max_events</em><span class="optional">[</span>, <em>timeout=None</em><span class="optional">]</span><span class="sig-paren">)</span> &#x2192; eventlist<a class="headerlink" href="#select.kqueue.control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Low level interface to kevent</p>
+<ul class="simple">
+<li><p>changelist must be an iterable of kevent object or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p>max_events must be 0 or a positive integer</p></li>
+<li><p>timeout in seconds (floats possible)</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="kevent-objects">
+<span id="id2"></span><h2>16.1.4. Kevent Objects<a class="headerlink" href="#kevent-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://www.freebsd.org/cgi/man.cgi?query=kqueue&amp;sektion=2">https://www.freebsd.org/cgi/man.cgi?query=kqueue&amp;sektion=2</a></p>
+<dl class="attribute">
+<dt id="select.kevent.ident">
+<code class="descclassname">kevent.</code><code class="descname">ident</code><a class="headerlink" href="#select.kevent.ident" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value used to identify the event. The interpretation depends on the filter
+but it’s usually the file descriptor. In the constructor ident can either
+be an int or an object with a fileno() function. kevent stores the integer
+internally.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="select.kevent.filter">
+<code class="descclassname">kevent.</code><code class="descname">filter</code><a class="headerlink" href="#select.kevent.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the kernel filter.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Constant</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_READ</span></code></p></td>
+<td><p>Takes a descriptor and returns whenever
+there is data available to read</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_WRITE</span></code></p></td>
+<td><p>Takes a descriptor and returns whenever
+there is data available to write</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_AIO</span></code></p></td>
+<td><p>AIO requests</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_VNODE</span></code></p></td>
+<td><p>Returns when one or more of the requested
+events watched in <em>fflag</em> occurs</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_PROC</span></code></p></td>
+<td><p>Watch for events on a process id</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_NETDEV</span></code></p></td>
+<td><p>Watch for events on a network device
+[not available on Mac OS X]</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_SIGNAL</span></code></p></td>
+<td><p>Returns whenever the watched signal is
+delivered to the process</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_TIMER</span></code></p></td>
+<td><p>Establishes an arbitrary timer</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="select.kevent.flags">
+<code class="descclassname">kevent.</code><code class="descname">flags</code><a class="headerlink" href="#select.kevent.flags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter action.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Constant</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_EV_ADD</span></code></p></td>
+<td><p>Adds or modifies an event</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_EV_DELETE</span></code></p></td>
+<td><p>Removes an event from the queue</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_EV_ENABLE</span></code></p></td>
+<td><p>Permitscontrol() to returns the event</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_EV_DISABLE</span></code></p></td>
+<td><p>Disablesevent</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_EV_ONESHOT</span></code></p></td>
+<td><p>Removes event after first occurrence</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_EV_CLEAR</span></code></p></td>
+<td><p>Reset the state after an event is retrieved</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_EV_SYSFLAGS</span></code></p></td>
+<td><p>internal event</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_EV_FLAG1</span></code></p></td>
+<td><p>internal event</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_EV_EOF</span></code></p></td>
+<td><p>Filter specific EOF condition</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_EV_ERROR</span></code></p></td>
+<td><p>See return values</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="select.kevent.fflags">
+<code class="descclassname">kevent.</code><code class="descname">fflags</code><a class="headerlink" href="#select.kevent.fflags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter specific flags.</p>
+<p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_READ</span></code> and  <code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_WRITE</span></code> filter flags:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Constant</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_LOWAT</span></code></p></td>
+<td><p>low water mark of a socket buffer</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_VNODE</span></code> filter flags:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Constant</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_DELETE</span></code></p></td>
+<td><p><em>unlink()</em> was called</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_WRITE</span></code></p></td>
+<td><p>a write occurred</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_EXTEND</span></code></p></td>
+<td><p>the file was extended</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_ATTRIB</span></code></p></td>
+<td><p>an attribute was changed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_LINK</span></code></p></td>
+<td><p>the link count has changed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_RENAME</span></code></p></td>
+<td><p>the file was renamed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_REVOKE</span></code></p></td>
+<td><p>access to the file was revoked</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_PROC</span></code> filter flags:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Constant</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_EXIT</span></code></p></td>
+<td><p>the process has exited</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_FORK</span></code></p></td>
+<td><p>the process has called <em>fork()</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_EXEC</span></code></p></td>
+<td><p>the process has executed a new process</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_PCTRLMASK</span></code></p></td>
+<td><p>internal filter flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_PDATAMASK</span></code></p></td>
+<td><p>internal filter flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_TRACK</span></code></p></td>
+<td><p>follow a process across <em>fork()</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_CHILD</span></code></p></td>
+<td><p>returned on the child process for
+<em>NOTE_TRACK</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_TRACKERR</span></code></p></td>
+<td><p>unable to attach to a child</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_FILTER_NETDEV</span></code> filter flags (not available on Mac OS X):</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Constant</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_LINKUP</span></code></p></td>
+<td><p>link is up</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_LINKDOWN</span></code></p></td>
+<td><p>link is down</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">KQ_NOTE_LINKINV</span></code></p></td>
+<td><p>link state is invalid</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="select.kevent.data">
+<code class="descclassname">kevent.</code><code class="descname">data</code><a class="headerlink" href="#select.kevent.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter specific data.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="select.kevent.udata">
+<code class="descclassname">kevent.</code><code class="descname">udata</code><a class="headerlink" href="#select.kevent.udata" title="Permalink to this definition">¶</a></dt>
+<dd><p>User defined value.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">16.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">select</span></code> — Waiting for I/O completion</a><ul>
+<li><a class="reference internal" href="#edge-and-level-trigger-polling-epoll-objects">16.1.1. Edge and Level Trigger Polling (epoll) Objects</a></li>
+<li><a class="reference internal" href="#polling-objects">16.1.2. Polling Objects</a></li>
+<li><a class="reference internal" href="#kqueue-objects">16.1.3. Kqueue Objects</a></li>
+<li><a class="reference internal" href="#kevent-objects">16.1.4. Kevent Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="someos.html"
+                        title="previous chapter">16. Optional Operating System Services</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="threading.html"
+                        title="next chapter">16.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">threading</span></code> — Higher-level threading interface</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/select.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="threading.html" title="16.2. threading — Higher-level threading interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="someos.html" title="16. Optional Operating System Services"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="someos.html" >16. Optional Operating System Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

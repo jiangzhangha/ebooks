@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>9. Numeric and Mathematical Modules &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="9.1. numbers — Numeric abstract base classes" href="numbers.html" />
+    <link rel="prev" title="8.19. repr — Alternate repr() implementation" href="repr.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/numeric.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="numbers.html" title="9.1. numbers — Numeric abstract base classes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="repr.html" title="8.19. repr — Alternate repr() implementation"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="numeric-and-mathematical-modules">
+<span id="numeric"></span><h1>9. Numeric and Mathematical Modules<a class="headerlink" href="#numeric-and-mathematical-modules" title="Permalink to this headline">¶</a></h1>
+<p>The modules described in this chapter provide numeric and math-related functions
+and data types. The <a class="reference internal" href="numbers.html#module-numbers" title="numbers: Numeric abstract base classes (Complex, Real, Integral, etc.)."><code class="xref py py-mod docutils literal notranslate"><span class="pre">numbers</span></code></a> module defines an abstract hierarchy of
+numeric types. The <a class="reference internal" href="math.html#module-math" title="math: Mathematical functions (sin() etc.)."><code class="xref py py-mod docutils literal notranslate"><span class="pre">math</span></code></a> and <a class="reference internal" href="cmath.html#module-cmath" title="cmath: Mathematical functions for complex numbers."><code class="xref py py-mod docutils literal notranslate"><span class="pre">cmath</span></code></a> modules contain various
+mathematical functions for floating-point and complex numbers. For users more
+interested in decimal accuracy than in speed, the <a class="reference internal" href="decimal.html#module-decimal" title="decimal: Implementation of the General Decimal Arithmetic  Specification."><code class="xref py py-mod docutils literal notranslate"><span class="pre">decimal</span></code></a> module supports
+exact representations of decimal numbers.</p>
+<p>The following modules are documented in this chapter:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="numbers.html">9.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">numbers</span></code> — Numeric abstract base classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="numbers.html#the-numeric-tower">9.1.1. The numeric tower</a></li>
+<li class="toctree-l2"><a class="reference internal" href="numbers.html#notes-for-type-implementors">9.1.2. Notes for type implementors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="numbers.html#adding-more-numeric-abcs">9.1.2.1. Adding More Numeric ABCs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="numbers.html#implementing-the-arithmetic-operations">9.1.2.2. Implementing the arithmetic operations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="math.html">9.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">math</span></code> — Mathematical functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="math.html#number-theoretic-and-representation-functions">9.2.1. Number-theoretic and representation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math.html#power-and-logarithmic-functions">9.2.2. Power and logarithmic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math.html#trigonometric-functions">9.2.3. Trigonometric functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math.html#angular-conversion">9.2.4. Angular conversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math.html#hyperbolic-functions">9.2.5. Hyperbolic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math.html#special-functions">9.2.6. Special functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math.html#constants">9.2.7. Constants</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cmath.html">9.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">cmath</span></code> — Mathematical functions for complex numbers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cmath.html#conversions-to-and-from-polar-coordinates">9.3.1. Conversions to and from polar coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmath.html#power-and-logarithmic-functions">9.3.2. Power and logarithmic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmath.html#trigonometric-functions">9.3.3. Trigonometric functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmath.html#hyperbolic-functions">9.3.4. Hyperbolic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmath.html#classification-functions">9.3.5. Classification functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmath.html#constants">9.3.6. Constants</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="decimal.html">9.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">decimal</span></code> — Decimal fixed point and floating point arithmetic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="decimal.html#quick-start-tutorial">9.4.1. Quick-start Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decimal.html#decimal-objects">9.4.2. Decimal objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="decimal.html#logical-operands">9.4.2.1. Logical operands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="decimal.html#context-objects">9.4.3. Context objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decimal.html#signals">9.4.4. Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decimal.html#floating-point-notes">9.4.5. Floating Point Notes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="decimal.html#mitigating-round-off-error-with-increased-precision">9.4.5.1. Mitigating round-off error with increased precision</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decimal.html#special-values">9.4.5.2. Special values</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="decimal.html#working-with-threads">9.4.6. Working with threads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decimal.html#recipes">9.4.7. Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decimal.html#decimal-faq">9.4.8. Decimal FAQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fractions.html">9.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">fractions</span></code> — Rational numbers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="random.html">9.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code> — Generate pseudo-random numbers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="itertools.html">9.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">itertools</span></code> — Functions creating iterators for efficient looping</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="itertools.html#itertool-functions">9.7.1. Itertool functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="itertools.html#recipes">9.7.2. Recipes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="functools.html">9.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">functools</span></code> — Higher-order functions and operations on callable objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functools.html#partial-objects">9.8.1. <code class="xref py py-class docutils literal notranslate"><span class="pre">partial</span></code> Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operator.html">9.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">operator</span></code> — Standard operators as functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operator.html#mapping-operators-to-functions">9.9.1. Mapping Operators to Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="repr.html"
+                        title="previous chapter">8.19. <code class="xref py py-mod docutils literal notranslate"><span class="pre">repr</span></code> — Alternate <code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code> implementation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numbers.html"
+                        title="next chapter">9.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">numbers</span></code> — Numeric abstract base classes</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/numeric.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="numbers.html" title="9.1. numbers — Numeric abstract base classes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="repr.html" title="8.19. repr — Alternate repr() implementation"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

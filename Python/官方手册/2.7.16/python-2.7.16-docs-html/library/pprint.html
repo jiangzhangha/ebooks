@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>8.18. pprint — Data pretty printer &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="8.19. repr — Alternate repr() implementation" href="repr.html" />
+    <link rel="prev" title="8.17. copy — Shallow and deep copy operations" href="copy.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/pprint.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="repr.html" title="8.19. repr — Alternate repr() implementation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="copy.html" title="8.17. copy — Shallow and deep copy operations"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" accesskey="U">8. Data Types</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pprint">
+<span id="pprint-data-pretty-printer"></span><h1>8.18. <a class="reference internal" href="#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pprint</span></code></a> — Data pretty printer<a class="headerlink" href="#module-pprint" title="Permalink to this headline">¶</a></h1>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/pprint.py">Lib/pprint.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pprint</span></code></a> module provides a capability to “pretty-print” arbitrary
+Python data structures in a form which can be used as input to the interpreter.
+If the formatted structures include objects which are not fundamental Python
+types, the representation may not be loadable.  This may be the case if objects
+such as files, sockets, classes, or instances are included, as well as many
+other built-in objects which are not representable as Python constants.</p>
+<p>The formatted representation keeps objects on a single line if it can, and
+breaks them onto multiple lines if they don’t fit within the allowed width.
+Construct <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrettyPrinter</span></code></a> objects explicitly if you need to adjust the
+width constraint.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>Dictionaries are sorted by key before the display is computed; before 2.5, a
+dictionary was sorted only if its display required more than one line, although
+that wasn’t documented.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Added support for <a class="reference internal" href="stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> and <a class="reference internal" href="stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>.</p>
+</div>
+<p>The <a class="reference internal" href="#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pprint</span></code></a> module defines one class:</p>
+<dl class="class">
+<dt id="pprint.PrettyPrinter">
+<em class="property">class </em><code class="descclassname">pprint.</code><code class="descname">PrettyPrinter</code><span class="sig-paren">(</span><em>indent=1</em>, <em>width=80</em>, <em>depth=None</em>, <em>stream=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrettyPrinter</span></code></a> instance.  This constructor understands
+several keyword parameters.  An output stream may be set using the <em>stream</em>
+keyword; the only method used on the stream object is the file protocol’s
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">write()</span></code> method.  If not specified, the <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrettyPrinter</span></code></a> adopts
+<code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>.  Three additional parameters may be used to control the
+formatted representation.  The keywords are <em>indent</em>, <em>depth</em>, and <em>width</em>.  The
+amount of indentation added for each recursive level is specified by <em>indent</em>;
+the default is one.  Other values can cause output to look a little odd, but can
+make nesting easier to spot.  The number of levels which may be printed is
+controlled by <em>depth</em>; if the data structure being printed is too deep, the next
+contained level is replaced by <code class="docutils literal notranslate"><span class="pre">...</span></code>.  By default, there is no constraint on
+the depth of the objects being formatted.  The desired output width is
+constrained using the <em>width</em> parameter; the default is 80 characters.  If a
+structure cannot be formatted within the constrained width, a best effort will
+be made.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;spam&#39;</span><span class="p">,</span> <span class="s1">&#39;eggs&#39;</span><span class="p">,</span> <span class="s1">&#39;lumberjack&#39;</span><span class="p">,</span> <span class="s1">&#39;knights&#39;</span><span class="p">,</span> <span class="s1">&#39;ni&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">stuff</span><span class="p">[:])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">stuff</span><span class="p">)</span>
+<span class="go">[   [&#39;spam&#39;, &#39;eggs&#39;, &#39;lumberjack&#39;, &#39;knights&#39;, &#39;ni&#39;],</span>
+<span class="go">    &#39;spam&#39;,</span>
+<span class="go">    &#39;eggs&#39;,</span>
+<span class="go">    &#39;lumberjack&#39;,</span>
+<span class="go">    &#39;knights&#39;,</span>
+<span class="go">    &#39;ni&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tup</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;spam&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;eggs&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;lumberjack&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;knights&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;ni&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;dead&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">(</span><span class="s1">&#39;parrot&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;fresh fruit&#39;</span><span class="p">,))))))))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span>
+<span class="go">(&#39;spam&#39;, (&#39;eggs&#39;, (&#39;lumberjack&#39;, (&#39;knights&#39;, (&#39;ni&#39;, (&#39;dead&#39;, (...)))))))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrettyPrinter</span></code></a> class supports several derivative functions:</p>
+<dl class="function">
+<dt id="pprint.pformat">
+<code class="descclassname">pprint.</code><code class="descname">pformat</code><span class="sig-paren">(</span><em>object</em>, <em>indent=1</em>, <em>width=80</em>, <em>depth=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.pformat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the formatted representation of <em>object</em> as a string.  <em>indent</em>, <em>width</em>
+and <em>depth</em> will be passed to the <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrettyPrinter</span></code></a> constructor as
+formatting parameters.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.4: </span>The parameters <em>indent</em>, <em>width</em> and <em>depth</em> were added.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pprint.pprint">
+<code class="descclassname">pprint.</code><code class="descname">pprint</code><span class="sig-paren">(</span><em>object</em>, <em>stream=None</em>, <em>indent=1</em>, <em>width=80</em>, <em>depth=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.pprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the formatted representation of <em>object</em> on <em>stream</em>, followed by a
+newline.  If <em>stream</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code> is used.  This may be used in
+the interactive interpreter instead of a <a class="reference internal" href="../reference/simple_stmts.html#print"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">print</span></code></a> statement for
+inspecting values.    <em>indent</em>, <em>width</em> and <em>depth</em> will be passed to the
+<a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrettyPrinter</span></code></a> constructor as formatting parameters.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;spam&#39;</span><span class="p">,</span> <span class="s1">&#39;eggs&#39;</span><span class="p">,</span> <span class="s1">&#39;lumberjack&#39;</span><span class="p">,</span> <span class="s1">&#39;knights&#39;</span><span class="p">,</span> <span class="s1">&#39;ni&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">stuff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">stuff</span><span class="p">)</span>
+<span class="go">[&lt;Recursion on list with id=...&gt;,</span>
+<span class="go"> &#39;spam&#39;,</span>
+<span class="go"> &#39;eggs&#39;,</span>
+<span class="go"> &#39;lumberjack&#39;,</span>
+<span class="go"> &#39;knights&#39;,</span>
+<span class="go"> &#39;ni&#39;]</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.4: </span>The parameters <em>indent</em>, <em>width</em> and <em>depth</em> were added.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pprint.isreadable">
+<code class="descclassname">pprint.</code><code class="descname">isreadable</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.isreadable" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-0">Determine if the formatted representation of <em>object</em> is “readable,” or can be
+used to reconstruct the value using <a class="reference internal" href="functions.html#eval" title="eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code></a>.  This always returns <code class="docutils literal notranslate"><span class="pre">False</span></code>
+for recursive objects.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">isreadable</span><span class="p">(</span><span class="n">stuff</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pprint.isrecursive">
+<code class="descclassname">pprint.</code><code class="descname">isrecursive</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.isrecursive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if <em>object</em> requires a recursive representation.</p>
+</dd></dl>
+
+<p>One more support function is also defined:</p>
+<dl class="function">
+<dt id="pprint.saferepr">
+<code class="descclassname">pprint.</code><code class="descname">saferepr</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.saferepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string representation of <em>object</em>, protected against recursive data
+structures.  If the representation of <em>object</em> exposes a recursive entry, the
+recursive reference will be represented as <code class="docutils literal notranslate"><span class="pre">&lt;Recursion</span> <span class="pre">on</span> <span class="pre">typename</span> <span class="pre">with</span>
+<span class="pre">id=number&gt;</span></code>.  The representation is not otherwise formatted.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">saferepr</span><span class="p">(</span><span class="n">stuff</span><span class="p">)</span>
+<span class="go">&quot;[&lt;Recursion on list with id=...&gt;, &#39;spam&#39;, &#39;eggs&#39;, &#39;lumberjack&#39;, &#39;knights&#39;, &#39;ni&#39;]&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="section" id="prettyprinter-objects">
+<span id="id1"></span><h2>8.18.1. PrettyPrinter Objects<a class="headerlink" href="#prettyprinter-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrettyPrinter</span></code></a> instances have the following methods:</p>
+<dl class="method">
+<dt id="pprint.PrettyPrinter.pformat">
+<code class="descclassname">PrettyPrinter.</code><code class="descname">pformat</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter.pformat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the formatted representation of <em>object</em>.  This takes into account the
+options passed to the <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrettyPrinter</span></code></a> constructor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pprint.PrettyPrinter.pprint">
+<code class="descclassname">PrettyPrinter.</code><code class="descname">pprint</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter.pprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the formatted representation of <em>object</em> on the configured stream,
+followed by a newline.</p>
+</dd></dl>
+
+<p>The following methods provide the implementations for the corresponding
+functions of the same names.  Using these methods on an instance is slightly
+more efficient since new <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrettyPrinter</span></code></a> objects don’t need to be
+created.</p>
+<dl class="method">
+<dt id="pprint.PrettyPrinter.isreadable">
+<code class="descclassname">PrettyPrinter.</code><code class="descname">isreadable</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter.isreadable" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">Determine if the formatted representation of the object is “readable,” or can be
+used to reconstruct the value using <a class="reference internal" href="functions.html#eval" title="eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code></a>.  Note that this returns
+<code class="docutils literal notranslate"><span class="pre">False</span></code> for recursive objects.  If the <em>depth</em> parameter of the
+<a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrettyPrinter</span></code></a> is set and the object is deeper than allowed, this
+returns <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pprint.PrettyPrinter.isrecursive">
+<code class="descclassname">PrettyPrinter.</code><code class="descname">isrecursive</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter.isrecursive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the object requires a recursive representation.</p>
+</dd></dl>
+
+<p>This method is provided as a hook to allow subclasses to modify the way objects
+are converted to strings.  The default implementation uses the internals of the
+<a class="reference internal" href="#pprint.saferepr" title="pprint.saferepr"><code class="xref py py-func docutils literal notranslate"><span class="pre">saferepr()</span></code></a> implementation.</p>
+<dl class="method">
+<dt id="pprint.PrettyPrinter.format">
+<code class="descclassname">PrettyPrinter.</code><code class="descname">format</code><span class="sig-paren">(</span><em>object</em>, <em>context</em>, <em>maxlevels</em>, <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns three values: the formatted version of <em>object</em> as a string, a flag
+indicating whether the result is readable, and a flag indicating whether
+recursion was detected.  The first argument is the object to be presented.  The
+second is a dictionary which contains the <a class="reference internal" href="functions.html#id" title="id"><code class="xref py py-func docutils literal notranslate"><span class="pre">id()</span></code></a> of objects that are part of
+the current presentation context (direct and indirect containers for <em>object</em>
+that are affecting the presentation) as the keys; if an object needs to be
+presented which is already represented in <em>context</em>, the third return value
+should be <code class="docutils literal notranslate"><span class="pre">True</span></code>.  Recursive calls to the <a class="reference internal" href="#pprint.PrettyPrinter.format" title="pprint.PrettyPrinter.format"><code class="xref py py-meth docutils literal notranslate"><span class="pre">format()</span></code></a> method should add
+additional entries for containers to this dictionary.  The third argument,
+<em>maxlevels</em>, gives the requested limit to recursion; this will be <code class="docutils literal notranslate"><span class="pre">0</span></code> if there
+is no requested limit.  This argument should be passed unmodified to recursive
+calls. The fourth argument, <em>level</em>, gives the current level; recursive calls
+should be passed a value less than that of the current call.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="pprint-example">
+<span id="id2"></span><h2>8.18.2. pprint Example<a class="headerlink" href="#pprint-example" title="Permalink to this headline">¶</a></h2>
+<p>This example demonstrates several uses of the <a class="reference internal" href="#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-func docutils literal notranslate"><span class="pre">pprint()</span></code></a> function and its
+parameters.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tup</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;spam&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;eggs&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;lumberjack&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;knights&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;ni&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;dead&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">(</span><span class="s1">&#39;parrot&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;fresh fruit&#39;</span><span class="p">,))))))))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">tup</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span> <span class="o">*</span> <span class="mi">30</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="o">*</span> <span class="mi">30</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">stuff</span><span class="p">)</span>
+<span class="go">[&#39;aaaaaaaaaa&#39;,</span>
+<span class="go"> (&#39;spam&#39;,</span>
+<span class="go">  (&#39;eggs&#39;,</span>
+<span class="go">   (&#39;lumberjack&#39;,</span>
+<span class="go">    (&#39;knights&#39;, (&#39;ni&#39;, (&#39;dead&#39;, (&#39;parrot&#39;, (&#39;fresh fruit&#39;,)))))))),</span>
+<span class="go"> [&#39;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&#39;, &#39;bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&#39;],</span>
+<span class="go"> [&#39;cccccccccccccccccccc&#39;, &#39;dddddddddddddddddddd&#39;]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">stuff</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">[&#39;aaaaaaaaaa&#39;,</span>
+<span class="go"> (&#39;spam&#39;, (&#39;eggs&#39;, (...))),</span>
+<span class="go"> [&#39;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&#39;, &#39;bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&#39;],</span>
+<span class="go"> [&#39;cccccccccccccccccccc&#39;, &#39;dddddddddddddddddddd&#39;]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">stuff</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="go">[&#39;aaaaaaaaaa&#39;,</span>
+<span class="go"> (&#39;spam&#39;,</span>
+<span class="go">  (&#39;eggs&#39;,</span>
+<span class="go">   (&#39;lumberjack&#39;,</span>
+<span class="go">    (&#39;knights&#39;,</span>
+<span class="go">     (&#39;ni&#39;, (&#39;dead&#39;, (&#39;parrot&#39;, (&#39;fresh fruit&#39;,)))))))),</span>
+<span class="go"> [&#39;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&#39;,</span>
+<span class="go">  &#39;bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&#39;],</span>
+<span class="go"> [&#39;cccccccccccccccccccc&#39;, &#39;dddddddddddddddddddd&#39;]]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8.18. <code class="xref py py-mod docutils literal notranslate"><span class="pre">pprint</span></code> — Data pretty printer</a><ul>
+<li><a class="reference internal" href="#prettyprinter-objects">8.18.1. PrettyPrinter Objects</a></li>
+<li><a class="reference internal" href="#pprint-example">8.18.2. pprint Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="copy.html"
+                        title="previous chapter">8.17. <code class="xref py py-mod docutils literal notranslate"><span class="pre">copy</span></code> — Shallow and deep copy operations</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="repr.html"
+                        title="next chapter">8.19. <code class="xref py py-mod docutils literal notranslate"><span class="pre">repr</span></code> — Alternate <code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code> implementation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/pprint.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="repr.html" title="8.19. repr — Alternate repr() implementation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="copy.html" title="8.17. copy — Shallow and deep copy operations"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" >8. Data Types</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

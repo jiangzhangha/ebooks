@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>20.25. DocXMLRPCServer — Self-documenting XML-RPC server &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="21. Multimedia Services" href="mm.html" />
+    <link rel="prev" title="20.24. SimpleXMLRPCServer — Basic XML-RPC server" href="simplexmlrpcserver.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/docxmlrpcserver.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mm.html" title="21. Multimedia Services"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="simplexmlrpcserver.html" title="20.24. SimpleXMLRPCServer — Basic XML-RPC server"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" accesskey="U">20. Internet Protocols and Support</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-DocXMLRPCServer">
+<span id="docxmlrpcserver-self-documenting-xml-rpc-server"></span><h1>20.25. <a class="reference internal" href="#module-DocXMLRPCServer" title="DocXMLRPCServer: Self-documenting XML-RPC server implementation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">DocXMLRPCServer</span></code></a> — Self-documenting XML-RPC server<a class="headerlink" href="#module-DocXMLRPCServer" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#module-DocXMLRPCServer" title="DocXMLRPCServer: Self-documenting XML-RPC server implementation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">DocXMLRPCServer</span></code></a> module has been merged into <code class="xref py py-mod docutils literal notranslate"><span class="pre">xmlrpc.server</span></code>
+in Python 3.  The <a class="reference internal" href="../glossary.html#term-2to3"><span class="xref std std-term">2to3</span></a> tool will automatically adapt imports when
+converting your sources to Python 3.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+<p>The <a class="reference internal" href="#module-DocXMLRPCServer" title="DocXMLRPCServer: Self-documenting XML-RPC server implementation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">DocXMLRPCServer</span></code></a> module extends the classes found in
+<a class="reference internal" href="simplexmlrpcserver.html#module-SimpleXMLRPCServer" title="SimpleXMLRPCServer: Basic XML-RPC server implementation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">SimpleXMLRPCServer</span></code></a> to serve HTML documentation in response to HTTP GET
+requests. Servers can either be free standing, using <a class="reference internal" href="#DocXMLRPCServer.DocXMLRPCServer" title="DocXMLRPCServer.DocXMLRPCServer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocXMLRPCServer</span></code></a>,
+or embedded in a CGI environment, using <a class="reference internal" href="#DocXMLRPCServer.DocCGIXMLRPCRequestHandler" title="DocXMLRPCServer.DocCGIXMLRPCRequestHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocCGIXMLRPCRequestHandler</span></code></a>.</p>
+<dl class="class">
+<dt id="DocXMLRPCServer.DocXMLRPCServer">
+<em class="property">class </em><code class="descclassname">DocXMLRPCServer.</code><code class="descname">DocXMLRPCServer</code><span class="sig-paren">(</span><em>addr</em><span class="optional">[</span>, <em>requestHandler</em><span class="optional">[</span>, <em>logRequests</em><span class="optional">[</span>, <em>allow_none</em><span class="optional">[</span>, <em>encoding</em><span class="optional">[</span>, <em>bind_and_activate</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#DocXMLRPCServer.DocXMLRPCServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new server instance. All parameters have the same meaning as for
+<a class="reference internal" href="simplexmlrpcserver.html#SimpleXMLRPCServer.SimpleXMLRPCServer" title="SimpleXMLRPCServer.SimpleXMLRPCServer"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleXMLRPCServer.SimpleXMLRPCServer</span></code></a>; <em>requestHandler</em> defaults to
+<a class="reference internal" href="#DocXMLRPCServer.DocXMLRPCRequestHandler" title="DocXMLRPCServer.DocXMLRPCRequestHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocXMLRPCRequestHandler</span></code></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="DocXMLRPCServer.DocCGIXMLRPCRequestHandler">
+<em class="property">class </em><code class="descclassname">DocXMLRPCServer.</code><code class="descname">DocCGIXMLRPCRequestHandler</code><a class="headerlink" href="#DocXMLRPCServer.DocCGIXMLRPCRequestHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance to handle XML-RPC requests in a CGI environment.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="DocXMLRPCServer.DocXMLRPCRequestHandler">
+<em class="property">class </em><code class="descclassname">DocXMLRPCServer.</code><code class="descname">DocXMLRPCRequestHandler</code><a class="headerlink" href="#DocXMLRPCServer.DocXMLRPCRequestHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new request handler instance. This request handler supports XML-RPC
+POST requests, documentation GET requests, and modifies logging so that the
+<em>logRequests</em> parameter to the <a class="reference internal" href="#DocXMLRPCServer.DocXMLRPCServer" title="DocXMLRPCServer.DocXMLRPCServer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocXMLRPCServer</span></code></a> constructor parameter is
+honored.</p>
+</dd></dl>
+
+<div class="section" id="docxmlrpcserver-objects">
+<span id="doc-xmlrpc-servers"></span><h2>20.25.1. DocXMLRPCServer Objects<a class="headerlink" href="#docxmlrpcserver-objects" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#DocXMLRPCServer.DocXMLRPCServer" title="DocXMLRPCServer.DocXMLRPCServer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocXMLRPCServer</span></code></a> class is derived from
+<a class="reference internal" href="simplexmlrpcserver.html#SimpleXMLRPCServer.SimpleXMLRPCServer" title="SimpleXMLRPCServer.SimpleXMLRPCServer"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleXMLRPCServer.SimpleXMLRPCServer</span></code></a> and provides a means of creating
+self-documenting, stand alone XML-RPC servers. HTTP POST requests are handled as
+XML-RPC method calls. HTTP GET requests are handled by generating pydoc-style
+HTML documentation. This allows a server to provide its own web-based
+documentation.</p>
+<dl class="method">
+<dt id="DocXMLRPCServer.DocXMLRPCServer.set_server_title">
+<code class="descclassname">DocXMLRPCServer.</code><code class="descname">set_server_title</code><span class="sig-paren">(</span><em>server_title</em><span class="sig-paren">)</span><a class="headerlink" href="#DocXMLRPCServer.DocXMLRPCServer.set_server_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the title used in the generated HTML documentation. This title will be used
+inside the HTML “title” element.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DocXMLRPCServer.DocXMLRPCServer.set_server_name">
+<code class="descclassname">DocXMLRPCServer.</code><code class="descname">set_server_name</code><span class="sig-paren">(</span><em>server_name</em><span class="sig-paren">)</span><a class="headerlink" href="#DocXMLRPCServer.DocXMLRPCServer.set_server_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the name used in the generated HTML documentation. This name will appear at
+the top of the generated documentation inside a “h1” element.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DocXMLRPCServer.DocXMLRPCServer.set_server_documentation">
+<code class="descclassname">DocXMLRPCServer.</code><code class="descname">set_server_documentation</code><span class="sig-paren">(</span><em>server_documentation</em><span class="sig-paren">)</span><a class="headerlink" href="#DocXMLRPCServer.DocXMLRPCServer.set_server_documentation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the description used in the generated HTML documentation. This description
+will appear as a paragraph, below the server name, in the documentation.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="doccgixmlrpcrequesthandler">
+<h2>20.25.2. DocCGIXMLRPCRequestHandler<a class="headerlink" href="#doccgixmlrpcrequesthandler" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#DocXMLRPCServer.DocCGIXMLRPCRequestHandler" title="DocXMLRPCServer.DocCGIXMLRPCRequestHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocCGIXMLRPCRequestHandler</span></code></a> class is derived from
+<a class="reference internal" href="simplexmlrpcserver.html#SimpleXMLRPCServer.CGIXMLRPCRequestHandler" title="SimpleXMLRPCServer.CGIXMLRPCRequestHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleXMLRPCServer.CGIXMLRPCRequestHandler</span></code></a> and provides a means of
+creating self-documenting, XML-RPC CGI scripts. HTTP POST requests are handled
+as XML-RPC method calls. HTTP GET requests are handled by generating pydoc-style
+HTML documentation. This allows a server to provide its own web-based
+documentation.</p>
+<dl class="method">
+<dt id="DocXMLRPCServer.DocCGIXMLRPCRequestHandler.set_server_title">
+<code class="descclassname">DocCGIXMLRPCRequestHandler.</code><code class="descname">set_server_title</code><span class="sig-paren">(</span><em>server_title</em><span class="sig-paren">)</span><a class="headerlink" href="#DocXMLRPCServer.DocCGIXMLRPCRequestHandler.set_server_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the title used in the generated HTML documentation. This title will be used
+inside the HTML “title” element.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DocXMLRPCServer.DocCGIXMLRPCRequestHandler.set_server_name">
+<code class="descclassname">DocCGIXMLRPCRequestHandler.</code><code class="descname">set_server_name</code><span class="sig-paren">(</span><em>server_name</em><span class="sig-paren">)</span><a class="headerlink" href="#DocXMLRPCServer.DocCGIXMLRPCRequestHandler.set_server_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the name used in the generated HTML documentation. This name will appear at
+the top of the generated documentation inside a “h1” element.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DocXMLRPCServer.DocCGIXMLRPCRequestHandler.set_server_documentation">
+<code class="descclassname">DocCGIXMLRPCRequestHandler.</code><code class="descname">set_server_documentation</code><span class="sig-paren">(</span><em>server_documentation</em><span class="sig-paren">)</span><a class="headerlink" href="#DocXMLRPCServer.DocCGIXMLRPCRequestHandler.set_server_documentation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the description used in the generated HTML documentation. This description
+will appear as a paragraph, below the server name, in the documentation.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">20.25. <code class="xref py py-mod docutils literal notranslate"><span class="pre">DocXMLRPCServer</span></code> — Self-documenting XML-RPC server</a><ul>
+<li><a class="reference internal" href="#docxmlrpcserver-objects">20.25.1. DocXMLRPCServer Objects</a></li>
+<li><a class="reference internal" href="#doccgixmlrpcrequesthandler">20.25.2. DocCGIXMLRPCRequestHandler</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="simplexmlrpcserver.html"
+                        title="previous chapter">20.24. <code class="xref py py-mod docutils literal notranslate"><span class="pre">SimpleXMLRPCServer</span></code> — Basic XML-RPC server</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mm.html"
+                        title="next chapter">21. Multimedia Services</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/docxmlrpcserver.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mm.html" title="21. Multimedia Services"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="simplexmlrpcserver.html" title="20.24. SimpleXMLRPCServer — Basic XML-RPC server"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" >20. Internet Protocols and Support</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

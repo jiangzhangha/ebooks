@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>18.1.3. email.generator: Generating MIME documents &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="18.1.4. email.mime: Creating email and MIME objects from scratch" href="email.mime.html" />
+    <link rel="prev" title="18.1.2. email.parser: Parsing email messages" href="email.parser.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/email.generator.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.mime.html" title="18.1.4. email.mime: Creating email and MIME objects from scratch"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="email.parser.html" title="18.1.2. email.parser: Parsing email messages"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >18. Internet Data Handling</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="email.html" accesskey="U">18.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> — An email and MIME handling package</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-email.generator">
+<span id="email-generator-generating-mime-documents"></span><h1>18.1.3. <a class="reference internal" href="#module-email.generator" title="email.generator: Generate flat text email messages from a message structure."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.generator</span></code></a>: Generating MIME documents<a class="headerlink" href="#module-email.generator" title="Permalink to this headline">¶</a></h1>
+<p>One of the most common tasks is to generate the flat text of the email message
+represented by a message object structure.  You will need to do this if you want
+to send your message via the <a class="reference internal" href="smtplib.html#module-smtplib" title="smtplib: SMTP protocol client (requires sockets)."><code class="xref py py-mod docutils literal notranslate"><span class="pre">smtplib</span></code></a> module or the <a class="reference internal" href="nntplib.html#module-nntplib" title="nntplib: NNTP protocol client (requires sockets)."><code class="xref py py-mod docutils literal notranslate"><span class="pre">nntplib</span></code></a> module,
+or print the message on the console.  Taking a message object structure and
+producing a flat text document is the job of the <a class="reference internal" href="#email.generator.Generator" title="email.generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a> class.</p>
+<p>Again, as with the <a class="reference internal" href="email.parser.html#module-email.parser" title="email.parser: Parse flat text email messages to produce a message object structure."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.parser</span></code></a> module, you aren’t limited to the
+functionality of the bundled generator; you could write one from scratch
+yourself.  However the bundled generator knows how to generate most email in a
+standards-compliant way, should handle MIME and non-MIME email messages just
+fine, and is designed so that the transformation from flat text, to a message
+structure via the <a class="reference internal" href="email.parser.html#email.parser.Parser" title="email.parser.Parser"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parser</span></code></a> class, and back to flat text,
+is idempotent (the input is identical to the output) <a class="footnote-reference brackets" href="#id2" id="id1">1</a>.  On the other hand,
+using the Generator on a <a class="reference internal" href="email.message.html#email.message.Message" title="email.message.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a> constructed by program
+may result in changes to the <a class="reference internal" href="email.message.html#email.message.Message" title="email.message.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a> object as defaults
+are filled in.</p>
+<p>Here are the public methods of the <a class="reference internal" href="#email.generator.Generator" title="email.generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a> class, imported from the
+<a class="reference internal" href="#module-email.generator" title="email.generator: Generate flat text email messages from a message structure."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.generator</span></code></a> module:</p>
+<dl class="class">
+<dt id="email.generator.Generator">
+<em class="property">class </em><code class="descclassname">email.generator.</code><code class="descname">Generator</code><span class="sig-paren">(</span><em>outfp</em><span class="optional">[</span>, <em>mangle_from_</em><span class="optional">[</span>, <em>maxheaderlen</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#email.generator.Generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>The constructor for the <a class="reference internal" href="#email.generator.Generator" title="email.generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a> class takes a file-like object called
+<em>outfp</em> for an argument.  <em>outfp</em> must support the <a class="reference internal" href="#email.generator.Generator.write" title="email.generator.Generator.write"><code class="xref py py-meth docutils literal notranslate"><span class="pre">write()</span></code></a> method and be
+usable as the output file in a Python extended print statement.</p>
+<p>Optional <em>mangle_from_</em> is a flag that, when <code class="docutils literal notranslate"><span class="pre">True</span></code>, puts a <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> character in
+front of any line in the body that starts exactly as <code class="docutils literal notranslate"><span class="pre">From</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">From</span></code>
+followed by a space at the beginning of the line.  This is the only guaranteed
+portable way to avoid having such lines be mistaken for a Unix mailbox format
+envelope header separator (see <a class="reference external" href="https://www.jwz.org/doc/content-length.html">WHY THE CONTENT-LENGTH FORMAT IS BAD</a> for details).  <em>mangle_from_</em>
+defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>, but you might want to set this to <code class="docutils literal notranslate"><span class="pre">False</span></code> if you are not
+writing Unix mailbox format files.</p>
+<p>Optional <em>maxheaderlen</em> specifies the longest length for a non-continued header.
+When a header line is longer than <em>maxheaderlen</em> (in characters, with tabs
+expanded to 8 spaces), the header will be split as defined in the
+<a class="reference internal" href="email.header.html#email.header.Header" title="email.header.Header"><code class="xref py py-class docutils literal notranslate"><span class="pre">Header</span></code></a> class.  Set to zero to disable header wrapping.
+The default is 78, as recommended (but not required) by <span class="target" id="index-0"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2822.html"><strong>RFC 2822</strong></a>.</p>
+<p>The other public <a class="reference internal" href="#email.generator.Generator" title="email.generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a> methods are:</p>
+<dl class="method">
+<dt id="email.generator.Generator.flatten">
+<code class="descname">flatten</code><span class="sig-paren">(</span><em>msg</em><span class="optional">[</span>, <em>unixfrom</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#email.generator.Generator.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the textual representation of the message object structure rooted at
+<em>msg</em> to the output file specified when the <a class="reference internal" href="#email.generator.Generator" title="email.generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a> instance
+was created.  Subparts are visited depth-first and the resulting text will
+be properly MIME encoded.</p>
+<p>Optional <em>unixfrom</em> is a flag that forces the printing of the envelope
+header delimiter before the first <span class="target" id="index-1"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2822.html"><strong>RFC 2822</strong></a> header of the root message
+object.  If the root object has no envelope header, a standard one is
+crafted.  By default, this is set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to inhibit the printing of
+the envelope delimiter.</p>
+<p>Note that for subparts, no envelope header is ever printed.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.generator.Generator.clone">
+<code class="descname">clone</code><span class="sig-paren">(</span><em>fp</em><span class="sig-paren">)</span><a class="headerlink" href="#email.generator.Generator.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an independent clone of this <a class="reference internal" href="#email.generator.Generator" title="email.generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a> instance with the
+exact same options.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.generator.Generator.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#email.generator.Generator.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the string <em>s</em> to the underlying file object, i.e. <em>outfp</em> passed to
+<a class="reference internal" href="#email.generator.Generator" title="email.generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a>’s constructor.  This provides just enough file-like API
+for <a class="reference internal" href="#email.generator.Generator" title="email.generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a> instances to be used in extended print statements.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>As a convenience, see the methods <code class="xref py py-meth docutils literal notranslate"><span class="pre">Message.as_string()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">str(aMessage)</span></code>, a.k.a. <code class="xref py py-meth docutils literal notranslate"><span class="pre">Message.__str__()</span></code>, which simplify the generation
+of a formatted string representation of a message object.  For more detail, see
+<a class="reference internal" href="email.message.html#module-email.message" title="email.message: The base class representing email messages."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.message</span></code></a>.</p>
+<p>The <a class="reference internal" href="#module-email.generator" title="email.generator: Generate flat text email messages from a message structure."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.generator</span></code></a> module also provides a derived class, called
+<a class="reference internal" href="#email.generator.DecodedGenerator" title="email.generator.DecodedGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">DecodedGenerator</span></code></a> which is like the <a class="reference internal" href="#email.generator.Generator" title="email.generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a> base class,
+except that non-<em class="mimetype">text</em> parts are substituted with a format string
+representing the part.</p>
+<dl class="class">
+<dt id="email.generator.DecodedGenerator">
+<em class="property">class </em><code class="descclassname">email.generator.</code><code class="descname">DecodedGenerator</code><span class="sig-paren">(</span><em>outfp</em><span class="optional">[</span>, <em>mangle_from_</em><span class="optional">[</span>, <em>maxheaderlen</em><span class="optional">[</span>, <em>fmt</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#email.generator.DecodedGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class, derived from <a class="reference internal" href="#email.generator.Generator" title="email.generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a> walks through all the subparts of a
+message.  If the subpart is of main type <em class="mimetype">text</em>, then it prints the
+decoded payload of the subpart. Optional <em>_mangle_from_</em> and <em>maxheaderlen</em> are
+as with the <a class="reference internal" href="#email.generator.Generator" title="email.generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code></a> base class.</p>
+<p>If the subpart is not of main type <em class="mimetype">text</em>, optional <em>fmt</em> is a format
+string that is used instead of the message payload. <em>fmt</em> is expanded with the
+following keywords, <code class="docutils literal notranslate"><span class="pre">%(keyword)s</span></code> format:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> – Full MIME type of the non-<em class="mimetype">text</em> part</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maintype</span></code> – Main MIME type of the non-<em class="mimetype">text</em> part</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">subtype</span></code> – Sub-MIME type of the non-<em class="mimetype">text</em> part</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">filename</span></code> – Filename of the non-<em class="mimetype">text</em> part</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">description</span></code> – Description associated with the non-<em class="mimetype">text</em> part</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">encoding</span></code> – Content transfer encoding of the non-<em class="mimetype">text</em> part</p></li>
+</ul>
+<p>The default value for <em>fmt</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, meaning</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Non</span><span class="o">-</span><span class="n">text</span> <span class="p">(</span><span class="o">%</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span><span class="n">s</span><span class="p">)</span> <span class="n">part</span> <span class="n">of</span> <span class="n">message</span> <span class="n">omitted</span><span class="p">,</span> <span class="n">filename</span> <span class="o">%</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="n">s</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.2.</span></p>
+</div>
+</dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>The previously deprecated method <a class="reference internal" href="../reference/datamodel.html#object.__call__" title="object.__call__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__call__()</span></code></a> was removed.</p>
+</div>
+<p class="rubric">Footnotes</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>This statement assumes that you use the appropriate setting for the
+<code class="docutils literal notranslate"><span class="pre">unixfrom</span></code> argument, and that you set maxheaderlen=0 (which will
+preserve whatever the input line lengths were).  It is also not strictly
+true, since in many cases runs of whitespace in headers are collapsed
+into single blanks.  The latter is a bug that will eventually be fixed.</p>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="email.parser.html"
+                        title="previous chapter">18.1.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.parser</span></code>: Parsing email messages</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="email.mime.html"
+                        title="next chapter">18.1.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime</span></code>: Creating email and MIME objects from scratch</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/email.generator.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.mime.html" title="18.1.4. email.mime: Creating email and MIME objects from scratch"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="email.parser.html" title="18.1.2. email.parser: Parsing email messages"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >18. Internet Data Handling</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="email.html" >18.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> — An email and MIME handling package</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>14.2. hmac — Keyed-Hashing for Message Authentication &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="14.3. md5 — MD5 message digest algorithm" href="md5.html" />
+    <link rel="prev" title="14.1. hashlib — Secure hashes and message digests" href="hashlib.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/hmac.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="md5.html" title="14.3. md5 — MD5 message digest algorithm"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="hashlib.html" title="14.1. hashlib — Secure hashes and message digests"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="crypto.html" accesskey="U">14. Cryptographic Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-hmac">
+<span id="hmac-keyed-hashing-for-message-authentication"></span><h1>14.2. <a class="reference internal" href="#module-hmac" title="hmac: Keyed-Hashing for Message Authentication (HMAC) implementation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hmac</span></code></a> — Keyed-Hashing for Message Authentication<a class="headerlink" href="#module-hmac" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/hmac.py">Lib/hmac.py</a></p>
+<hr class="docutils" />
+<p>This module implements the HMAC algorithm as described by <span class="target" id="index-0"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2104.html"><strong>RFC 2104</strong></a>.</p>
+<dl class="function">
+<dt id="hmac.new">
+<code class="descclassname">hmac.</code><code class="descname">new</code><span class="sig-paren">(</span><em>key</em><span class="optional">[</span>, <em>msg</em><span class="optional">[</span>, <em>digestmod</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#hmac.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new hmac object.  If <em>msg</em> is present, the method call <code class="docutils literal notranslate"><span class="pre">update(msg)</span></code>
+is made. <em>digestmod</em> is the digest constructor or module for the HMAC object to
+use. It defaults to  the <code class="xref py py-data docutils literal notranslate"><span class="pre">hashlib.md5</span></code> constructor.</p>
+</dd></dl>
+
+<p>An HMAC object has the following methods:</p>
+<dl class="method">
+<dt id="hmac.HMAC.update">
+<code class="descclassname">HMAC.</code><code class="descname">update</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#hmac.HMAC.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the hmac object with the string <em>msg</em>.  Repeated calls are equivalent to
+a single call with the concatenation of all the arguments: <code class="docutils literal notranslate"><span class="pre">m.update(a);</span>
+<span class="pre">m.update(b)</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">m.update(a</span> <span class="pre">+</span> <span class="pre">b)</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hmac.HMAC.digest">
+<code class="descclassname">HMAC.</code><code class="descname">digest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hmac.HMAC.digest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the digest of the strings passed to the <a class="reference internal" href="#hmac.HMAC.update" title="hmac.HMAC.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update()</span></code></a> method so far.
+This string will be the same length as the <em>digest_size</em> of the digest given to
+the constructor.  It may contain non-ASCII characters, including NUL bytes.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When comparing the output of <a class="reference internal" href="#hmac.HMAC.digest" title="hmac.HMAC.digest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">digest()</span></code></a> to an externally-supplied
+digest during a verification routine, it is recommended to use the
+<a class="reference internal" href="#hmac.compare_digest" title="hmac.compare_digest"><code class="xref py py-func docutils literal notranslate"><span class="pre">compare_digest()</span></code></a> function instead of the <code class="docutils literal notranslate"><span class="pre">==</span></code> operator
+to reduce the vulnerability to timing attacks.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hmac.HMAC.hexdigest">
+<code class="descclassname">HMAC.</code><code class="descname">hexdigest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hmac.HMAC.hexdigest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <a class="reference internal" href="#hmac.HMAC.digest" title="hmac.HMAC.digest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">digest()</span></code></a> except the digest is returned as a string twice the length
+containing only hexadecimal digits.  This may be used to exchange the value
+safely in email or other non-binary environments.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When comparing the output of <a class="reference internal" href="#hmac.HMAC.hexdigest" title="hmac.HMAC.hexdigest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hexdigest()</span></code></a> to an externally-supplied
+digest during a verification routine, it is recommended to use the
+<a class="reference internal" href="#hmac.compare_digest" title="hmac.compare_digest"><code class="xref py py-func docutils literal notranslate"><span class="pre">compare_digest()</span></code></a> function instead of the <code class="docutils literal notranslate"><span class="pre">==</span></code> operator
+to reduce the vulnerability to timing attacks.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hmac.HMAC.copy">
+<code class="descclassname">HMAC.</code><code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hmac.HMAC.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy (“clone”) of the hmac object.  This can be used to efficiently
+compute the digests of strings that share a common initial substring.</p>
+</dd></dl>
+
+<p>This module also provides the following helper function:</p>
+<dl class="function">
+<dt id="hmac.compare_digest">
+<code class="descclassname">hmac.</code><code class="descname">compare_digest</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#hmac.compare_digest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">==</span> <span class="pre">b</span></code>.  This function uses an approach designed to prevent
+timing analysis by avoiding content-based short circuiting behaviour,
+making it appropriate for cryptography.  <em>a</em> and <em>b</em> must both be of the
+same type: either <a class="reference internal" href="functions.html#unicode" title="unicode"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></a> or a <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <em>a</em> and <em>b</em> are of different lengths, or if an error occurs,
+a timing attack could theoretically reveal information about the
+types and lengths of <em>a</em> and <em>b</em>—but not their values.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.7.7.</span></p>
+</div>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="hashlib.html#module-hashlib" title="hashlib: Secure hash and message digest algorithms."><code class="xref py py-mod docutils literal notranslate"><span class="pre">hashlib</span></code></a></dt><dd><p>The Python module providing secure hash functions.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="hashlib.html"
+                        title="previous chapter">14.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">hashlib</span></code> — Secure hashes and message digests</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="md5.html"
+                        title="next chapter">14.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">md5</span></code> — MD5 message digest algorithm</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/hmac.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="md5.html" title="14.3. md5 — MD5 message digest algorithm"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="hashlib.html" title="14.1. hashlib — Secure hashes and message digests"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="crypto.html" >14. Cryptographic Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

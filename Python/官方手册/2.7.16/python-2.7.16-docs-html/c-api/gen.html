@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Generator Objects &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="DateTime Objects" href="datetime.html" />
+    <link rel="prev" title="Cell Objects" href="cell.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/c-api/gen.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datetime.html" title="DateTime Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cell.html" title="Cell Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="generator-objects">
+<span id="gen-objects"></span><h1>Generator Objects<a class="headerlink" href="#generator-objects" title="Permalink to this headline">¶</a></h1>
+<p>Generator objects are what Python uses to implement generator iterators. They
+are normally created by iterating over a function that yields values, rather
+than explicitly calling <a class="reference internal" href="#c.PyGen_New" title="PyGen_New"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyGen_New()</span></code></a>.</p>
+<dl class="type">
+<dt id="c.PyGenObject">
+<code class="descname">PyGenObject</code><a class="headerlink" href="#c.PyGenObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>The C structure used for generator objects.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyGen_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a> <code class="descname">PyGen_Type</code><a class="headerlink" href="#c.PyGen_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type object corresponding to generator objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyGen_Check">
+int <code class="descname">PyGen_Check</code><span class="sig-paren">(</span>ob<span class="sig-paren">)</span><a class="headerlink" href="#c.PyGen_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is a generator object; <em>ob</em> must not be <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyGen_CheckExact">
+int <code class="descname">PyGen_CheckExact</code><span class="sig-paren">(</span>ob<span class="sig-paren">)</span><a class="headerlink" href="#c.PyGen_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em>’s type is <em>PyGen_Type</em> is a generator object; <em>ob</em> must not
+be <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyGen_New">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyGen_New</code><span class="sig-paren">(</span>PyFrameObject<em> *frame</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyGen_New" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create and return a new generator object based on the <em>frame</em> object. A
+reference to <em>frame</em> is stolen by this function. The parameter must not be
+<em>NULL</em>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cell.html"
+                        title="previous chapter">Cell Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="datetime.html"
+                        title="next chapter">DateTime Objects</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/c-api/gen.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datetime.html" title="DateTime Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cell.html" title="Cell Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" >Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

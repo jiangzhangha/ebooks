@@ -1,0 +1,764 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>39.4. fl — FORMS library for graphical user interfaces &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="39.7. fm — Font Manager interface" href="fm.html" />
+    <link rel="prev" title="39.3. cd — CD-ROM access on SGI systems" href="cd.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/fl.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fm.html" title="39.7. fm — Font Manager interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cd.html" title="39.3. cd — CD-ROM access on SGI systems"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="sgi.html" accesskey="U">39. SGI IRIX Specific Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fl">
+<span id="fl-forms-library-for-graphical-user-interfaces"></span><h1>39.4. <a class="reference internal" href="#module-fl" title="fl: FORMS library for applications with graphical user interfaces. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fl</span></code></a> — FORMS library for graphical user interfaces<a class="headerlink" href="#module-fl" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-fl" title="fl: FORMS library for applications with graphical user interfaces. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fl</span></code></a> module has been removed in Python 3.</p>
+</div>
+<p id="index-0">This module provides an interface to the FORMS Library by Mark Overmars.  The
+source for the library can be retrieved by anonymous FTP from host
+<code class="docutils literal notranslate"><span class="pre">ftp.cs.ruu.nl</span></code>, directory <code class="file docutils literal notranslate"><span class="pre">SGI/FORMS</span></code>.  It was last tested with version
+2.0b.</p>
+<p>Most functions are literal translations of their C equivalents, dropping the
+initial <code class="docutils literal notranslate"><span class="pre">fl_</span></code> from their name.  Constants used by the library are defined in
+module <a class="reference internal" href="#module-FL" title="FL: Constants used with the fl module. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FL</span></code></a> described below.</p>
+<p>The creation of objects is a little different in Python than in C: instead of
+the ‘current form’ maintained by the library to which new FORMS objects are
+added, all functions that add a FORMS object to a form are methods of the Python
+object representing the form. Consequently, there are no Python equivalents for
+the C functions <code class="xref c c-func docutils literal notranslate"><span class="pre">fl_addto_form()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">fl_end_form()</span></code>, and the
+equivalent of <code class="xref c c-func docutils literal notranslate"><span class="pre">fl_bgn_form()</span></code> is called <a class="reference internal" href="#fl.make_form" title="fl.make_form"><code class="xref py py-func docutils literal notranslate"><span class="pre">fl.make_form()</span></code></a>.</p>
+<p>Watch out for the somewhat confusing terminology: FORMS uses the word
+<em class="dfn">object</em> for the buttons, sliders etc. that you can place in a form. In
+Python, ‘object’ means any value.  The Python interface to FORMS introduces two
+new Python object types: form objects (representing an entire form) and FORMS
+objects (representing one button, slider etc.). Hopefully this isn’t too
+confusing.</p>
+<p>There are no ‘free objects’ in the Python interface to FORMS, nor is there an
+easy way to add object classes written in Python.  The FORMS interface to GL
+event handling is available, though, so you can mix FORMS with pure GL windows.</p>
+<p><strong>Please note:</strong> importing <a class="reference internal" href="#module-fl" title="fl: FORMS library for applications with graphical user interfaces. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fl</span></code></a> implies a call to the GL function
+<code class="xref c c-func docutils literal notranslate"><span class="pre">foreground()</span></code> and to the FORMS routine <code class="xref c c-func docutils literal notranslate"><span class="pre">fl_init()</span></code>.</p>
+<div class="section" id="functions-defined-in-module-fl">
+<span id="fl-functions"></span><h2>39.4.1. Functions Defined in Module <a class="reference internal" href="#module-fl" title="fl: FORMS library for applications with graphical user interfaces. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fl</span></code></a><a class="headerlink" href="#functions-defined-in-module-fl" title="Permalink to this headline">¶</a></h2>
+<p>Module <a class="reference internal" href="#module-fl" title="fl: FORMS library for applications with graphical user interfaces. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fl</span></code></a> defines the following functions.  For more information about
+what they do, see the description of the equivalent C function in the FORMS
+documentation:</p>
+<dl class="function">
+<dt id="fl.make_form">
+<code class="descclassname">fl.</code><code class="descname">make_form</code><span class="sig-paren">(</span><em>type</em>, <em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.make_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a form with given type, width and height.  This returns a <em class="dfn">form</em>
+object, whose methods are described below.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.do_forms">
+<code class="descclassname">fl.</code><code class="descname">do_forms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.do_forms" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard FORMS main loop.  Returns a Python object representing the FORMS
+object needing interaction, or the special value <code class="xref py py-const docutils literal notranslate"><span class="pre">FL.EVENT</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.check_forms">
+<code class="descclassname">fl.</code><code class="descname">check_forms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.check_forms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check for FORMS events.  Returns what <a class="reference internal" href="#fl.do_forms" title="fl.do_forms"><code class="xref py py-func docutils literal notranslate"><span class="pre">do_forms()</span></code></a> above returns, or
+<code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no event that immediately needs interaction.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.set_event_call_back">
+<code class="descclassname">fl.</code><code class="descname">set_event_call_back</code><span class="sig-paren">(</span><em>function</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.set_event_call_back" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the event callback function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.set_graphics_mode">
+<code class="descclassname">fl.</code><code class="descname">set_graphics_mode</code><span class="sig-paren">(</span><em>rgbmode</em>, <em>doublebuffering</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.set_graphics_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the graphics modes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.get_rgbmode">
+<code class="descclassname">fl.</code><code class="descname">get_rgbmode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.get_rgbmode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current rgb mode.  This is the value of the C global variable
+<code class="xref c c-data docutils literal notranslate"><span class="pre">fl_rgbmode</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.show_message">
+<code class="descclassname">fl.</code><code class="descname">show_message</code><span class="sig-paren">(</span><em>str1</em>, <em>str2</em>, <em>str3</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.show_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a dialog box with a three-line message and an OK button.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.show_question">
+<code class="descclassname">fl.</code><code class="descname">show_question</code><span class="sig-paren">(</span><em>str1</em>, <em>str2</em>, <em>str3</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.show_question" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a dialog box with a three-line message and YES and NO buttons. It returns
+<code class="docutils literal notranslate"><span class="pre">1</span></code> if the user pressed YES, <code class="docutils literal notranslate"><span class="pre">0</span></code> if NO.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.show_choice">
+<code class="descclassname">fl.</code><code class="descname">show_choice</code><span class="sig-paren">(</span><em>str1</em>, <em>str2</em>, <em>str3</em>, <em>but1</em><span class="optional">[</span>, <em>but2</em><span class="optional">[</span>, <em>but3</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.show_choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a dialog box with a three-line message and up to three buttons. It returns
+the number of the button clicked by the user (<code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code> or <code class="docutils literal notranslate"><span class="pre">3</span></code>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.show_input">
+<code class="descclassname">fl.</code><code class="descname">show_input</code><span class="sig-paren">(</span><em>prompt</em>, <em>default</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.show_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a dialog box with a one-line prompt message and text field in which the
+user can enter a string.  The second argument is the default input string.  It
+returns the string value as edited by the user.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.show_file_selector">
+<code class="descclassname">fl.</code><code class="descname">show_file_selector</code><span class="sig-paren">(</span><em>message</em>, <em>directory</em>, <em>pattern</em>, <em>default</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.show_file_selector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a dialog box in which the user can select a file.  It returns the absolute
+filename selected by the user, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the user presses Cancel.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.get_directory">
+<code class="descclassname">fl.</code><code class="descname">get_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.get_directory" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.get_pattern">
+<code class="descclassname">fl.</code><code class="descname">get_pattern</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.get_pattern" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.get_filename">
+<code class="descclassname">fl.</code><code class="descname">get_filename</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.get_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>These functions return the directory, pattern and filename (the tail part only)
+selected by the user in the last <a class="reference internal" href="#fl.show_file_selector" title="fl.show_file_selector"><code class="xref py py-func docutils literal notranslate"><span class="pre">show_file_selector()</span></code></a> call.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.qdevice">
+<code class="descclassname">fl.</code><code class="descname">qdevice</code><span class="sig-paren">(</span><em>dev</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.qdevice" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.unqdevice">
+<code class="descclassname">fl.</code><code class="descname">unqdevice</code><span class="sig-paren">(</span><em>dev</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.unqdevice" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.isqueued">
+<code class="descclassname">fl.</code><code class="descname">isqueued</code><span class="sig-paren">(</span><em>dev</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.isqueued" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.qtest">
+<code class="descclassname">fl.</code><code class="descname">qtest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.qtest" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.qread">
+<code class="descclassname">fl.</code><code class="descname">qread</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.qread" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.qreset">
+<code class="descclassname">fl.</code><code class="descname">qreset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.qreset" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.qenter">
+<code class="descclassname">fl.</code><code class="descname">qenter</code><span class="sig-paren">(</span><em>dev</em>, <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.qenter" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.get_mouse">
+<code class="descclassname">fl.</code><code class="descname">get_mouse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.get_mouse" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.tie">
+<code class="descclassname">fl.</code><code class="descname">tie</code><span class="sig-paren">(</span><em>button</em>, <em>valuator1</em>, <em>valuator2</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.tie" title="Permalink to this definition">¶</a></dt>
+<dd><p>These functions are the FORMS interfaces to the corresponding GL functions.  Use
+these if you want to handle some GL events yourself when using
+<code class="xref py py-func docutils literal notranslate"><span class="pre">fl.do_events()</span></code>.  When a GL event is detected that FORMS cannot handle,
+<a class="reference internal" href="#fl.do_forms" title="fl.do_forms"><code class="xref py py-func docutils literal notranslate"><span class="pre">fl.do_forms()</span></code></a> returns the special value <code class="xref py py-const docutils literal notranslate"><span class="pre">FL.EVENT</span></code> and you should
+call <a class="reference internal" href="#fl.qread" title="fl.qread"><code class="xref py py-func docutils literal notranslate"><span class="pre">fl.qread()</span></code></a> to read the event from the queue.  Don’t use the
+equivalent GL functions!</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fl.color">
+<code class="descclassname">fl.</code><code class="descname">color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.color" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.mapcolor">
+<code class="descclassname">fl.</code><code class="descname">mapcolor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.mapcolor" title="Permalink to this definition">¶</a></dt>
+<dt id="fl.getmcolor">
+<code class="descclassname">fl.</code><code class="descname">getmcolor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.getmcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the description in the FORMS documentation of <code class="xref c c-func docutils literal notranslate"><span class="pre">fl_color()</span></code>,
+<code class="xref c c-func docutils literal notranslate"><span class="pre">fl_mapcolor()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">fl_getmcolor()</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="form-objects">
+<span id="id1"></span><h2>39.4.2. Form Objects<a class="headerlink" href="#form-objects" title="Permalink to this headline">¶</a></h2>
+<p>Form objects (returned by <a class="reference internal" href="#fl.make_form" title="fl.make_form"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_form()</span></code></a> above) have the following methods.
+Each method corresponds to a C function whose name is prefixed with <code class="docutils literal notranslate"><span class="pre">fl_</span></code>; and
+whose first argument is a form pointer; please refer to the official FORMS
+documentation for descriptions.</p>
+<p>All the <code class="xref py py-meth docutils literal notranslate"><span class="pre">add_*()</span></code> methods return a Python object representing the FORMS
+object.  Methods of FORMS objects are described below.  Most kinds of FORMS
+object also have some methods specific to that kind; these methods are listed
+here.</p>
+<dl class="method">
+<dt id="fl.form.show_form">
+<code class="descclassname">form.</code><code class="descname">show_form</code><span class="sig-paren">(</span><em>placement</em>, <em>bordertype</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.show_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the form.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.hide_form">
+<code class="descclassname">form.</code><code class="descname">hide_form</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.hide_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hide the form.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.redraw_form">
+<code class="descclassname">form.</code><code class="descname">redraw_form</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.redraw_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Redraw the form.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.set_form_position">
+<code class="descclassname">form.</code><code class="descname">set_form_position</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.set_form_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the form’s position.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.freeze_form">
+<code class="descclassname">form.</code><code class="descname">freeze_form</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.freeze_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Freeze the form.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.unfreeze_form">
+<code class="descclassname">form.</code><code class="descname">unfreeze_form</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.unfreeze_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unfreeze the form.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.activate_form">
+<code class="descclassname">form.</code><code class="descname">activate_form</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.activate_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activate the form.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.deactivate_form">
+<code class="descclassname">form.</code><code class="descname">deactivate_form</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.deactivate_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deactivate the form.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.bgn_group">
+<code class="descclassname">form.</code><code class="descname">bgn_group</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.bgn_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Begin a new group of objects; return a group object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.end_group">
+<code class="descclassname">form.</code><code class="descname">end_group</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.end_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>End the current group of objects.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.find_first">
+<code class="descclassname">form.</code><code class="descname">find_first</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.find_first" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the first object in the form.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.find_last">
+<code class="descclassname">form.</code><code class="descname">find_last</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.find_last" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the last object in the form.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_box">
+<code class="descclassname">form.</code><code class="descname">add_box</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a box object to the form. No extra methods.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_text">
+<code class="descclassname">form.</code><code class="descname">add_text</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a text object to the form. No extra methods.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_clock">
+<code class="descclassname">form.</code><code class="descname">add_clock</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_clock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a clock object to the form.  —  Method: <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_clock()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_button">
+<code class="descclassname">form.</code><code class="descname">add_button</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_button" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a button object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_button()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_button()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_lightbutton">
+<code class="descclassname">form.</code><code class="descname">add_lightbutton</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_lightbutton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a lightbutton object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_button()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_button()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_roundbutton">
+<code class="descclassname">form.</code><code class="descname">add_roundbutton</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_roundbutton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a roundbutton object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_button()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_button()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_slider">
+<code class="descclassname">form.</code><code class="descname">add_slider</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_slider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a slider object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_value()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_slider_value()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_bounds()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_slider_bounds()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_return()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_size()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_precision()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_step()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_valslider">
+<code class="descclassname">form.</code><code class="descname">add_valslider</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_valslider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a valslider object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_value()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_slider_value()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_bounds()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_slider_bounds()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_return()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_size()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_precision()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_slider_step()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_dial">
+<code class="descclassname">form.</code><code class="descname">add_dial</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_dial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a dial object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_dial_value()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_dial_value()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_dial_bounds()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_dial_bounds()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_positioner">
+<code class="descclassname">form.</code><code class="descname">add_positioner</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_positioner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a positioner object to the form.  —  Methods:
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_positioner_xvalue()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_positioner_yvalue()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_positioner_xbounds()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_positioner_ybounds()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_positioner_xvalue()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_positioner_yvalue()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_positioner_xbounds()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_positioner_ybounds()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_counter">
+<code class="descclassname">form.</code><code class="descname">add_counter</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a counter object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_counter_value()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_counter_value()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_counter_bounds()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_counter_step()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_counter_precision()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_counter_return()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_input">
+<code class="descclassname">form.</code><code class="descname">add_input</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an input object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_input()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_input()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_input_color()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_input_return()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_menu">
+<code class="descclassname">form.</code><code class="descname">add_menu</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a menu object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_menu()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_menu()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">addto_menu()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_choice">
+<code class="descclassname">form.</code><code class="descname">add_choice</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a choice object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_choice()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_choice()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">clear_choice()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">addto_choice()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">replace_choice()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">delete_choice()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_choice_text()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_choice_fontsize()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_choice_fontstyle()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_browser">
+<code class="descclassname">form.</code><code class="descname">add_browser</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_browser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a browser object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_browser_topline()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">clear_browser()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">add_browser_line()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">addto_browser()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">insert_browser_line()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">delete_browser_line()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">replace_browser_line()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_browser_line()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">load_browser()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_browser_maxline()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">select_browser_line()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">deselect_browser_line()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">deselect_browser()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">isselected_browser_line()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_browser()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_browser_fontsize()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_browser_fontstyle()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_browser_specialkey()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fl.form.add_timer">
+<code class="descclassname">form.</code><code class="descname">add_timer</code><span class="sig-paren">(</span><em>type</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#fl.form.add_timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a timer object to the form.  —  Methods: <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_timer()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_timer()</span></code>.</p>
+</dd></dl>
+
+<p>Form objects have the following data attributes; see the FORMS documentation:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 24%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>C Type</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">window</span></code></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>GL window id</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">w</span></code></p></td>
+<td><p>float</p></td>
+<td><p>form width</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">h</span></code></p></td>
+<td><p>float</p></td>
+<td><p>form height</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">x</span></code></p></td>
+<td><p>float</p></td>
+<td><p>form x origin</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">y</span></code></p></td>
+<td><p>float</p></td>
+<td><p>form y origin</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">deactivated</span></code></p></td>
+<td><p>int</p></td>
+<td><p>nonzero if form is deactivated</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">visible</span></code></p></td>
+<td><p>int</p></td>
+<td><p>nonzero if form is visible</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">frozen</span></code></p></td>
+<td><p>int</p></td>
+<td><p>nonzero if form is frozen</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">doublebuf</span></code></p></td>
+<td><p>int</p></td>
+<td><p>nonzero if double buffering on</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="forms-objects">
+<span id="id2"></span><h2>39.4.3. FORMS Objects<a class="headerlink" href="#forms-objects" title="Permalink to this headline">¶</a></h2>
+<p>Besides methods specific to particular kinds of FORMS objects, all FORMS objects
+also have the following methods:</p>
+<dl class="method">
+<dt>
+<code class="descname">FORMS object.set_call_back(function, argument)</code></dt>
+<dd><p>Set the object’s callback function and argument.  When the object needs
+interaction, the callback function will be called with two arguments: the
+object, and the callback argument.  (FORMS objects without a callback function
+are returned by <a class="reference internal" href="#fl.do_forms" title="fl.do_forms"><code class="xref py py-func docutils literal notranslate"><span class="pre">fl.do_forms()</span></code></a> or <a class="reference internal" href="#fl.check_forms" title="fl.check_forms"><code class="xref py py-func docutils literal notranslate"><span class="pre">fl.check_forms()</span></code></a> when they need
+interaction.)  Call this method without arguments to remove the callback
+function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">FORMS object.delete_object()</code></dt>
+<dd><p>Delete the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">FORMS object.show_object()</code></dt>
+<dd><p>Show the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">FORMS object.hide_object()</code></dt>
+<dd><p>Hide the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">FORMS object.redraw_object()</code></dt>
+<dd><p>Redraw the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">FORMS object.freeze_object()</code></dt>
+<dd><p>Freeze the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">FORMS object.unfreeze_object()</code></dt>
+<dd><p>Unfreeze the object.</p>
+</dd></dl>
+
+<p>FORMS objects have these data attributes; see the FORMS documentation:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 31%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>C Type</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">objclass</span></code></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>object class</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="functions.html#type" title="type"><code class="xref py py-attr docutils literal notranslate"><span class="pre">type</span></code></a></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>object type</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">boxtype</span></code></p></td>
+<td><p>int</p></td>
+<td><p>box type</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">x</span></code></p></td>
+<td><p>float</p></td>
+<td><p>x origin</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">y</span></code></p></td>
+<td><p>float</p></td>
+<td><p>y origin</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">w</span></code></p></td>
+<td><p>float</p></td>
+<td><p>width</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">h</span></code></p></td>
+<td><p>float</p></td>
+<td><p>height</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">col1</span></code></p></td>
+<td><p>int</p></td>
+<td><p>primary color</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">col2</span></code></p></td>
+<td><p>int</p></td>
+<td><p>secondary color</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">align</span></code></p></td>
+<td><p>int</p></td>
+<td><p>alignment</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">lcol</span></code></p></td>
+<td><p>int</p></td>
+<td><p>label color</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">lsize</span></code></p></td>
+<td><p>float</p></td>
+<td><p>label font size</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">label</span></code></p></td>
+<td><p>string</p></td>
+<td><p>label string</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">lstyle</span></code></p></td>
+<td><p>int</p></td>
+<td><p>label style</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">pushed</span></code></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>(see FORMS docs)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">focus</span></code></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>(see FORMS docs)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">belowmouse</span></code></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>(see FORMS docs)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">frozen</span></code></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>(see FORMS docs)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">active</span></code></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>(see FORMS docs)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="functions.html#input" title="input"><code class="xref py py-attr docutils literal notranslate"><span class="pre">input</span></code></a></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>(see FORMS docs)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">visible</span></code></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>(see FORMS docs)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">radio</span></code></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>(see FORMS docs)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">automatic</span></code></p></td>
+<td><p>int (read-only)</p></td>
+<td><p>(see FORMS docs)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-FL">
+<span id="fl-constants-used-with-the-fl-module"></span><h1>39.5. <a class="reference internal" href="#module-FL" title="FL: Constants used with the fl module. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FL</span></code></a> — Constants used with the <a class="reference internal" href="#module-fl" title="fl: FORMS library for applications with graphical user interfaces. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fl</span></code></a> module<a class="headerlink" href="#module-FL" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-FL" title="FL: Constants used with the fl module. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FL</span></code></a> module has been removed in Python 3.</p>
+</div>
+<p>This module defines symbolic constants needed to use the built-in module
+<a class="reference internal" href="#module-fl" title="fl: FORMS library for applications with graphical user interfaces. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fl</span></code></a> (see above); they are equivalent to those defined in the C header file
+<code class="docutils literal notranslate"><span class="pre">&lt;forms.h&gt;</span></code> except that the name prefix <code class="docutils literal notranslate"><span class="pre">FL_</span></code> is omitted.  Read the module
+source for a complete list of the defined names.  Suggested use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fl</span>
+<span class="kn">from</span> <span class="nn">FL</span> <span class="k">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-flp">
+<span id="flp-functions-for-loading-stored-forms-designs"></span><h1>39.6. <a class="reference internal" href="#module-flp" title="flp: Functions for loading stored FORMS designs. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">flp</span></code></a> — Functions for loading stored FORMS designs<a class="headerlink" href="#module-flp" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-flp" title="flp: Functions for loading stored FORMS designs. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">flp</span></code></a> module has been removed in Python 3.</p>
+</div>
+<p>This module defines functions that can read form definitions created by the
+‘form designer’ (<strong class="program">fdesign</strong>) program that comes with the FORMS library
+(see module <a class="reference internal" href="#module-fl" title="fl: FORMS library for applications with graphical user interfaces. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fl</span></code></a> above).</p>
+<p>For now, see the file <code class="file docutils literal notranslate"><span class="pre">flp.doc</span></code> in the Python library source directory for
+a description.</p>
+<p>XXX A complete description should be inserted here!</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">39.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">fl</span></code> — FORMS library for graphical user interfaces</a><ul>
+<li><a class="reference internal" href="#functions-defined-in-module-fl">39.4.1. Functions Defined in Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">fl</span></code></a></li>
+<li><a class="reference internal" href="#form-objects">39.4.2. Form Objects</a></li>
+<li><a class="reference internal" href="#forms-objects">39.4.3. FORMS Objects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-FL">39.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">FL</span></code> — Constants used with the <code class="xref py py-mod docutils literal notranslate"><span class="pre">fl</span></code> module</a></li>
+<li><a class="reference internal" href="#module-flp">39.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">flp</span></code> — Functions for loading stored FORMS designs</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cd.html"
+                        title="previous chapter">39.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">cd</span></code> — CD-ROM access on SGI systems</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fm.html"
+                        title="next chapter">39.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">fm</span></code> — <em>Font Manager</em> interface</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/fl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fm.html" title="39.7. fm — Font Manager interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cd.html" title="39.3. cd — CD-ROM access on SGI systems"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="sgi.html" >39. SGI IRIX Specific Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

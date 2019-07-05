@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>18. Internet Data Handling &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="18.1. email — An email and MIME handling package" href="email.html" />
+    <link rel="prev" title="17.7. asynchat — Asynchronous socket command/response handler" href="asynchat.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/netdata.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.html" title="18.1. email — An email and MIME handling package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="asynchat.html" title="17.7. asynchat — Asynchronous socket command/response handler"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="internet-data-handling">
+<span id="netdata"></span><h1>18. Internet Data Handling<a class="headerlink" href="#internet-data-handling" title="Permalink to this headline">¶</a></h1>
+<p>This chapter describes modules which support handling data formats commonly used
+on the Internet.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="email.html">18.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> — An email and MIME handling package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="email.message.html">18.1.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.message</span></code>: Representing an email message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.parser.html">18.1.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.parser</span></code>: Parsing email messages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="email.parser.html#feedparser-api">18.1.2.1. FeedParser API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="email.parser.html#parser-class-api">18.1.2.2. Parser class API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="email.parser.html#additional-notes">18.1.2.3. Additional notes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="email.generator.html">18.1.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.generator</span></code>: Generating MIME documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.mime.html">18.1.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime</span></code>: Creating email and MIME objects from scratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.header.html">18.1.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.header</span></code>: Internationalized headers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.charset.html">18.1.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.charset</span></code>: Representing character sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.encoders.html">18.1.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.encoders</span></code>: Encoders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.errors.html">18.1.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.errors</span></code>: Exception and Defect classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.utils.html">18.1.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.utils</span></code>: Miscellaneous utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.iterators.html">18.1.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.iterators</span></code>: Iterators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email-examples.html">18.1.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code>: Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.html#package-history">18.1.12. Package History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.html#differences-from-mimelib">18.1.13. Differences from <code class="xref py py-mod docutils literal notranslate"><span class="pre">mimelib</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="json.html">18.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> — JSON encoder and decoder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="json.html#basic-usage">18.2.1. Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html#encoders-and-decoders">18.2.2. Encoders and Decoders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html#standard-compliance-and-interoperability">18.2.3. Standard Compliance and Interoperability</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="json.html#character-encodings">18.2.3.1. Character Encodings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="json.html#infinite-and-nan-number-values">18.2.3.2. Infinite and NaN Number Values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="json.html#repeated-names-within-an-object">18.2.3.3. Repeated Names Within an Object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="json.html#top-level-non-object-non-array-values">18.2.3.4. Top-level Non-Object, Non-Array Values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="json.html#implementation-limitations">18.2.3.5. Implementation Limitations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mailcap.html">18.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mailcap</span></code> — Mailcap file handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mailbox.html">18.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mailbox</span></code> — Manipulate mailboxes in various formats</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mailbox.html#mailbox-objects">18.4.1. <code class="xref py py-class docutils literal notranslate"><span class="pre">Mailbox</span></code> objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#maildir">18.4.1.1. <code class="xref py py-class docutils literal notranslate"><span class="pre">Maildir</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mbox">18.4.1.2. <code class="xref py py-class docutils literal notranslate"><span class="pre">mbox</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mh">18.4.1.3. <code class="xref py py-class docutils literal notranslate"><span class="pre">MH</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#babyl">18.4.1.4. <code class="xref py py-class docutils literal notranslate"><span class="pre">Babyl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mmdf">18.4.1.5. <code class="xref py py-class docutils literal notranslate"><span class="pre">MMDF</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mailbox.html#message-objects">18.4.2. <code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code> objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#maildirmessage">18.4.2.1. <code class="xref py py-class docutils literal notranslate"><span class="pre">MaildirMessage</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mboxmessage">18.4.2.2. <code class="xref py py-class docutils literal notranslate"><span class="pre">mboxMessage</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mhmessage">18.4.2.3. <code class="xref py py-class docutils literal notranslate"><span class="pre">MHMessage</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#babylmessage">18.4.2.4. <code class="xref py py-class docutils literal notranslate"><span class="pre">BabylMessage</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mmdfmessage">18.4.2.5. <code class="xref py py-class docutils literal notranslate"><span class="pre">MMDFMessage</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mailbox.html#exceptions">18.4.3. Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mailbox.html#deprecated-classes-and-methods">18.4.4. Deprecated classes and methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mailbox.html#examples">18.4.5. Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mhlib.html">18.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mhlib</span></code> — Access to MH mailboxes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mhlib.html#mh-objects">18.5.1. MH Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mhlib.html#folder-objects">18.5.2. Folder Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mhlib.html#message-objects">18.5.3. Message Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mimetools.html">18.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mimetools</span></code> — Tools for parsing MIME messages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mimetools.html#additional-methods-of-message-objects">18.6.1. Additional Methods of Message Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mimetypes.html">18.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mimetypes</span></code> — Map filenames to MIME types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mimetypes.html#mimetypes-objects">18.7.1. MimeTypes Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mimewriter.html">18.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">MimeWriter</span></code> — Generic MIME file writer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mimewriter.html#mimewriter-objects">18.8.1. MimeWriter Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mimify.html">18.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mimify</span></code> — MIME processing of mail messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multifile.html">18.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">multifile</span></code> — Support for files containing distinct parts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="multifile.html#multifile-objects">18.10.1. MultiFile Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multifile.html#multifile-example">18.10.2. <code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFile</span></code> Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rfc822.html">18.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">rfc822</span></code> — Parse RFC 2822 mail headers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rfc822.html#message-objects">18.11.1. Message Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rfc822.html#addresslist-objects">18.11.2. AddressList Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="base64.html">18.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code> — RFC 3548: Base16, Base32, Base64 Data Encodings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binhex.html">18.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">binhex</span></code> — Encode and decode binhex4 files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="binhex.html#notes">18.13.1. Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="binascii.html">18.14. <code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code> — Convert between binary and ASCII</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quopri.html">18.15. <code class="xref py py-mod docutils literal notranslate"><span class="pre">quopri</span></code> — Encode and decode MIME quoted-printable data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uu.html">18.16. <code class="xref py py-mod docutils literal notranslate"><span class="pre">uu</span></code> — Encode and decode uuencode files</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="asynchat.html"
+                        title="previous chapter">17.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">asynchat</span></code> — Asynchronous socket command/response handler</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="email.html"
+                        title="next chapter">18.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> — An email and MIME handling package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/netdata.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.html" title="18.1. email — An email and MIME handling package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="asynchat.html" title="17.7. asynchat — Asynchronous socket command/response handler"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

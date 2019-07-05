@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>7.7. textwrap — Text wrapping and filling &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="7.8. codecs — Codec registry and base classes" href="codecs.html" />
+    <link rel="prev" title="7.5. StringIO — Read and write strings as files" href="stringio.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/textwrap.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="codecs.html" title="7.8. codecs — Codec registry and base classes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="stringio.html" title="7.5. StringIO — Read and write strings as files"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="strings.html" accesskey="U">7. String Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-textwrap">
+<span id="textwrap-text-wrapping-and-filling"></span><h1>7.7. <a class="reference internal" href="#module-textwrap" title="textwrap: Text wrapping and filling"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textwrap</span></code></a> — Text wrapping and filling<a class="headerlink" href="#module-textwrap" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/textwrap.py">Lib/textwrap.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-textwrap" title="textwrap: Text wrapping and filling"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textwrap</span></code></a> module provides two convenience functions, <a class="reference internal" href="#textwrap.wrap" title="textwrap.wrap"><code class="xref py py-func docutils literal notranslate"><span class="pre">wrap()</span></code></a> and
+<a class="reference internal" href="#textwrap.fill" title="textwrap.fill"><code class="xref py py-func docutils literal notranslate"><span class="pre">fill()</span></code></a>, as well as <a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a>, the class that does all the work,
+and a utility function  <a class="reference internal" href="#textwrap.dedent" title="textwrap.dedent"><code class="xref py py-func docutils literal notranslate"><span class="pre">dedent()</span></code></a>.  If you’re just wrapping or filling one
+or two  text strings, the convenience functions should be good enough;
+otherwise,  you should use an instance of <a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a> for efficiency.</p>
+<dl class="function">
+<dt id="textwrap.wrap">
+<code class="descclassname">textwrap.</code><code class="descname">wrap</code><span class="sig-paren">(</span><em>text</em><span class="optional">[</span>, <em>width</em><span class="optional">[</span>, <em>...</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#textwrap.wrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps the single paragraph in <em>text</em> (a string) so every line is at most <em>width</em>
+characters long.  Returns a list of output lines, without final newlines.</p>
+<p>Optional keyword arguments correspond to the instance attributes of
+<a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a>, documented below.  <em>width</em> defaults to <code class="docutils literal notranslate"><span class="pre">70</span></code>.</p>
+<p>See the <a class="reference internal" href="#textwrap.TextWrapper.wrap" title="textwrap.TextWrapper.wrap"><code class="xref py py-meth docutils literal notranslate"><span class="pre">TextWrapper.wrap()</span></code></a> method for additional details on how
+<a class="reference internal" href="#textwrap.wrap" title="textwrap.wrap"><code class="xref py py-func docutils literal notranslate"><span class="pre">wrap()</span></code></a> behaves.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="textwrap.fill">
+<code class="descclassname">textwrap.</code><code class="descname">fill</code><span class="sig-paren">(</span><em>text</em><span class="optional">[</span>, <em>width</em><span class="optional">[</span>, <em>...</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#textwrap.fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps the single paragraph in <em>text</em>, and returns a single string containing the
+wrapped paragraph.  <a class="reference internal" href="#textwrap.fill" title="textwrap.fill"><code class="xref py py-func docutils literal notranslate"><span class="pre">fill()</span></code></a> is shorthand for</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">...</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In particular, <a class="reference internal" href="#textwrap.fill" title="textwrap.fill"><code class="xref py py-func docutils literal notranslate"><span class="pre">fill()</span></code></a> accepts exactly the same keyword arguments as
+<a class="reference internal" href="#textwrap.wrap" title="textwrap.wrap"><code class="xref py py-func docutils literal notranslate"><span class="pre">wrap()</span></code></a>.</p>
+</dd></dl>
+
+<p>Both <a class="reference internal" href="#textwrap.wrap" title="textwrap.wrap"><code class="xref py py-func docutils literal notranslate"><span class="pre">wrap()</span></code></a> and <a class="reference internal" href="#textwrap.fill" title="textwrap.fill"><code class="xref py py-func docutils literal notranslate"><span class="pre">fill()</span></code></a> work by creating a <a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a>
+instance and calling a single method on it.  That instance is not reused, so for
+applications that wrap/fill many text strings, it will be more efficient for you
+to create your own <a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a> object.</p>
+<p>Text is preferably wrapped on whitespaces and right after the hyphens in
+hyphenated words; only then will long words be broken if necessary, unless
+<a class="reference internal" href="#textwrap.TextWrapper.break_long_words" title="textwrap.TextWrapper.break_long_words"><code class="xref py py-attr docutils literal notranslate"><span class="pre">TextWrapper.break_long_words</span></code></a> is set to false.</p>
+<p>An additional utility function, <a class="reference internal" href="#textwrap.dedent" title="textwrap.dedent"><code class="xref py py-func docutils literal notranslate"><span class="pre">dedent()</span></code></a>, is provided to remove
+indentation from strings that have unwanted whitespace to the left of the text.</p>
+<dl class="function">
+<dt id="textwrap.dedent">
+<code class="descclassname">textwrap.</code><code class="descname">dedent</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#textwrap.dedent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove any common leading whitespace from every line in <em>text</em>.</p>
+<p>This can be used to make triple-quoted strings line up with the left edge of the
+display, while still presenting them in the source code in indented form.</p>
+<p>Note that tabs and spaces are both treated as whitespace, but they are not
+equal: the lines <code class="docutils literal notranslate"><span class="pre">&quot;</span>&#160; <span class="pre">hello&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;\thello&quot;</span></code> are considered to have no
+common leading whitespace.  (This behaviour is new in Python 2.5; older versions
+of this module incorrectly expanded tabs before searching for common leading
+whitespace.)</p>
+<p>Lines containing only whitespace are ignored in the input and normalized to a
+single newline character in the output.</p>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="c1"># end first line with \ to avoid the empty line!</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span><span class="se">\</span>
+<span class="s1">    hello</span>
+<span class="s1">      world</span>
+<span class="s1">    &#39;&#39;&#39;</span>
+    <span class="nb">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>          <span class="c1"># prints &#39;    hello\n      world\n    &#39;</span>
+    <span class="nb">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">dedent</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>  <span class="c1"># prints &#39;hello\n  world\n&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="textwrap.TextWrapper">
+<em class="property">class </em><code class="descclassname">textwrap.</code><code class="descname">TextWrapper</code><span class="sig-paren">(</span><em>...</em><span class="sig-paren">)</span><a class="headerlink" href="#textwrap.TextWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a> constructor accepts a number of optional keyword
+arguments.  Each argument corresponds to one instance attribute, so for example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wrapper</span> <span class="o">=</span> <span class="n">TextWrapper</span><span class="p">(</span><span class="n">initial_indent</span><span class="o">=</span><span class="s2">&quot;* &quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wrapper</span> <span class="o">=</span> <span class="n">TextWrapper</span><span class="p">()</span>
+<span class="n">wrapper</span><span class="o">.</span><span class="n">initial_indent</span> <span class="o">=</span> <span class="s2">&quot;* &quot;</span>
+</pre></div>
+</div>
+<p>You can re-use the same <a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a> object many times, and you can
+change any of its options through direct assignment to instance attributes
+between uses.</p>
+<p>The <a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a> instance attributes (and keyword arguments to the
+constructor) are as follows:</p>
+<dl class="attribute">
+<dt id="textwrap.TextWrapper.width">
+<code class="descname">width</code><a class="headerlink" href="#textwrap.TextWrapper.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>(default: <code class="docutils literal notranslate"><span class="pre">70</span></code>) The maximum length of wrapped lines.  As long as there
+are no individual words in the input text longer than <a class="reference internal" href="#textwrap.TextWrapper.width" title="textwrap.TextWrapper.width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code></a>,
+<a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a> guarantees that no output line will be longer than
+<a class="reference internal" href="#textwrap.TextWrapper.width" title="textwrap.TextWrapper.width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code></a> characters.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="textwrap.TextWrapper.expand_tabs">
+<code class="descname">expand_tabs</code><a class="headerlink" href="#textwrap.TextWrapper.expand_tabs" title="Permalink to this definition">¶</a></dt>
+<dd><p>(default: <code class="docutils literal notranslate"><span class="pre">True</span></code>) If true, then all tab characters in <em>text</em> will be
+expanded to spaces using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">expandtabs()</span></code> method of <em>text</em>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="textwrap.TextWrapper.replace_whitespace">
+<code class="descname">replace_whitespace</code><a class="headerlink" href="#textwrap.TextWrapper.replace_whitespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>(default: <code class="docutils literal notranslate"><span class="pre">True</span></code>) If true, after tab expansion but before wrapping,
+the <a class="reference internal" href="#textwrap.wrap" title="textwrap.wrap"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wrap()</span></code></a> method will replace each whitespace character
+with a single space.  The whitespace characters replaced are
+as follows: tab, newline, vertical tab, formfeed, and carriage
+return (<code class="docutils literal notranslate"><span class="pre">'\t\n\v\f\r'</span></code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <a class="reference internal" href="#textwrap.TextWrapper.expand_tabs" title="textwrap.TextWrapper.expand_tabs"><code class="xref py py-attr docutils literal notranslate"><span class="pre">expand_tabs</span></code></a> is false and <a class="reference internal" href="#textwrap.TextWrapper.replace_whitespace" title="textwrap.TextWrapper.replace_whitespace"><code class="xref py py-attr docutils literal notranslate"><span class="pre">replace_whitespace</span></code></a> is true,
+each tab character will be replaced by a single space, which is <em>not</em>
+the same as tab expansion.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <a class="reference internal" href="#textwrap.TextWrapper.replace_whitespace" title="textwrap.TextWrapper.replace_whitespace"><code class="xref py py-attr docutils literal notranslate"><span class="pre">replace_whitespace</span></code></a> is false, newlines may appear in the
+middle of a line and cause strange output. For this reason, text should
+be split into paragraphs (using <a class="reference internal" href="stdtypes.html#str.splitlines" title="str.splitlines"><code class="xref py py-meth docutils literal notranslate"><span class="pre">str.splitlines()</span></code></a> or similar)
+which are wrapped separately.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="textwrap.TextWrapper.drop_whitespace">
+<code class="descname">drop_whitespace</code><a class="headerlink" href="#textwrap.TextWrapper.drop_whitespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>(default: <code class="docutils literal notranslate"><span class="pre">True</span></code>) If true, whitespace at the beginning and ending of
+every line (after wrapping but before indenting) is dropped.
+Whitespace at the beginning of the paragraph, however, is not dropped
+if non-whitespace follows it.  If whitespace being dropped takes up an
+entire line, the whole line is dropped.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6: </span>Whitespace was always dropped in earlier versions.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="textwrap.TextWrapper.initial_indent">
+<code class="descname">initial_indent</code><a class="headerlink" href="#textwrap.TextWrapper.initial_indent" title="Permalink to this definition">¶</a></dt>
+<dd><p>(default: <code class="docutils literal notranslate"><span class="pre">''</span></code>) String that will be prepended to the first line of
+wrapped output.  Counts towards the length of the first line.  The empty
+string is not indented.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="textwrap.TextWrapper.subsequent_indent">
+<code class="descname">subsequent_indent</code><a class="headerlink" href="#textwrap.TextWrapper.subsequent_indent" title="Permalink to this definition">¶</a></dt>
+<dd><p>(default: <code class="docutils literal notranslate"><span class="pre">''</span></code>) String that will be prepended to all lines of wrapped
+output except the first.  Counts towards the length of each line except
+the first.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="textwrap.TextWrapper.fix_sentence_endings">
+<code class="descname">fix_sentence_endings</code><a class="headerlink" href="#textwrap.TextWrapper.fix_sentence_endings" title="Permalink to this definition">¶</a></dt>
+<dd><p>(default: <code class="docutils literal notranslate"><span class="pre">False</span></code>) If true, <a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a> attempts to detect
+sentence endings and ensure that sentences are always separated by exactly
+two spaces.  This is generally desired for text in a monospaced font.
+However, the sentence detection algorithm is imperfect: it assumes that a
+sentence ending consists of a lowercase letter followed by one of <code class="docutils literal notranslate"><span class="pre">'.'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'!'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'?'</span></code>, possibly followed by one of <code class="docutils literal notranslate"><span class="pre">'&quot;'</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;'&quot;</span></code>,
+followed by a space.  One problem with this is algorithm is that it is
+unable to detect the difference between “Dr.” in</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="n">Dr</span><span class="o">.</span> <span class="n">Frankenstein</span><span class="s1">&#39;s monster [...]</span>
+</pre></div>
+</div>
+<p>and “Spot.” in</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="n">See</span> <span class="n">Spot</span><span class="o">.</span> <span class="n">See</span> <span class="n">Spot</span> <span class="n">run</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#textwrap.TextWrapper.fix_sentence_endings" title="textwrap.TextWrapper.fix_sentence_endings"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fix_sentence_endings</span></code></a> is false by default.</p>
+<p>Since the sentence detection algorithm relies on <code class="docutils literal notranslate"><span class="pre">string.lowercase</span></code> for
+the definition of “lowercase letter,” and a convention of using two spaces
+after a period to separate sentences on the same line, it is specific to
+English-language texts.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="textwrap.TextWrapper.break_long_words">
+<code class="descname">break_long_words</code><a class="headerlink" href="#textwrap.TextWrapper.break_long_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>(default: <code class="docutils literal notranslate"><span class="pre">True</span></code>) If true, then words longer than <a class="reference internal" href="#textwrap.TextWrapper.width" title="textwrap.TextWrapper.width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code></a> will be
+broken in order to ensure that no lines are longer than <a class="reference internal" href="#textwrap.TextWrapper.width" title="textwrap.TextWrapper.width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code></a>.  If
+it is false, long words will not be broken, and some lines may be longer
+than <a class="reference internal" href="#textwrap.TextWrapper.width" title="textwrap.TextWrapper.width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code></a>.  (Long words will be put on a line by themselves, in
+order to minimize the amount by which <a class="reference internal" href="#textwrap.TextWrapper.width" title="textwrap.TextWrapper.width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code></a> is exceeded.)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="textwrap.TextWrapper.break_on_hyphens">
+<code class="descname">break_on_hyphens</code><a class="headerlink" href="#textwrap.TextWrapper.break_on_hyphens" title="Permalink to this definition">¶</a></dt>
+<dd><p>(default: <code class="docutils literal notranslate"><span class="pre">True</span></code>) If true, wrapping will occur preferably on whitespaces
+and right after hyphens in compound words, as it is customary in English.
+If false, only whitespaces will be considered as potentially good places
+for line breaks, but you need to set <a class="reference internal" href="#textwrap.TextWrapper.break_long_words" title="textwrap.TextWrapper.break_long_words"><code class="xref py py-attr docutils literal notranslate"><span class="pre">break_long_words</span></code></a> to false if
+you want truly insecable words.  Default behaviour in previous versions
+was to always allow breaking hyphenated words.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<p><a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a> also provides two public methods, analogous to the
+module-level convenience functions:</p>
+<dl class="method">
+<dt id="textwrap.TextWrapper.wrap">
+<code class="descname">wrap</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#textwrap.TextWrapper.wrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps the single paragraph in <em>text</em> (a string) so every line is at most
+<a class="reference internal" href="#textwrap.TextWrapper.width" title="textwrap.TextWrapper.width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code></a> characters long.  All wrapping options are taken from
+instance attributes of the <a class="reference internal" href="#textwrap.TextWrapper" title="textwrap.TextWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextWrapper</span></code></a> instance.  Returns a list
+of output lines, without final newlines.  If the wrapped output has no
+content, the returned list is empty.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="textwrap.TextWrapper.fill">
+<code class="descname">fill</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#textwrap.TextWrapper.fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps the single paragraph in <em>text</em>, and returns a single string
+containing the wrapped paragraph.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="stringio.html"
+                        title="previous chapter">7.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">StringIO</span></code> — Read and write strings as files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="codecs.html"
+                        title="next chapter">7.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">codecs</span></code> — Codec registry and base classes</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/textwrap.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="codecs.html" title="7.8. codecs — Codec registry and base classes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="stringio.html" title="7.5. StringIO — Read and write strings as files"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="strings.html" >7. String Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 30, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

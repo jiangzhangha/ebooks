@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>7.11. fpformat — Floating point conversions &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="8. Data Types" href="datatypes.html" />
+    <link rel="prev" title="7.10. stringprep — Internet String Preparation" href="stringprep.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/fpformat.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datatypes.html" title="8. Data Types"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="stringprep.html" title="7.10. stringprep — Internet String Preparation"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="strings.html" accesskey="U">7. String Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fpformat">
+<span id="fpformat-floating-point-conversions"></span><h1>7.11. <a class="reference internal" href="#module-fpformat" title="fpformat: General floating point formatting functions. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpformat</span></code></a> — Floating point conversions<a class="headerlink" href="#module-fpformat" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-fpformat" title="fpformat: General floating point formatting functions. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpformat</span></code></a> module has been removed in Python 3.</p>
+</div>
+<p>The <a class="reference internal" href="#module-fpformat" title="fpformat: General floating point formatting functions. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpformat</span></code></a> module defines functions for dealing with floating point
+numbers representations in 100% pure Python.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is unnecessary: everything here can be done using the <code class="docutils literal notranslate"><span class="pre">%</span></code> string
+interpolation operator described in the <a class="reference internal" href="stdtypes.html#string-formatting"><span class="std std-ref">String Formatting Operations</span></a> section.</p>
+</div>
+<p>The <a class="reference internal" href="#module-fpformat" title="fpformat: General floating point formatting functions. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpformat</span></code></a> module defines the following functions and an exception:</p>
+<dl class="function">
+<dt id="fpformat.fix">
+<code class="descclassname">fpformat.</code><code class="descname">fix</code><span class="sig-paren">(</span><em>x</em>, <em>digs</em><span class="sig-paren">)</span><a class="headerlink" href="#fpformat.fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format <em>x</em> as <code class="docutils literal notranslate"><span class="pre">[-]ddd.ddd</span></code> with <em>digs</em> digits after the point and at least one
+digit before. If <code class="docutils literal notranslate"><span class="pre">digs</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>, the decimal point is suppressed.</p>
+<p><em>x</em> can be either a number or a string that looks like one. <em>digs</em> is an
+integer.</p>
+<p>Return value is a string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fpformat.sci">
+<code class="descclassname">fpformat.</code><code class="descname">sci</code><span class="sig-paren">(</span><em>x</em>, <em>digs</em><span class="sig-paren">)</span><a class="headerlink" href="#fpformat.sci" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format <em>x</em> as <code class="docutils literal notranslate"><span class="pre">[-]d.dddE[+-]ddd</span></code> with <em>digs</em> digits after the  point and
+exactly one digit before. If <code class="docutils literal notranslate"><span class="pre">digs</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>, one digit is kept and the point is
+suppressed.</p>
+<p><em>x</em> can be either a real number, or a string that looks like one. <em>digs</em> is an
+integer.</p>
+<p>Return value is a string.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="fpformat.NotANumber">
+<em class="property">exception </em><code class="descclassname">fpformat.</code><code class="descname">NotANumber</code><a class="headerlink" href="#fpformat.NotANumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when a string passed to <a class="reference internal" href="#fpformat.fix" title="fpformat.fix"><code class="xref py py-func docutils literal notranslate"><span class="pre">fix()</span></code></a> or <a class="reference internal" href="#fpformat.sci" title="fpformat.sci"><code class="xref py py-func docutils literal notranslate"><span class="pre">sci()</span></code></a> as the <em>x</em>
+parameter does not look like a number. This is a subclass of <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>
+when the standard exceptions are strings.  The exception value is the improperly
+formatted string that caused the exception to be raised.</p>
+</dd></dl>
+
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">fpformat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fpformat</span><span class="o">.</span><span class="n">fix</span><span class="p">(</span><span class="mf">1.23</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">&#39;1.2&#39;</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="stringprep.html"
+                        title="previous chapter">7.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">stringprep</span></code> — Internet String Preparation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="datatypes.html"
+                        title="next chapter">8. Data Types</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/fpformat.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datatypes.html" title="8. Data Types"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="stringprep.html" title="7.10. stringprep — Internet String Preparation"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="strings.html" >7. String Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

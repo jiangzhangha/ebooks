@@ -1,0 +1,592 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>20.16. urlparse — Parse URLs into components &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="20.17. SocketServer — A framework for network servers" href="socketserver.html" />
+    <link rel="prev" title="20.15. uuid — UUID objects according to RFC 4122" href="uuid.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/urlparse.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="socketserver.html" title="20.17. SocketServer — A framework for network servers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="uuid.html" title="20.15. uuid — UUID objects according to RFC 4122"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" accesskey="U">20. Internet Protocols and Support</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-urlparse">
+<span id="urlparse-parse-urls-into-components"></span><h1>20.16. <a class="reference internal" href="#module-urlparse" title="urlparse: Parse URLs into or assemble them from components."><code class="xref py py-mod docutils literal notranslate"><span class="pre">urlparse</span></code></a> — Parse URLs into components<a class="headerlink" href="#module-urlparse" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note" id="index-0">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#module-urlparse" title="urlparse: Parse URLs into or assemble them from components."><code class="xref py py-mod docutils literal notranslate"><span class="pre">urlparse</span></code></a> module is renamed to <code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.parse</span></code> in Python 3.
+The <a class="reference internal" href="../glossary.html#term-2to3"><span class="xref std std-term">2to3</span></a> tool will automatically adapt imports when converting
+your sources to Python 3.</p>
+</div>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/urlparse.py">Lib/urlparse.py</a></p>
+<hr class="docutils" />
+<p>This module defines a standard interface to break Uniform Resource Locator (URL)
+strings up in components (addressing scheme, network location, path etc.), to
+combine the components back into a URL string, and to convert a “relative URL”
+to an absolute URL given a “base URL.”</p>
+<p>The module has been designed to match the Internet RFC on Relative Uniform
+Resource Locators. It supports the following URL schemes: <code class="docutils literal notranslate"><span class="pre">file</span></code>, <code class="docutils literal notranslate"><span class="pre">ftp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gopher</span></code>, <code class="docutils literal notranslate"><span class="pre">hdl</span></code>, <code class="docutils literal notranslate"><span class="pre">http</span></code>, <code class="docutils literal notranslate"><span class="pre">https</span></code>, <code class="docutils literal notranslate"><span class="pre">imap</span></code>, <code class="docutils literal notranslate"><span class="pre">mailto</span></code>, <code class="docutils literal notranslate"><span class="pre">mms</span></code>,
+<code class="docutils literal notranslate"><span class="pre">news</span></code>,  <code class="docutils literal notranslate"><span class="pre">nntp</span></code>, <code class="docutils literal notranslate"><span class="pre">prospero</span></code>, <code class="docutils literal notranslate"><span class="pre">rsync</span></code>, <code class="docutils literal notranslate"><span class="pre">rtsp</span></code>, <code class="docutils literal notranslate"><span class="pre">rtspu</span></code>,  <code class="docutils literal notranslate"><span class="pre">sftp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">shttp</span></code>, <code class="docutils literal notranslate"><span class="pre">sip</span></code>, <code class="docutils literal notranslate"><span class="pre">sips</span></code>, <code class="docutils literal notranslate"><span class="pre">snews</span></code>, <code class="docutils literal notranslate"><span class="pre">svn</span></code>,  <code class="docutils literal notranslate"><span class="pre">svn+ssh</span></code>, <code class="docutils literal notranslate"><span class="pre">telnet</span></code>,
+<code class="docutils literal notranslate"><span class="pre">wais</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5: </span>Support for the <code class="docutils literal notranslate"><span class="pre">sftp</span></code> and <code class="docutils literal notranslate"><span class="pre">sips</span></code> schemes.</p>
+</div>
+<p>The <a class="reference internal" href="#module-urlparse" title="urlparse: Parse URLs into or assemble them from components."><code class="xref py py-mod docutils literal notranslate"><span class="pre">urlparse</span></code></a> module defines the following functions:</p>
+<dl class="function">
+<dt id="urlparse.urlparse">
+<code class="descclassname">urlparse.</code><code class="descname">urlparse</code><span class="sig-paren">(</span><em>urlstring</em><span class="optional">[</span>, <em>scheme</em><span class="optional">[</span>, <em>allow_fragments</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#urlparse.urlparse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a URL into six components, returning a 6-tuple.  This corresponds to the
+general structure of a URL: <code class="docutils literal notranslate"><span class="pre">scheme://netloc/path;parameters?query#fragment</span></code>.
+Each tuple item is a string, possibly empty. The components are not broken up in
+smaller parts (for example, the network location is a single string), and %
+escapes are not expanded. The delimiters as shown above are not part of the
+result, except for a leading slash in the <em>path</em> component, which is retained if
+present.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">urlparse</span> <span class="k">import</span> <span class="n">urlparse</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="s1">&#39;http://www.cwi.nl:80/</span><span class="si">%7E</span><span class="s1">guido/Python.html&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span>   <span class="c1"># doctest: +NORMALIZE_WHITESPACE</span>
+<span class="go">ParseResult(scheme=&#39;http&#39;, netloc=&#39;www.cwi.nl:80&#39;, path=&#39;/%7Eguido/Python.html&#39;,</span>
+<span class="go">            params=&#39;&#39;, query=&#39;&#39;, fragment=&#39;&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span><span class="o">.</span><span class="n">scheme</span>
+<span class="go">&#39;http&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span><span class="o">.</span><span class="n">port</span>
+<span class="go">80</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span><span class="o">.</span><span class="n">geturl</span><span class="p">()</span>
+<span class="go">&#39;http://www.cwi.nl:80/%7Eguido/Python.html&#39;</span>
+</pre></div>
+</div>
+<p>Following the syntax specifications in <span class="target" id="index-1"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc1808.html"><strong>RFC 1808</strong></a>, urlparse recognizes
+a netloc only if it is properly introduced by ‘//’.  Otherwise the
+input is presumed to be a relative URL and thus to start with
+a path component.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">urlparse</span> <span class="k">import</span> <span class="n">urlparse</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urlparse</span><span class="p">(</span><span class="s1">&#39;//www.cwi.nl:80/</span><span class="si">%7E</span><span class="s1">guido/Python.html&#39;</span><span class="p">)</span>
+<span class="go">ParseResult(scheme=&#39;&#39;, netloc=&#39;www.cwi.nl:80&#39;, path=&#39;/%7Eguido/Python.html&#39;,</span>
+<span class="go">           params=&#39;&#39;, query=&#39;&#39;, fragment=&#39;&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urlparse</span><span class="p">(</span><span class="s1">&#39;www.cwi.nl/</span><span class="si">%7E</span><span class="s1">guido/Python.html&#39;</span><span class="p">)</span>
+<span class="go">ParseResult(scheme=&#39;&#39;, netloc=&#39;&#39;, path=&#39;www.cwi.nl/%7Eguido/Python.html&#39;,</span>
+<span class="go">           params=&#39;&#39;, query=&#39;&#39;, fragment=&#39;&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urlparse</span><span class="p">(</span><span class="s1">&#39;help/Python.html&#39;</span><span class="p">)</span>
+<span class="go">ParseResult(scheme=&#39;&#39;, netloc=&#39;&#39;, path=&#39;help/Python.html&#39;, params=&#39;&#39;,</span>
+<span class="go">           query=&#39;&#39;, fragment=&#39;&#39;)</span>
+</pre></div>
+</div>
+<p>If the <em>scheme</em> argument is specified, it gives the default addressing
+scheme, to be used only if the URL does not specify one.  The default value for
+this argument is the empty string.</p>
+<p>If the <em>allow_fragments</em> argument is false, fragment identifiers are not
+recognized and parsed as part of the preceding component, even if the URL’s
+addressing scheme normally does support them.  The default value for this
+argument is <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code></a>.</p>
+<p>The return value is actually an instance of a subclass of <a class="reference internal" href="functions.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>.  This
+class has the following additional read-only convenience attributes:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 10%" />
+<col style="width: 36%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Index</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Value if not present</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">scheme</span></code></p></td>
+<td><p>0</p></td>
+<td><p>URL scheme specifier</p></td>
+<td><p><em>scheme</em> parameter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">netloc</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Network location part</p></td>
+<td><p>empty string</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">path</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Hierarchical path</p></td>
+<td><p>empty string</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">params</span></code></p></td>
+<td><p>3</p></td>
+<td><p>Parameters for last path
+element</p></td>
+<td><p>empty string</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">query</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Query component</p></td>
+<td><p>empty string</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fragment</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Fragment identifier</p></td>
+<td><p>empty string</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">username</span></code></p></td>
+<td></td>
+<td><p>User name</p></td>
+<td><p><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">password</span></code></p></td>
+<td></td>
+<td><p>Password</p></td>
+<td><p><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">hostname</span></code></p></td>
+<td></td>
+<td><p>Host name (lower case)</p></td>
+<td><p><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">port</span></code></p></td>
+<td></td>
+<td><p>Port number as integer,
+if present</p></td>
+<td><p><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+<p>See section <a class="reference internal" href="#urlparse-result-object"><span class="std std-ref">Results of urlparse() and urlsplit()</span></a> for more information on the result
+object.</p>
+<p>Characters in the <code class="xref py py-attr docutils literal notranslate"><span class="pre">netloc</span></code> attribute that decompose under NFKC
+normalization (as used by the IDNA encoding) into any of <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">?</span></code>,
+<code class="docutils literal notranslate"><span class="pre">#</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>, or <code class="docutils literal notranslate"><span class="pre">:</span></code> will raise a <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>. If the URL is
+decomposed before parsing, or is not a Unicode string, no error will be
+raised.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>Added attributes to return value.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span>Added IPv6 URL parsing capabilities.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7.17: </span>Characters that affect netloc parsing under NFKC normalization will
+now raise <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="urlparse.parse_qs">
+<code class="descclassname">urlparse.</code><code class="descname">parse_qs</code><span class="sig-paren">(</span><em>qs</em><span class="optional">[</span>, <em>keep_blank_values</em><span class="optional">[</span>, <em>strict_parsing</em><span class="optional">[</span>, <em>max_num_fields</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#urlparse.parse_qs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a query string given as a string argument (data of type
+<em class="mimetype">application/x-www-form-urlencoded</em>).  Data are returned as a
+dictionary.  The dictionary keys are the unique query variable names and the
+values are lists of values for each name.</p>
+<p>The optional argument <em>keep_blank_values</em> is a flag indicating whether blank
+values in percent-encoded queries should be treated as blank strings.   A true value
+indicates that blanks should be retained as  blank strings.  The default false
+value indicates that blank values are to be ignored and treated as if they were
+not included.</p>
+<p>The optional argument <em>strict_parsing</em> is a flag indicating what to do with
+parsing errors.  If false (the default), errors are silently ignored.  If true,
+errors raise a <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> exception.</p>
+<p>The optional argument <em>max_num_fields</em> is the maximum number of fields to
+read. If set, then throws a <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> if there are more than
+<em>max_num_fields</em> fields read.</p>
+<p>Use the <a class="reference internal" href="urllib.html#urllib.urlencode" title="urllib.urlencode"><code class="xref py py-func docutils literal notranslate"><span class="pre">urllib.urlencode()</span></code></a> function to convert such dictionaries into
+query strings.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6: </span>Copied from the <a class="reference internal" href="cgi.html#module-cgi" title="cgi: Helpers for running Python scripts via the Common Gateway Interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">cgi</span></code></a> module.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7.16: </span>Added <em>max_num_fields</em> parameter.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="urlparse.parse_qsl">
+<code class="descclassname">urlparse.</code><code class="descname">parse_qsl</code><span class="sig-paren">(</span><em>qs</em><span class="optional">[</span>, <em>keep_blank_values</em><span class="optional">[</span>, <em>strict_parsing</em><span class="optional">[</span>, <em>max_num_fields</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#urlparse.parse_qsl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a query string given as a string argument (data of type
+<em class="mimetype">application/x-www-form-urlencoded</em>).  Data are returned as a list of
+name, value pairs.</p>
+<p>The optional argument <em>keep_blank_values</em> is a flag indicating whether blank
+values in percent-encoded queries should be treated as blank strings.   A true value
+indicates that blanks should be retained as  blank strings.  The default false
+value indicates that blank values are to be ignored and treated as if they were
+not included.</p>
+<p>The optional argument <em>strict_parsing</em> is a flag indicating what to do with
+parsing errors.  If false (the default), errors are silently ignored.  If true,
+errors raise a <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> exception.</p>
+<p>The optional argument <em>max_num_fields</em> is the maximum number of fields to
+read. If set, then throws a <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> if there are more than
+<em>max_num_fields</em> fields read.</p>
+<p>Use the <a class="reference internal" href="urllib.html#urllib.urlencode" title="urllib.urlencode"><code class="xref py py-func docutils literal notranslate"><span class="pre">urllib.urlencode()</span></code></a> function to convert such lists of pairs into
+query strings.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6: </span>Copied from the <a class="reference internal" href="cgi.html#module-cgi" title="cgi: Helpers for running Python scripts via the Common Gateway Interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">cgi</span></code></a> module.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7.16: </span>Added <em>max_num_fields</em> parameter.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="urlparse.urlunparse">
+<code class="descclassname">urlparse.</code><code class="descname">urlunparse</code><span class="sig-paren">(</span><em>parts</em><span class="sig-paren">)</span><a class="headerlink" href="#urlparse.urlunparse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a URL from a tuple as returned by <code class="docutils literal notranslate"><span class="pre">urlparse()</span></code>. The <em>parts</em> argument
+can be any six-item iterable. This may result in a slightly different, but
+equivalent URL, if the URL that was parsed originally had unnecessary delimiters
+(for example, a ? with an empty query; the RFC states that these are
+equivalent).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="urlparse.urlsplit">
+<code class="descclassname">urlparse.</code><code class="descname">urlsplit</code><span class="sig-paren">(</span><em>urlstring</em><span class="optional">[</span>, <em>scheme</em><span class="optional">[</span>, <em>allow_fragments</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#urlparse.urlsplit" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is similar to <a class="reference internal" href="#module-urlparse" title="urlparse: Parse URLs into or assemble them from components."><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a>, but does not split the params from the URL.
+This should generally be used instead of <a class="reference internal" href="#module-urlparse" title="urlparse: Parse URLs into or assemble them from components."><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a> if the more recent URL
+syntax allowing parameters to be applied to each segment of the <em>path</em> portion
+of the URL (see <span class="target" id="index-2"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2396.html"><strong>RFC 2396</strong></a>) is wanted.  A separate function is needed to
+separate the path segments and parameters.  This function returns a 5-tuple:
+(addressing scheme, network location, path, query, fragment identifier).</p>
+<p>The return value is actually an instance of a subclass of <a class="reference internal" href="functions.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>.  This
+class has the following additional read-only convenience attributes:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 10%" />
+<col style="width: 35%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Index</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Value if not present</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">scheme</span></code></p></td>
+<td><p>0</p></td>
+<td><p>URL scheme specifier</p></td>
+<td><p><em>scheme</em> parameter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">netloc</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Network location part</p></td>
+<td><p>empty string</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">path</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Hierarchical path</p></td>
+<td><p>empty string</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">query</span></code></p></td>
+<td><p>3</p></td>
+<td><p>Query component</p></td>
+<td><p>empty string</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fragment</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Fragment identifier</p></td>
+<td><p>empty string</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">username</span></code></p></td>
+<td></td>
+<td><p>User name</p></td>
+<td><p><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">password</span></code></p></td>
+<td></td>
+<td><p>Password</p></td>
+<td><p><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">hostname</span></code></p></td>
+<td></td>
+<td><p>Host name (lower case)</p></td>
+<td><p><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">port</span></code></p></td>
+<td></td>
+<td><p>Port number as integer,
+if present</p></td>
+<td><p><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+<p>See section <a class="reference internal" href="#urlparse-result-object"><span class="std std-ref">Results of urlparse() and urlsplit()</span></a> for more information on the result
+object.</p>
+<p>Characters in the <code class="xref py py-attr docutils literal notranslate"><span class="pre">netloc</span></code> attribute that decompose under NFKC
+normalization (as used by the IDNA encoding) into any of <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">?</span></code>,
+<code class="docutils literal notranslate"><span class="pre">#</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>, or <code class="docutils literal notranslate"><span class="pre">:</span></code> will raise a <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>. If the URL is
+decomposed before parsing, or is not a Unicode string, no error will be
+raised.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>Added attributes to return value.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7.17: </span>Characters that affect netloc parsing under NFKC normalization will
+now raise <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="urlparse.urlunsplit">
+<code class="descclassname">urlparse.</code><code class="descname">urlunsplit</code><span class="sig-paren">(</span><em>parts</em><span class="sig-paren">)</span><a class="headerlink" href="#urlparse.urlunsplit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine the elements of a tuple as returned by <a class="reference internal" href="#urlparse.urlsplit" title="urlparse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a> into a complete
+URL as a string. The <em>parts</em> argument can be any five-item iterable. This may
+result in a slightly different, but equivalent URL, if the URL that was parsed
+originally had unnecessary delimiters (for example, a ? with an empty query; the
+RFC states that these are equivalent).</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="urlparse.urljoin">
+<code class="descclassname">urlparse.</code><code class="descname">urljoin</code><span class="sig-paren">(</span><em>base</em>, <em>url</em><span class="optional">[</span>, <em>allow_fragments</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#urlparse.urljoin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a full (“absolute”) URL by combining a “base URL” (<em>base</em>) with
+another URL (<em>url</em>).  Informally, this uses components of the base URL, in
+particular the addressing scheme, the network location and (part of) the path,
+to provide missing components in the relative URL.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">urlparse</span> <span class="k">import</span> <span class="n">urljoin</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urljoin</span><span class="p">(</span><span class="s1">&#39;http://www.cwi.nl/</span><span class="si">%7E</span><span class="s1">guido/Python.html&#39;</span><span class="p">,</span> <span class="s1">&#39;FAQ.html&#39;</span><span class="p">)</span>
+<span class="go">&#39;http://www.cwi.nl/%7Eguido/FAQ.html&#39;</span>
+</pre></div>
+</div>
+<p>The <em>allow_fragments</em> argument has the same meaning and default as for
+<a class="reference internal" href="#module-urlparse" title="urlparse: Parse URLs into or assemble them from components."><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <em>url</em> is an absolute URL (that is, starting with <code class="docutils literal notranslate"><span class="pre">//</span></code> or <code class="docutils literal notranslate"><span class="pre">scheme://</span></code>),
+the <em>url</em>’s host name and/or scheme will be present in the result.  For example:</p>
+</div>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">urljoin</span><span class="p">(</span><span class="s1">&#39;http://www.cwi.nl/</span><span class="si">%7E</span><span class="s1">guido/Python.html&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s1">&#39;//www.python.org/</span><span class="si">%7E</span><span class="s1">guido&#39;</span><span class="p">)</span>
+<span class="go">&#39;http://www.python.org/%7Eguido&#39;</span>
+</pre></div>
+</div>
+<p>If you do not want that behavior, preprocess the <em>url</em> with <a class="reference internal" href="#urlparse.urlsplit" title="urlparse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a> and
+<a class="reference internal" href="#urlparse.urlunsplit" title="urlparse.urlunsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlunsplit()</span></code></a>, removing possible <em>scheme</em> and <em>netloc</em> parts.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="urlparse.urldefrag">
+<code class="descclassname">urlparse.</code><code class="descname">urldefrag</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#urlparse.urldefrag" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <em>url</em> contains a fragment identifier, returns a modified version of <em>url</em>
+with no fragment identifier, and the fragment identifier as a separate string.
+If there is no fragment identifier in <em>url</em>, returns <em>url</em> unmodified and an
+empty string.</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><span class="target" id="index-3"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc3986.html"><strong>RFC 3986</strong></a> - Uniform Resource Identifiers</dt><dd><p>This is the current standard (STD66). Any changes to urlparse module
+should conform to this. Certain deviations could be observed, which are
+mostly for backward compatibility purposes and for certain de-facto
+parsing requirements as commonly observed in major browsers.</p>
+</dd>
+<dt><span class="target" id="index-4"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2732.html"><strong>RFC 2732</strong></a> - Format for Literal IPv6 Addresses in URL’s.</dt><dd><p>This specifies the parsing requirements of IPv6 URLs.</p>
+</dd>
+<dt><span class="target" id="index-5"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2396.html"><strong>RFC 2396</strong></a> - Uniform Resource Identifiers (URI): Generic Syntax</dt><dd><p>Document describing the generic syntactic requirements for both Uniform Resource
+Names (URNs) and Uniform Resource Locators (URLs).</p>
+</dd>
+<dt><span class="target" id="index-6"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2368.html"><strong>RFC 2368</strong></a> - The mailto URL scheme.</dt><dd><p>Parsing requirements for mailto URL schemes.</p>
+</dd>
+<dt><span class="target" id="index-7"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc1808.html"><strong>RFC 1808</strong></a> - Relative Uniform Resource Locators</dt><dd><p>This Request For Comments includes the rules for joining an absolute and a
+relative URL, including a fair number of “Abnormal Examples” which govern the
+treatment of border cases.</p>
+</dd>
+<dt><span class="target" id="index-8"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc1738.html"><strong>RFC 1738</strong></a> - Uniform Resource Locators (URL)</dt><dd><p>This specifies the formal syntax and semantics of absolute URLs.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="results-of-urlparse-and-urlsplit">
+<span id="urlparse-result-object"></span><h2>20.16.1. Results of <a class="reference internal" href="#module-urlparse" title="urlparse: Parse URLs into or assemble them from components."><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a> and <a class="reference internal" href="#urlparse.urlsplit" title="urlparse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a><a class="headerlink" href="#results-of-urlparse-and-urlsplit" title="Permalink to this headline">¶</a></h2>
+<p>The result objects from the <a class="reference internal" href="#module-urlparse" title="urlparse: Parse URLs into or assemble them from components."><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a> and <a class="reference internal" href="#urlparse.urlsplit" title="urlparse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a> functions are
+subclasses of the <a class="reference internal" href="functions.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> type.  These subclasses add the attributes
+described in those functions, as well as provide an additional method:</p>
+<dl class="method">
+<dt id="urlparse.ParseResult.geturl">
+<code class="descclassname">ParseResult.</code><code class="descname">geturl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#urlparse.ParseResult.geturl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the re-combined version of the original URL as a string. This may differ
+from the original URL in that the scheme will always be normalized to lower case
+and empty components may be dropped. Specifically, empty parameters, queries,
+and fragment identifiers will be removed.</p>
+<p>The result of this method is a fixpoint if passed back through the original
+parsing function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urlparse</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;HTTP://www.Python.org/doc/#&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r1</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r1</span><span class="o">.</span><span class="n">geturl</span><span class="p">()</span>
+<span class="go">&#39;http://www.Python.org/doc/&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r2</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">r1</span><span class="o">.</span><span class="n">geturl</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r2</span><span class="o">.</span><span class="n">geturl</span><span class="p">()</span>
+<span class="go">&#39;http://www.Python.org/doc/&#39;</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+</dd></dl>
+
+<p>The following classes provide the implementations of the parse results:</p>
+<dl class="class">
+<dt id="urlparse.ParseResult">
+<em class="property">class </em><code class="descclassname">urlparse.</code><code class="descname">ParseResult</code><span class="sig-paren">(</span><em>scheme</em>, <em>netloc</em>, <em>path</em>, <em>params</em>, <em>query</em>, <em>fragment</em><span class="sig-paren">)</span><a class="headerlink" href="#urlparse.ParseResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concrete class for <a class="reference internal" href="#module-urlparse" title="urlparse: Parse URLs into or assemble them from components."><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a> results.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="urlparse.SplitResult">
+<em class="property">class </em><code class="descclassname">urlparse.</code><code class="descname">SplitResult</code><span class="sig-paren">(</span><em>scheme</em>, <em>netloc</em>, <em>path</em>, <em>query</em>, <em>fragment</em><span class="sig-paren">)</span><a class="headerlink" href="#urlparse.SplitResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concrete class for <a class="reference internal" href="#urlparse.urlsplit" title="urlparse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a> results.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">20.16. <code class="xref py py-mod docutils literal notranslate"><span class="pre">urlparse</span></code> — Parse URLs into components</a><ul>
+<li><a class="reference internal" href="#results-of-urlparse-and-urlsplit">20.16.1. Results of <code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="uuid.html"
+                        title="previous chapter">20.15. <code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> — UUID objects according to RFC 4122</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="socketserver.html"
+                        title="next chapter">20.17. <code class="xref py py-mod docutils literal notranslate"><span class="pre">SocketServer</span></code> — A framework for network servers</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/urlparse.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="socketserver.html" title="20.17. SocketServer — A framework for network servers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="uuid.html" title="20.15. uuid — UUID objects according to RFC 4122"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" >20. Internet Protocols and Support</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

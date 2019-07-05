@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>20.20. CGIHTTPServer — CGI-capable HTTP request handler &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="20.21. cookielib — Cookie handling for HTTP clients" href="cookielib.html" />
+    <link rel="prev" title="20.19. SimpleHTTPServer — Simple HTTP request handler" href="simplehttpserver.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/cgihttpserver.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cookielib.html" title="20.21. cookielib — Cookie handling for HTTP clients"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="simplehttpserver.html" title="20.19. SimpleHTTPServer — Simple HTTP request handler"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" accesskey="U">20. Internet Protocols and Support</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-CGIHTTPServer">
+<span id="cgihttpserver-cgi-capable-http-request-handler"></span><h1>20.20. <a class="reference internal" href="#module-CGIHTTPServer" title="CGIHTTPServer: This module provides a request handler for HTTP servers which can run CGI scripts."><code class="xref py py-mod docutils literal notranslate"><span class="pre">CGIHTTPServer</span></code></a> — CGI-capable HTTP request handler<a class="headerlink" href="#module-CGIHTTPServer" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#module-CGIHTTPServer" title="CGIHTTPServer: This module provides a request handler for HTTP servers which can run CGI scripts."><code class="xref py py-mod docutils literal notranslate"><span class="pre">CGIHTTPServer</span></code></a> module has been merged into <code class="xref py py-mod docutils literal notranslate"><span class="pre">http.server</span></code> in
+Python 3.  The <a class="reference internal" href="../glossary.html#term-2to3"><span class="xref std std-term">2to3</span></a> tool will automatically adapt imports when
+converting your sources to Python 3.</p>
+</div>
+<p>The <a class="reference internal" href="#module-CGIHTTPServer" title="CGIHTTPServer: This module provides a request handler for HTTP servers which can run CGI scripts."><code class="xref py py-mod docutils literal notranslate"><span class="pre">CGIHTTPServer</span></code></a> module defines a request-handler class, interface
+compatible with <a class="reference internal" href="basehttpserver.html#BaseHTTPServer.BaseHTTPRequestHandler" title="BaseHTTPServer.BaseHTTPRequestHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseHTTPServer.BaseHTTPRequestHandler</span></code></a> and inherits
+behavior from <a class="reference internal" href="simplehttpserver.html#SimpleHTTPServer.SimpleHTTPRequestHandler" title="SimpleHTTPServer.SimpleHTTPRequestHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleHTTPServer.SimpleHTTPRequestHandler</span></code></a> but can also
+run CGI scripts.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module can run CGI scripts on Unix and Windows systems.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CGI scripts run by the <a class="reference internal" href="#CGIHTTPServer.CGIHTTPRequestHandler" title="CGIHTTPServer.CGIHTTPRequestHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">CGIHTTPRequestHandler</span></code></a> class cannot execute
+redirects (HTTP code 302), because code 200 (script output follows) is sent
+prior to execution of the CGI script.  This pre-empts the status code.</p>
+</div>
+<p>The <a class="reference internal" href="#module-CGIHTTPServer" title="CGIHTTPServer: This module provides a request handler for HTTP servers which can run CGI scripts."><code class="xref py py-mod docutils literal notranslate"><span class="pre">CGIHTTPServer</span></code></a> module defines the following class:</p>
+<dl class="class">
+<dt id="CGIHTTPServer.CGIHTTPRequestHandler">
+<em class="property">class </em><code class="descclassname">CGIHTTPServer.</code><code class="descname">CGIHTTPRequestHandler</code><span class="sig-paren">(</span><em>request</em>, <em>client_address</em>, <em>server</em><span class="sig-paren">)</span><a class="headerlink" href="#CGIHTTPServer.CGIHTTPRequestHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is used to serve either files or output of CGI scripts from  the
+current directory and below. Note that mapping HTTP hierarchic structure to
+local directory structure is exactly as in
+<a class="reference internal" href="simplehttpserver.html#SimpleHTTPServer.SimpleHTTPRequestHandler" title="SimpleHTTPServer.SimpleHTTPRequestHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleHTTPServer.SimpleHTTPRequestHandler</span></code></a>.</p>
+<p>The class will however, run the CGI script, instead of serving it as a file, if
+it guesses it to be a CGI script. Only directory-based CGI are used — the
+other common server configuration is to treat special extensions as denoting CGI
+scripts.</p>
+<p>The <code class="xref py py-func docutils literal notranslate"><span class="pre">do_GET()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">do_HEAD()</span></code> functions are modified to run CGI scripts
+and serve the output, instead of serving files, if the request leads to
+somewhere below the <code class="docutils literal notranslate"><span class="pre">cgi_directories</span></code> path.</p>
+<p>The <a class="reference internal" href="#CGIHTTPServer.CGIHTTPRequestHandler" title="CGIHTTPServer.CGIHTTPRequestHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">CGIHTTPRequestHandler</span></code></a> defines the following data member:</p>
+<dl class="attribute">
+<dt id="CGIHTTPServer.CGIHTTPRequestHandler.cgi_directories">
+<code class="descname">cgi_directories</code><a class="headerlink" href="#CGIHTTPServer.CGIHTTPRequestHandler.cgi_directories" title="Permalink to this definition">¶</a></dt>
+<dd><p>This defaults to <code class="docutils literal notranslate"><span class="pre">['/cgi-bin',</span> <span class="pre">'/htbin']</span></code> and describes directories to
+treat as containing CGI scripts.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#CGIHTTPServer.CGIHTTPRequestHandler" title="CGIHTTPServer.CGIHTTPRequestHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">CGIHTTPRequestHandler</span></code></a> defines the following methods:</p>
+<dl class="method">
+<dt id="CGIHTTPServer.CGIHTTPRequestHandler.do_POST">
+<code class="descname">do_POST</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CGIHTTPServer.CGIHTTPRequestHandler.do_POST" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method serves the <code class="docutils literal notranslate"><span class="pre">'POST'</span></code> request type, only allowed for CGI
+scripts.  Error 501, “Can only POST to CGI scripts”, is output when trying
+to POST to a non-CGI url.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>Note that CGI scripts will be run with UID of user nobody, for security reasons.
+Problems with the CGI script will be translated to error 403.</p>
+<p>For example usage, see the implementation of the <a class="reference internal" href="test.html#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-func docutils literal notranslate"><span class="pre">test()</span></code></a> function.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="basehttpserver.html#module-BaseHTTPServer" title="BaseHTTPServer: Basic HTTP server (base class for SimpleHTTPServer and CGIHTTPServer)."><code class="xref py py-mod docutils literal notranslate"><span class="pre">BaseHTTPServer</span></code></a></dt><dd><p>Base class implementation for Web server and request handler.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="simplehttpserver.html"
+                        title="previous chapter">20.19. <code class="xref py py-mod docutils literal notranslate"><span class="pre">SimpleHTTPServer</span></code> — Simple HTTP request handler</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cookielib.html"
+                        title="next chapter">20.21. <code class="xref py py-mod docutils literal notranslate"><span class="pre">cookielib</span></code> — Cookie handling for HTTP clients</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/cgihttpserver.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cookielib.html" title="20.21. cookielib — Cookie handling for HTTP clients"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="simplehttpserver.html" title="20.19. SimpleHTTPServer — Simple HTTP request handler"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" >20. Internet Protocols and Support</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

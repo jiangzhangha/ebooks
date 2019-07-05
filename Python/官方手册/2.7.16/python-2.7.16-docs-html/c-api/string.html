@@ -1,0 +1,523 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>String/Bytes Objects &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Unicode Objects and Codecs" href="unicode.html" />
+    <link rel="prev" title="Byte Array Objects" href="bytearray.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/c-api/string.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="unicode.html" title="Unicode Objects and Codecs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bytearray.html" title="Byte Array Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="string-bytes-objects">
+<span id="stringobjects"></span><h1>String/Bytes Objects<a class="headerlink" href="#string-bytes-objects" title="Permalink to this headline">¶</a></h1>
+<p>These functions raise <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> when expecting a string parameter and are
+called with a non-string parameter.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These functions have been renamed to PyBytes_* in Python 3.x. Unless
+otherwise noted, the PyBytes functions available in 3.x are aliased to their
+PyString_* equivalents to help porting.</p>
+</div>
+<span class="target" id="index-0"></span><dl class="type">
+<dt id="c.PyStringObject">
+<code class="descname">PyStringObject</code><a class="headerlink" href="#c.PyStringObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This subtype of <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyObject</span></code></a> represents a Python string object.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyString_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a> <code class="descname">PyString_Type</code><a class="headerlink" href="#c.PyString_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This instance of <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> represents the Python string type; it is
+the same object as <code class="docutils literal notranslate"><span class="pre">str</span></code> and <code class="docutils literal notranslate"><span class="pre">types.StringType</span></code> in the Python layer. .</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_Check">
+int <code class="descname">PyString_Check</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object <em>o</em> is a string object or an instance of a subtype of
+the string type.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.2: </span>Allowed subtypes to be accepted.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_CheckExact">
+int <code class="descname">PyString_CheckExact</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object <em>o</em> is a string object, but not an instance of a
+subtype of the string type.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_FromString">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyString_FromString</code><span class="sig-paren">(</span>const char<em> *v</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_FromString" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new string object with a copy of the string <em>v</em> as value on success,
+and <em>NULL</em> on failure.  The parameter <em>v</em> must not be <em>NULL</em>; it will not be
+checked.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_FromStringAndSize">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyString_FromStringAndSize</code><span class="sig-paren">(</span>const char<em> *v</em>, Py_ssize_t<em> len</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_FromStringAndSize" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new string object with a copy of the string <em>v</em> as value and length
+<em>len</em> on success, and <em>NULL</em> on failure.  If <em>v</em> is <em>NULL</em>, the contents of the
+string are uninitialized.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function used an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type for <em>len</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_FromFormat">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyString_FromFormat</code><span class="sig-paren">(</span>const char<em> *format</em>, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_FromFormat" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Take a C <code class="xref c c-func docutils literal notranslate"><span class="pre">printf()</span></code>-style <em>format</em> string and a variable number of
+arguments, calculate the size of the resulting Python string and return a string
+with the values formatted into it.  The variable arguments must be C types and
+must correspond exactly to the format characters in the <em>format</em> string.  The
+following format characters are allowed:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 23%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Format Characters</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Comment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%%</span></code></p></td>
+<td><p><em>n/a</em></p></td>
+<td><p>The literal % character.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%c</span></code></p></td>
+<td><p>int</p></td>
+<td><p>A single character,
+represented as a C int.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%d</span></code></p></td>
+<td><p>int</p></td>
+<td><p>Exactly equivalent to
+<code class="docutils literal notranslate"><span class="pre">printf(&quot;%d&quot;)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%u</span></code></p></td>
+<td><p>unsigned int</p></td>
+<td><p>Exactly equivalent to
+<code class="docutils literal notranslate"><span class="pre">printf(&quot;%u&quot;)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%ld</span></code></p></td>
+<td><p>long</p></td>
+<td><p>Exactly equivalent to
+<code class="docutils literal notranslate"><span class="pre">printf(&quot;%ld&quot;)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%lu</span></code></p></td>
+<td><p>unsigned long</p></td>
+<td><p>Exactly equivalent to
+<code class="docutils literal notranslate"><span class="pre">printf(&quot;%lu&quot;)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%lld</span></code></p></td>
+<td><p>long long</p></td>
+<td><p>Exactly equivalent to
+<code class="docutils literal notranslate"><span class="pre">printf(&quot;%lld&quot;)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%llu</span></code></p></td>
+<td><p>unsigned
+long long</p></td>
+<td><p>Exactly equivalent to
+<code class="docutils literal notranslate"><span class="pre">printf(&quot;%llu&quot;)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%zd</span></code></p></td>
+<td><p>Py_ssize_t</p></td>
+<td><p>Exactly equivalent to
+<code class="docutils literal notranslate"><span class="pre">printf(&quot;%zd&quot;)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%zu</span></code></p></td>
+<td><p>size_t</p></td>
+<td><p>Exactly equivalent to
+<code class="docutils literal notranslate"><span class="pre">printf(&quot;%zu&quot;)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%i</span></code></p></td>
+<td><p>int</p></td>
+<td><p>Exactly equivalent to
+<code class="docutils literal notranslate"><span class="pre">printf(&quot;%i&quot;)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%x</span></code></p></td>
+<td><p>int</p></td>
+<td><p>Exactly equivalent to
+<code class="docutils literal notranslate"><span class="pre">printf(&quot;%x&quot;)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%s</span></code></p></td>
+<td><p>char*</p></td>
+<td><p>A null-terminated C character
+array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">%p</span></code></p></td>
+<td><p>void*</p></td>
+<td><p>The hex representation of a C
+pointer. Mostly equivalent to
+<code class="docutils literal notranslate"><span class="pre">printf(&quot;%p&quot;)</span></code> except that
+it is guaranteed to start with
+the literal <code class="docutils literal notranslate"><span class="pre">0x</span></code> regardless
+of what the platform’s
+<code class="docutils literal notranslate"><span class="pre">printf</span></code> yields.</p></td>
+</tr>
+</tbody>
+</table>
+<p>An unrecognized format character causes all the rest of the format string to be
+copied as-is to the result string, and any extra arguments discarded.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <cite>“%lld”</cite> and <cite>“%llu”</cite> format specifiers are only available
+when <code class="xref py py-const docutils literal notranslate"><span class="pre">HAVE_LONG_LONG</span></code> is defined.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span>Support for <cite>“%lld”</cite> and <cite>“%llu”</cite> added.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_FromFormatV">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyString_FromFormatV</code><span class="sig-paren">(</span>const char<em> *format</em>, va_list<em> vargs</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_FromFormatV" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Identical to <a class="reference internal" href="#c.PyString_FromFormat" title="PyString_FromFormat"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyString_FromFormat()</span></code></a> except that it takes exactly two
+arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_Size">
+Py_ssize_t <code class="descname">PyString_Size</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *string</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_Size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the length of the string in string object <em>string</em>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function returned an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type. This might require changes
+in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_GET_SIZE">
+Py_ssize_t <code class="descname">PyString_GET_SIZE</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *string</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_GET_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Macro form of <a class="reference internal" href="#c.PyString_Size" title="PyString_Size"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyString_Size()</span></code></a> but without error checking.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This macro returned an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type. This might require changes in
+your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_AsString">
+char* <code class="descname">PyString_AsString</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *string</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_AsString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a NUL-terminated representation of the contents of <em>string</em>.  The pointer
+refers to the internal buffer of <em>string</em>, not a copy.  The data must not be
+modified in any way, unless the string was just created using
+<code class="docutils literal notranslate"><span class="pre">PyString_FromStringAndSize(NULL,</span> <span class="pre">size)</span></code>. It must not be deallocated.  If
+<em>string</em> is a Unicode object, this function computes the default encoding of
+<em>string</em> and operates on that.  If <em>string</em> is not a string object at all,
+<a class="reference internal" href="#c.PyString_AsString" title="PyString_AsString"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyString_AsString()</span></code></a> returns <em>NULL</em> and raises <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_AS_STRING">
+char* <code class="descname">PyString_AS_STRING</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *string</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_AS_STRING" title="Permalink to this definition">¶</a></dt>
+<dd><p>Macro form of <a class="reference internal" href="#c.PyString_AsString" title="PyString_AsString"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyString_AsString()</span></code></a> but without error checking.  Only
+string objects are supported; no Unicode objects should be passed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_AsStringAndSize">
+int <code class="descname">PyString_AsStringAndSize</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *obj</em>, char<em> **buffer</em>, Py_ssize_t<em> *length</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_AsStringAndSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a NUL-terminated representation of the contents of the object <em>obj</em>
+through the output variables <em>buffer</em> and <em>length</em>.</p>
+<p>The function accepts both string and Unicode objects as input. For Unicode
+objects it returns the default encoded version of the object.  If <em>length</em> is
+<em>NULL</em>, the resulting buffer may not contain NUL characters; if it does, the
+function returns <code class="docutils literal notranslate"><span class="pre">-1</span></code> and a <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> is raised.</p>
+<p>The buffer refers to an internal string buffer of <em>obj</em>, not a copy. The data
+must not be modified in any way, unless the string was just created using
+<code class="docutils literal notranslate"><span class="pre">PyString_FromStringAndSize(NULL,</span> <span class="pre">size)</span></code>.  It must not be deallocated.  If
+<em>string</em> is a Unicode object, this function computes the default encoding of
+<em>string</em> and operates on that.  If <em>string</em> is not a string object at all,
+<a class="reference internal" href="#c.PyString_AsStringAndSize" title="PyString_AsStringAndSize"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyString_AsStringAndSize()</span></code></a> returns <code class="docutils literal notranslate"><span class="pre">-1</span></code> and raises <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function used an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span> <span class="pre">*</span></code> type for <em>length</em>. This might
+require changes in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_Concat">
+void <code class="descname">PyString_Concat</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> **string</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *newpart</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_Concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new string object in <em>*string</em> containing the contents of <em>newpart</em>
+appended to <em>string</em>; the caller will own the new reference.  The reference to
+the old value of <em>string</em> will be stolen.  If the new string cannot be created,
+the old reference to <em>string</em> will still be discarded and the value of
+<em>*string</em> will be set to <em>NULL</em>; the appropriate exception will be set.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_ConcatAndDel">
+void <code class="descname">PyString_ConcatAndDel</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> **string</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *newpart</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_ConcatAndDel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new string object in <em>*string</em> containing the contents of <em>newpart</em>
+appended to <em>string</em>.  This version decrements the reference count of <em>newpart</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c._PyString_Resize">
+int <code class="descname">_PyString_Resize</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> **string</em>, Py_ssize_t<em> newsize</em><span class="sig-paren">)</span><a class="headerlink" href="#c._PyString_Resize" title="Permalink to this definition">¶</a></dt>
+<dd><p>A way to resize a string object even though it is “immutable”. Only use this to
+build up a brand new string object; don’t use this if the string may already be
+known in other parts of the code.  It is an error to call this function if the
+refcount on the input string object is not one. Pass the address of an existing
+string object as an lvalue (it may be written into), and the new size desired.
+On success, <em>*string</em> holds the resized string object and <code class="docutils literal notranslate"><span class="pre">0</span></code> is returned;
+the address in <em>*string</em> may differ from its input value.  If the reallocation
+fails, the original string object at <em>*string</em> is deallocated, <em>*string</em> is
+set to <em>NULL</em>, a memory exception is set, and <code class="docutils literal notranslate"><span class="pre">-1</span></code> is returned.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function used an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type for <em>newsize</em>. This might
+require changes in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_Format">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyString_Format</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *format</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *args</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_Format" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new string object from <em>format</em> and <em>args</em>. Analogous to <code class="docutils literal notranslate"><span class="pre">format</span> <span class="pre">%</span>
+<span class="pre">args</span></code>.  The <em>args</em> argument must be a tuple or dict.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_InternInPlace">
+void <code class="descname">PyString_InternInPlace</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> **string</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_InternInPlace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Intern the argument <em>*string</em> in place.  The argument must be the address of a
+pointer variable pointing to a Python string object.  If there is an existing
+interned string that is the same as <em>*string</em>, it sets <em>*string</em> to it
+(decrementing the reference count of the old string object and incrementing the
+reference count of the interned string object), otherwise it leaves <em>*string</em>
+alone and interns it (incrementing its reference count).  (Clarification: even
+though there is a lot of talk about reference counts, think of this function as
+reference-count-neutral; you own the object after the call if and only if you
+owned it before the call.)</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is not available in 3.x and does not have a PyBytes alias.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_InternFromString">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyString_InternFromString</code><span class="sig-paren">(</span>const char<em> *v</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_InternFromString" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>A combination of <a class="reference internal" href="#c.PyString_FromString" title="PyString_FromString"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyString_FromString()</span></code></a> and
+<a class="reference internal" href="#c.PyString_InternInPlace" title="PyString_InternInPlace"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyString_InternInPlace()</span></code></a>, returning either a new string object that has
+been interned, or a new (“owned”) reference to an earlier interned string object
+with the same value.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is not available in 3.x and does not have a PyBytes alias.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_Decode">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyString_Decode</code><span class="sig-paren">(</span>const char<em> *s</em>, Py_ssize_t<em> size</em>, const char<em> *encoding</em>, const char<em> *errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_Decode" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create an object by decoding <em>size</em> bytes of the encoded buffer <em>s</em> using the
+codec registered for <em>encoding</em>.  <em>encoding</em> and <em>errors</em> have the same meaning
+as the parameters of the same name in the <a class="reference internal" href="../library/functions.html#unicode" title="unicode"><code class="xref py py-func docutils literal notranslate"><span class="pre">unicode()</span></code></a> built-in function.
+The codec to be used is looked up using the Python codec registry.  Return
+<em>NULL</em> if an exception was raised by the codec.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is not available in 3.x and does not have a PyBytes alias.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function used an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type for <em>size</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_AsDecodedObject">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyString_AsDecodedObject</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *str</em>, const char<em> *encoding</em>, const char<em> *errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_AsDecodedObject" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Decode a string object by passing it to the codec registered for <em>encoding</em> and
+return the result as Python object. <em>encoding</em> and <em>errors</em> have the same
+meaning as the parameters of the same name in the string <code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code> method.
+The codec to be used is looked up using the Python codec registry. Return <em>NULL</em>
+if an exception was raised by the codec.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is not available in 3.x and does not have a PyBytes alias.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_Encode">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyString_Encode</code><span class="sig-paren">(</span>const char<em> *s</em>, Py_ssize_t<em> size</em>, const char<em> *encoding</em>, const char<em> *errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_Encode" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Encode the <code class="xref c c-type docutils literal notranslate"><span class="pre">char</span></code> buffer of the given size by passing it to the codec
+registered for <em>encoding</em> and return a Python object. <em>encoding</em> and <em>errors</em>
+have the same meaning as the parameters of the same name in the string
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code> method. The codec to be used is looked up using the Python codec
+registry.  Return <em>NULL</em> if an exception was raised by the codec.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is not available in 3.x and does not have a PyBytes alias.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function used an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type for <em>size</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyString_AsEncodedObject">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyString_AsEncodedObject</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *str</em>, const char<em> *encoding</em>, const char<em> *errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyString_AsEncodedObject" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Encode a string object using the codec registered for <em>encoding</em> and return the
+result as Python object. <em>encoding</em> and <em>errors</em> have the same meaning as the
+parameters of the same name in the string <code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code> method. The codec to be
+used is looked up using the Python codec registry. Return <em>NULL</em> if an exception
+was raised by the codec.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is not available in 3.x and does not have a PyBytes alias.</p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bytearray.html"
+                        title="previous chapter">Byte Array Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="unicode.html"
+                        title="next chapter">Unicode Objects and Codecs</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/c-api/string.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="unicode.html" title="Unicode Objects and Codecs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bytearray.html" title="Byte Array Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" >Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

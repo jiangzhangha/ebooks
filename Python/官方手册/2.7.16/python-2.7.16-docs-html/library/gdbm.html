@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>11.9. gdbm — GNU’s reinterpretation of dbm &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="11.10. dbhash — DBM-style interface to the BSD database library" href="dbhash.html" />
+    <link rel="prev" title="11.8. dbm — Simple “database” interface" href="dbm.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/gdbm.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dbhash.html" title="11.10. dbhash — DBM-style interface to the BSD database library"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dbm.html" title="11.8. dbm — Simple “database” interface"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="persistence.html" accesskey="U">11. Data Persistence</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gdbm">
+<span id="gdbm-gnu-s-reinterpretation-of-dbm"></span><h1>11.9. <a class="reference internal" href="#module-gdbm" title="gdbm: GNU's reinterpretation of dbm. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gdbm</span></code></a> — GNU’s reinterpretation of dbm<a class="headerlink" href="#module-gdbm" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#module-gdbm" title="gdbm: GNU's reinterpretation of dbm. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gdbm</span></code></a> module has been renamed to <code class="xref py py-mod docutils literal notranslate"><span class="pre">dbm.gnu</span></code> in Python 3.  The
+<a class="reference internal" href="../glossary.html#term-2to3"><span class="xref std std-term">2to3</span></a> tool will automatically adapt imports when converting your
+sources to Python 3.</p>
+</div>
+<p id="index-0">This module is quite similar to the <a class="reference internal" href="dbm.html#module-dbm" title="dbm: The standard &quot;database&quot; interface, based on ndbm. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dbm</span></code></a> module, but uses <code class="docutils literal notranslate"><span class="pre">gdbm</span></code> instead
+to provide some additional functionality.  Please note that the file formats
+created by <code class="docutils literal notranslate"><span class="pre">gdbm</span></code> and <code class="docutils literal notranslate"><span class="pre">dbm</span></code> are incompatible.</p>
+<p>The <a class="reference internal" href="#module-gdbm" title="gdbm: GNU's reinterpretation of dbm. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gdbm</span></code></a> module provides an interface to the GNU DBM library.  <code class="docutils literal notranslate"><span class="pre">gdbm</span></code>
+objects behave like mappings (dictionaries), except that keys and values are
+always strings. Printing a <code class="docutils literal notranslate"><span class="pre">gdbm</span></code> object doesn’t print the keys and values,
+and the <code class="xref py py-meth docutils literal notranslate"><span class="pre">items()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">values()</span></code> methods are not supported.</p>
+<p>The module defines the following constant and functions:</p>
+<dl class="exception">
+<dt id="gdbm.error">
+<em class="property">exception </em><code class="descclassname">gdbm.</code><code class="descname">error</code><a class="headerlink" href="#gdbm.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised on <code class="docutils literal notranslate"><span class="pre">gdbm</span></code>-specific errors, such as I/O errors. <a class="reference internal" href="exceptions.html#exceptions.KeyError" title="exceptions.KeyError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> is
+raised for general mapping errors like specifying an incorrect key.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gdbm.open">
+<code class="descclassname">gdbm.</code><code class="descname">open</code><span class="sig-paren">(</span><em>filename</em><span class="optional">[</span>, <em>flag</em><span class="optional">[</span>, <em>mode</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#gdbm.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a <code class="docutils literal notranslate"><span class="pre">gdbm</span></code> database and return a <code class="docutils literal notranslate"><span class="pre">gdbm</span></code> object.  The <em>filename</em> argument
+is the name of the database file.</p>
+<p>The optional <em>flag</em> argument can be:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'r'</span></code></p></td>
+<td><p>Open existing database for reading only
+(default)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'w'</span></code></p></td>
+<td><p>Open existing database for reading and
+writing</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'c'</span></code></p></td>
+<td><p>Open database for reading and writing,
+creating it if it doesn’t exist</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'n'</span></code></p></td>
+<td><p>Always create a new, empty database, open
+for reading and writing</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following additional characters may be appended to the flag to control
+how the database is opened:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'f'</span></code></p></td>
+<td><p>Open the database in fast mode.  Writes
+to the database will not be synchronized.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'s'</span></code></p></td>
+<td><p>Synchronized mode. This will cause changes
+to the database to be immediately written
+to the file.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'u'</span></code></p></td>
+<td><p>Do not lock database.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Not all flags are valid for all versions of <code class="docutils literal notranslate"><span class="pre">gdbm</span></code>.  The module constant
+<code class="xref py py-const docutils literal notranslate"><span class="pre">open_flags</span></code> is a string of supported flag characters.  The exception
+<a class="reference internal" href="#gdbm.error" title="gdbm.error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">error</span></code></a> is raised if an invalid flag is specified.</p>
+<p>The optional <em>mode</em> argument is the Unix mode of the file, used only when the
+database has to be created.  It defaults to octal <code class="docutils literal notranslate"><span class="pre">0666</span></code>.</p>
+</dd></dl>
+
+<p>In addition to the dictionary-like methods, <code class="docutils literal notranslate"><span class="pre">gdbm</span></code> objects have the following
+methods:</p>
+<dl class="function">
+<dt id="gdbm.firstkey">
+<code class="descclassname">gdbm.</code><code class="descname">firstkey</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gdbm.firstkey" title="Permalink to this definition">¶</a></dt>
+<dd><p>It’s possible to loop over every key in the database using this method  and the
+<a class="reference internal" href="#gdbm.nextkey" title="gdbm.nextkey"><code class="xref py py-meth docutils literal notranslate"><span class="pre">nextkey()</span></code></a> method.  The traversal is ordered by <code class="docutils literal notranslate"><span class="pre">gdbm</span></code>’s internal hash
+values, and won’t be sorted by the key values.  This method returns the starting
+key.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gdbm.nextkey">
+<code class="descclassname">gdbm.</code><code class="descname">nextkey</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#gdbm.nextkey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the key that follows <em>key</em> in the traversal.  The following code prints
+every key in the database <code class="docutils literal notranslate"><span class="pre">db</span></code>, without having to create a list in memory that
+contains them all:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">firstkey</span><span class="p">()</span>
+<span class="k">while</span> <span class="n">k</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="n">k</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">nextkey</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="gdbm.reorganize">
+<code class="descclassname">gdbm.</code><code class="descname">reorganize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gdbm.reorganize" title="Permalink to this definition">¶</a></dt>
+<dd><p>If you have carried out a lot of deletions and would like to shrink the space
+used by the <code class="docutils literal notranslate"><span class="pre">gdbm</span></code> file, this routine will reorganize the database.  <code class="docutils literal notranslate"><span class="pre">gdbm</span></code>
+will not shorten the length of a database file except by using this
+reorganization; otherwise, deleted file space will be kept and reused as new
+(key, value) pairs are added.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gdbm.sync">
+<code class="descclassname">gdbm.</code><code class="descname">sync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gdbm.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>When the database has been opened in fast mode, this method forces any
+unwritten data to be written to the disk.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gdbm.close">
+<code class="descclassname">gdbm.</code><code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gdbm.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the <code class="docutils literal notranslate"><span class="pre">gdbm</span></code> database.</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="anydbm.html#module-anydbm" title="anydbm: Generic interface to DBM-style database modules."><code class="xref py py-mod docutils literal notranslate"><span class="pre">anydbm</span></code></a></dt><dd><p>Generic interface to <code class="docutils literal notranslate"><span class="pre">dbm</span></code>-style databases.</p>
+</dd>
+<dt>Module <a class="reference internal" href="whichdb.html#module-whichdb" title="whichdb: Guess which DBM-style module created a given database."><code class="xref py py-mod docutils literal notranslate"><span class="pre">whichdb</span></code></a></dt><dd><p>Utility module used to determine the type of an existing database.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dbm.html"
+                        title="previous chapter">11.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dbm</span></code> — Simple “database” interface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dbhash.html"
+                        title="next chapter">11.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dbhash</span></code> — DBM-style interface to the BSD database library</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/gdbm.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dbhash.html" title="11.10. dbhash — DBM-style interface to the BSD database library"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dbm.html" title="11.8. dbm — Simple “database” interface"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="persistence.html" >11. Data Persistence</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

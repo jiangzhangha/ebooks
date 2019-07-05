@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>38.1. gensuitemodule — Generate OSA stub packages &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="38.2. aetools — OSA client support" href="aetools.html" />
+    <link rel="prev" title="38. MacPython OSA Modules" href="macosa.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/gensuitemodule.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aetools.html" title="38.2. aetools — OSA client support"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="macosa.html" title="38. MacPython OSA Modules"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="macosa.html" accesskey="U">38. MacPython OSA Modules</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gensuitemodule">
+<span id="gensuitemodule-generate-osa-stub-packages"></span><h1>38.1. <a class="reference internal" href="#module-gensuitemodule" title="gensuitemodule: Create a stub package from an OSA dictionary (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gensuitemodule</span></code></a> — Generate OSA stub packages<a class="headerlink" href="#module-gensuitemodule" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-gensuitemodule" title="gensuitemodule: Create a stub package from an OSA dictionary (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gensuitemodule</span></code></a> module creates a Python package implementing stub code
+for the AppleScript suites that are implemented by a specific application,
+according to its AppleScript dictionary.</p>
+<p>It is usually invoked by the user through the <strong class="program">PythonIDE</strong>, but it can
+also be run as a script from the command line (pass <a class="reference internal" href="../using/cmdline.html#cmdoption-help"><code class="xref std std-option docutils literal notranslate"><span class="pre">--help</span></code></a> for help on
+the options) or imported from Python code. For an example of its use see
+<code class="file docutils literal notranslate"><span class="pre">Mac/scripts/genallsuites.py</span></code> in a source distribution, which generates
+the stub packages that are included in the standard library.</p>
+<p>It defines the following public functions:</p>
+<dl class="function">
+<dt id="gensuitemodule.is_scriptable">
+<code class="descclassname">gensuitemodule.</code><code class="descname">is_scriptable</code><span class="sig-paren">(</span><em>application</em><span class="sig-paren">)</span><a class="headerlink" href="#gensuitemodule.is_scriptable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if <code class="docutils literal notranslate"><span class="pre">application</span></code>, which should be passed as a pathname, appears
+to be scriptable. Take the return value with a grain of salt: <strong class="program">Internet
+Explorer</strong> appears not to be scriptable but definitely is.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gensuitemodule.processfile">
+<code class="descclassname">gensuitemodule.</code><code class="descname">processfile</code><span class="sig-paren">(</span><em>application</em><span class="optional">[</span>, <em>output</em>, <em>basepkgname</em>, <em>edit_modnames</em>, <em>creatorsignature</em>, <em>dump</em>, <em>verbose</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#gensuitemodule.processfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a stub package for <code class="docutils literal notranslate"><span class="pre">application</span></code>, which should be passed as a full
+pathname. For a <code class="file docutils literal notranslate"><span class="pre">.app</span></code> bundle this is the pathname to the bundle, not to
+the executable inside the bundle; for an unbundled CFM application you pass the
+filename of the application binary.</p>
+<p>This function asks the application for its OSA terminology resources, decodes
+these resources and uses the resultant data to create the Python code for the
+package implementing the client stubs.</p>
+<p><code class="docutils literal notranslate"><span class="pre">output</span></code> is the pathname where the resulting package is stored, if not
+specified a standard “save file as” dialog is presented to the user.
+<code class="docutils literal notranslate"><span class="pre">basepkgname</span></code> is the base package on which this package will build, and
+defaults to <code class="xref py py-mod docutils literal notranslate"><span class="pre">StdSuites</span></code>. Only when generating <code class="xref py py-mod docutils literal notranslate"><span class="pre">StdSuites</span></code> itself do
+you need to specify this. <code class="docutils literal notranslate"><span class="pre">edit_modnames</span></code> is a dictionary that can be used to
+change modulenames that are too ugly after name mangling. <code class="docutils literal notranslate"><span class="pre">creator_signature</span></code>
+can be used to override the 4-char creator code, which is normally obtained from
+the <code class="file docutils literal notranslate"><span class="pre">PkgInfo</span></code> file in the package or from the CFM file creator signature.
+When <code class="docutils literal notranslate"><span class="pre">dump</span></code> is given it should refer to a file object, and <code class="docutils literal notranslate"><span class="pre">processfile</span></code>
+will stop after decoding the resources and dump the Python representation of the
+terminology resources to this file. <code class="docutils literal notranslate"><span class="pre">verbose</span></code> should also be a file object,
+and specifying it will cause <code class="docutils literal notranslate"><span class="pre">processfile</span></code> to tell you what it is doing.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gensuitemodule.processfile_fromresource">
+<code class="descclassname">gensuitemodule.</code><code class="descname">processfile_fromresource</code><span class="sig-paren">(</span><em>application</em><span class="optional">[</span>, <em>output</em>, <em>basepkgname</em>, <em>edit_modnames</em>, <em>creatorsignature</em>, <em>dump</em>, <em>verbose</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#gensuitemodule.processfile_fromresource" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function does the same as <code class="docutils literal notranslate"><span class="pre">processfile</span></code>, except that it uses a different
+method to get the terminology resources. It opens <code class="docutils literal notranslate"><span class="pre">application</span></code> as a resource
+file and reads all <code class="docutils literal notranslate"><span class="pre">&quot;aete&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;aeut&quot;</span></code> resources from this file.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="macosa.html"
+                        title="previous chapter">38. MacPython OSA Modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aetools.html"
+                        title="next chapter">38.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">aetools</span></code> — OSA client support</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/gensuitemodule.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aetools.html" title="38.2. aetools — OSA client support"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="macosa.html" title="38. MacPython OSA Modules"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="macosa.html" >38. MacPython OSA Modules</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

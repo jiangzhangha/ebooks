@@ -1,0 +1,895 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>20.7. httplib — HTTP protocol client &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="20.8. ftplib — FTP protocol client" href="ftplib.html" />
+    <link rel="prev" title="20.6. urllib2 — extensible library for opening URLs" href="urllib2.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/httplib.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ftplib.html" title="20.8. ftplib — FTP protocol client"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="urllib2.html" title="20.6. urllib2 — extensible library for opening URLs"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" accesskey="U">20. Internet Protocols and Support</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-httplib">
+<span id="httplib-http-protocol-client"></span><h1>20.7. <a class="reference internal" href="#module-httplib" title="httplib: HTTP and HTTPS protocol client (requires sockets)."><code class="xref py py-mod docutils literal notranslate"><span class="pre">httplib</span></code></a> — HTTP protocol client<a class="headerlink" href="#module-httplib" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#module-httplib" title="httplib: HTTP and HTTPS protocol client (requires sockets)."><code class="xref py py-mod docutils literal notranslate"><span class="pre">httplib</span></code></a> module has been renamed to <code class="xref py py-mod docutils literal notranslate"><span class="pre">http.client</span></code> in Python
+3.  The <a class="reference internal" href="../glossary.html#term-2to3"><span class="xref std std-term">2to3</span></a> tool will automatically adapt imports when converting
+your sources to Python 3.</p>
+</div>
+<span class="target" id="index-0"></span><p id="index-1"><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/httplib.py">Lib/httplib.py</a></p>
+<hr class="docutils" />
+<p>This module defines classes which implement the client side of the HTTP and
+HTTPS protocols.  It is normally not used directly — the module <a class="reference internal" href="urllib.html#module-urllib" title="urllib: Open an arbitrary network resource by URL (requires sockets)."><code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib</span></code></a>
+uses it to handle URLs that use HTTP and HTTPS.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The <a class="reference external" href="http://requests.readthedocs.org/">Requests package</a>
+is recommended for a higher-level HTTP client interface.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>HTTPS support is only available if the <a class="reference internal" href="socket.html#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">socket</span></code></a> module was compiled with
+SSL support.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The public interface for this module changed substantially in Python 2.0.  The
+<code class="xref py py-class docutils literal notranslate"><span class="pre">HTTP</span></code> class is retained only for backward compatibility with 1.5.2.  It
+should not be used in new code.  Refer to the online docstrings for usage.</p>
+</div>
+<p>The module provides the following classes:</p>
+<dl class="class">
+<dt id="httplib.HTTPConnection">
+<em class="property">class </em><code class="descclassname">httplib.</code><code class="descname">HTTPConnection</code><span class="sig-paren">(</span><em>host</em><span class="optional">[</span>, <em>port</em><span class="optional">[</span>, <em>strict</em><span class="optional">[</span>, <em>timeout</em><span class="optional">[</span>, <em>source_address</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>An <a class="reference internal" href="#httplib.HTTPConnection" title="httplib.HTTPConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPConnection</span></code></a> instance represents one transaction with an HTTP
+server.  It should be instantiated passing it a host and optional port
+number.  If no port number is passed, the port is extracted from the host
+string if it has the form <code class="docutils literal notranslate"><span class="pre">host:port</span></code>, else the default HTTP port (80) is
+used.  When true, the optional parameter <em>strict</em> (which defaults to a false
+value) causes <code class="docutils literal notranslate"><span class="pre">BadStatusLine</span></code> to
+be raised if the status line can’t be parsed as a valid HTTP/1.0 or 1.1
+status line.  If the optional <em>timeout</em> parameter is given, blocking
+operations (like connection attempts) will timeout after that many seconds
+(if it is not given, the global default timeout setting is used).
+The optional <em>source_address</em> parameter may be a tuple of a (host, port)
+to use as the source address the HTTP connection is made from.</p>
+<p>For example, the following calls all create instances that connect to the server
+at the same host and port:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h1</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="s1">&#39;www.cwi.nl&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h2</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="s1">&#39;www.cwi.nl:80&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h3</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="s1">&#39;www.cwi.nl&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h3</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="s1">&#39;www.cwi.nl&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span><em>timeout</em> was added.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span><em>source_address</em> was added.</p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="httplib.HTTPSConnection">
+<em class="property">class </em><code class="descclassname">httplib.</code><code class="descname">HTTPSConnection</code><span class="sig-paren">(</span><em>host</em><span class="optional">[</span>, <em>port</em><span class="optional">[</span>, <em>key_file</em><span class="optional">[</span>, <em>cert_file</em><span class="optional">[</span>, <em>strict</em><span class="optional">[</span>, <em>timeout</em><span class="optional">[</span>, <em>source_address</em><span class="optional">[</span>, <em>context</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPSConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.HTTPConnection" title="httplib.HTTPConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPConnection</span></code></a> that uses SSL for communication with
+secure servers.  Default port is <code class="docutils literal notranslate"><span class="pre">443</span></code>.  If <em>context</em> is specified, it must
+be a <a class="reference internal" href="ssl.html#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">ssl.SSLContext</span></code></a> instance describing the various SSL options.</p>
+<p><em>key_file</em> and <em>cert_file</em> are deprecated, please use
+<a class="reference internal" href="ssl.html#ssl.SSLContext.load_cert_chain" title="ssl.SSLContext.load_cert_chain"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ssl.SSLContext.load_cert_chain()</span></code></a> instead, or let
+<a class="reference internal" href="ssl.html#ssl.create_default_context" title="ssl.create_default_context"><code class="xref py py-func docutils literal notranslate"><span class="pre">ssl.create_default_context()</span></code></a> select the system’s trusted CA
+certificates for you.</p>
+<p>Please read <a class="reference internal" href="ssl.html#ssl-security"><span class="std std-ref">Security considerations</span></a> for more information on best practices.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span><em>timeout</em> was added.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span><em>source_address</em> was added.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7.9: </span><em>context</em> was added.</p>
+<p>This class now performs all the necessary certificate and hostname checks
+by default. To revert to the previous, unverified, behavior
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ssl._create_unverified_context()</span></code> can be passed to the <em>context</em>
+parameter.</p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="httplib.HTTPResponse">
+<em class="property">class </em><code class="descclassname">httplib.</code><code class="descname">HTTPResponse</code><span class="sig-paren">(</span><em>sock</em>, <em>debuglevel=0</em>, <em>strict=0</em><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class whose instances are returned upon successful connection.  Not instantiated
+directly by user.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="httplib.HTTPMessage">
+<em class="property">class </em><code class="descclassname">httplib.</code><code class="descname">HTTPMessage</code><a class="headerlink" href="#httplib.HTTPMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>An <a class="reference internal" href="#httplib.HTTPMessage" title="httplib.HTTPMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPMessage</span></code></a> instance is used to hold the headers from an HTTP
+response. It is implemented using the <a class="reference internal" href="mimetools.html#mimetools.Message" title="mimetools.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">mimetools.Message</span></code></a> class and
+provides utility functions to deal with HTTP Headers. It is not directly
+instantiated by the users.</p>
+</dd></dl>
+
+<p>The following exceptions are raised as appropriate:</p>
+<dl class="exception">
+<dt id="httplib.HTTPException">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">HTTPException</code><a class="headerlink" href="#httplib.HTTPException" title="Permalink to this definition">¶</a></dt>
+<dd><p>The base class of the other exceptions in this module.  It is a subclass of
+<a class="reference internal" href="exceptions.html#exceptions.Exception" title="exceptions.Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="httplib.NotConnected">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">NotConnected</code><a class="headerlink" href="#httplib.NotConnected" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.HTTPException" title="httplib.HTTPException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">HTTPException</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="httplib.InvalidURL">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">InvalidURL</code><a class="headerlink" href="#httplib.InvalidURL" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.HTTPException" title="httplib.HTTPException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">HTTPException</span></code></a>, raised if a port is given and is either
+non-numeric or empty.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="httplib.UnknownProtocol">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">UnknownProtocol</code><a class="headerlink" href="#httplib.UnknownProtocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.HTTPException" title="httplib.HTTPException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">HTTPException</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="httplib.UnknownTransferEncoding">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">UnknownTransferEncoding</code><a class="headerlink" href="#httplib.UnknownTransferEncoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.HTTPException" title="httplib.HTTPException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">HTTPException</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="httplib.UnimplementedFileMode">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">UnimplementedFileMode</code><a class="headerlink" href="#httplib.UnimplementedFileMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.HTTPException" title="httplib.HTTPException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">HTTPException</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="httplib.IncompleteRead">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">IncompleteRead</code><a class="headerlink" href="#httplib.IncompleteRead" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.HTTPException" title="httplib.HTTPException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">HTTPException</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="httplib.ImproperConnectionState">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">ImproperConnectionState</code><a class="headerlink" href="#httplib.ImproperConnectionState" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.HTTPException" title="httplib.HTTPException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">HTTPException</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="httplib.CannotSendRequest">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">CannotSendRequest</code><a class="headerlink" href="#httplib.CannotSendRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.ImproperConnectionState" title="httplib.ImproperConnectionState"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImproperConnectionState</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="httplib.CannotSendHeader">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">CannotSendHeader</code><a class="headerlink" href="#httplib.CannotSendHeader" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.ImproperConnectionState" title="httplib.ImproperConnectionState"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImproperConnectionState</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="httplib.ResponseNotReady">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">ResponseNotReady</code><a class="headerlink" href="#httplib.ResponseNotReady" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.ImproperConnectionState" title="httplib.ImproperConnectionState"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImproperConnectionState</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="httplib.BadStatusLine">
+<em class="property">exception </em><code class="descclassname">httplib.</code><code class="descname">BadStatusLine</code><a class="headerlink" href="#httplib.BadStatusLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <a class="reference internal" href="#httplib.HTTPException" title="httplib.HTTPException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">HTTPException</span></code></a>.  Raised if a server responds with a HTTP
+status code that we don’t understand.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<p>The constants defined in this module are:</p>
+<dl class="data">
+<dt id="httplib.HTTP_PORT">
+<code class="descclassname">httplib.</code><code class="descname">HTTP_PORT</code><a class="headerlink" href="#httplib.HTTP_PORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default port for the HTTP protocol (always <code class="docutils literal notranslate"><span class="pre">80</span></code>).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="httplib.HTTPS_PORT">
+<code class="descclassname">httplib.</code><code class="descname">HTTPS_PORT</code><a class="headerlink" href="#httplib.HTTPS_PORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default port for the HTTPS protocol (always <code class="docutils literal notranslate"><span class="pre">443</span></code>).</p>
+</dd></dl>
+
+<p>and also the following constants for integer status codes:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 7%" />
+<col style="width: 58%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Constant</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Definition</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">CONTINUE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.1.1">RFC 2616, Section
+10.1.1</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">SWITCHING_PROTOCOLS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">101</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.1.2">RFC 2616, Section
+10.1.2</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">PROCESSING</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">102</span></code></p></td>
+<td><p>WEBDAV, <a class="reference external" href="http://www.webdav.org/specs/rfc2518.html#STATUS_102">RFC 2518, Section 10.1</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">OK</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">200</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">RFC 2616, Section
+10.2.1</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">CREATED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">201</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">RFC 2616, Section
+10.2.2</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">ACCEPTED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">202</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.3">RFC 2616, Section
+10.2.3</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">NON_AUTHORITATIVE_INFORMATION</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">203</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.4">RFC 2616, Section
+10.2.4</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">NO_CONTENT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">204</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5">RFC 2616, Section
+10.2.5</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">RESET_CONTENT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">205</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.6">RFC 2616, Section
+10.2.6</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">PARTIAL_CONTENT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">206</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.7">RFC 2616, Section
+10.2.7</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">MULTI_STATUS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">207</span></code></p></td>
+<td><p>WEBDAV <a class="reference external" href="http://www.webdav.org/specs/rfc2518.html#STATUS_207">RFC 2518, Section 10.2</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">IM_USED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">226</span></code></p></td>
+<td><p>Delta encoding in HTTP,
+<span class="target" id="index-2"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc3229.html"><strong>RFC 3229</strong></a>, Section 10.4.1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">MULTIPLE_CHOICES</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">300</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.1">RFC 2616, Section
+10.3.1</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">MOVED_PERMANENTLY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">301</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.2">RFC 2616, Section
+10.3.2</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">FOUND</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">302</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.3">RFC 2616, Section
+10.3.3</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">SEE_OTHER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">303</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.4">RFC 2616, Section
+10.3.4</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">NOT_MODIFIED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">304</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.5">RFC 2616, Section
+10.3.5</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">USE_PROXY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">305</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.6">RFC 2616, Section
+10.3.6</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">TEMPORARY_REDIRECT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">307</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.8">RFC 2616, Section
+10.3.8</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">BAD_REQUEST</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">400</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">RFC 2616, Section
+10.4.1</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">UNAUTHORIZED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">401</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">RFC 2616, Section
+10.4.2</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">PAYMENT_REQUIRED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">402</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.3">RFC 2616, Section
+10.4.3</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">FORBIDDEN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">403</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">RFC 2616, Section
+10.4.4</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">NOT_FOUND</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">404</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">RFC 2616, Section
+10.4.5</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">METHOD_NOT_ALLOWED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">405</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">RFC 2616, Section
+10.4.6</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">NOT_ACCEPTABLE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">406</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.7">RFC 2616, Section
+10.4.7</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">PROXY_AUTHENTICATION_REQUIRED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">407</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.8">RFC 2616, Section
+10.4.8</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">REQUEST_TIMEOUT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">408</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.9">RFC 2616, Section
+10.4.9</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">CONFLICT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">409</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10">RFC 2616, Section
+10.4.10</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">GONE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">410</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.11">RFC 2616, Section
+10.4.11</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">LENGTH_REQUIRED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">411</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.12">RFC 2616, Section
+10.4.12</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">PRECONDITION_FAILED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">412</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.13">RFC 2616, Section
+10.4.13</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">REQUEST_ENTITY_TOO_LARGE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">413</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">RFC 2616, Section
+10.4.14</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">REQUEST_URI_TOO_LONG</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">414</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.15">RFC 2616, Section
+10.4.15</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">UNSUPPORTED_MEDIA_TYPE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">415</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.16">RFC 2616, Section
+10.4.16</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">REQUESTED_RANGE_NOT_SATISFIABLE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">416</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.17">RFC 2616, Section
+10.4.17</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">EXPECTATION_FAILED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">417</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.18">RFC 2616, Section
+10.4.18</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">UNPROCESSABLE_ENTITY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">422</span></code></p></td>
+<td><p>WEBDAV, <a class="reference external" href="http://www.webdav.org/specs/rfc2518.html#STATUS_422">RFC 2518, Section 10.3</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">LOCKED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">423</span></code></p></td>
+<td><p>WEBDAV <a class="reference external" href="http://www.webdav.org/specs/rfc2518.html#STATUS_423">RFC 2518, Section 10.4</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">FAILED_DEPENDENCY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">424</span></code></p></td>
+<td><p>WEBDAV, <a class="reference external" href="http://www.webdav.org/specs/rfc2518.html#STATUS_424">RFC 2518, Section 10.5</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">UPGRADE_REQUIRED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">426</span></code></p></td>
+<td><p>HTTP Upgrade to TLS,
+<span class="target" id="index-3"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2817.html"><strong>RFC 2817</strong></a>, Section 6</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">INTERNAL_SERVER_ERROR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">500</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">RFC 2616, Section
+10.5.1</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">NOT_IMPLEMENTED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">501</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.2">RFC 2616, Section
+10.5.2</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">BAD_GATEWAY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">502</span></code></p></td>
+<td><p>HTTP/1.1 <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.3">RFC 2616, Section
+10.5.3</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">SERVICE_UNAVAILABLE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">503</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.4">RFC 2616, Section
+10.5.4</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">GATEWAY_TIMEOUT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">504</span></code></p></td>
+<td><p>HTTP/1.1 <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.5">RFC 2616, Section
+10.5.5</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">HTTP_VERSION_NOT_SUPPORTED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">505</span></code></p></td>
+<td><p>HTTP/1.1, <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.6">RFC 2616, Section
+10.5.6</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">INSUFFICIENT_STORAGE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">507</span></code></p></td>
+<td><p>WEBDAV, <a class="reference external" href="http://www.webdav.org/specs/rfc2518.html#STATUS_507">RFC 2518, Section 10.6</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">NOT_EXTENDED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">510</span></code></p></td>
+<td><p>An HTTP Extension Framework,
+<span class="target" id="index-4"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2774.html"><strong>RFC 2774</strong></a>, Section 7</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="data">
+<dt id="httplib.responses">
+<code class="descclassname">httplib.</code><code class="descname">responses</code><a class="headerlink" href="#httplib.responses" title="Permalink to this definition">¶</a></dt>
+<dd><p>This dictionary maps the HTTP 1.1 status codes to the W3C names.</p>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">httplib.responses[httplib.NOT_FOUND]</span></code> is <code class="docutils literal notranslate"><span class="pre">'Not</span> <span class="pre">Found'</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+</dd></dl>
+
+<div class="section" id="httpconnection-objects">
+<span id="id1"></span><h2>20.7.1. HTTPConnection Objects<a class="headerlink" href="#httpconnection-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#httplib.HTTPConnection" title="httplib.HTTPConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPConnection</span></code></a> instances have the following methods:</p>
+<dl class="method">
+<dt id="httplib.HTTPConnection.request">
+<code class="descclassname">HTTPConnection.</code><code class="descname">request</code><span class="sig-paren">(</span><em>method</em>, <em>url</em><span class="optional">[</span>, <em>body</em><span class="optional">[</span>, <em>headers</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPConnection.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>This will send a request to the server using the HTTP request method <em>method</em>
+and the selector <em>url</em>.  If the <em>body</em> argument is present, it should be a
+string of data to send after the headers are finished. Alternatively, it may
+be an open file object, in which case the contents of the file is sent; this
+file object should support <code class="docutils literal notranslate"><span class="pre">fileno()</span></code> and <code class="docutils literal notranslate"><span class="pre">read()</span></code> methods. The
+<em>headers</em> argument should be a mapping of extra HTTP headers to send with
+the request.</p>
+<p>If one is not provided in <em>headers</em>, a <code class="docutils literal notranslate"><span class="pre">Content-Length</span></code> header is added
+automatically for all methods if the length of the body can be determined,
+either from the length of the <code class="docutils literal notranslate"><span class="pre">str</span></code> representation, or from the reported
+size of the file on disk. If <em>body</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code> the header is not set except
+for methods that expect a body (<code class="docutils literal notranslate"><span class="pre">PUT</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span></code>, and <code class="docutils literal notranslate"><span class="pre">PATCH</span></code>) in which
+case it is set to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span><em>body</em> can be a file object.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="httplib.HTTPConnection.getresponse">
+<code class="descclassname">HTTPConnection.</code><code class="descname">getresponse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPConnection.getresponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should be called after a request is sent to get the response from the server.
+Returns an <a class="reference internal" href="#httplib.HTTPResponse" title="httplib.HTTPResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPResponse</span></code></a> instance.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that you must have read the whole response before you can send a new
+request to the server.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="httplib.HTTPConnection.set_debuglevel">
+<code class="descclassname">HTTPConnection.</code><code class="descname">set_debuglevel</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPConnection.set_debuglevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the debugging level (the amount of debugging output printed). The default
+debug level is <code class="docutils literal notranslate"><span class="pre">0</span></code>, meaning no debugging output is printed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="httplib.HTTPConnection.set_tunnel">
+<code class="descclassname">HTTPConnection.</code><code class="descname">set_tunnel</code><span class="sig-paren">(</span><em>host</em>, <em>port=None</em>, <em>headers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPConnection.set_tunnel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the host and the port for HTTP Connect Tunnelling. Normally used when
+it is required to do HTTPS Connection through a proxy server.</p>
+<p>The headers argument should be a mapping of extra HTTP headers to send
+with the CONNECT request.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.7.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="httplib.HTTPConnection.connect">
+<code class="descclassname">HTTPConnection.</code><code class="descname">connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPConnection.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to the server specified when the object was created.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="httplib.HTTPConnection.close">
+<code class="descclassname">HTTPConnection.</code><code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPConnection.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the connection to the server.</p>
+</dd></dl>
+
+<p>As an alternative to using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">request()</span></code> method described above, you can
+also send your request step by step, by using the four functions below.</p>
+<dl class="method">
+<dt id="httplib.HTTPConnection.putrequest">
+<code class="descclassname">HTTPConnection.</code><code class="descname">putrequest</code><span class="sig-paren">(</span><em>request</em>, <em>selector</em><span class="optional">[</span>, <em>skip_host</em><span class="optional">[</span>, <em>skip_accept_encoding</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPConnection.putrequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>This should be the first call after the connection to the server has been made.
+It sends a line to the server consisting of the <em>request</em> string, the <em>selector</em>
+string, and the HTTP version (<code class="docutils literal notranslate"><span class="pre">HTTP/1.1</span></code>).  To disable automatic sending of
+<code class="docutils literal notranslate"><span class="pre">Host:</span></code> or <code class="docutils literal notranslate"><span class="pre">Accept-Encoding:</span></code> headers (for example to accept additional
+content encodings), specify <em>skip_host</em> or <em>skip_accept_encoding</em> with non-False
+values.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.4: </span><em>skip_accept_encoding</em> argument added.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="httplib.HTTPConnection.putheader">
+<code class="descclassname">HTTPConnection.</code><code class="descname">putheader</code><span class="sig-paren">(</span><em>header</em>, <em>argument</em><span class="optional">[</span>, <em>...</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPConnection.putheader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an <span class="target" id="index-5"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc822.html"><strong>RFC 822</strong></a>-style header to the server.  It sends a line to the server
+consisting of the header, a colon and a space, and the first argument.  If more
+arguments are given, continuation lines are sent, each consisting of a tab and
+an argument.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="httplib.HTTPConnection.endheaders">
+<code class="descclassname">HTTPConnection.</code><code class="descname">endheaders</code><span class="sig-paren">(</span><em>message_body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPConnection.endheaders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a blank line to the server, signalling the end of the headers. The
+optional <em>message_body</em> argument can be used to pass a message body
+associated with the request.  The message body will be sent in the same
+packet as the message headers if it is string, otherwise it is sent in a
+separate packet.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span><em>message_body</em> was added.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="httplib.HTTPConnection.send">
+<code class="descclassname">HTTPConnection.</code><code class="descname">send</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPConnection.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send data to the server.  This should be used directly only after the
+<a class="reference internal" href="#httplib.HTTPConnection.endheaders" title="httplib.HTTPConnection.endheaders"><code class="xref py py-meth docutils literal notranslate"><span class="pre">endheaders()</span></code></a> method has been called and before <a class="reference internal" href="#httplib.HTTPConnection.getresponse" title="httplib.HTTPConnection.getresponse"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getresponse()</span></code></a> is
+called.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="httpresponse-objects">
+<span id="id2"></span><h2>20.7.2. HTTPResponse Objects<a class="headerlink" href="#httpresponse-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#httplib.HTTPResponse" title="httplib.HTTPResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPResponse</span></code></a> instances have the following methods and attributes:</p>
+<dl class="method">
+<dt id="httplib.HTTPResponse.read">
+<code class="descclassname">HTTPResponse.</code><code class="descname">read</code><span class="sig-paren">(</span><span class="optional">[</span><em>amt</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPResponse.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads and returns the response body, or up to the next <em>amt</em> bytes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="httplib.HTTPResponse.getheader">
+<code class="descclassname">HTTPResponse.</code><code class="descname">getheader</code><span class="sig-paren">(</span><em>name</em><span class="optional">[</span>, <em>default</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPResponse.getheader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the contents of the header <em>name</em>, or <em>default</em> if there is no matching
+header.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="httplib.HTTPResponse.getheaders">
+<code class="descclassname">HTTPResponse.</code><code class="descname">getheaders</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPResponse.getheaders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of (header, value) tuples.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="httplib.HTTPResponse.fileno">
+<code class="descclassname">HTTPResponse.</code><code class="descname">fileno</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.HTTPResponse.fileno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <code class="docutils literal notranslate"><span class="pre">fileno</span></code> of the underlying socket.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="httplib.HTTPResponse.msg">
+<code class="descclassname">HTTPResponse.</code><code class="descname">msg</code><a class="headerlink" href="#httplib.HTTPResponse.msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="mimetools.html#mimetools.Message" title="mimetools.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">mimetools.Message</span></code></a> instance containing the response headers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="httplib.HTTPResponse.version">
+<code class="descclassname">HTTPResponse.</code><code class="descname">version</code><a class="headerlink" href="#httplib.HTTPResponse.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP protocol version used by server.  10 for HTTP/1.0, 11 for HTTP/1.1.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="httplib.HTTPResponse.status">
+<code class="descclassname">HTTPResponse.</code><code class="descname">status</code><a class="headerlink" href="#httplib.HTTPResponse.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Status code returned by server.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="httplib.HTTPResponse.reason">
+<code class="descclassname">HTTPResponse.</code><code class="descname">reason</code><a class="headerlink" href="#httplib.HTTPResponse.reason" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reason phrase returned by server.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="examples">
+<span id="httplib-examples"></span><h2>20.7.3. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Here is an example session that uses the <code class="docutils literal notranslate"><span class="pre">GET</span></code> method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">httplib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s2">&quot;www.python.org&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r1</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">r1</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">r1</span><span class="o">.</span><span class="n">reason</span>
+<span class="go">200 OK</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data1</span> <span class="o">=</span> <span class="n">r1</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r2</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">r2</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">r2</span><span class="o">.</span><span class="n">reason</span>
+<span class="go">404 Not Found</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data2</span> <span class="o">=</span> <span class="n">r2</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here is an example session that uses the <code class="docutils literal notranslate"><span class="pre">HEAD</span></code> method.  Note that the
+<code class="docutils literal notranslate"><span class="pre">HEAD</span></code> method never returns any data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">httplib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s2">&quot;www.python.org&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;HEAD&quot;</span><span class="p">,</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">reason</span>
+<span class="go">200 OK</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Here is an example session that shows how to <code class="docutils literal notranslate"><span class="pre">POST</span></code> requests:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">httplib</span><span class="o">,</span> <span class="nn">urllib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span><span class="p">({</span><span class="s1">&#39;@number&#39;</span><span class="p">:</span> <span class="mi">12524</span><span class="p">,</span> <span class="s1">&#39;@type&#39;</span><span class="p">:</span> <span class="s1">&#39;issue&#39;</span><span class="p">,</span> <span class="s1">&#39;@action&#39;</span><span class="p">:</span> <span class="s1">&#39;show&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Content-type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/x-www-form-urlencoded&quot;</span><span class="p">,</span>
+<span class="gp">... </span>           <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="s2">&quot;bugs.python.org&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">reason</span>
+<span class="go">302 Found</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
+<span class="go">&#39;Redirecting to &lt;a href=&quot;http://bugs.python.org/issue12524&quot;&gt;http://bugs.python.org/issue12524&lt;/a&gt;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Client side <code class="docutils literal notranslate"><span class="pre">HTTP</span> <span class="pre">PUT</span></code> requests are very similar to <code class="docutils literal notranslate"><span class="pre">POST</span></code> requests. The
+difference lies only the server side where HTTP server will allow resources to
+be created via <code class="docutils literal notranslate"><span class="pre">PUT</span></code> request. Here is an example session that shows how to do
+<code class="docutils literal notranslate"><span class="pre">PUT</span></code> request using httplib:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># This creates an HTTP message</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># with the content of BODY as the enclosed representation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># for the resource http://localhost:8080/foobar</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">httplib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BODY</span> <span class="o">=</span> <span class="s2">&quot;***filecontents***&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">8080</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="s2">&quot;/file&quot;</span><span class="p">,</span> <span class="n">BODY</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">reason</span>
+<span class="go">200, OK</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">20.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">httplib</span></code> — HTTP protocol client</a><ul>
+<li><a class="reference internal" href="#httpconnection-objects">20.7.1. HTTPConnection Objects</a></li>
+<li><a class="reference internal" href="#httpresponse-objects">20.7.2. HTTPResponse Objects</a></li>
+<li><a class="reference internal" href="#examples">20.7.3. Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="urllib2.html"
+                        title="previous chapter">20.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib2</span></code> — extensible library for opening URLs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ftplib.html"
+                        title="next chapter">20.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">ftplib</span></code> — FTP protocol client</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/httplib.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ftplib.html" title="20.8. ftplib — FTP protocol client"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="urllib2.html" title="20.6. urllib2 — extensible library for opening URLs"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" >20. Internet Protocols and Support</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

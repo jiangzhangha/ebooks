@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>25. Development Tools &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="25.1. pydoc — Documentation generator and online help system" href="pydoc.html" />
+    <link rel="prev" title="24.7. Other Graphical User Interface Packages" href="othergui.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/development.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pydoc.html" title="25.1. pydoc — Documentation generator and online help system"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="othergui.html" title="24.7. Other Graphical User Interface Packages"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="development-tools">
+<span id="development"></span><h1>25. Development Tools<a class="headerlink" href="#development-tools" title="Permalink to this headline">¶</a></h1>
+<p>The modules described in this chapter help you write software.  For example, the
+<a class="reference internal" href="pydoc.html#module-pydoc" title="pydoc: Documentation generator and online help system."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code></a> module takes a module and generates documentation based on the
+module’s contents.  The <a class="reference internal" href="doctest.html#module-doctest" title="doctest: Test pieces of code within docstrings."><code class="xref py py-mod docutils literal notranslate"><span class="pre">doctest</span></code></a> and <a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code></a> modules contains
+frameworks for writing unit tests that automatically exercise code and verify
+that the expected output is produced.  <strong class="program">2to3</strong> can translate Python 2.x
+source code into valid Python 3.x code.</p>
+<p>The list of modules described in this chapter is:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pydoc.html">25.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code> — Documentation generator and online help system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doctest.html">25.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">doctest</span></code> — Test interactive Python examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="doctest.html#simple-usage-checking-examples-in-docstrings">25.2.1. Simple Usage: Checking Examples in Docstrings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doctest.html#simple-usage-checking-examples-in-a-text-file">25.2.2. Simple Usage: Checking Examples in a Text File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doctest.html#how-it-works">25.2.3. How It Works</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#which-docstrings-are-examined">25.2.3.1. Which Docstrings Are Examined?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#how-are-docstring-examples-recognized">25.2.3.2. How are Docstring Examples Recognized?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#what-s-the-execution-context">25.2.3.3. What’s the Execution Context?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#what-about-exceptions">25.2.3.4. What About Exceptions?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#option-flags">25.2.3.5. Option Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#directives">25.2.3.6. Directives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#warnings">25.2.3.7. Warnings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doctest.html#basic-api">25.2.4. Basic API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doctest.html#unittest-api">25.2.5. Unittest API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doctest.html#advanced-api">25.2.6. Advanced API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#doctest-objects">25.2.6.1. DocTest Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#example-objects">25.2.6.2. Example Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#doctestfinder-objects">25.2.6.3. DocTestFinder objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#doctestparser-objects">25.2.6.4. DocTestParser objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#doctestrunner-objects">25.2.6.5. DocTestRunner objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doctest.html#outputchecker-objects">25.2.6.6. OutputChecker objects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doctest.html#debugging">25.2.7. Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doctest.html#soapbox">25.2.8. Soapbox</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="unittest.html">25.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code> — Unit testing framework</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="unittest.html#basic-example">25.3.1. Basic example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unittest.html#command-line-interface">25.3.2. Command-Line Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="unittest.html#command-line-options">25.3.2.1. Command-line options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="unittest.html#test-discovery">25.3.3. Test Discovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unittest.html#organizing-test-code">25.3.4. Organizing test code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unittest.html#re-using-old-test-code">25.3.5. Re-using old test code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unittest.html#skipping-tests-and-expected-failures">25.3.6. Skipping tests and expected failures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unittest.html#classes-and-functions">25.3.7. Classes and functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="unittest.html#test-cases">25.3.7.1. Test cases</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="unittest.html#deprecated-aliases">25.3.7.1.1. Deprecated aliases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="unittest.html#grouping-tests">25.3.7.2. Grouping tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unittest.html#loading-and-running-tests">25.3.7.3. Loading and running tests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="unittest.html#load-tests-protocol">25.3.7.3.1. load_tests Protocol</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="unittest.html#class-and-module-fixtures">25.3.8. Class and Module Fixtures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="unittest.html#setupclass-and-teardownclass">25.3.8.1. setUpClass and tearDownClass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unittest.html#setupmodule-and-teardownmodule">25.3.8.2. setUpModule and tearDownModule</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="unittest.html#signal-handling">25.3.9. Signal Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2to3.html">25.4. 2to3 - Automated Python 2 to 3 code translation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2to3.html#using-2to3">25.4.1. Using 2to3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2to3.html#fixers">25.4.2. Fixers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2to3.html#module-lib2to3">25.4.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">lib2to3</span></code> - 2to3’s library</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="test.html">25.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">test</span></code> — Regression tests package for Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="test.html#writing-unit-tests-for-the-test-package">25.5.1. Writing Unit Tests for the <code class="xref py py-mod docutils literal notranslate"><span class="pre">test</span></code> package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html#running-tests-using-the-command-line-interface">25.5.2. Running tests using the command-line interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="test.html#module-test.support">25.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.support</span></code> — Utility functions for tests</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="othergui.html"
+                        title="previous chapter">24.7. Other Graphical User Interface Packages</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pydoc.html"
+                        title="next chapter">25.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code> — Documentation generator and online help system</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/development.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pydoc.html" title="25.1. pydoc — Documentation generator and online help system"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="othergui.html" title="24.7. Other Graphical User Interface Packages"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

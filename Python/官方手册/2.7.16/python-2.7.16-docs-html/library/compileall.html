@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>32.11. compileall — Byte-compile Python libraries &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="32.12. dis — Disassembler for Python bytecode" href="dis.html" />
+    <link rel="prev" title="32.10. py_compile — Compile Python source files" href="py_compile.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/compileall.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dis.html" title="32.12. dis — Disassembler for Python bytecode"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="py_compile.html" title="32.10. py_compile — Compile Python source files"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" accesskey="U">32. Python Language Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-compileall">
+<span id="compileall-byte-compile-python-libraries"></span><h1>32.11. <a class="reference internal" href="#module-compileall" title="compileall: Tools for byte-compiling all Python source files in a directory tree."><code class="xref py py-mod docutils literal notranslate"><span class="pre">compileall</span></code></a> — Byte-compile Python libraries<a class="headerlink" href="#module-compileall" title="Permalink to this headline">¶</a></h1>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/compileall.py">Lib/compileall.py</a></p>
+<hr class="docutils" />
+<p>This module provides some utility functions to support installing Python
+libraries.  These functions compile Python source files in a directory tree.
+This module can be used to create the cached byte-code files at library
+installation time, which makes them available for use even by users who don’t
+have write permission to the library directories.</p>
+<div class="section" id="command-line-use">
+<h2>32.11.1. Command-line use<a class="headerlink" href="#command-line-use" title="Permalink to this headline">¶</a></h2>
+<p>This module can work as a script (using <strong class="program">python -m compileall</strong>) to
+compile Python sources.</p>
+<dl class="cmdoption">
+<dt id="cmdoption-compileall-arg-directory">
+<code class="descname">directory</code><code class="descclassname"> ...</code><a class="headerlink" href="#cmdoption-compileall-arg-directory" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-compileall-arg-file">
+<code class="descname">file</code><code class="descclassname"> ...</code><a class="headerlink" href="#cmdoption-compileall-arg-file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Positional arguments are files to compile or directories that contain
+source files, traversed recursively.  If no argument is given, behave as if
+the command line was <code class="docutils literal notranslate"><span class="pre">-l</span> <span class="pre">&lt;directories</span> <span class="pre">from</span> <span class="pre">sys.path&gt;</span></code>.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-compileall-l">
+<code class="descname">-l</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-compileall-l" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do not recurse into subdirectories, only compile source code files directly
+contained in the named or implied directories.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-compileall-f">
+<code class="descname">-f</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-compileall-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force rebuild even if timestamps are up-to-date.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-compileall-q">
+<code class="descname">-q</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-compileall-q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do not print the list of files compiled, print only error messages.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-compileall-d">
+<code class="descname">-d</code><code class="descclassname"> destdir</code><a class="headerlink" href="#cmdoption-compileall-d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Directory prepended to the path to each file being compiled.  This will
+appear in compilation time tracebacks, and is also compiled in to the
+byte-code file, where it will be used in tracebacks and other messages in
+cases where the source file does not exist at the time the byte-code file is
+executed.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-compileall-x">
+<code class="descname">-x</code><code class="descclassname"> regex</code><a class="headerlink" href="#cmdoption-compileall-x" title="Permalink to this definition">¶</a></dt>
+<dd><p>regex is used to search the full path to each file considered for
+compilation, and if the regex produces a match, the file is skipped.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-compileall-i">
+<code class="descname">-i</code><code class="descclassname"> list</code><a class="headerlink" href="#cmdoption-compileall-i" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the file <code class="docutils literal notranslate"><span class="pre">list</span></code> and add each line that it contains to the list of
+files and directories to compile.  If <code class="docutils literal notranslate"><span class="pre">list</span></code> is <code class="docutils literal notranslate"><span class="pre">-</span></code>, read lines from
+<code class="docutils literal notranslate"><span class="pre">stdin</span></code>.</p>
+</dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span>Added the <code class="docutils literal notranslate"><span class="pre">-i</span></code>  option.</p>
+</div>
+</div>
+<div class="section" id="public-functions">
+<h2>32.11.2. Public functions<a class="headerlink" href="#public-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compileall.compile_dir">
+<code class="descclassname">compileall.</code><code class="descname">compile_dir</code><span class="sig-paren">(</span><em>dir</em><span class="optional">[</span>, <em>maxlevels</em><span class="optional">[</span>, <em>ddir</em><span class="optional">[</span>, <em>force</em><span class="optional">[</span>, <em>rx</em><span class="optional">[</span>, <em>quiet</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#compileall.compile_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively descend the directory tree named by <em>dir</em>, compiling all <code class="file docutils literal notranslate"><span class="pre">.py</span></code>
+files along the way.</p>
+<p>The <em>maxlevels</em> parameter is used to limit the depth of the recursion; it
+defaults to <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p>
+<p>If <em>ddir</em> is given, it is prepended to the path to each file being compiled
+for use in compilation time tracebacks, and is also compiled in to the
+byte-code file, where it will be used in tracebacks and other messages in
+cases where the source file does not exist at the time the byte-code file is
+executed.</p>
+<p>If <em>force</em> is true, modules are re-compiled even if the timestamps are up to
+date.</p>
+<p>If <em>rx</em> is given, its search method is called on the complete path to each
+file considered for compilation, and if it returns a true value, the file
+is skipped.</p>
+<p>If <em>quiet</em> is true, nothing is printed to the standard output unless errors
+occur.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compileall.compile_file">
+<code class="descclassname">compileall.</code><code class="descname">compile_file</code><span class="sig-paren">(</span><em>fullname</em><span class="optional">[</span>, <em>ddir</em><span class="optional">[</span>, <em>force</em><span class="optional">[</span>, <em>rx</em><span class="optional">[</span>, <em>quiet</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#compileall.compile_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compile the file with path <em>fullname</em>.</p>
+<p>If <em>ddir</em> is given, it is prepended to the path to the file being compiled
+for use in compilation time tracebacks, and is also compiled in to the
+byte-code file, where it will be used in tracebacks and other messages in
+cases where the source file does not exist at the time the byte-code file is
+executed.</p>
+<p>If <em>rx</em> is given, its search method is passed the full path name to the
+file being compiled, and if it returns a true value, the file is not
+compiled and <code class="docutils literal notranslate"><span class="pre">True</span></code> is returned.</p>
+<p>If <em>quiet</em> is true, nothing is printed to the standard output unless errors
+occur.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.7.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="compileall.compile_path">
+<code class="descclassname">compileall.</code><code class="descname">compile_path</code><span class="sig-paren">(</span><span class="optional">[</span><em>skip_curdir</em><span class="optional">[</span>, <em>maxlevels</em><span class="optional">[</span>, <em>force</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#compileall.compile_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Byte-compile all the <code class="file docutils literal notranslate"><span class="pre">.py</span></code> files found along <code class="docutils literal notranslate"><span class="pre">sys.path</span></code>. If
+<em>skip_curdir</em> is true (the default), the current directory is not included
+in the search.  All other parameters are passed to the <a class="reference internal" href="#compileall.compile_dir" title="compileall.compile_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile_dir()</span></code></a>
+function.  Note that unlike the other compile functions, <code class="docutils literal notranslate"><span class="pre">maxlevels</span></code>
+defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+</dd></dl>
+
+<p>To force a recompile of all the <code class="file docutils literal notranslate"><span class="pre">.py</span></code> files in the <code class="file docutils literal notranslate"><span class="pre">Lib/</span></code>
+subdirectory and all its subdirectories:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">compileall</span>
+
+<span class="n">compileall</span><span class="o">.</span><span class="n">compile_dir</span><span class="p">(</span><span class="s1">&#39;Lib/&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Perform same compilation, excluding files in .svn directories.</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="n">compileall</span><span class="o">.</span><span class="n">compile_dir</span><span class="p">(</span><span class="s1">&#39;Lib/&#39;</span><span class="p">,</span> <span class="n">rx</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[/</span><span class="se">\\</span><span class="s1">][.]svn&#39;</span><span class="p">),</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="py_compile.html#module-py_compile" title="py_compile: Generate byte-code files from Python source files."><code class="xref py py-mod docutils literal notranslate"><span class="pre">py_compile</span></code></a></dt><dd><p>Byte-compile a single source file.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">32.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">compileall</span></code> — Byte-compile Python libraries</a><ul>
+<li><a class="reference internal" href="#command-line-use">32.11.1. Command-line use</a></li>
+<li><a class="reference internal" href="#public-functions">32.11.2. Public functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="py_compile.html"
+                        title="previous chapter">32.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">py_compile</span></code> — Compile Python source files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dis.html"
+                        title="next chapter">32.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dis</span></code> — Disassembler for Python bytecode</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/compileall.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dis.html" title="32.12. dis — Disassembler for Python bytecode"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="py_compile.html" title="32.10. py_compile — Compile Python source files"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" >32. Python Language Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

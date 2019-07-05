@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>28.15. user — User-specific configuration hook &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="28.16. fpectl — Floating point exception control" href="fpectl.html" />
+    <link rel="prev" title="28.14. site — Site-specific configuration hook" href="site.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/user.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fpectl.html" title="28.16. fpectl — Floating point exception control"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="site.html" title="28.14. site — Site-specific configuration hook"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" accesskey="U">28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-user">
+<span id="user-user-specific-configuration-hook"></span><h1>28.15. <a class="reference internal" href="#module-user" title="user: A standard way to reference user-specific modules. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">user</span></code></a> — User-specific configuration hook<a class="headerlink" href="#module-user" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-user" title="user: A standard way to reference user-specific modules. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">user</span></code></a> module has been removed in Python 3.</p>
+</div>
+<p id="index-0">As a policy, Python doesn’t run user-specified code on startup of Python
+programs.  (Only interactive sessions execute the script specified in the
+<span class="target" id="index-1"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONSTARTUP"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHONSTARTUP</span></code></a> environment variable if it exists).</p>
+<p>However, some programs or sites may find it convenient to allow users to have a
+standard customization file, which gets run when a program requests it.  This
+module implements such a mechanism.  A program that wishes to use the mechanism
+must execute the statement</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">user</span>
+</pre></div>
+</div>
+<p id="index-2">The <a class="reference internal" href="#module-user" title="user: A standard way to reference user-specific modules. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">user</span></code></a> module looks for a file <code class="file docutils literal notranslate"><span class="pre">.pythonrc.py</span></code> in the user’s home
+directory and if it can be opened, executes it (using <a class="reference internal" href="functions.html#execfile" title="execfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">execfile()</span></code></a>) in its
+own (the module <a class="reference internal" href="#module-user" title="user: A standard way to reference user-specific modules. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">user</span></code></a>’s) global namespace.  Errors during this phase are
+not caught; that’s up to the program that imports the <a class="reference internal" href="#module-user" title="user: A standard way to reference user-specific modules. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">user</span></code></a> module, if it
+wishes.  The home directory is assumed to be named by the <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">HOME</span></code>
+environment variable; if this is not set, the current directory is used.</p>
+<p>The user’s <code class="file docutils literal notranslate"><span class="pre">.pythonrc.py</span></code> could conceivably test for <code class="docutils literal notranslate"><span class="pre">sys.version</span></code> if it
+wishes to do different things depending on the Python version.</p>
+<p>A warning to users: be very conservative in what you place in your
+<code class="file docutils literal notranslate"><span class="pre">.pythonrc.py</span></code> file.  Since you don’t know which programs will use it,
+changing the behavior of standard modules or functions is generally not a good
+idea.</p>
+<p>A suggestion for programmers who wish to use this mechanism: a simple way to let
+users specify options for your package is to have them define variables in their
+<code class="file docutils literal notranslate"><span class="pre">.pythonrc.py</span></code> file that you test in your module.  For example, a module
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">spam</span></code> that has a verbosity level can look for a variable
+<code class="docutils literal notranslate"><span class="pre">user.spam_verbose</span></code>, as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">user</span>
+
+<span class="n">verbose</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s2">&quot;spam_verbose&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>(The three-argument form of <a class="reference internal" href="functions.html#getattr" title="getattr"><code class="xref py py-func docutils literal notranslate"><span class="pre">getattr()</span></code></a> is used in case the user has not
+defined <code class="docutils literal notranslate"><span class="pre">spam_verbose</span></code> in their <code class="file docutils literal notranslate"><span class="pre">.pythonrc.py</span></code> file.)</p>
+<p>Programs with extensive customization needs are better off reading a
+program-specific customization file.</p>
+<p>Programs with security or privacy concerns should <em>not</em> import this module; a
+user can easily break into a program by placing arbitrary code in the
+<code class="file docutils literal notranslate"><span class="pre">.pythonrc.py</span></code> file.</p>
+<p>Modules for general use should <em>not</em> import this module; it may interfere with
+the operation of the importing program.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="site.html#module-site" title="site: Module responsible for site-specific configuration."><code class="xref py py-mod docutils literal notranslate"><span class="pre">site</span></code></a></dt><dd><p>Site-wide customization mechanism.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="site.html"
+                        title="previous chapter">28.14. <code class="xref py py-mod docutils literal notranslate"><span class="pre">site</span></code> — Site-specific configuration hook</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fpectl.html"
+                        title="next chapter">28.16. <code class="xref py py-mod docutils literal notranslate"><span class="pre">fpectl</span></code> — Floating point exception control</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/user.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fpectl.html" title="28.16. fpectl — Floating point exception control"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="site.html" title="28.14. site — Site-specific configuration hook"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" >28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

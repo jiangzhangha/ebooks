@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>38. MacPython OSA Modules &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="38.1. gensuitemodule — Generate OSA stub packages" href="gensuitemodule.html" />
+    <link rel="prev" title="37.9. ColorPicker — Color selection dialog" href="colorpicker.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/macosa.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gensuitemodule.html" title="38.1. gensuitemodule — Generate OSA stub packages"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="colorpicker.html" title="37.9. ColorPicker — Color selection dialog"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="macpython-osa-modules">
+<span id="mac-scripting"></span><h1>38. MacPython OSA Modules<a class="headerlink" href="#macpython-osa-modules" title="Permalink to this headline">¶</a></h1>
+<p>This chapter describes the current implementation of the Open Scripting
+Architecture (OSA, also commonly referred to as AppleScript) for Python,
+allowing you to control scriptable applications from your Python program,
+and with a fairly pythonic interface. Development on this set of modules has
+stopped.</p>
+<p>For a description of the various components of AppleScript and OSA, and to get
+an understanding of the architecture and terminology, you should read Apple’s
+documentation. The “Applescript Language Guide” explains the conceptual model
+and the terminology, and documents the standard suite. The “Open Scripting
+Architecture” document explains how to use OSA from an application programmers
+point of view. In the Apple Help Viewer these books are located in the Developer
+Documentation, Core Technologies section.</p>
+<p>As an example of scripting an application, the following piece of AppleScript
+will get the name of the frontmost <strong class="program">Finder</strong> window and print it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tell</span> <span class="n">application</span> <span class="s2">&quot;Finder&quot;</span>
+    <span class="n">get</span> <span class="n">name</span> <span class="n">of</span> <span class="n">window</span> <span class="mi">1</span>
+<span class="n">end</span> <span class="n">tell</span>
+</pre></div>
+</div>
+<p>In Python, the following code fragment will do the same:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">Finder</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">Finder</span><span class="o">.</span><span class="n">Finder</span><span class="p">()</span>
+<span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As distributed the Python library includes packages that implement the standard
+suites, plus packages that interface to a small number of common applications.</p>
+<p>To send AppleEvents to an application you must first create the Python package
+interfacing to the terminology of the application (what <strong class="program">Script Editor</strong>
+calls the “Dictionary”). This can be done from within the <strong class="program">PythonIDE</strong>
+or by running the <code class="file docutils literal notranslate"><span class="pre">gensuitemodule.py</span></code> module as a standalone program from
+the command line.</p>
+<p>The generated output is a package with a number of modules, one for every suite
+used in the program plus an <code class="xref py py-mod docutils literal notranslate"><span class="pre">__init__</span></code> module to glue it all together. The
+Python inheritance graph follows the AppleScript inheritance graph, so if a
+program’s dictionary specifies that it includes support for the Standard Suite,
+but extends one or two verbs with extra arguments then the output suite will
+contain a module <code class="xref py py-mod docutils literal notranslate"><span class="pre">Standard_Suite</span></code> that imports and re-exports everything
+from <code class="xref py py-mod docutils literal notranslate"><span class="pre">StdSuites.Standard_Suite</span></code> but overrides the methods that have extra
+functionality. The output of <a class="reference internal" href="gensuitemodule.html#module-gensuitemodule" title="gensuitemodule: Create a stub package from an OSA dictionary (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gensuitemodule</span></code></a> is pretty readable, and
+contains the documentation that was in the original AppleScript dictionary in
+Python docstrings, so reading it is a good source of documentation.</p>
+<p>The output package implements a main class with the same name as the package
+which contains all the AppleScript verbs as methods, with the direct object as
+the first argument and all optional parameters as keyword arguments. AppleScript
+classes are also implemented as Python classes, as are comparisons and all the
+other thingies.</p>
+<p>The main Python class implementing the verbs also allows access to the
+properties and elements declared in the AppleScript class “application”. In the
+current release that is as far as the object orientation goes, so in the example
+above we need to use <code class="docutils literal notranslate"><span class="pre">f.get(f.window(1).name)</span></code> instead of the more Pythonic
+<code class="docutils literal notranslate"><span class="pre">f.window(1).name.get()</span></code>.</p>
+<p>If an AppleScript identifier is not a Python identifier the name is mangled
+according to a small number of rules:</p>
+<ul class="simple">
+<li><p>spaces are replaced with underscores</p></li>
+<li><p>other non-alphanumeric characters are replaced with <code class="docutils literal notranslate"><span class="pre">_xx_</span></code> where <code class="docutils literal notranslate"><span class="pre">xx</span></code> is
+the hexadecimal character value</p></li>
+<li><p>any Python reserved word gets an underscore appended</p></li>
+</ul>
+<p>Python also has support for creating scriptable applications in Python, but The
+following modules are relevant to MacPython AppleScript support:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gensuitemodule.html">38.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">gensuitemodule</span></code> — Generate OSA stub packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aetools.html">38.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">aetools</span></code> — OSA client support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aepack.html">38.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">aepack</span></code> — Conversion between Python variables and AppleEvent data containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aetypes.html">38.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">aetypes</span></code> — AppleEvent objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="miniaeframe.html">38.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">MiniAEFrame</span></code> — Open Scripting Architecture server support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="miniaeframe.html#aeserver-objects">38.5.1. AEServer Objects</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>In addition, support modules have been pre-generated for <code class="xref py py-mod docutils literal notranslate"><span class="pre">Finder</span></code>,
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">Terminal</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">Explorer</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">Netscape</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">CodeWarrior</span></code>,
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemEvents</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">StdSuites</span></code>.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="colorpicker.html"
+                        title="previous chapter">37.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">ColorPicker</span></code> — Color selection dialog</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gensuitemodule.html"
+                        title="next chapter">38.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">gensuitemodule</span></code> — Generate OSA stub packages</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/macosa.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gensuitemodule.html" title="38.1. gensuitemodule — Generate OSA stub packages"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="colorpicker.html" title="37.9. ColorPicker — Color selection dialog"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

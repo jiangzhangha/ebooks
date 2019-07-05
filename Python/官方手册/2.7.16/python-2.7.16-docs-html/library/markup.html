@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>19. Structured Markup Processing Tools &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="19.1. HTMLParser — Simple HTML and XHTML parser" href="htmlparser.html" />
+    <link rel="prev" title="18.16. uu — Encode and decode uuencode files" href="uu.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/markup.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="htmlparser.html" title="19.1. HTMLParser — Simple HTML and XHTML parser"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="uu.html" title="18.16. uu — Encode and decode uuencode files"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="structured-markup-processing-tools">
+<span id="markup"></span><h1>19. Structured Markup Processing Tools<a class="headerlink" href="#structured-markup-processing-tools" title="Permalink to this headline">¶</a></h1>
+<p>Python supports a variety of modules to work with various forms of structured
+data markup.  This includes modules to work with the Standard Generalized Markup
+Language (SGML) and the Hypertext Markup Language (HTML), and several interfaces
+for working with the Extensible Markup Language (XML).</p>
+<p>It is important to note that modules in the <a class="reference internal" href="xml.html#module-xml" title="xml: Package containing XML processing modules"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml</span></code></a> package require that
+there be at least one SAX-compliant XML parser available. Starting with Python
+2.3, the Expat parser is included with Python, so the <a class="reference internal" href="pyexpat.html#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.parsers.expat</span></code></a>
+module will always be available. You may still want to be aware of the <a class="reference external" href="http://pyxml.sourceforge.net/">PyXML
+add-on package</a>; that package provides an
+extended set of XML libraries for Python.</p>
+<p>The documentation for the <a class="reference internal" href="xml.dom.html#module-xml.dom" title="xml.dom: Document Object Model API for Python."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom</span></code></a> and <a class="reference internal" href="xml.sax.html#module-xml.sax" title="xml.sax: Package containing SAX2 base classes and convenience functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code></a> packages are the
+definition of the Python bindings for the DOM and SAX interfaces.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="htmlparser.html">19.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">HTMLParser</span></code> — Simple HTML and XHTML parser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="htmlparser.html#example-html-parser-application">19.1.1. Example HTML Parser Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="htmlparser.html#htmlparser-methods">19.1.2. <code class="xref py py-class docutils literal notranslate"><span class="pre">HTMLParser</span></code> Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="htmlparser.html#examples">19.1.3. Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sgmllib.html">19.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sgmllib</span></code> — Simple SGML parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="htmllib.html">19.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">htmllib</span></code> — A parser for HTML documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="htmllib.html#htmlparser-objects">19.3.1. HTMLParser Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="htmllib.html#module-htmlentitydefs">19.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">htmlentitydefs</span></code> — Definitions of HTML general entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xml.html">19.5. XML Processing Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xml.html#xml-vulnerabilities">19.6. XML vulnerabilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xml.html#defused-packages">19.6.1. defused packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xml.etree.elementtree.html">19.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.etree.ElementTree</span></code> — The ElementTree XML API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xml.etree.elementtree.html#tutorial">19.7.1. Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#xml-tree-and-elements">19.7.1.1. XML tree and elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#parsing-xml">19.7.1.2. Parsing XML</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#finding-interesting-elements">19.7.1.3. Finding interesting elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#modifying-an-xml-file">19.7.1.4. Modifying an XML File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#building-xml-documents">19.7.1.5. Building XML documents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#parsing-xml-with-namespaces">19.7.1.6. Parsing XML with Namespaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#additional-resources">19.7.1.7. Additional resources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xml.etree.elementtree.html#xpath-support">19.7.2. XPath support</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#example">19.7.2.1. Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#supported-xpath-syntax">19.7.2.2. Supported XPath syntax</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xml.etree.elementtree.html#reference">19.7.3. Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#functions">19.7.3.1. Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#element-objects">19.7.3.2. Element Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#elementtree-objects">19.7.3.3. ElementTree Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#qname-objects">19.7.3.4. QName Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#treebuilder-objects">19.7.3.5. TreeBuilder Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.etree.elementtree.html#xmlparser-objects">19.7.3.6. XMLParser Objects</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xml.dom.html">19.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom</span></code> — The Document Object Model API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xml.dom.html#module-contents">19.8.1. Module Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.dom.html#objects-in-the-dom">19.8.2. Objects in the DOM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#domimplementation-objects">19.8.2.1. DOMImplementation Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#node-objects">19.8.2.2. Node Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#nodelist-objects">19.8.2.3. NodeList Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#documenttype-objects">19.8.2.4. DocumentType Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#document-objects">19.8.2.5. Document Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#element-objects">19.8.2.6. Element Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#attr-objects">19.8.2.7. Attr Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#namednodemap-objects">19.8.2.8. NamedNodeMap Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#comment-objects">19.8.2.9. Comment Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#text-and-cdatasection-objects">19.8.2.10. Text and CDATASection Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#processinginstruction-objects">19.8.2.11. ProcessingInstruction Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#exceptions">19.8.2.12. Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xml.dom.html#conformance">19.8.3. Conformance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#type-mapping">19.8.3.1. Type Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xml.dom.html#accessor-methods">19.8.3.2. Accessor Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xml.dom.minidom.html">19.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom.minidom</span></code> — Minimal DOM implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xml.dom.minidom.html#dom-objects">19.9.1. DOM Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.dom.minidom.html#dom-example">19.9.2. DOM Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.dom.minidom.html#minidom-and-the-dom-standard">19.9.3. minidom and the DOM standard</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xml.dom.pulldom.html">19.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom.pulldom</span></code> — Support for building partial DOM trees</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xml.dom.pulldom.html#domeventstream-objects">19.10.1. DOMEventStream Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xml.sax.html">19.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code> — Support for SAX2 parsers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.html#saxexception-objects">19.11.1. SAXException Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xml.sax.handler.html">19.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code> — Base classes for SAX handlers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.handler.html#contenthandler-objects">19.12.1. ContentHandler Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.handler.html#dtdhandler-objects">19.12.2. DTDHandler Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.handler.html#entityresolver-objects">19.12.3. EntityResolver Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.handler.html#errorhandler-objects">19.12.4. ErrorHandler Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xml.sax.utils.html">19.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.saxutils</span></code> — SAX Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xml.sax.reader.html">19.14. <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.xmlreader</span></code> — Interface for XML parsers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.reader.html#xmlreader-objects">19.14.1. XMLReader Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.reader.html#incrementalparser-objects">19.14.2. IncrementalParser Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.reader.html#locator-objects">19.14.3. Locator Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.reader.html#inputsource-objects">19.14.4. InputSource Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.reader.html#the-attributes-interface">19.14.5. The <code class="xref py py-class docutils literal notranslate"><span class="pre">Attributes</span></code> Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.reader.html#the-attributesns-interface">19.14.6. The <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributesNS</span></code> Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyexpat.html">19.15. <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.parsers.expat</span></code> — Fast XML parsing using Expat</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyexpat.html#xmlparser-objects">19.15.1. XMLParser Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyexpat.html#expaterror-exceptions">19.15.2. ExpatError Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyexpat.html#example">19.15.3. Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyexpat.html#content-model-descriptions">19.15.4. Content Model Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyexpat.html#expat-error-constants">19.15.5. Expat error constants</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="uu.html"
+                        title="previous chapter">18.16. <code class="xref py py-mod docutils literal notranslate"><span class="pre">uu</span></code> — Encode and decode uuencode files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="htmlparser.html"
+                        title="next chapter">19.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">HTMLParser</span></code> — Simple HTML and XHTML parser</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/markup.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="htmlparser.html" title="19.1. HTMLParser — Simple HTML and XHTML parser"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="uu.html" title="18.16. uu — Encode and decode uuencode files"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

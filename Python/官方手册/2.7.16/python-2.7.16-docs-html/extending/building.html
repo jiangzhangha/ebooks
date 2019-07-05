@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>3. Building C and C++ Extensions with distutils &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="4. Building C and C++ Extensions on Windows" href="windows.html" />
+    <link rel="prev" title="2. Defining New Types" href="newtypes.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/extending/building.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="windows.html" title="4. Building C and C++ Extensions on Windows"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="newtypes.html" title="2. Defining New Types"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Extending and Embedding the Python Interpreter</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="building-c-and-c-extensions-with-distutils">
+<span id="building"></span><h1>3. Building C and C++ Extensions with distutils<a class="headerlink" href="#building-c-and-c-extensions-with-distutils" title="Permalink to this headline">¶</a></h1>
+<p>Starting in Python 1.4, Python provides, on Unix, a special make file for
+building make files for building dynamically-linked extensions and custom
+interpreters.  Starting with Python 2.0, this mechanism (known as related to
+Makefile.pre.in, and Setup files) is no longer supported. Building custom
+interpreters was rarely used, and extension modules can be built using
+distutils.</p>
+<p>Building an extension module using distutils requires that distutils is
+installed on the build machine, which is included in Python 2.x and available
+separately for Python 1.5. Since distutils also supports creation of binary
+packages, users don’t necessarily need a compiler and distutils to install the
+extension.</p>
+<p>A distutils package contains a driver script, <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code>. This is a plain
+Python file, which, in the most simple case, could look like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">Extension</span>
+
+<span class="n">module1</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span><span class="s1">&#39;demo&#39;</span><span class="p">,</span>
+                    <span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;demo.c&#39;</span><span class="p">])</span>
+
+<span class="n">setup</span> <span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;PackageName&#39;</span><span class="p">,</span>
+       <span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+       <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;This is a demo package&#39;</span><span class="p">,</span>
+       <span class="n">ext_modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">module1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>With this <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code>, and a file <code class="file docutils literal notranslate"><span class="pre">demo.c</span></code>, running</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">build</span>
+</pre></div>
+</div>
+<p>will compile <code class="file docutils literal notranslate"><span class="pre">demo.c</span></code>, and produce an extension module named <code class="docutils literal notranslate"><span class="pre">demo</span></code> in
+the <code class="file docutils literal notranslate"><span class="pre">build</span></code> directory. Depending on the system, the module file will end
+up in a subdirectory <code class="file docutils literal notranslate"><span class="pre">build/lib.system</span></code>, and may have a name like
+<code class="file docutils literal notranslate"><span class="pre">demo.so</span></code> or <code class="file docutils literal notranslate"><span class="pre">demo.pyd</span></code>.</p>
+<p>In the <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code>, all execution is performed by calling the <code class="docutils literal notranslate"><span class="pre">setup</span></code>
+function. This takes a variable number of keyword arguments, of which the
+example above uses only a subset. Specifically, the example specifies
+meta-information to build packages, and it specifies the contents of the
+package.  Normally, a package will contain of addition modules, like Python
+source modules, documentation, subpackages, etc. Please refer to the distutils
+documentation in <a class="reference internal" href="../distutils/index.html#distutils-index"><span class="std std-ref">Distributing Python Modules (Legacy version)</span></a> to learn more about the features of
+distutils; this section explains building extension modules only.</p>
+<p>It is common to pre-compute arguments to <code class="xref py py-func docutils literal notranslate"><span class="pre">setup()</span></code>, to better structure the
+driver script. In the example above, the <code class="docutils literal notranslate"><span class="pre">ext_modules</span></code> argument to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">setup()</span></code> is a list of extension modules, each of which is an instance of
+the <code class="xref py py-class docutils literal notranslate"><span class="pre">Extension</span></code>. In the example, the instance
+defines an extension named <code class="docutils literal notranslate"><span class="pre">demo</span></code> which is build by compiling a single source
+file, <code class="file docutils literal notranslate"><span class="pre">demo.c</span></code>.</p>
+<p>In many cases, building an extension is more complex, since additional
+preprocessor defines and libraries may be needed. This is demonstrated in the
+example below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">Extension</span>
+
+<span class="n">module1</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span><span class="s1">&#39;demo&#39;</span><span class="p">,</span>
+                    <span class="n">define_macros</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;MAJOR_VERSION&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">),</span>
+                                     <span class="p">(</span><span class="s1">&#39;MINOR_VERSION&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)],</span>
+                    <span class="n">include_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/usr/local/include&#39;</span><span class="p">],</span>
+                    <span class="n">libraries</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;tcl83&#39;</span><span class="p">],</span>
+                    <span class="n">library_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/usr/local/lib&#39;</span><span class="p">],</span>
+                    <span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;demo.c&#39;</span><span class="p">])</span>
+
+<span class="n">setup</span> <span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;PackageName&#39;</span><span class="p">,</span>
+       <span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+       <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;This is a demo package&#39;</span><span class="p">,</span>
+       <span class="n">author</span> <span class="o">=</span> <span class="s1">&#39;Martin v. Loewis&#39;</span><span class="p">,</span>
+       <span class="n">author_email</span> <span class="o">=</span> <span class="s1">&#39;martin@v.loewis.de&#39;</span><span class="p">,</span>
+       <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://docs.python.org/extending/building&#39;</span><span class="p">,</span>
+       <span class="n">long_description</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">This is really just a demo package.</span>
+<span class="s1">&#39;&#39;&#39;</span><span class="p">,</span>
+       <span class="n">ext_modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">module1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>In this example, <code class="xref py py-func docutils literal notranslate"><span class="pre">setup()</span></code> is called with additional meta-information, which
+is recommended when distribution packages have to be built. For the extension
+itself, it specifies preprocessor defines, include directories, library
+directories, and libraries. Depending on the compiler, distutils passes this
+information in different ways to the compiler. For example, on Unix, this may
+result in the compilation commands</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">gcc</span> <span class="o">-</span><span class="n">DNDEBUG</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">O3</span> <span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">Wstrict</span><span class="o">-</span><span class="n">prototypes</span> <span class="o">-</span><span class="n">fPIC</span> <span class="o">-</span><span class="n">DMAJOR_VERSION</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span><span class="n">DMINOR_VERSION</span><span class="o">=</span><span class="mi">0</span> <span class="o">-</span><span class="n">I</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">include</span> <span class="o">-</span><span class="n">I</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">python2</span><span class="mf">.2</span> <span class="o">-</span><span class="n">c</span> <span class="n">demo</span><span class="p">.</span><span class="n">c</span> <span class="o">-</span><span class="n">o</span> <span class="n">build</span><span class="o">/</span><span class="n">temp</span><span class="p">.</span><span class="n">linux</span><span class="o">-</span><span class="n">i686</span><span class="o">-</span><span class="mf">2.2</span><span class="o">/</span><span class="n">demo</span><span class="p">.</span><span class="n">o</span>
+
+<span class="n">gcc</span> <span class="o">-</span><span class="n">shared</span> <span class="n">build</span><span class="o">/</span><span class="n">temp</span><span class="p">.</span><span class="n">linux</span><span class="o">-</span><span class="n">i686</span><span class="o">-</span><span class="mf">2.2</span><span class="o">/</span><span class="n">demo</span><span class="p">.</span><span class="n">o</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span> <span class="o">-</span><span class="n">ltcl83</span> <span class="o">-</span><span class="n">o</span> <span class="n">build</span><span class="o">/</span><span class="n">lib</span><span class="p">.</span><span class="n">linux</span><span class="o">-</span><span class="n">i686</span><span class="o">-</span><span class="mf">2.2</span><span class="o">/</span><span class="n">demo</span><span class="p">.</span><span class="n">so</span>
+</pre></div>
+</div>
+<p>These lines are for demonstration purposes only; distutils users should trust
+that distutils gets the invocations right.</p>
+<div class="section" id="distributing-your-extension-modules">
+<span id="distributing"></span><h2>3.1. Distributing your extension modules<a class="headerlink" href="#distributing-your-extension-modules" title="Permalink to this headline">¶</a></h2>
+<p>When an extension has been successfully build, there are three ways to use it.</p>
+<p>End-users will typically want to install the module, they do so by running</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>Module maintainers should produce source packages; to do so, they run</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">sdist</span>
+</pre></div>
+</div>
+<p>In some cases, additional files need to be included in a source distribution;
+this is done through a <code class="file docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> file; see the distutils documentation
+for details.</p>
+<p>If the source distribution has been build successfully, maintainers can also
+create binary distributions. Depending on the platform, one of the following
+commands can be used to do so.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">bdist_wininst</span>
+<span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">bdist_rpm</span>
+<span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">bdist_dumb</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. Building C and C++ Extensions with distutils</a><ul>
+<li><a class="reference internal" href="#distributing-your-extension-modules">3.1. Distributing your extension modules</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="newtypes.html"
+                        title="previous chapter">2. Defining New Types</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="windows.html"
+                        title="next chapter">4. Building C and C++ Extensions on Windows</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/extending/building.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="windows.html" title="4. Building C and C++ Extensions on Windows"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="newtypes.html" title="2. Defining New Types"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Extending and Embedding the Python Interpreter</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

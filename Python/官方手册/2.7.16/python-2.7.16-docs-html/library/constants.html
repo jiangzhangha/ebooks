@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>4. Built-in Constants &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="5. Built-in Types" href="stdtypes.html" />
+    <link rel="prev" title="2. Built-in Functions" href="functions.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/constants.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="stdtypes.html" title="5. Built-in Types"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="functions.html" title="2. Built-in Functions"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="built-in-constants">
+<span id="built-in-consts"></span><h1>4. Built-in Constants<a class="headerlink" href="#built-in-constants" title="Permalink to this headline">¶</a></h1>
+<p>A small number of constants live in the built-in namespace.  They are:</p>
+<dl class="data">
+<dt id="False">
+<code class="descname">False</code><a class="headerlink" href="#False" title="Permalink to this definition">¶</a></dt>
+<dd><p>The false value of the <a class="reference internal" href="functions.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> type.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="True">
+<code class="descname">True</code><a class="headerlink" href="#True" title="Permalink to this definition">¶</a></dt>
+<dd><p>The true value of the <a class="reference internal" href="functions.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> type.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="None">
+<code class="descname">None</code><a class="headerlink" href="#None" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sole value of <a class="reference internal" href="types.html#types.NoneType" title="types.NoneType"><code class="xref py py-attr docutils literal notranslate"><span class="pre">types.NoneType</span></code></a>.  <code class="docutils literal notranslate"><span class="pre">None</span></code> is frequently used to
+represent the absence of a value, as when default arguments are not passed to a
+function.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.4: </span>Assignments to <code class="docutils literal notranslate"><span class="pre">None</span></code> are illegal and raise a <a class="reference internal" href="exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SyntaxError</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="NotImplemented">
+<code class="descname">NotImplemented</code><a class="headerlink" href="#NotImplemented" title="Permalink to this definition">¶</a></dt>
+<dd><p>Special value which can be returned by the “rich comparison” special methods
+(<a class="reference internal" href="../reference/datamodel.html#object.__eq__" title="object.__eq__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__eq__()</span></code></a>, <a class="reference internal" href="../reference/datamodel.html#object.__lt__" title="object.__lt__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__lt__()</span></code></a>, and friends), to indicate that the comparison
+is not implemented with respect to the other type.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Ellipsis">
+<code class="descname">Ellipsis</code><a class="headerlink" href="#Ellipsis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Special value used in conjunction with extended slicing syntax.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="__debug__">
+<code class="descname">__debug__</code><a class="headerlink" href="#__debug__" title="Permalink to this definition">¶</a></dt>
+<dd><p>This constant is true if Python was not started with an <a class="reference internal" href="../using/cmdline.html#cmdoption-o"><code class="xref std std-option docutils literal notranslate"><span class="pre">-O</span></code></a> option.
+See also the <a class="reference internal" href="../reference/simple_stmts.html#assert"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">assert</span></code></a> statement.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The names <a class="reference internal" href="#None" title="None"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> and <a class="reference internal" href="#__debug__" title="__debug__"><code class="xref py py-data docutils literal notranslate"><span class="pre">__debug__</span></code></a> cannot be reassigned
+(assignments to them, even as an attribute name, raise <a class="reference internal" href="exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SyntaxError</span></code></a>),
+so they can be considered “true” constants.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span>Assignments to <code class="docutils literal notranslate"><span class="pre">__debug__</span></code> as an attribute became illegal.</p>
+</div>
+</div>
+<div class="section" id="constants-added-by-the-site-module">
+<h2>4.1. Constants added by the <a class="reference internal" href="site.html#module-site" title="site: Module responsible for site-specific configuration."><code class="xref py py-mod docutils literal notranslate"><span class="pre">site</span></code></a> module<a class="headerlink" href="#constants-added-by-the-site-module" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="site.html#module-site" title="site: Module responsible for site-specific configuration."><code class="xref py py-mod docutils literal notranslate"><span class="pre">site</span></code></a> module (which is imported automatically during startup, except
+if the <a class="reference internal" href="../using/cmdline.html#id2"><code class="xref std std-option docutils literal notranslate"><span class="pre">-S</span></code></a> command-line option is given) adds several constants to the
+built-in namespace.  They are useful for the interactive interpreter shell and
+should not be used in programs.</p>
+<dl class="data">
+<dt id="quit">
+<code class="descname">quit</code><span class="sig-paren">(</span><span class="optional">[</span><em>code=None</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#quit" title="Permalink to this definition">¶</a></dt>
+<dt id="exit">
+<code class="descname">exit</code><span class="sig-paren">(</span><span class="optional">[</span><em>code=None</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Objects that when printed, print a message like “Use quit() or Ctrl-D
+(i.e. EOF) to exit”, and when called, raise <a class="reference internal" href="exceptions.html#exceptions.SystemExit" title="exceptions.SystemExit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemExit</span></code></a> with the
+specified exit code.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="copyright">
+<code class="descname">copyright</code><a class="headerlink" href="#copyright" title="Permalink to this definition">¶</a></dt>
+<dt id="credits">
+<code class="descname">credits</code><a class="headerlink" href="#credits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Objects that when printed or called, print the text of copyright or
+credits, respectively.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="license">
+<code class="descname">license</code><a class="headerlink" href="#license" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object that when printed, prints the message “Type license() to see the
+full license text”, and when called, displays the full license text in a
+pager-like fashion (one screen at a time).</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. Built-in Constants</a><ul>
+<li><a class="reference internal" href="#constants-added-by-the-site-module">4.1. Constants added by the <code class="xref py py-mod docutils literal notranslate"><span class="pre">site</span></code> module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="functions.html"
+                        title="previous chapter">2. Built-in Functions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="stdtypes.html"
+                        title="next chapter">5. Built-in Types</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/constants.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="stdtypes.html" title="5. Built-in Types"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="functions.html" title="2. Built-in Functions"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

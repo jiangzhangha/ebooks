@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>10. File and Directory Access &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="10.1. os.path — Common pathname manipulations" href="os.path.html" />
+    <link rel="prev" title="9.9. operator — Standard operators as functions" href="operator.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/filesys.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="os.path.html" title="10.1. os.path — Common pathname manipulations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="operator.html" title="9.9. operator — Standard operators as functions"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="file-and-directory-access">
+<span id="filesys"></span><h1>10. File and Directory Access<a class="headerlink" href="#file-and-directory-access" title="Permalink to this headline">¶</a></h1>
+<p>The modules described in this chapter deal with disk files and directories.  For
+example, there are modules for reading the properties of files, manipulating
+paths in a portable way, and creating temporary files.  The full list of modules
+in this chapter is:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="os.path.html">10.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">os.path</span></code> — Common pathname manipulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileinput.html">10.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">fileinput</span></code> — Iterate over lines from multiple input streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stat.html">10.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">stat</span></code> — Interpreting <code class="xref py py-func docutils literal notranslate"><span class="pre">stat()</span></code> results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="statvfs.html">10.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">statvfs</span></code> — Constants used with <code class="xref py py-func docutils literal notranslate"><span class="pre">os.statvfs()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="filecmp.html">10.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">filecmp</span></code> — File and Directory Comparisons</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filecmp.html#the-dircmp-class">10.5.1. The <code class="xref py py-class docutils literal notranslate"><span class="pre">dircmp</span></code> class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tempfile.html">10.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">tempfile</span></code> — Generate temporary files and directories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glob.html">10.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">glob</span></code> — Unix style pathname pattern expansion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fnmatch.html">10.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">fnmatch</span></code> — Unix filename pattern matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linecache.html">10.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">linecache</span></code> — Random access to text lines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shutil.html">10.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">shutil</span></code> — High-level file operations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="shutil.html#directory-and-files-operations">10.10.1. Directory and files operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shutil.html#copytree-example">10.10.1.1. copytree example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shutil.html#archiving-operations">10.10.2. Archiving operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shutil.html#archiving-example">10.10.2.1. Archiving example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dircache.html">10.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dircache</span></code> — Cached directory listings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="macpath.html">10.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">macpath</span></code> — Mac OS 9 path manipulation functions</a></li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Section <a class="reference internal" href="stdtypes.html#bltin-file-objects"><span class="std std-ref">File Objects</span></a></dt><dd><p>A description of Python’s built-in file objects.</p>
+</dd>
+<dt>Module <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal notranslate"><span class="pre">os</span></code></a></dt><dd><p>Operating system interfaces, including functions to work with files at a lower
+level than the built-in file object.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="operator.html"
+                        title="previous chapter">9.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">operator</span></code> — Standard operators as functions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="os.path.html"
+                        title="next chapter">10.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">os.path</span></code> — Common pathname manipulations</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/filesys.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="os.path.html" title="10.1. os.path — Common pathname manipulations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="operator.html" title="9.9. operator — Standard operators as functions"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

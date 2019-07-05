@@ -1,0 +1,995 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>28.13. inspect — Inspect live objects &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="28.14. site — Site-specific configuration hook" href="site.html" />
+    <link rel="prev" title="28.12. gc — Garbage Collector interface" href="gc.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/inspect.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="site.html" title="28.14. site — Site-specific configuration hook"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gc.html" title="28.12. gc — Garbage Collector interface"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" accesskey="U">28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-inspect">
+<span id="inspect-inspect-live-objects"></span><h1>28.13. <a class="reference internal" href="#module-inspect" title="inspect: Extract information and source code from live objects."><code class="xref py py-mod docutils literal notranslate"><span class="pre">inspect</span></code></a> — Inspect live objects<a class="headerlink" href="#module-inspect" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.1.</span></p>
+</div>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/inspect.py">Lib/inspect.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-inspect" title="inspect: Extract information and source code from live objects."><code class="xref py py-mod docutils literal notranslate"><span class="pre">inspect</span></code></a> module provides several useful functions to help get
+information about live objects such as modules, classes, methods, functions,
+tracebacks, frame objects, and code objects.  For example, it can help you
+examine the contents of a class, retrieve the source code of a method, extract
+and format the argument list for a function, or get all the information you need
+to display a detailed traceback.</p>
+<p>There are four main kinds of services provided by this module: type checking,
+getting source code, inspecting classes and functions, and examining the
+interpreter stack.</p>
+<div class="section" id="types-and-members">
+<span id="inspect-types"></span><h2>28.13.1. Types and members<a class="headerlink" href="#types-and-members" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#inspect.getmembers" title="inspect.getmembers"><code class="xref py py-func docutils literal notranslate"><span class="pre">getmembers()</span></code></a> function retrieves the members of an object such as a
+class or module. The sixteen functions whose names begin with “is” are mainly
+provided as convenient choices for the second argument to <a class="reference internal" href="#inspect.getmembers" title="inspect.getmembers"><code class="xref py py-func docutils literal notranslate"><span class="pre">getmembers()</span></code></a>.
+They also help you determine when you can expect to find the following special
+attributes:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 27%" />
+<col style="width: 44%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Attribute</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>module</p></td>
+<td><p>__doc__</p></td>
+<td><p>documentation string</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>__file__</p></td>
+<td><p>filename (missing for
+built-in modules)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>class</p></td>
+<td><p>__doc__</p></td>
+<td><p>documentation string</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>__module__</p></td>
+<td><p>name of module in which
+this class was defined</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>method</p></td>
+<td><p>__doc__</p></td>
+<td><p>documentation string</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>__name__</p></td>
+<td><p>name with which this
+method was defined</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>im_class</p></td>
+<td><p>class object that asked
+for this method</p></td>
+<td><p>(1)</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>im_func or
+__func__</p></td>
+<td><p>function object
+containing implementation
+of method</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>im_self or
+__self__</p></td>
+<td><p>instance to which this
+method is bound, or
+<code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>function</p></td>
+<td><p>__doc__</p></td>
+<td><p>documentation string</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>__name__</p></td>
+<td><p>name with which this
+function was defined</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>func_code</p></td>
+<td><p>code object containing
+compiled function
+<a class="reference internal" href="../glossary.html#term-bytecode"><span class="xref std std-term">bytecode</span></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>func_defaults</p></td>
+<td><p>tuple of any default
+values for arguments</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>func_doc</p></td>
+<td><p>(same as __doc__)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>func_globals</p></td>
+<td><p>global namespace in which
+this function was defined</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>func_name</p></td>
+<td><p>(same as __name__)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>generator</p></td>
+<td><p>__iter__</p></td>
+<td><p>defined to support
+iteration over container</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>close</p></td>
+<td><p>raises new GeneratorExit
+exception inside the
+generator to terminate
+the iteration</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>gi_code</p></td>
+<td><p>code object</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>gi_frame</p></td>
+<td><p>frame object or possibly
+<code class="docutils literal notranslate"><span class="pre">None</span></code> once the
+generator has been
+exhausted</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>gi_running</p></td>
+<td><p>set to 1 when generator
+is executing, 0 otherwise</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>next</p></td>
+<td><p>return the next item from
+the container</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>send</p></td>
+<td><p>resumes the generator and
+“sends” a value that
+becomes the result of the
+current yield-expression</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>throw</p></td>
+<td><p>used to raise an
+exception inside the
+generator</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>traceback</p></td>
+<td><p>tb_frame</p></td>
+<td><p>frame object at this
+level</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>tb_lasti</p></td>
+<td><p>index of last attempted
+instruction in bytecode</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>tb_lineno</p></td>
+<td><p>current line number in
+Python source code</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>tb_next</p></td>
+<td><p>next inner traceback
+object (called by this
+level)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>frame</p></td>
+<td><p>f_back</p></td>
+<td><p>next outer frame object
+(this frame’s caller)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>f_builtins</p></td>
+<td><p>builtins namespace seen
+by this frame</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>f_code</p></td>
+<td><p>code object being
+executed in this frame</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>f_exc_traceback</p></td>
+<td><p>traceback if raised in
+this frame, or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>f_exc_type</p></td>
+<td><p>exception type if raised
+in this frame, or
+<code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>f_exc_value</p></td>
+<td><p>exception value if raised
+in this frame, or
+<code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>f_globals</p></td>
+<td><p>global namespace seen by
+this frame</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>f_lasti</p></td>
+<td><p>index of last attempted
+instruction in bytecode</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>f_lineno</p></td>
+<td><p>current line number in
+Python source code</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>f_locals</p></td>
+<td><p>local namespace seen by
+this frame</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>f_restricted</p></td>
+<td><p>0 or 1 if frame is in
+restricted execution mode</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>f_trace</p></td>
+<td><p>tracing function for this
+frame, or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>code</p></td>
+<td><p>co_argcount</p></td>
+<td><p>number of arguments (not
+including * or **
+args)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>co_code</p></td>
+<td><p>string of raw compiled
+bytecode</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>co_consts</p></td>
+<td><p>tuple of constants used
+in the bytecode</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>co_filename</p></td>
+<td><p>name of file in which
+this code object was
+created</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>co_firstlineno</p></td>
+<td><p>number of first line in
+Python source code</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>co_flags</p></td>
+<td><p>bitmap: 1=optimized <code class="docutils literal notranslate"><span class="pre">|</span></code>
+2=newlocals <code class="docutils literal notranslate"><span class="pre">|</span></code> 4=*arg
+<code class="docutils literal notranslate"><span class="pre">|</span></code> 8=**arg</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>co_lnotab</p></td>
+<td><p>encoded mapping of line
+numbers to bytecode
+indices</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>co_name</p></td>
+<td><p>name with which this code
+object was defined</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>co_names</p></td>
+<td><p>tuple of names of local
+variables</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>co_nlocals</p></td>
+<td><p>number of local variables</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>co_stacksize</p></td>
+<td><p>virtual machine stack
+space required</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>co_varnames</p></td>
+<td><p>tuple of names of
+arguments and local
+variables</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>builtin</p></td>
+<td><p>__doc__</p></td>
+<td><p>documentation string</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>__name__</p></td>
+<td><p>original name of this
+function or method</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>__self__</p></td>
+<td><p>instance to which a
+method is bound, or
+<code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Note:</p>
+<ol class="arabic">
+<li><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.2: </span><code class="xref py py-attr docutils literal notranslate"><span class="pre">im_class</span></code> used to refer to the class that defined the method.</p>
+</div>
+</li>
+</ol>
+<dl class="function">
+<dt id="inspect.getmembers">
+<code class="descclassname">inspect.</code><code class="descname">getmembers</code><span class="sig-paren">(</span><em>object</em><span class="optional">[</span>, <em>predicate</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getmembers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all the members of an object in a list of (name, value) pairs sorted by
+name.  If the optional <em>predicate</em> argument is supplied, only members for which
+the predicate returns a true value are included.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#inspect.getmembers" title="inspect.getmembers"><code class="xref py py-func docutils literal notranslate"><span class="pre">getmembers()</span></code></a> does not return metaclass attributes when the argument
+is a class (this behavior is inherited from the <a class="reference internal" href="functions.html#dir" title="dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">dir()</span></code></a> function).</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getmoduleinfo">
+<code class="descclassname">inspect.</code><code class="descname">getmoduleinfo</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getmoduleinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tuple of values that describe how Python will interpret the file
+identified by <em>path</em> if it is a module, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it would not be
+identified as a module.  The return tuple is <code class="docutils literal notranslate"><span class="pre">(name,</span> <span class="pre">suffix,</span> <span class="pre">mode,</span>
+<span class="pre">module_type)</span></code>, where <em>name</em> is the name of the module without the name of
+any enclosing package, <em>suffix</em> is the trailing part of the file name (which
+may not be a dot-delimited extension), <em>mode</em> is the <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> mode that
+would be used (<code class="docutils literal notranslate"><span class="pre">'r'</span></code> or <code class="docutils literal notranslate"><span class="pre">'rb'</span></code>), and <em>module_type</em> is an integer giving
+the type of the module.  <em>module_type</em> will have a value which can be
+compared to the constants defined in the <a class="reference internal" href="imp.html#module-imp" title="imp: Access the implementation of the import statement."><code class="xref py py-mod docutils literal notranslate"><span class="pre">imp</span></code></a> module; see the
+documentation for that module for more information on module types.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Returns a <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">named tuple</span></a> <code class="docutils literal notranslate"><span class="pre">ModuleInfo(name,</span> <span class="pre">suffix,</span> <span class="pre">mode,</span>
+<span class="pre">module_type)</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getmodulename">
+<code class="descclassname">inspect.</code><code class="descname">getmodulename</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getmodulename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the module named by the file <em>path</em>, without including the
+names of enclosing packages.  This uses the same algorithm as the interpreter
+uses when searching for modules.  If the name cannot be matched according to the
+interpreter’s rules, <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.ismodule">
+<code class="descclassname">inspect.</code><code class="descname">ismodule</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.ismodule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.isclass">
+<code class="descclassname">inspect.</code><code class="descname">isclass</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.isclass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a class, whether built-in or created in Python
+code.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.ismethod">
+<code class="descclassname">inspect.</code><code class="descname">ismethod</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.ismethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a bound or unbound method written in Python.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.isfunction">
+<code class="descclassname">inspect.</code><code class="descname">isfunction</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.isfunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a Python function, which includes functions
+created by a <a class="reference internal" href="../glossary.html#term-lambda"><span class="xref std std-term">lambda</span></a> expression.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.isgeneratorfunction">
+<code class="descclassname">inspect.</code><code class="descname">isgeneratorfunction</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.isgeneratorfunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a Python generator function.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.isgenerator">
+<code class="descclassname">inspect.</code><code class="descname">isgenerator</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.isgenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a generator.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.istraceback">
+<code class="descclassname">inspect.</code><code class="descname">istraceback</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.istraceback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a traceback.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.isframe">
+<code class="descclassname">inspect.</code><code class="descname">isframe</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.isframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a frame.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.iscode">
+<code class="descclassname">inspect.</code><code class="descname">iscode</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.iscode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a code.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.isbuiltin">
+<code class="descclassname">inspect.</code><code class="descname">isbuiltin</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.isbuiltin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a built-in function or a bound built-in method.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.isroutine">
+<code class="descclassname">inspect.</code><code class="descname">isroutine</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.isroutine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a user-defined or built-in function or method.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.isabstract">
+<code class="descclassname">inspect.</code><code class="descname">isabstract</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.isabstract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is an abstract base class.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.ismethoddescriptor">
+<code class="descclassname">inspect.</code><code class="descname">ismethoddescriptor</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.ismethoddescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a method descriptor, but not if
+<a class="reference internal" href="#inspect.ismethod" title="inspect.ismethod"><code class="xref py py-func docutils literal notranslate"><span class="pre">ismethod()</span></code></a>, <a class="reference internal" href="#inspect.isclass" title="inspect.isclass"><code class="xref py py-func docutils literal notranslate"><span class="pre">isclass()</span></code></a>, <a class="reference internal" href="#inspect.isfunction" title="inspect.isfunction"><code class="xref py py-func docutils literal notranslate"><span class="pre">isfunction()</span></code></a> or <a class="reference internal" href="#inspect.isbuiltin" title="inspect.isbuiltin"><code class="xref py py-func docutils literal notranslate"><span class="pre">isbuiltin()</span></code></a>
+are true.</p>
+<p>This is new as of Python 2.2, and, for example, is true of
+<code class="docutils literal notranslate"><span class="pre">int.__add__</span></code>. An object passing this test
+has a <a class="reference internal" href="../reference/datamodel.html#object.__get__" title="object.__get__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__get__()</span></code></a> method but not a <a class="reference internal" href="../reference/datamodel.html#object.__set__" title="object.__set__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__set__()</span></code></a>
+method, but beyond that the set of attributes varies.  A
+<a class="reference internal" href="stdtypes.html#definition.__name__" title="definition.__name__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__name__</span></code></a> attribute is usually
+sensible, and <code class="xref py py-attr docutils literal notranslate"><span class="pre">__doc__</span></code> often is.</p>
+<p>Methods implemented via descriptors that also pass one of the other tests
+return false from the <a class="reference internal" href="#inspect.ismethoddescriptor" title="inspect.ismethoddescriptor"><code class="xref py py-func docutils literal notranslate"><span class="pre">ismethoddescriptor()</span></code></a> test, simply because the
+other tests promise more – you can, e.g., count on having the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">im_func</span></code> attribute (etc) when an object passes <a class="reference internal" href="#inspect.ismethod" title="inspect.ismethod"><code class="xref py py-func docutils literal notranslate"><span class="pre">ismethod()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.isdatadescriptor">
+<code class="descclassname">inspect.</code><code class="descname">isdatadescriptor</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.isdatadescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a data descriptor.</p>
+<p>Data descriptors have both a <a class="reference internal" href="../reference/datamodel.html#object.__get__" title="object.__get__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__get__</span></code></a> and a <a class="reference internal" href="../reference/datamodel.html#object.__set__" title="object.__set__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__set__</span></code></a> method.
+Examples are properties (defined in Python), getsets, and members.  The
+latter two are defined in C and there are more specific tests available for
+those types, which is robust across Python implementations.  Typically, data
+descriptors will also have <a class="reference internal" href="stdtypes.html#definition.__name__" title="definition.__name__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__name__</span></code></a> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">__doc__</span></code> attributes
+(properties, getsets, and members have both of these attributes), but this is
+not guaranteed.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.isgetsetdescriptor">
+<code class="descclassname">inspect.</code><code class="descname">isgetsetdescriptor</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.isgetsetdescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a getset descriptor.</p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> getsets are attributes defined in extension modules via
+<a class="reference internal" href="../c-api/structures.html#c.PyGetSetDef" title="PyGetSetDef"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyGetSetDef</span></code></a> structures.  For Python implementations without such
+types, this method will always return <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.ismemberdescriptor">
+<code class="descclassname">inspect.</code><code class="descname">ismemberdescriptor</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.ismemberdescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object is a member descriptor.</p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> Member descriptors are attributes defined in extension modules via
+<a class="reference internal" href="../c-api/structures.html#c.PyMemberDef" title="PyMemberDef"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyMemberDef</span></code></a> structures.  For Python implementations without such
+types, this method will always return <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="retrieving-source-code">
+<span id="inspect-source"></span><h2>28.13.2. Retrieving source code<a class="headerlink" href="#retrieving-source-code" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="inspect.getdoc">
+<code class="descclassname">inspect.</code><code class="descname">getdoc</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getdoc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the documentation string for an object, cleaned up with <a class="reference internal" href="#inspect.cleandoc" title="inspect.cleandoc"><code class="xref py py-func docutils literal notranslate"><span class="pre">cleandoc()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getcomments">
+<code class="descclassname">inspect.</code><code class="descname">getcomments</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getcomments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return in a single string any lines of comments immediately preceding the
+object’s source code (for a class, function, or method), or at the top of the
+Python source file (if the object is a module).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getfile">
+<code class="descclassname">inspect.</code><code class="descname">getfile</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the (text or binary) file in which an object was defined.
+This will fail with a <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> if the object is a built-in module,
+class, or function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getmodule">
+<code class="descclassname">inspect.</code><code class="descname">getmodule</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getmodule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to guess which module an object was defined in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getsourcefile">
+<code class="descclassname">inspect.</code><code class="descname">getsourcefile</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getsourcefile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the Python source file in which an object was defined.  This
+will fail with a <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> if the object is a built-in module, class, or
+function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getsourcelines">
+<code class="descclassname">inspect.</code><code class="descname">getsourcelines</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getsourcelines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of source lines and starting line number for an object. The
+argument may be a module, class, method, function, traceback, frame, or code
+object.  The source code is returned as a list of the lines corresponding to the
+object and the line number indicates where in the original source file the first
+line of code was found.  An <a class="reference internal" href="exceptions.html#exceptions.IOError" title="exceptions.IOError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IOError</span></code></a> is raised if the source code cannot
+be retrieved.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getsource">
+<code class="descclassname">inspect.</code><code class="descname">getsource</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getsource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the text of the source code for an object. The argument may be a module,
+class, method, function, traceback, frame, or code object.  The source code is
+returned as a single string.  An <a class="reference internal" href="exceptions.html#exceptions.IOError" title="exceptions.IOError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IOError</span></code></a> is raised if the source code
+cannot be retrieved.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.cleandoc">
+<code class="descclassname">inspect.</code><code class="descname">cleandoc</code><span class="sig-paren">(</span><em>doc</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.cleandoc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up indentation from docstrings that are indented to line up with blocks
+of code.</p>
+<p>All leading whitespace is removed from the first line.  Any leading whitespace
+that can be uniformly removed from the second line onwards is removed.  Empty
+lines at the beginning and end are subsequently removed.  Also, all tabs are
+expanded to spaces.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="classes-and-functions">
+<span id="inspect-classes-functions"></span><h2>28.13.3. Classes and functions<a class="headerlink" href="#classes-and-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="inspect.getclasstree">
+<code class="descclassname">inspect.</code><code class="descname">getclasstree</code><span class="sig-paren">(</span><em>classes</em><span class="optional">[</span>, <em>unique</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getclasstree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arrange the given list of classes into a hierarchy of nested lists. Where a
+nested list appears, it contains classes derived from the class whose entry
+immediately precedes the list.  Each entry is a 2-tuple containing a class and a
+tuple of its base classes.  If the <em>unique</em> argument is true, exactly one entry
+appears in the returned structure for each class in the given list.  Otherwise,
+classes using multiple inheritance and their descendants will appear multiple
+times.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getargspec">
+<code class="descclassname">inspect.</code><code class="descname">getargspec</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getargspec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the names and default values of a Python function’s arguments. A tuple of
+four things is returned: <code class="docutils literal notranslate"><span class="pre">(args,</span> <span class="pre">varargs,</span> <span class="pre">keywords,</span> <span class="pre">defaults)</span></code>. <em>args</em> is a
+list of the argument names (it may contain nested lists). <em>varargs</em> and
+<em>keywords</em> are the names of the <code class="docutils literal notranslate"><span class="pre">*</span></code> and <code class="docutils literal notranslate"><span class="pre">**</span></code> arguments or
+<code class="docutils literal notranslate"><span class="pre">None</span></code>. <em>defaults</em> is a tuple of default argument values or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there
+are no default arguments; if this tuple has <em>n</em> elements, they correspond to
+the last <em>n</em> elements listed in <em>args</em>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Returns a <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">named tuple</span></a> <code class="docutils literal notranslate"><span class="pre">ArgSpec(args,</span> <span class="pre">varargs,</span> <span class="pre">keywords,</span>
+<span class="pre">defaults)</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getargvalues">
+<code class="descclassname">inspect.</code><code class="descname">getargvalues</code><span class="sig-paren">(</span><em>frame</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getargvalues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information about arguments passed into a particular frame. A tuple of
+four things is returned: <code class="docutils literal notranslate"><span class="pre">(args,</span> <span class="pre">varargs,</span> <span class="pre">keywords,</span> <span class="pre">locals)</span></code>. <em>args</em> is a
+list of the argument names (it may contain nested lists). <em>varargs</em> and
+<em>keywords</em> are the names of the <code class="docutils literal notranslate"><span class="pre">*</span></code> and <code class="docutils literal notranslate"><span class="pre">**</span></code> arguments or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+<em>locals</em> is the locals dictionary of the given frame.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Returns a <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">named tuple</span></a> <code class="docutils literal notranslate"><span class="pre">ArgInfo(args,</span> <span class="pre">varargs,</span> <span class="pre">keywords,</span>
+<span class="pre">locals)</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.formatargspec">
+<code class="descclassname">inspect.</code><code class="descname">formatargspec</code><span class="sig-paren">(</span><em>args</em><span class="optional">[</span>, <em>varargs</em>, <em>varkw</em>, <em>defaults</em>, <em>formatarg</em>, <em>formatvarargs</em>, <em>formatvarkw</em>, <em>formatvalue</em>, <em>join</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#inspect.formatargspec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format a pretty argument spec from the four values returned by
+<a class="reference internal" href="#inspect.getargspec" title="inspect.getargspec"><code class="xref py py-func docutils literal notranslate"><span class="pre">getargspec()</span></code></a>.  The format* arguments are the corresponding optional
+formatting functions that are called to turn names and values into strings.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.formatargvalues">
+<code class="descclassname">inspect.</code><code class="descname">formatargvalues</code><span class="sig-paren">(</span><em>args</em><span class="optional">[</span>, <em>varargs</em>, <em>varkw</em>, <em>locals</em>, <em>formatarg</em>, <em>formatvarargs</em>, <em>formatvarkw</em>, <em>formatvalue</em>, <em>join</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#inspect.formatargvalues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format a pretty argument spec from the four values returned by
+<a class="reference internal" href="#inspect.getargvalues" title="inspect.getargvalues"><code class="xref py py-func docutils literal notranslate"><span class="pre">getargvalues()</span></code></a>.  The format* arguments are the corresponding optional
+formatting functions that are called to turn names and values into strings.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getmro">
+<code class="descclassname">inspect.</code><code class="descname">getmro</code><span class="sig-paren">(</span><em>cls</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getmro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tuple of class cls’s base classes, including cls, in method resolution
+order.  No class appears more than once in this tuple. Note that the method
+resolution order depends on cls’s type.  Unless a very peculiar user-defined
+metatype is in use, cls will be the first element of the tuple.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getcallargs">
+<code class="descclassname">inspect.</code><code class="descname">getcallargs</code><span class="sig-paren">(</span><em>func[, *args][, **kwds]</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getcallargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bind the <em>args</em> and <em>kwds</em> to the argument names of the Python function or
+method <em>func</em>, as if it was called with them. For bound methods, bind also the
+first argument (typically named <code class="docutils literal notranslate"><span class="pre">self</span></code>) to the associated instance. A dict
+is returned, mapping the argument names (including the names of the <code class="docutils literal notranslate"><span class="pre">*</span></code> and
+<code class="docutils literal notranslate"><span class="pre">**</span></code> arguments, if any) to their values from <em>args</em> and <em>kwds</em>. In case of
+invoking <em>func</em> incorrectly, i.e. whenever <code class="docutils literal notranslate"><span class="pre">func(*args,</span> <span class="pre">**kwds)</span></code> would raise
+an exception because of incompatible signature, an exception of the same type
+and the same or similar message is raised. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">inspect</span> <span class="k">import</span> <span class="n">getcallargs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">pos</span><span class="p">,</span> <span class="o">**</span><span class="n">named</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">getcallargs</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: 1, &#39;named&#39;: {}, &#39;b&#39;: 2, &#39;pos&#39;: (3,)}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">getcallargs</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: 2, &#39;named&#39;: {&#39;x&#39;: 4}, &#39;b&#39;: 1, &#39;pos&#39;: ()}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">getcallargs</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">TypeError</span>: <span class="n">f() takes at least 1 argument (0 given)</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.7.</span></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="the-interpreter-stack">
+<span id="inspect-stack"></span><h2>28.13.4. The interpreter stack<a class="headerlink" href="#the-interpreter-stack" title="Permalink to this headline">¶</a></h2>
+<p>When the following functions return “frame records,” each record is a tuple of
+six items: the frame object, the filename, the line number of the current line,
+the function name, a list of lines of context from the source code, and the
+index of the current line within that list.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Keeping references to frame objects, as found in the first element of the frame
+records these functions return, can cause your program to create reference
+cycles.  Once a reference cycle has been created, the lifespan of all objects
+which can be accessed from the objects which form the cycle can become much
+longer even if Python’s optional cycle detector is enabled.  If such cycles must
+be created, it is important to ensure they are explicitly broken to avoid the
+delayed destruction of objects and increased memory consumption which occurs.</p>
+<p>Though the cycle detector will catch these, destruction of the frames (and local
+variables) can be made deterministic by removing the cycle in a
+<a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">finally</span></code></a> clause.  This is also important if the cycle detector was
+disabled when Python was compiled or using <a class="reference internal" href="gc.html#gc.disable" title="gc.disable"><code class="xref py py-func docutils literal notranslate"><span class="pre">gc.disable()</span></code></a>.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">handle_stackframe_without_leak</span><span class="p">():</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># do something with the frame</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">frame</span>
+</pre></div>
+</div>
+</div>
+<p>The optional <em>context</em> argument supported by most of these functions specifies
+the number of lines of context to return, which are centered around the current
+line.</p>
+<dl class="function">
+<dt id="inspect.getframeinfo">
+<code class="descclassname">inspect.</code><code class="descname">getframeinfo</code><span class="sig-paren">(</span><em>frame</em><span class="optional">[</span>, <em>context</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getframeinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information about a frame or traceback object.  A 5-tuple is returned, the
+last five elements of the frame’s frame record.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Returns a <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">named tuple</span></a> <code class="docutils literal notranslate"><span class="pre">Traceback(filename,</span> <span class="pre">lineno,</span> <span class="pre">function,</span>
+<span class="pre">code_context,</span> <span class="pre">index)</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getouterframes">
+<code class="descclassname">inspect.</code><code class="descname">getouterframes</code><span class="sig-paren">(</span><em>frame</em><span class="optional">[</span>, <em>context</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getouterframes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of frame records for a frame and all outer frames.  These frames
+represent the calls that lead to the creation of <em>frame</em>. The first entry in the
+returned list represents <em>frame</em>; the last entry represents the outermost call
+on <em>frame</em>’s stack.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.getinnerframes">
+<code class="descclassname">inspect.</code><code class="descname">getinnerframes</code><span class="sig-paren">(</span><em>traceback</em><span class="optional">[</span>, <em>context</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#inspect.getinnerframes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of frame records for a traceback’s frame and all inner frames.  These
+frames represent calls made as a consequence of <em>frame</em>.  The first entry in the
+list represents <em>traceback</em>; the last entry represents where the exception was
+raised.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.currentframe">
+<code class="descclassname">inspect.</code><code class="descname">currentframe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inspect.currentframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the frame object for the caller’s stack frame.</p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> This function relies on Python stack frame support in the interpreter,
+which isn’t guaranteed to exist in all implementations of Python.  If
+running in an implementation without Python stack frame support this
+function returns <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.stack">
+<code class="descclassname">inspect.</code><code class="descname">stack</code><span class="sig-paren">(</span><span class="optional">[</span><em>context</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#inspect.stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of frame records for the caller’s stack.  The first entry in the
+returned list represents the caller; the last entry represents the outermost
+call on the stack.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inspect.trace">
+<code class="descclassname">inspect.</code><code class="descname">trace</code><span class="sig-paren">(</span><span class="optional">[</span><em>context</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#inspect.trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of frame records for the stack between the current frame and the
+frame in which an exception currently being handled was raised in.  The first
+entry in the list represents the caller; the last entry represents where the
+exception was raised.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">28.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">inspect</span></code> — Inspect live objects</a><ul>
+<li><a class="reference internal" href="#types-and-members">28.13.1. Types and members</a></li>
+<li><a class="reference internal" href="#retrieving-source-code">28.13.2. Retrieving source code</a></li>
+<li><a class="reference internal" href="#classes-and-functions">28.13.3. Classes and functions</a></li>
+<li><a class="reference internal" href="#the-interpreter-stack">28.13.4. The interpreter stack</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gc.html"
+                        title="previous chapter">28.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">gc</span></code> — Garbage Collector interface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="site.html"
+                        title="next chapter">28.14. <code class="xref py py-mod docutils literal notranslate"><span class="pre">site</span></code> — Site-specific configuration hook</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/inspect.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="site.html" title="28.14. site — Site-specific configuration hook"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gc.html" title="28.12. gc — Garbage Collector interface"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" >28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

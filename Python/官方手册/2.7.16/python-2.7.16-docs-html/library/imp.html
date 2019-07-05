@@ -1,0 +1,466 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>31.1. imp — Access the import internals &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="31.2. importlib — Convenience wrappers for __import__()" href="importlib.html" />
+    <link rel="prev" title="31. Importing Modules" href="modules.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/imp.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="importlib.html" title="31.2. importlib — Convenience wrappers for __import__()"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="31. Importing Modules"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" accesskey="U">31. Importing Modules</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-imp">
+<span id="imp-access-the-import-internals"></span><h1>31.1. <a class="reference internal" href="#module-imp" title="imp: Access the implementation of the import statement."><code class="xref py py-mod docutils literal notranslate"><span class="pre">imp</span></code></a> — Access the <a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">import</span></code></a> internals<a class="headerlink" href="#module-imp" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">This module provides an interface to the mechanisms used to implement the
+<a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">import</span></code></a> statement.  It defines the following constants and functions:</p>
+<dl class="function">
+<dt id="imp.get_magic">
+<code class="descclassname">imp.</code><code class="descname">get_magic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imp.get_magic" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">Return the magic string value used to recognize byte-compiled code files
+(<code class="file docutils literal notranslate"><span class="pre">.pyc</span></code> files).  (This value may be different for each Python version.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.get_suffixes">
+<code class="descclassname">imp.</code><code class="descname">get_suffixes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imp.get_suffixes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of 3-element tuples, each describing a particular type of
+module. Each triple has the form <code class="docutils literal notranslate"><span class="pre">(suffix,</span> <span class="pre">mode,</span> <span class="pre">type)</span></code>, where <em>suffix</em> is
+a string to be appended to the module name to form the filename to search
+for, <em>mode</em> is the mode string to pass to the built-in <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> function
+to open the file (this can be <code class="docutils literal notranslate"><span class="pre">'r'</span></code> for text files or <code class="docutils literal notranslate"><span class="pre">'rb'</span></code> for binary
+files), and <em>type</em> is the file type, which has one of the values
+<a class="reference internal" href="#imp.PY_SOURCE" title="imp.PY_SOURCE"><code class="xref py py-const docutils literal notranslate"><span class="pre">PY_SOURCE</span></code></a>, <a class="reference internal" href="#imp.PY_COMPILED" title="imp.PY_COMPILED"><code class="xref py py-const docutils literal notranslate"><span class="pre">PY_COMPILED</span></code></a>, or <a class="reference internal" href="#imp.C_EXTENSION" title="imp.C_EXTENSION"><code class="xref py py-const docutils literal notranslate"><span class="pre">C_EXTENSION</span></code></a>, described
+below.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.find_module">
+<code class="descclassname">imp.</code><code class="descname">find_module</code><span class="sig-paren">(</span><em>name</em><span class="optional">[</span>, <em>path</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#imp.find_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to find the module <em>name</em>.  If <em>path</em> is omitted or <code class="docutils literal notranslate"><span class="pre">None</span></code>, the list of
+directory names given by <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> is searched, but first a few special
+places are searched: the function tries to find a built-in module with the
+given name (<a class="reference internal" href="#imp.C_BUILTIN" title="imp.C_BUILTIN"><code class="xref py py-const docutils literal notranslate"><span class="pre">C_BUILTIN</span></code></a>), then a frozen module (<a class="reference internal" href="#imp.PY_FROZEN" title="imp.PY_FROZEN"><code class="xref py py-const docutils literal notranslate"><span class="pre">PY_FROZEN</span></code></a>),
+and on some systems some other places are looked in as well (on Windows, it
+looks in the registry which may point to a specific file).</p>
+<p>Otherwise, <em>path</em> must be a list of directory names; each directory is
+searched for files with any of the suffixes returned by <a class="reference internal" href="#imp.get_suffixes" title="imp.get_suffixes"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_suffixes()</span></code></a>
+above.  Invalid names in the list are silently ignored (but all list items
+must be strings).</p>
+<p>If search is successful, the return value is a 3-element tuple <code class="docutils literal notranslate"><span class="pre">(file,</span>
+<span class="pre">pathname,</span> <span class="pre">description)</span></code>:</p>
+<p><em>file</em> is an open file object positioned at the beginning, <em>pathname</em> is the
+pathname of the file found, and <em>description</em> is a 3-element tuple as
+contained in the list returned by <a class="reference internal" href="#imp.get_suffixes" title="imp.get_suffixes"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_suffixes()</span></code></a> describing the kind of
+module found.</p>
+<p>If the module does not live in a file, the returned <em>file</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+<em>pathname</em> is the empty string, and the <em>description</em> tuple contains empty
+strings for its suffix and mode; the module type is indicated as given in
+parentheses above.  If the search is unsuccessful, <a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportError</span></code></a> is
+raised.  Other exceptions indicate problems with the arguments or
+environment.</p>
+<p>If the module is a package, <em>file</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, <em>pathname</em> is the package
+path and the last item in the <em>description</em> tuple is <a class="reference internal" href="#imp.PKG_DIRECTORY" title="imp.PKG_DIRECTORY"><code class="xref py py-const docutils literal notranslate"><span class="pre">PKG_DIRECTORY</span></code></a>.</p>
+<p>This function does not handle hierarchical module names (names containing
+dots).  In order to find <em>P.M</em>, that is, submodule <em>M</em> of package <em>P</em>, use
+<a class="reference internal" href="#imp.find_module" title="imp.find_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_module()</span></code></a> and <a class="reference internal" href="#imp.load_module" title="imp.load_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_module()</span></code></a> to find and load package <em>P</em>, and
+then use <a class="reference internal" href="#imp.find_module" title="imp.find_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_module()</span></code></a> with the <em>path</em> argument set to <code class="docutils literal notranslate"><span class="pre">P.__path__</span></code>.
+When <em>P</em> itself has a dotted name, apply this recipe recursively.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.load_module">
+<code class="descclassname">imp.</code><code class="descname">load_module</code><span class="sig-paren">(</span><em>name</em>, <em>file</em>, <em>pathname</em>, <em>description</em><span class="sig-paren">)</span><a class="headerlink" href="#imp.load_module" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">Load a module that was previously found by <a class="reference internal" href="#imp.find_module" title="imp.find_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_module()</span></code></a> (or by an
+otherwise conducted search yielding compatible results).  This function does
+more than importing the module: if the module was already imported, it is
+equivalent to a <a class="reference internal" href="functions.html#reload" title="reload"><code class="xref py py-func docutils literal notranslate"><span class="pre">reload()</span></code></a>!  The <em>name</em> argument indicates the full
+module name (including the package name, if this is a submodule of a
+package).  The <em>file</em> argument is an open file, and <em>pathname</em> is the
+corresponding file name; these can be <code class="docutils literal notranslate"><span class="pre">None</span></code> and <code class="docutils literal notranslate"><span class="pre">''</span></code>, respectively, when
+the module is a package or not being loaded from a file.  The <em>description</em>
+argument is a tuple, as would be returned by <a class="reference internal" href="#imp.get_suffixes" title="imp.get_suffixes"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_suffixes()</span></code></a>, describing
+what kind of module must be loaded.</p>
+<p>If the load is successful, the return value is the module object; otherwise,
+an exception (usually <a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportError</span></code></a>) is raised.</p>
+<p><strong>Important:</strong> the caller is responsible for closing the <em>file</em> argument, if
+it was not <code class="docutils literal notranslate"><span class="pre">None</span></code>, even when an exception is raised.  This is best done
+using a <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">try</span></code></a> … <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">finally</span></code></a> statement.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.new_module">
+<code class="descclassname">imp.</code><code class="descname">new_module</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#imp.new_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new empty module object called <em>name</em>.  This object is <em>not</em> inserted
+in <code class="docutils literal notranslate"><span class="pre">sys.modules</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.lock_held">
+<code class="descclassname">imp.</code><code class="descname">lock_held</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imp.lock_held" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the import lock is currently held, else <code class="docutils literal notranslate"><span class="pre">False</span></code>. On
+platforms without threads, always return <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>On platforms with threads, a thread executing an import holds an internal lock
+until the import is complete. This lock blocks other threads from doing an
+import until the original import completes, which in turn prevents other threads
+from seeing incomplete module objects constructed by the original thread while
+in the process of completing its import (and the imports, if any, triggered by
+that).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.acquire_lock">
+<code class="descclassname">imp.</code><code class="descname">acquire_lock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imp.acquire_lock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire the interpreter’s import lock for the current thread.  This lock should
+be used by import hooks to ensure thread-safety when importing modules.</p>
+<p>Once a thread has acquired the import lock, the same thread may acquire it
+again without blocking; the thread must release it once for each time it has
+acquired it.</p>
+<p>On platforms without threads, this function does nothing.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.release_lock">
+<code class="descclassname">imp.</code><code class="descname">release_lock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imp.release_lock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release the interpreter’s import lock. On platforms without threads, this
+function does nothing.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<p>The following constants with integer values, defined in this module, are used to
+indicate the search result of <a class="reference internal" href="#imp.find_module" title="imp.find_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_module()</span></code></a>.</p>
+<dl class="data">
+<dt id="imp.PY_SOURCE">
+<code class="descclassname">imp.</code><code class="descname">PY_SOURCE</code><a class="headerlink" href="#imp.PY_SOURCE" title="Permalink to this definition">¶</a></dt>
+<dd><p>The module was found as a source file.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="imp.PY_COMPILED">
+<code class="descclassname">imp.</code><code class="descname">PY_COMPILED</code><a class="headerlink" href="#imp.PY_COMPILED" title="Permalink to this definition">¶</a></dt>
+<dd><p>The module was found as a compiled code object file.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="imp.C_EXTENSION">
+<code class="descclassname">imp.</code><code class="descname">C_EXTENSION</code><a class="headerlink" href="#imp.C_EXTENSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>The module was found as dynamically loadable shared library.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="imp.PKG_DIRECTORY">
+<code class="descclassname">imp.</code><code class="descname">PKG_DIRECTORY</code><a class="headerlink" href="#imp.PKG_DIRECTORY" title="Permalink to this definition">¶</a></dt>
+<dd><p>The module was found as a package directory.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="imp.C_BUILTIN">
+<code class="descclassname">imp.</code><code class="descname">C_BUILTIN</code><a class="headerlink" href="#imp.C_BUILTIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>The module was found as a built-in module.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="imp.PY_FROZEN">
+<code class="descclassname">imp.</code><code class="descname">PY_FROZEN</code><a class="headerlink" href="#imp.PY_FROZEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>The module was found as a frozen module (see <a class="reference internal" href="#imp.init_frozen" title="imp.init_frozen"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_frozen()</span></code></a>).</p>
+</dd></dl>
+
+<p>The following constant and functions are obsolete; their functionality is
+available through <a class="reference internal" href="#imp.find_module" title="imp.find_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_module()</span></code></a> or <a class="reference internal" href="#imp.load_module" title="imp.load_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_module()</span></code></a>. They are kept
+around for backward compatibility:</p>
+<dl class="data">
+<dt id="imp.SEARCH_ERROR">
+<code class="descclassname">imp.</code><code class="descname">SEARCH_ERROR</code><a class="headerlink" href="#imp.SEARCH_ERROR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unused.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.init_builtin">
+<code class="descclassname">imp.</code><code class="descname">init_builtin</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#imp.init_builtin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the built-in module called <em>name</em> and return its module object along
+with storing it in <code class="docutils literal notranslate"><span class="pre">sys.modules</span></code>.  If the module was already initialized, it
+will be initialized <em>again</em>.  Re-initialization involves the copying of the
+built-in module’s <code class="docutils literal notranslate"><span class="pre">__dict__</span></code> from the cached module over the module’s entry in
+<code class="docutils literal notranslate"><span class="pre">sys.modules</span></code>.  If there is no built-in module called <em>name</em>, <code class="docutils literal notranslate"><span class="pre">None</span></code> is
+returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.init_frozen">
+<code class="descclassname">imp.</code><code class="descname">init_frozen</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#imp.init_frozen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the frozen module called <em>name</em> and return its module object.  If
+the module was already initialized, it will be initialized <em>again</em>.  If there
+is no frozen module called <em>name</em>, <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.  (Frozen modules are
+modules written in Python whose compiled byte-code object is incorporated
+into a custom-built Python interpreter by Python’s <strong class="program">freeze</strong>
+utility. See <code class="file docutils literal notranslate"><span class="pre">Tools/freeze/</span></code> for now.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.is_builtin">
+<code class="descclassname">imp.</code><code class="descname">is_builtin</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#imp.is_builtin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">1</span></code> if there is a built-in module called <em>name</em> which can be
+initialized again.  Return <code class="docutils literal notranslate"><span class="pre">-1</span></code> if there is a built-in module called <em>name</em>
+which cannot be initialized again (see <a class="reference internal" href="#imp.init_builtin" title="imp.init_builtin"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_builtin()</span></code></a>).  Return <code class="docutils literal notranslate"><span class="pre">0</span></code> if
+there is no built-in module called <em>name</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.is_frozen">
+<code class="descclassname">imp.</code><code class="descname">is_frozen</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#imp.is_frozen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if there is a frozen module (see <a class="reference internal" href="#imp.init_frozen" title="imp.init_frozen"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_frozen()</span></code></a>) called
+<em>name</em>, or <code class="docutils literal notranslate"><span class="pre">False</span></code> if there is no such module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.load_compiled">
+<code class="descclassname">imp.</code><code class="descname">load_compiled</code><span class="sig-paren">(</span><em>name</em>, <em>pathname</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#imp.load_compiled" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-3">Load and initialize a module implemented as a byte-compiled code file and return
+its module object.  If the module was already initialized, it will be
+initialized <em>again</em>.  The <em>name</em> argument is used to create or access a module
+object.  The <em>pathname</em> argument points to the byte-compiled code file.  The
+<em>file</em> argument is the byte-compiled code file, open for reading in binary mode,
+from the beginning. It must currently be a real file object, not a user-defined
+class emulating a file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.load_dynamic">
+<code class="descclassname">imp.</code><code class="descname">load_dynamic</code><span class="sig-paren">(</span><em>name</em>, <em>pathname</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#imp.load_dynamic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and initialize a module implemented as a dynamically loadable shared
+library and return its module object.  If the module was already initialized, it
+will be initialized <em>again</em>. Re-initialization involves copying the <code class="docutils literal notranslate"><span class="pre">__dict__</span></code>
+attribute of the cached instance of the module over the value used in the module
+cached in <code class="docutils literal notranslate"><span class="pre">sys.modules</span></code>.  The <em>pathname</em> argument must point to the shared
+library.  The <em>name</em> argument is used to construct the name of the
+initialization function: an external C function called <code class="docutils literal notranslate"><span class="pre">initname()</span></code> in the
+shared library is called.  The optional <em>file</em> argument is ignored.  (Note:
+using shared libraries is highly system dependent, and not all systems support
+it.)</p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> The import internals identify extension modules by filename, so doing
+<code class="docutils literal notranslate"><span class="pre">foo</span> <span class="pre">=</span> <span class="pre">load_dynamic(&quot;foo&quot;,</span> <span class="pre">&quot;mod.so&quot;)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">bar</span> <span class="pre">=</span> <span class="pre">load_dynamic(&quot;bar&quot;,</span> <span class="pre">&quot;mod.so&quot;)</span></code> will result in both foo and bar
+referring to the same module, regardless of whether or not
+<code class="docutils literal notranslate"><span class="pre">mod.so</span></code> exports an <code class="docutils literal notranslate"><span class="pre">initbar</span></code> function. On systems which
+support them, symlinks can be used to import multiple modules from
+the same shared library, as each reference to the module will use
+a different file name.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="imp.load_source">
+<code class="descclassname">imp.</code><code class="descname">load_source</code><span class="sig-paren">(</span><em>name</em>, <em>pathname</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#imp.load_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and initialize a module implemented as a Python source file and return its
+module object.  If the module was already initialized, it will be initialized
+<em>again</em>.  The <em>name</em> argument is used to create or access a module object.  The
+<em>pathname</em> argument points to the source file.  The <em>file</em> argument is the
+source file, open for reading as text, from the beginning. It must currently be
+a real file object, not a user-defined class emulating a file.  Note that if a
+properly matching byte-compiled file (with suffix <code class="file docutils literal notranslate"><span class="pre">.pyc</span></code> or <code class="file docutils literal notranslate"><span class="pre">.pyo</span></code>)
+exists, it will be used instead of parsing the given source file.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="imp.NullImporter">
+<em class="property">class </em><code class="descclassname">imp.</code><code class="descname">NullImporter</code><span class="sig-paren">(</span><em>path_string</em><span class="sig-paren">)</span><a class="headerlink" href="#imp.NullImporter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#imp.NullImporter" title="imp.NullImporter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NullImporter</span></code></a> type is a <span class="target" id="index-4"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0302"><strong>PEP 302</strong></a> import hook that handles
+non-directory path strings by failing to find any modules.  Calling this type
+with an existing directory or empty string raises <a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportError</span></code></a>.
+Otherwise, a <a class="reference internal" href="#imp.NullImporter" title="imp.NullImporter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NullImporter</span></code></a> instance is returned.</p>
+<p>Python adds instances of this type to <code class="docutils literal notranslate"><span class="pre">sys.path_importer_cache</span></code> for any path
+entries that are not directories and are not handled by any other path hooks on
+<code class="docutils literal notranslate"><span class="pre">sys.path_hooks</span></code>.  Instances have only one method:</p>
+<dl class="method">
+<dt id="imp.NullImporter.find_module">
+<code class="descname">find_module</code><span class="sig-paren">(</span><em>fullname</em><span class="optional">[</span>, <em>path</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#imp.NullImporter.find_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method always returns <code class="docutils literal notranslate"><span class="pre">None</span></code>, indicating that the requested module could
+not be found.</p>
+</dd></dl>
+
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+</dd></dl>
+
+<div class="section" id="examples">
+<span id="examples-imp"></span><h2>31.1.1. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The following function emulates what was the standard import statement up to
+Python 1.4 (no hierarchical module names).  (This <em>implementation</em> wouldn’t work
+in that version, since <a class="reference internal" href="#imp.find_module" title="imp.find_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_module()</span></code></a> has been extended and
+<a class="reference internal" href="#imp.load_module" title="imp.load_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_module()</span></code></a> has been added in 1.4.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">imp</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">def</span> <span class="nf">__import__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fromlist</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># Fast path: see if the module has already been imported.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># If any of the following calls raises an exception,</span>
+    <span class="c1"># there&#39;s a problem we can&#39;t handle -- let the caller handle it.</span>
+
+    <span class="n">fp</span><span class="p">,</span> <span class="n">pathname</span><span class="p">,</span> <span class="n">description</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">find_module</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">imp</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">pathname</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Since we may exit via an exception, close fp explicitly.</span>
+        <span class="k">if</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p id="index-5">A more complete example that implements hierarchical module names and includes a
+<a class="reference internal" href="functions.html#reload" title="reload"><code class="xref py py-func docutils literal notranslate"><span class="pre">reload()</span></code></a> function can be found in the module <code class="xref py py-mod docutils literal notranslate"><span class="pre">knee</span></code>.  The <code class="xref py py-mod docutils literal notranslate"><span class="pre">knee</span></code>
+module can be found in <code class="file docutils literal notranslate"><span class="pre">Demo/imputil/</span></code> in the Python source distribution.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">31.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">imp</span></code> — Access the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">import</span></code> internals</a><ul>
+<li><a class="reference internal" href="#examples">31.1.1. Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">31. Importing Modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="importlib.html"
+                        title="next chapter">31.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib</span></code> — Convenience wrappers for <code class="xref py py-func docutils literal notranslate"><span class="pre">__import__()</span></code></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/imp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="importlib.html" title="31.2. importlib — Convenience wrappers for __import__()"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="31. Importing Modules"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" >31. Importing Modules</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

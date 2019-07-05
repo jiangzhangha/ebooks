@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>18.14. binascii — Convert between binary and ASCII &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="18.15. quopri — Encode and decode MIME quoted-printable data" href="quopri.html" />
+    <link rel="prev" title="18.13. binhex — Encode and decode binhex4 files" href="binhex.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/binascii.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="quopri.html" title="18.15. quopri — Encode and decode MIME quoted-printable data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="binhex.html" title="18.13. binhex — Encode and decode binhex4 files"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" accesskey="U">18. Internet Data Handling</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-binascii">
+<span id="binascii-convert-between-binary-and-ascii"></span><h1>18.14. <a class="reference internal" href="#module-binascii" title="binascii: Tools for converting between binary and various ASCII-encoded binary representations."><code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code></a> — Convert between binary and ASCII<a class="headerlink" href="#module-binascii" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">The <a class="reference internal" href="#module-binascii" title="binascii: Tools for converting between binary and various ASCII-encoded binary representations."><code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code></a> module contains a number of methods to convert between
+binary and various ASCII-encoded binary representations. Normally, you will not
+use these functions directly but use wrapper modules like <a class="reference internal" href="uu.html#module-uu" title="uu: Encode and decode files in uuencode format."><code class="xref py py-mod docutils literal notranslate"><span class="pre">uu</span></code></a>,
+<a class="reference internal" href="base64.html#module-base64" title="base64: RFC 3548: Base16, Base32, Base64 Data Encodings"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code></a>, or <a class="reference internal" href="binhex.html#module-binhex" title="binhex: Encode and decode files in binhex4 format."><code class="xref py py-mod docutils literal notranslate"><span class="pre">binhex</span></code></a> instead. The <a class="reference internal" href="#module-binascii" title="binascii: Tools for converting between binary and various ASCII-encoded binary representations."><code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code></a> module contains
+low-level functions written in C for greater speed that are used by the
+higher-level modules.</p>
+<p>The <a class="reference internal" href="#module-binascii" title="binascii: Tools for converting between binary and various ASCII-encoded binary representations."><code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code></a> module defines the following functions:</p>
+<dl class="function">
+<dt id="binascii.a2b_uu">
+<code class="descclassname">binascii.</code><code class="descname">a2b_uu</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.a2b_uu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a single line of uuencoded data back to binary and return the binary
+data. Lines normally contain 45 (binary) bytes, except for the last line. Line
+data may be followed by whitespace.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.b2a_uu">
+<code class="descclassname">binascii.</code><code class="descname">b2a_uu</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.b2a_uu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert binary data to a line of ASCII characters, the return value is the
+converted line, including a newline char. The length of <em>data</em> should be at most
+45.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.a2b_base64">
+<code class="descclassname">binascii.</code><code class="descname">a2b_base64</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.a2b_base64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a block of base64 data back to binary and return the binary data. More
+than one line may be passed at a time.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.b2a_base64">
+<code class="descclassname">binascii.</code><code class="descname">b2a_base64</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.b2a_base64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert binary data to a line of ASCII characters in base64 coding. The return
+value is the converted line, including a newline char.  The newline is
+added because the original use case for this function was to feed it a
+series of 57 byte input lines to get output lines that conform to the
+MIME-base64 standard.  Otherwise the output conforms to <span class="target" id="index-1"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc3548.html"><strong>RFC 3548</strong></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.a2b_qp">
+<code class="descclassname">binascii.</code><code class="descname">a2b_qp</code><span class="sig-paren">(</span><em>string</em><span class="optional">[</span>, <em>header</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#binascii.a2b_qp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a block of quoted-printable data back to binary and return the binary
+data. More than one line may be passed at a time. If the optional argument
+<em>header</em> is present and true, underscores will be decoded as spaces.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.b2a_qp">
+<code class="descclassname">binascii.</code><code class="descname">b2a_qp</code><span class="sig-paren">(</span><em>data</em><span class="optional">[</span>, <em>quotetabs</em>, <em>istext</em>, <em>header</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#binascii.b2a_qp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert binary data to a line(s) of ASCII characters in quoted-printable
+encoding.  The return value is the converted line(s). If the optional argument
+<em>quotetabs</em> is present and true, all tabs and spaces will be encoded.   If the
+optional argument <em>istext</em> is present and true, newlines are not encoded but
+trailing whitespace will be encoded. If the optional argument <em>header</em> is
+present and true, spaces will be encoded as underscores per RFC1522. If the
+optional argument <em>header</em> is present and false, newline characters will be
+encoded as well; otherwise linefeed conversion might corrupt the binary data
+stream.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.a2b_hqx">
+<code class="descclassname">binascii.</code><code class="descname">a2b_hqx</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.a2b_hqx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert binhex4 formatted ASCII data to binary, without doing RLE-decompression.
+The string should contain a complete number of binary bytes, or (in case of the
+last portion of the binhex4 data) have the remaining bits zero.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.rledecode_hqx">
+<code class="descclassname">binascii.</code><code class="descname">rledecode_hqx</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.rledecode_hqx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform RLE-decompression on the data, as per the binhex4 standard. The
+algorithm uses <code class="docutils literal notranslate"><span class="pre">0x90</span></code> after a byte as a repeat indicator, followed by a count.
+A count of <code class="docutils literal notranslate"><span class="pre">0</span></code> specifies a byte value of <code class="docutils literal notranslate"><span class="pre">0x90</span></code>. The routine returns the
+decompressed data, unless data input data ends in an orphaned repeat indicator,
+in which case the <a class="reference internal" href="#binascii.Incomplete" title="binascii.Incomplete"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Incomplete</span></code></a> exception is raised.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.rlecode_hqx">
+<code class="descclassname">binascii.</code><code class="descname">rlecode_hqx</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.rlecode_hqx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform binhex4 style RLE-compression on <em>data</em> and return the result.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.b2a_hqx">
+<code class="descclassname">binascii.</code><code class="descname">b2a_hqx</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.b2a_hqx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform hexbin4 binary-to-ASCII translation and return the resulting string. The
+argument should already be RLE-coded, and have a length divisible by 3 (except
+possibly the last fragment).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.crc_hqx">
+<code class="descclassname">binascii.</code><code class="descname">crc_hqx</code><span class="sig-paren">(</span><em>data</em>, <em>crc</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.crc_hqx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a 16-bit CRC value of <em>data</em>, starting with an initial <em>crc</em> and
+returning the result.  This uses the CRC-CCITT polynomial
+<em>x</em><sup>16</sup> + <em>x</em><sup>12</sup> + <em>x</em><sup>5</sup> + 1, often represented as
+0x1021.  This CRC is used in the binhex4 format.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.crc32">
+<code class="descclassname">binascii.</code><code class="descname">crc32</code><span class="sig-paren">(</span><em>data</em><span class="optional">[</span>, <em>crc</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#binascii.crc32" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute CRC-32, the 32-bit checksum of data, starting with an initial crc.  This
+is consistent with the ZIP file checksum.  Since the algorithm is designed for
+use as a checksum algorithm, it is not suitable for use as a general hash
+algorithm.  Use as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span> <span class="n">binascii</span><span class="o">.</span><span class="n">crc32</span><span class="p">(</span><span class="s2">&quot;hello world&quot;</span><span class="p">)</span>
+<span class="c1"># Or, in two pieces:</span>
+<span class="n">crc</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">crc32</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="n">crc</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">crc32</span><span class="p">(</span><span class="s2">&quot; world&quot;</span><span class="p">,</span> <span class="n">crc</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span>
+<span class="nb">print</span> <span class="s1">&#39;crc32 = 0x</span><span class="si">%08x</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">crc</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To generate the same numeric value across all Python versions and
+platforms use crc32(data) &amp; 0xffffffff.  If you are only using
+the checksum in packed binary format this is not necessary as the
+return value is the correct 32bit binary representation
+regardless of sign.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>The return value is in the range [-2**31, 2**31-1]
+regardless of platform.  In the past the value would be signed on
+some platforms and unsigned on others.  Use &amp; 0xffffffff on the
+value if you want it to match Python 3 behavior.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.0: </span>The return value is unsigned and in the range [0, 2**32-1]
+regardless of platform.</p>
+</div>
+<dl class="function">
+<dt id="binascii.b2a_hex">
+<code class="descclassname">binascii.</code><code class="descname">b2a_hex</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.b2a_hex" title="Permalink to this definition">¶</a></dt>
+<dt id="binascii.hexlify">
+<code class="descclassname">binascii.</code><code class="descname">hexlify</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.hexlify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hexadecimal representation of the binary <em>data</em>.  Every byte of
+<em>data</em> is converted into the corresponding 2-digit hex representation.  The
+resulting string is therefore twice as long as the length of <em>data</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binascii.a2b_hex">
+<code class="descclassname">binascii.</code><code class="descname">a2b_hex</code><span class="sig-paren">(</span><em>hexstr</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.a2b_hex" title="Permalink to this definition">¶</a></dt>
+<dt id="binascii.unhexlify">
+<code class="descclassname">binascii.</code><code class="descname">unhexlify</code><span class="sig-paren">(</span><em>hexstr</em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.unhexlify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the binary data represented by the hexadecimal string <em>hexstr</em>.  This
+function is the inverse of <a class="reference internal" href="#binascii.b2a_hex" title="binascii.b2a_hex"><code class="xref py py-func docutils literal notranslate"><span class="pre">b2a_hex()</span></code></a>. <em>hexstr</em> must contain an even number
+of hexadecimal digits (which can be upper or lower case), otherwise a
+<a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> is raised.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="binascii.Error">
+<em class="property">exception </em><code class="descclassname">binascii.</code><code class="descname">Error</code><a class="headerlink" href="#binascii.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised on errors. These are usually programming errors.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="binascii.Incomplete">
+<em class="property">exception </em><code class="descclassname">binascii.</code><code class="descname">Incomplete</code><a class="headerlink" href="#binascii.Incomplete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised on incomplete data. These are usually not programming errors,
+but may be handled by reading a little more data and trying again.</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="base64.html#module-base64" title="base64: RFC 3548: Base16, Base32, Base64 Data Encodings"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code></a></dt><dd><p>Support for RFC compliant base64-style encoding in base 16, 32, and 64.</p>
+</dd>
+<dt>Module <a class="reference internal" href="binhex.html#module-binhex" title="binhex: Encode and decode files in binhex4 format."><code class="xref py py-mod docutils literal notranslate"><span class="pre">binhex</span></code></a></dt><dd><p>Support for the binhex format used on the Macintosh.</p>
+</dd>
+<dt>Module <a class="reference internal" href="uu.html#module-uu" title="uu: Encode and decode files in uuencode format."><code class="xref py py-mod docutils literal notranslate"><span class="pre">uu</span></code></a></dt><dd><p>Support for UU encoding used on Unix.</p>
+</dd>
+<dt>Module <a class="reference internal" href="quopri.html#module-quopri" title="quopri: Encode and decode files using the MIME quoted-printable encoding."><code class="xref py py-mod docutils literal notranslate"><span class="pre">quopri</span></code></a></dt><dd><p>Support for quoted-printable encoding used in MIME email messages.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="binhex.html"
+                        title="previous chapter">18.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">binhex</span></code> — Encode and decode binhex4 files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="quopri.html"
+                        title="next chapter">18.15. <code class="xref py py-mod docutils literal notranslate"><span class="pre">quopri</span></code> — Encode and decode MIME quoted-printable data</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/binascii.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="quopri.html" title="18.15. quopri — Encode and decode MIME quoted-printable data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="binhex.html" title="18.13. binhex — Encode and decode binhex4 files"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >18. Internet Data Handling</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

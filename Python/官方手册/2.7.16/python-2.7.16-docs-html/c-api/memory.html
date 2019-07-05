@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Memory Management &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Object Implementation Support" href="objimpl.html" />
+    <link rel="prev" title="Initialization, Finalization, and Threads" href="init.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/c-api/memory.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="objimpl.html" title="Object Implementation Support"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="init.html" title="Initialization, Finalization, and Threads"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python/C API Reference Manual</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="memory-management">
+<span id="memory"></span><h1>Memory Management<a class="headerlink" href="#memory-management" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<span id="memoryoverview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Memory management in Python involves a private heap containing all Python
+objects and data structures. The management of this private heap is ensured
+internally by the <em>Python memory manager</em>.  The Python memory manager has
+different components which deal with various dynamic storage management aspects,
+like sharing, segmentation, preallocation or caching.</p>
+<p>At the lowest level, a raw memory allocator ensures that there is enough room in
+the private heap for storing all Python-related data by interacting with the
+memory manager of the operating system. On top of the raw memory allocator,
+several object-specific allocators operate on the same heap and implement
+distinct memory management policies adapted to the peculiarities of every object
+type. For example, integer objects are managed differently within the heap than
+strings, tuples or dictionaries because integers imply different storage
+requirements and speed/space tradeoffs. The Python memory manager thus delegates
+some of the work to the object-specific allocators, but ensures that the latter
+operate within the bounds of the private heap.</p>
+<p>It is important to understand that the management of the Python heap is
+performed by the interpreter itself and that the user has no control over it,
+even if they regularly manipulate object pointers to memory blocks inside that
+heap.  The allocation of heap space for Python objects and other internal
+buffers is performed on demand by the Python memory manager through the Python/C
+API functions listed in this document.</p>
+<p id="index-0">To avoid memory corruption, extension writers should never try to operate on
+Python objects with the functions exported by the C library: <code class="xref c c-func docutils literal notranslate"><span class="pre">malloc()</span></code>,
+<code class="xref c c-func docutils literal notranslate"><span class="pre">calloc()</span></code>, <code class="xref c c-func docutils literal notranslate"><span class="pre">realloc()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">free()</span></code>.  This will result in  mixed
+calls between the C allocator and the Python memory manager with fatal
+consequences, because they implement different algorithms and operate on
+different heaps.  However, one may safely allocate and release memory blocks
+with the C library allocator for individual purposes, as shown in the following
+example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">res</span><span class="p">;</span>
+<span class="kt">char</span> <span class="o">*</span><span class="n">buf</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">BUFSIZ</span><span class="p">);</span> <span class="cm">/* for I/O */</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">buf</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">PyErr_NoMemory</span><span class="p">();</span>
+<span class="p">...</span><span class="n">Do</span> <span class="n">some</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">operation</span> <span class="n">involving</span> <span class="n">buf</span><span class="p">...</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">PyString_FromString</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+<span class="n">free</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span> <span class="cm">/* malloc&#39;ed */</span>
+<span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>In this example, the memory request for the I/O buffer is handled by the C
+library allocator. The Python memory manager is involved only in the allocation
+of the string object returned as a result.</p>
+<p>In most situations, however, it is recommended to allocate memory from the
+Python heap specifically because the latter is under control of the Python
+memory manager. For example, this is required when the interpreter is extended
+with new object types written in C. Another reason for using the Python heap is
+the desire to <em>inform</em> the Python memory manager about the memory needs of the
+extension module. Even when the requested memory is used exclusively for
+internal, highly-specific purposes, delegating all memory requests to the Python
+memory manager causes the interpreter to have a more accurate image of its
+memory footprint as a whole. Consequently, under certain circumstances, the
+Python memory manager may or may not trigger appropriate actions, like garbage
+collection, memory compaction or other preventive procedures. Note that by using
+the C library allocator as shown in the previous example, the allocated memory
+for the I/O buffer escapes completely the Python memory manager.</p>
+</div>
+<div class="section" id="memory-interface">
+<span id="memoryinterface"></span><h2>Memory Interface<a class="headerlink" href="#memory-interface" title="Permalink to this headline">¶</a></h2>
+<p>The following function sets, modeled after the ANSI C standard, but specifying
+behavior when requesting zero bytes, are available for allocating and releasing
+memory from the Python heap:</p>
+<dl class="function">
+<dt id="c.PyMem_Malloc">
+void* <code class="descname">PyMem_Malloc</code><span class="sig-paren">(</span>size_t<em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMem_Malloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocates <em>n</em> bytes and returns a pointer of type <code class="xref c c-type docutils literal notranslate"><span class="pre">void*</span></code> to the
+allocated memory, or <em>NULL</em> if the request fails. Requesting zero bytes returns
+a distinct non-<em>NULL</em> pointer if possible, as if <code class="docutils literal notranslate"><span class="pre">PyMem_Malloc(1)</span></code> had
+been called instead. The memory will not have been initialized in any way.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyMem_Realloc">
+void* <code class="descname">PyMem_Realloc</code><span class="sig-paren">(</span>void<em> *p</em>, size_t<em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMem_Realloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resizes the memory block pointed to by <em>p</em> to <em>n</em> bytes. The contents will be
+unchanged to the minimum of the old and the new sizes. If <em>p</em> is <em>NULL</em>, the
+call is equivalent to <code class="docutils literal notranslate"><span class="pre">PyMem_Malloc(n)</span></code>; else if <em>n</em> is equal to zero,
+the memory block is resized but is not freed, and the returned pointer is
+non-<em>NULL</em>.  Unless <em>p</em> is <em>NULL</em>, it must have been returned by a previous call
+to <a class="reference internal" href="#c.PyMem_Malloc" title="PyMem_Malloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_Malloc()</span></code></a> or <a class="reference internal" href="#c.PyMem_Realloc" title="PyMem_Realloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_Realloc()</span></code></a>. If the request fails,
+<a class="reference internal" href="#c.PyMem_Realloc" title="PyMem_Realloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_Realloc()</span></code></a> returns <em>NULL</em> and <em>p</em> remains a valid pointer to the
+previous memory area.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyMem_Free">
+void <code class="descname">PyMem_Free</code><span class="sig-paren">(</span>void<em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMem_Free" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frees the memory block pointed to by <em>p</em>, which must have been returned by a
+previous call to <a class="reference internal" href="#c.PyMem_Malloc" title="PyMem_Malloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_Malloc()</span></code></a> or <a class="reference internal" href="#c.PyMem_Realloc" title="PyMem_Realloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_Realloc()</span></code></a>.  Otherwise, or
+if <code class="docutils literal notranslate"><span class="pre">PyMem_Free(p)</span></code> has been called before, undefined behavior occurs. If
+<em>p</em> is <em>NULL</em>, no operation is performed.</p>
+</dd></dl>
+
+<p>The following type-oriented macros are provided for convenience.  Note  that
+<em>TYPE</em> refers to any C type.</p>
+<dl class="function">
+<dt id="c.PyMem_New">
+TYPE* <code class="descname">PyMem_New</code><span class="sig-paren">(</span>TYPE, size_t<em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMem_New" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <a class="reference internal" href="#c.PyMem_Malloc" title="PyMem_Malloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_Malloc()</span></code></a>, but allocates <code class="docutils literal notranslate"><span class="pre">(n</span> <span class="pre">*</span> <span class="pre">sizeof(TYPE))</span></code> bytes of
+memory.  Returns a pointer cast to <code class="xref c c-type docutils literal notranslate"><span class="pre">TYPE*</span></code>.  The memory will not have
+been initialized in any way.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyMem_Resize">
+TYPE* <code class="descname">PyMem_Resize</code><span class="sig-paren">(</span>void<em> *p</em>, TYPE, size_t<em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMem_Resize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <a class="reference internal" href="#c.PyMem_Realloc" title="PyMem_Realloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_Realloc()</span></code></a>, but the memory block is resized to <code class="docutils literal notranslate"><span class="pre">(n</span> <span class="pre">*</span>
+<span class="pre">sizeof(TYPE))</span></code> bytes.  Returns a pointer cast to <code class="xref c c-type docutils literal notranslate"><span class="pre">TYPE*</span></code>. On return,
+<em>p</em> will be a pointer to the new memory area, or <em>NULL</em> in the event of
+failure.  This is a C preprocessor macro; p is always reassigned.  Save
+the original value of p to avoid losing memory when handling errors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyMem_Del">
+void <code class="descname">PyMem_Del</code><span class="sig-paren">(</span>void<em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMem_Del" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <a class="reference internal" href="#c.PyMem_Free" title="PyMem_Free"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_Free()</span></code></a>.</p>
+</dd></dl>
+
+<p>In addition, the following macro sets are provided for calling the Python memory
+allocator directly, without involving the C API functions listed above. However,
+note that their use does not preserve binary compatibility across Python
+versions and is therefore deprecated in extension modules.</p>
+<p><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_MALLOC()</span></code>, <code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_REALLOC()</span></code>, <code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_FREE()</span></code>.</p>
+<p><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_NEW()</span></code>, <code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_RESIZE()</span></code>, <code class="xref c c-func docutils literal notranslate"><span class="pre">PyMem_DEL()</span></code>.</p>
+</div>
+<div class="section" id="object-allocators">
+<h2>Object allocators<a class="headerlink" href="#object-allocators" title="Permalink to this headline">¶</a></h2>
+<p>The following function sets, modeled after the ANSI C standard, but specifying
+behavior when requesting zero bytes, are available for allocating and releasing
+memory from the Python heap.</p>
+<p>By default, these functions use <a class="reference internal" href="#pymalloc"><span class="std std-ref">pymalloc memory allocator</span></a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <a class="reference internal" href="../glossary.html#term-global-interpreter-lock"><span class="xref std std-term">GIL</span></a> must be held when using these
+functions.</p>
+</div>
+<dl class="function">
+<dt id="c.PyObject_Malloc">
+void* <code class="descname">PyObject_Malloc</code><span class="sig-paren">(</span>size_t<em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyObject_Malloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocates <em>n</em> bytes and returns a pointer of type <code class="xref c c-type docutils literal notranslate"><span class="pre">void*</span></code> to the
+allocated memory, or <em>NULL</em> if the request fails.</p>
+<p>Requesting zero bytes returns a distinct non-<em>NULL</em> pointer if possible, as
+if <code class="docutils literal notranslate"><span class="pre">PyObject_Malloc(1)</span></code> had been called instead. The memory will not have
+been initialized in any way.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyObject_Realloc">
+void* <code class="descname">PyObject_Realloc</code><span class="sig-paren">(</span>void<em> *p</em>, size_t<em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyObject_Realloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resizes the memory block pointed to by <em>p</em> to <em>n</em> bytes. The contents will be
+unchanged to the minimum of the old and the new sizes.</p>
+<p>If <em>p</em> is <em>NULL</em>, the call is equivalent to <code class="docutils literal notranslate"><span class="pre">PyObject_Malloc(n)</span></code>; else if <em>n</em>
+is equal to zero, the memory block is resized but is not freed, and the
+returned pointer is non-<em>NULL</em>.</p>
+<p>Unless <em>p</em> is <em>NULL</em>, it must have been returned by a previous call to
+<a class="reference internal" href="#c.PyObject_Malloc" title="PyObject_Malloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Malloc()</span></code></a>, <a class="reference internal" href="#c.PyObject_Realloc" title="PyObject_Realloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Realloc()</span></code></a> or <code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Calloc()</span></code>.</p>
+<p>If the request fails, <a class="reference internal" href="#c.PyObject_Realloc" title="PyObject_Realloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Realloc()</span></code></a> returns <em>NULL</em> and <em>p</em> remains
+a valid pointer to the previous memory area.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyObject_Free">
+void <code class="descname">PyObject_Free</code><span class="sig-paren">(</span>void<em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyObject_Free" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frees the memory block pointed to by <em>p</em>, which must have been returned by a
+previous call to <a class="reference internal" href="#c.PyObject_Malloc" title="PyObject_Malloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Malloc()</span></code></a>, <a class="reference internal" href="#c.PyObject_Realloc" title="PyObject_Realloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Realloc()</span></code></a> or
+<code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Calloc()</span></code>.  Otherwise, or if <code class="docutils literal notranslate"><span class="pre">PyObject_Free(p)</span></code> has been called
+before, undefined behavior occurs.</p>
+<p>If <em>p</em> is <em>NULL</em>, no operation is performed.</p>
+</dd></dl>
+
+<p>In addition, the following macro sets are provided:</p>
+<ul class="simple">
+<li><p><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_MALLOC()</span></code>: alias to <a class="reference internal" href="#c.PyObject_Malloc" title="PyObject_Malloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Malloc()</span></code></a></p></li>
+<li><p><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_REALLOC()</span></code>: alias to <a class="reference internal" href="#c.PyObject_Realloc" title="PyObject_Realloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Realloc()</span></code></a></p></li>
+<li><p><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_FREE()</span></code>: alias to <a class="reference internal" href="#c.PyObject_Free" title="PyObject_Free"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Free()</span></code></a></p></li>
+<li><p><a class="reference internal" href="allocation.html#c.PyObject_Del" title="PyObject_Del"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Del()</span></code></a>: alias to <a class="reference internal" href="#c.PyObject_Free" title="PyObject_Free"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Free()</span></code></a></p></li>
+<li><p><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_DEL()</span></code>: alias to <code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_FREE()</span></code> (so finally an alias
+to <a class="reference internal" href="#c.PyObject_Free" title="PyObject_Free"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Free()</span></code></a>)</p></li>
+</ul>
+</div>
+<div class="section" id="the-pymalloc-allocator">
+<span id="pymalloc"></span><h2>The pymalloc allocator<a class="headerlink" href="#the-pymalloc-allocator" title="Permalink to this headline">¶</a></h2>
+<p>Python has a <em>pymalloc</em> allocator optimized for small objects (smaller or equal
+to 512 bytes) with a short lifetime. It uses memory mappings called “arenas”
+with a fixed size of 256 KiB. It falls back to <code class="xref c c-func docutils literal notranslate"><span class="pre">malloc()</span></code> and
+<code class="xref c c-func docutils literal notranslate"><span class="pre">realloc()</span></code> for allocations larger than 512 bytes.</p>
+<p><em>pymalloc</em> is the default allocator of <a class="reference internal" href="#c.PyObject_Malloc" title="PyObject_Malloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Malloc()</span></code></a>.</p>
+<p>The arena allocator uses the following functions:</p>
+<ul class="simple">
+<li><p><code class="xref c c-func docutils literal notranslate"><span class="pre">mmap()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">munmap()</span></code> if available,</p></li>
+<li><p><code class="xref c c-func docutils literal notranslate"><span class="pre">malloc()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">free()</span></code> otherwise.</p></li>
+</ul>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7.7: </span>The threshold changed from 256 to 512 bytes. The arena allocator now
+uses <code class="xref c c-func docutils literal notranslate"><span class="pre">mmap()</span></code> if available.</p>
+</div>
+</div>
+<div class="section" id="examples">
+<span id="memoryexamples"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Here is the example from section <a class="reference internal" href="#memoryoverview"><span class="std std-ref">Overview</span></a>, rewritten so that the
+I/O buffer is allocated from the Python heap by using the first function set:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">res</span><span class="p">;</span>
+<span class="kt">char</span> <span class="o">*</span><span class="n">buf</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">PyMem_Malloc</span><span class="p">(</span><span class="n">BUFSIZ</span><span class="p">);</span> <span class="cm">/* for I/O */</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">buf</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">PyErr_NoMemory</span><span class="p">();</span>
+<span class="cm">/* ...Do some I/O operation involving buf... */</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">PyString_FromString</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+<span class="n">PyMem_Free</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span> <span class="cm">/* allocated with PyMem_Malloc */</span>
+<span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The same code using the type-oriented function set:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">res</span><span class="p">;</span>
+<span class="kt">char</span> <span class="o">*</span><span class="n">buf</span> <span class="o">=</span> <span class="n">PyMem_New</span><span class="p">(</span><span class="kt">char</span><span class="p">,</span> <span class="n">BUFSIZ</span><span class="p">);</span> <span class="cm">/* for I/O */</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">buf</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">PyErr_NoMemory</span><span class="p">();</span>
+<span class="cm">/* ...Do some I/O operation involving buf... */</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">PyString_FromString</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+<span class="n">PyMem_Del</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span> <span class="cm">/* allocated with PyMem_New */</span>
+<span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Note that in the two examples above, the buffer is always manipulated via
+functions belonging to the same set. Indeed, it is required to use the same
+memory API family for a given memory block, so that the risk of mixing different
+allocators is reduced to a minimum. The following code sequence contains two
+errors, one of which is labeled as <em>fatal</em> because it mixes two different
+allocators operating on different heaps.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">char</span> <span class="o">*</span><span class="n">buf1</span> <span class="o">=</span> <span class="n">PyMem_New</span><span class="p">(</span><span class="kt">char</span><span class="p">,</span> <span class="n">BUFSIZ</span><span class="p">);</span>
+<span class="kt">char</span> <span class="o">*</span><span class="n">buf2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">BUFSIZ</span><span class="p">);</span>
+<span class="kt">char</span> <span class="o">*</span><span class="n">buf3</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">PyMem_Malloc</span><span class="p">(</span><span class="n">BUFSIZ</span><span class="p">);</span>
+<span class="p">...</span>
+<span class="n">PyMem_Del</span><span class="p">(</span><span class="n">buf3</span><span class="p">);</span>  <span class="cm">/* Wrong -- should be PyMem_Free() */</span>
+<span class="n">free</span><span class="p">(</span><span class="n">buf2</span><span class="p">);</span>       <span class="cm">/* Right -- allocated via malloc() */</span>
+<span class="n">free</span><span class="p">(</span><span class="n">buf1</span><span class="p">);</span>       <span class="cm">/* Fatal -- should be PyMem_Del()  */</span>
+</pre></div>
+</div>
+<p>In addition to the functions aimed at handling raw memory blocks from the Python
+heap, objects in Python are allocated and released with <a class="reference internal" href="allocation.html#c.PyObject_New" title="PyObject_New"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_New()</span></code></a>,
+<a class="reference internal" href="allocation.html#c.PyObject_NewVar" title="PyObject_NewVar"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_NewVar()</span></code></a> and <a class="reference internal" href="allocation.html#c.PyObject_Del" title="PyObject_Del"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Del()</span></code></a>.</p>
+<p>These will be explained in the next chapter on defining and implementing new
+object types in C.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Memory Management</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#memory-interface">Memory Interface</a></li>
+<li><a class="reference internal" href="#object-allocators">Object allocators</a></li>
+<li><a class="reference internal" href="#the-pymalloc-allocator">The pymalloc allocator</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="init.html"
+                        title="previous chapter">Initialization, Finalization, and Threads</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="objimpl.html"
+                        title="next chapter">Object Implementation Support</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/c-api/memory.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="objimpl.html" title="Object Implementation Support"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="init.html" title="Initialization, Finalization, and Threads"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

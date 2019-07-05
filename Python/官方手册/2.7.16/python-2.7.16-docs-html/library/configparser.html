@@ -1,0 +1,724 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>13.2. ConfigParser — Configuration file parser &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="13.3. robotparser — Parser for robots.txt" href="robotparser.html" />
+    <link rel="prev" title="13.1. csv — CSV File Reading and Writing" href="csv.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/configparser.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="robotparser.html" title="13.3. robotparser — Parser for robots.txt"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="csv.html" title="13.1. csv — CSV File Reading and Writing"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="fileformats.html" accesskey="U">13. File Formats</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-ConfigParser">
+<span id="configparser-configuration-file-parser"></span><h1>13.2. <a class="reference internal" href="#module-ConfigParser" title="ConfigParser: Configuration file parser."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConfigParser</span></code></a> — Configuration file parser<a class="headerlink" href="#module-ConfigParser" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#module-ConfigParser" title="ConfigParser: Configuration file parser."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConfigParser</span></code></a> module has been renamed to <code class="xref py py-mod docutils literal notranslate"><span class="pre">configparser</span></code> in
+Python 3.  The <a class="reference internal" href="../glossary.html#term-2to3"><span class="xref std std-term">2to3</span></a> tool will automatically adapt imports when
+converting your sources to Python 3.</p>
+</div>
+<p id="index-0">This module defines the class <a class="reference internal" href="#ConfigParser.ConfigParser" title="ConfigParser.ConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code></a>.   The <a class="reference internal" href="#ConfigParser.ConfigParser" title="ConfigParser.ConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code></a>
+class implements a basic configuration file parser language which provides a
+structure similar to what you would find on Microsoft Windows INI files.  You
+can use this to write Python programs which can be customized by end users
+easily.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This library does <em>not</em> interpret or write the value-type prefixes used in
+the Windows Registry extended version of INI syntax.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="shlex.html#module-shlex" title="shlex: Simple lexical analysis for Unix shell-like languages."><code class="xref py py-mod docutils literal notranslate"><span class="pre">shlex</span></code></a></dt><dd><p>Support for creating Unix shell-like mini-languages which can be used as
+an alternate format for application configuration files.</p>
+</dd>
+<dt>Module <a class="reference internal" href="json.html#module-json" title="json: Encode and decode the JSON format."><code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code></a></dt><dd><p>The json module implements a subset of JavaScript syntax which can also
+be used for this purpose.</p>
+</dd>
+</dl>
+</div>
+<p>The configuration file consists of sections, led by a <code class="docutils literal notranslate"><span class="pre">[section]</span></code> header and
+followed by <code class="docutils literal notranslate"><span class="pre">name:</span> <span class="pre">value</span></code> entries, with continuations in the style of
+<span class="target" id="index-1"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc822.html"><strong>RFC 822</strong></a> (see section 3.1.1, “LONG HEADER FIELDS”); <code class="docutils literal notranslate"><span class="pre">name=value</span></code> is also
+accepted.  Note that leading whitespace is removed from values. The optional
+values can contain format strings which refer to other values in the same
+section, or values in a special <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> section.  Additional defaults can be
+provided on initialization and retrieval.  Lines beginning with <code class="docutils literal notranslate"><span class="pre">'#'</span></code> or
+<code class="docutils literal notranslate"><span class="pre">';'</span></code> are ignored and may be used to provide comments.</p>
+<p>Configuration files may include comments, prefixed by specific characters (<code class="docutils literal notranslate"><span class="pre">#</span></code>
+and <code class="docutils literal notranslate"><span class="pre">;</span></code>).  Comments may appear on their own in an otherwise empty line, or may
+be entered in lines holding values or section names.  In the latter case, they
+need to be preceded by a whitespace character to be recognized as a comment.
+(For backwards compatibility, only <code class="docutils literal notranslate"><span class="pre">;</span></code> starts an inline comment, while <code class="docutils literal notranslate"><span class="pre">#</span></code>
+does not.)</p>
+<p>On top of the core functionality, <a class="reference internal" href="#ConfigParser.SafeConfigParser" title="ConfigParser.SafeConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">SafeConfigParser</span></code></a> supports
+interpolation.  This means values can contain format strings which refer to
+other values in the same section, or values in a special <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> section.
+Additional defaults can be provided on initialization.</p>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">My</span> <span class="n">Section</span><span class="p">]</span>
+<span class="n">foodir</span><span class="p">:</span> <span class="o">%</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span><span class="n">s</span><span class="o">/</span><span class="n">whatever</span>
+<span class="nb">dir</span><span class="o">=</span><span class="n">frob</span>
+<span class="n">long</span><span class="p">:</span> <span class="n">this</span> <span class="n">value</span> <span class="n">continues</span>
+   <span class="ow">in</span> <span class="n">the</span> <span class="nb">next</span> <span class="n">line</span>
+</pre></div>
+</div>
+<p>would resolve the <code class="docutils literal notranslate"><span class="pre">%(dir)s</span></code> to the value of <code class="docutils literal notranslate"><span class="pre">dir</span></code> (<code class="docutils literal notranslate"><span class="pre">frob</span></code> in this case).
+All reference expansions are done on demand.</p>
+<p>Default values can be specified by passing them into the <a class="reference internal" href="#ConfigParser.ConfigParser" title="ConfigParser.ConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code></a>
+constructor as a dictionary.  Additional defaults  may be passed into the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code> method which will override all others.</p>
+<p>Sections are normally stored in a built-in dictionary. An alternative dictionary
+type can be passed to the <a class="reference internal" href="#ConfigParser.ConfigParser" title="ConfigParser.ConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code></a> constructor. For example, if a
+dictionary type is passed that sorts its keys, the sections will be sorted on
+write-back, as will be the keys within each section.</p>
+<dl class="class">
+<dt id="ConfigParser.RawConfigParser">
+<em class="property">class </em><code class="descclassname">ConfigParser.</code><code class="descname">RawConfigParser</code><span class="sig-paren">(</span><span class="optional">[</span><em>defaults</em><span class="optional">[</span>, <em>dict_type</em><span class="optional">[</span>, <em>allow_no_value</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>The basic configuration object.  When <em>defaults</em> is given, it is initialized
+into the dictionary of intrinsic defaults.  When <em>dict_type</em> is given, it will
+be used to create the dictionary objects for the list of sections, for the
+options within a section, and for the default values.  When <em>allow_no_value</em>
+is true (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>), options without values are accepted; the value
+presented for these is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>This class does not
+support the magical interpolation behavior.</p>
+<p>All option names are passed through the <a class="reference internal" href="#ConfigParser.RawConfigParser.optionxform" title="ConfigParser.RawConfigParser.optionxform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">optionxform()</span></code></a> method.  Its
+default implementation converts option names to lower case.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span><em>dict_type</em> was added.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span>The default <em>dict_type</em> is <a class="reference internal" href="collections.html#collections.OrderedDict" title="collections.OrderedDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.OrderedDict</span></code></a>.
+<em>allow_no_value</em> was added.</p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="ConfigParser.ConfigParser">
+<em class="property">class </em><code class="descclassname">ConfigParser.</code><code class="descname">ConfigParser</code><span class="sig-paren">(</span><span class="optional">[</span><em>defaults</em><span class="optional">[</span>, <em>dict_type</em><span class="optional">[</span>, <em>allow_no_value</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.ConfigParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derived class of <a class="reference internal" href="#ConfigParser.RawConfigParser" title="ConfigParser.RawConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">RawConfigParser</span></code></a> that implements the magical
+interpolation feature and adds optional arguments to the <a class="reference internal" href="#ConfigParser.ConfigParser.get" title="ConfigParser.ConfigParser.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> and
+<a class="reference internal" href="#ConfigParser.ConfigParser.items" title="ConfigParser.ConfigParser.items"><code class="xref py py-meth docutils literal notranslate"><span class="pre">items()</span></code></a> methods.  The values in <em>defaults</em> must be appropriate for the
+<code class="docutils literal notranslate"><span class="pre">%()s</span></code> string interpolation.  Note that <em>__name__</em> is an intrinsic default;
+its value is the section name, and will override any value provided in
+<em>defaults</em>.</p>
+<p>All option names used in interpolation will be passed through the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">optionxform()</span></code> method just like any other option name reference.  Using
+the default implementation of <code class="xref py py-meth docutils literal notranslate"><span class="pre">optionxform()</span></code>, the values <code class="docutils literal notranslate"><span class="pre">foo</span> <span class="pre">%(bar)s</span></code>
+and <code class="docutils literal notranslate"><span class="pre">foo</span> <span class="pre">%(BAR)s</span></code> are equivalent.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span><em>dict_type</em> was added.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span>The default <em>dict_type</em> is <a class="reference internal" href="collections.html#collections.OrderedDict" title="collections.OrderedDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.OrderedDict</span></code></a>.
+<em>allow_no_value</em> was added.</p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="ConfigParser.SafeConfigParser">
+<em class="property">class </em><code class="descclassname">ConfigParser.</code><code class="descname">SafeConfigParser</code><span class="sig-paren">(</span><span class="optional">[</span><em>defaults</em><span class="optional">[</span>, <em>dict_type</em><span class="optional">[</span>, <em>allow_no_value</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.SafeConfigParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derived class of <a class="reference internal" href="#ConfigParser.ConfigParser" title="ConfigParser.ConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code></a> that implements a more-sane variant of
+the magical interpolation feature.  This implementation is more predictable as
+well. New applications should prefer this version if they don’t need to be
+compatible with older versions of Python.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span><em>dict_type</em> was added.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span>The default <em>dict_type</em> is <a class="reference internal" href="collections.html#collections.OrderedDict" title="collections.OrderedDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.OrderedDict</span></code></a>.
+<em>allow_no_value</em> was added.</p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ConfigParser.Error">
+<em class="property">exception </em><code class="descclassname">ConfigParser.</code><code class="descname">Error</code><a class="headerlink" href="#ConfigParser.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all other configparser exceptions.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ConfigParser.NoSectionError">
+<em class="property">exception </em><code class="descclassname">ConfigParser.</code><code class="descname">NoSectionError</code><a class="headerlink" href="#ConfigParser.NoSectionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when a specified section is not found.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ConfigParser.DuplicateSectionError">
+<em class="property">exception </em><code class="descclassname">ConfigParser.</code><code class="descname">DuplicateSectionError</code><a class="headerlink" href="#ConfigParser.DuplicateSectionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised if <code class="xref py py-meth docutils literal notranslate"><span class="pre">add_section()</span></code> is called with the name of a section
+that is already present.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ConfigParser.NoOptionError">
+<em class="property">exception </em><code class="descclassname">ConfigParser.</code><code class="descname">NoOptionError</code><a class="headerlink" href="#ConfigParser.NoOptionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when a specified option is not found in the specified  section.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ConfigParser.InterpolationError">
+<em class="property">exception </em><code class="descclassname">ConfigParser.</code><code class="descname">InterpolationError</code><a class="headerlink" href="#ConfigParser.InterpolationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for exceptions raised when problems occur performing string
+interpolation.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ConfigParser.InterpolationDepthError">
+<em class="property">exception </em><code class="descclassname">ConfigParser.</code><code class="descname">InterpolationDepthError</code><a class="headerlink" href="#ConfigParser.InterpolationDepthError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when string interpolation cannot be completed because the
+number of iterations exceeds <a class="reference internal" href="#ConfigParser.MAX_INTERPOLATION_DEPTH" title="ConfigParser.MAX_INTERPOLATION_DEPTH"><code class="xref py py-const docutils literal notranslate"><span class="pre">MAX_INTERPOLATION_DEPTH</span></code></a>. Subclass of
+<a class="reference internal" href="#ConfigParser.InterpolationError" title="ConfigParser.InterpolationError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">InterpolationError</span></code></a>.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ConfigParser.InterpolationMissingOptionError">
+<em class="property">exception </em><code class="descclassname">ConfigParser.</code><code class="descname">InterpolationMissingOptionError</code><a class="headerlink" href="#ConfigParser.InterpolationMissingOptionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when an option referenced from a value does not exist. Subclass
+of <a class="reference internal" href="#ConfigParser.InterpolationError" title="ConfigParser.InterpolationError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">InterpolationError</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ConfigParser.InterpolationSyntaxError">
+<em class="property">exception </em><code class="descclassname">ConfigParser.</code><code class="descname">InterpolationSyntaxError</code><a class="headerlink" href="#ConfigParser.InterpolationSyntaxError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when the source text into which substitutions are made does not
+conform to the required syntax. Subclass of <a class="reference internal" href="#ConfigParser.InterpolationError" title="ConfigParser.InterpolationError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">InterpolationError</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ConfigParser.MissingSectionHeaderError">
+<em class="property">exception </em><code class="descclassname">ConfigParser.</code><code class="descname">MissingSectionHeaderError</code><a class="headerlink" href="#ConfigParser.MissingSectionHeaderError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when attempting to parse a file which has no section headers.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ConfigParser.ParsingError">
+<em class="property">exception </em><code class="descclassname">ConfigParser.</code><code class="descname">ParsingError</code><a class="headerlink" href="#ConfigParser.ParsingError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when errors occur attempting to parse a file.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="ConfigParser.MAX_INTERPOLATION_DEPTH">
+<code class="descclassname">ConfigParser.</code><code class="descname">MAX_INTERPOLATION_DEPTH</code><a class="headerlink" href="#ConfigParser.MAX_INTERPOLATION_DEPTH" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum depth for recursive interpolation for <code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code> when the <em>raw</em>
+parameter is false.  This is relevant only for the <a class="reference internal" href="#ConfigParser.ConfigParser" title="ConfigParser.ConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code></a> class.</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="shlex.html#module-shlex" title="shlex: Simple lexical analysis for Unix shell-like languages."><code class="xref py py-mod docutils literal notranslate"><span class="pre">shlex</span></code></a></dt><dd><p>Support for a creating Unix shell-like mini-languages which can be used as an
+alternate format for application configuration files.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="rawconfigparser-objects">
+<span id="id1"></span><h2>13.2.1. RawConfigParser Objects<a class="headerlink" href="#rawconfigparser-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#ConfigParser.RawConfigParser" title="ConfigParser.RawConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">RawConfigParser</span></code></a> instances have the following methods:</p>
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.defaults">
+<code class="descclassname">RawConfigParser.</code><code class="descname">defaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.defaults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary containing the instance-wide defaults.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.sections">
+<code class="descclassname">RawConfigParser.</code><code class="descname">sections</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.sections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of the sections available; <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> is not included in the
+list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.add_section">
+<code class="descclassname">RawConfigParser.</code><code class="descname">add_section</code><span class="sig-paren">(</span><em>section</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.add_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a section named <em>section</em> to the instance.  If a section by the given name
+already exists, <a class="reference internal" href="#ConfigParser.DuplicateSectionError" title="ConfigParser.DuplicateSectionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">DuplicateSectionError</span></code></a> is raised. If the name
+<code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> (or any of it’s case-insensitive variants) is passed,
+<a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> is raised.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.has_section">
+<code class="descclassname">RawConfigParser.</code><code class="descname">has_section</code><span class="sig-paren">(</span><em>section</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.has_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates whether the named section is present in the configuration. The
+<code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> section is not acknowledged.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.options">
+<code class="descclassname">RawConfigParser.</code><code class="descname">options</code><span class="sig-paren">(</span><em>section</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of options available in the specified <em>section</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.has_option">
+<code class="descclassname">RawConfigParser.</code><code class="descname">has_option</code><span class="sig-paren">(</span><em>section</em>, <em>option</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.has_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the given section exists, and contains the given option, return
+<a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code></a>; otherwise return <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.read">
+<code class="descclassname">RawConfigParser.</code><code class="descname">read</code><span class="sig-paren">(</span><em>filenames</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to read and parse a list of filenames, returning a list of filenames
+which were successfully parsed.  If <em>filenames</em> is a string or Unicode string,
+it is treated as a single filename. If a file named in <em>filenames</em> cannot be
+opened, that file will be ignored.  This is designed so that you can specify a
+list of potential configuration file locations (for example, the current
+directory, the user’s home directory, and some system-wide directory), and all
+existing configuration files in the list will be read.  If none of the named
+files exist, the <a class="reference internal" href="#ConfigParser.ConfigParser" title="ConfigParser.ConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code></a> instance will contain an empty dataset.
+An application which requires initial values to be loaded from a file should
+load the required file or files using <a class="reference internal" href="#ConfigParser.RawConfigParser.readfp" title="ConfigParser.RawConfigParser.readfp"><code class="xref py py-meth docutils literal notranslate"><span class="pre">readfp()</span></code></a> before calling <a class="reference internal" href="#ConfigParser.RawConfigParser.read" title="ConfigParser.RawConfigParser.read"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read()</span></code></a>
+for any optional files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ConfigParser</span><span class="o">,</span> <span class="nn">os</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+<span class="n">config</span><span class="o">.</span><span class="n">readfp</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;defaults.cfg&#39;</span><span class="p">))</span>
+<span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">([</span><span class="s1">&#39;site.cfg&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/.myapp.cfg&#39;</span><span class="p">)])</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.4: </span>Returns list of successfully parsed filenames.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.readfp">
+<code class="descclassname">RawConfigParser.</code><code class="descname">readfp</code><span class="sig-paren">(</span><em>fp</em><span class="optional">[</span>, <em>filename</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.readfp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and parse configuration data from the file or file-like object in <em>fp</em>
+(only the <a class="reference internal" href="readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">readline()</span></code></a> method is used).  If <em>filename</em> is omitted and <em>fp</em>
+has a <code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code> attribute, that is used for <em>filename</em>; the default is
+<code class="docutils literal notranslate"><span class="pre">&lt;???&gt;</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.get">
+<code class="descclassname">RawConfigParser.</code><code class="descname">get</code><span class="sig-paren">(</span><em>section</em>, <em>option</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an <em>option</em> value for the named <em>section</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.getint">
+<code class="descclassname">RawConfigParser.</code><code class="descname">getint</code><span class="sig-paren">(</span><em>section</em>, <em>option</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.getint" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience method which coerces the <em>option</em> in the specified <em>section</em> to an
+integer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.getfloat">
+<code class="descclassname">RawConfigParser.</code><code class="descname">getfloat</code><span class="sig-paren">(</span><em>section</em>, <em>option</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.getfloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience method which coerces the <em>option</em> in the specified <em>section</em> to a
+floating point number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.getboolean">
+<code class="descclassname">RawConfigParser.</code><code class="descname">getboolean</code><span class="sig-paren">(</span><em>section</em>, <em>option</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.getboolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience method which coerces the <em>option</em> in the specified <em>section</em> to a
+Boolean value.  Note that the accepted values for the option are <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;yes&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;true&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;on&quot;</span></code>, which cause this method to return <code class="docutils literal notranslate"><span class="pre">True</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;no&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;false&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;off&quot;</span></code>, which cause it to return
+<code class="docutils literal notranslate"><span class="pre">False</span></code>.  These string values are checked in a case-insensitive manner.  Any
+other value will cause it to raise <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.items">
+<code class="descclassname">RawConfigParser.</code><code class="descname">items</code><span class="sig-paren">(</span><em>section</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of <code class="docutils literal notranslate"><span class="pre">(name,</span> <span class="pre">value)</span></code> pairs for each option in the given <em>section</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.set">
+<code class="descclassname">RawConfigParser.</code><code class="descname">set</code><span class="sig-paren">(</span><em>section</em>, <em>option</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the given section exists, set the given option to the specified value;
+otherwise raise <a class="reference internal" href="#ConfigParser.NoSectionError" title="ConfigParser.NoSectionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NoSectionError</span></code></a>.  While it is possible to use
+<a class="reference internal" href="#ConfigParser.RawConfigParser" title="ConfigParser.RawConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">RawConfigParser</span></code></a> (or <a class="reference internal" href="#ConfigParser.ConfigParser" title="ConfigParser.ConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code></a> with <em>raw</em> parameters set to
+true) for <em>internal</em> storage of non-string values, full functionality (including
+interpolation and output to files) can only be achieved using string values.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.write">
+<code class="descclassname">RawConfigParser.</code><code class="descname">write</code><span class="sig-paren">(</span><em>fileobject</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a representation of the configuration to the specified file object.  This
+representation can be parsed by a future <a class="reference internal" href="#ConfigParser.RawConfigParser.read" title="ConfigParser.RawConfigParser.read"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read()</span></code></a> call.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.remove_option">
+<code class="descclassname">RawConfigParser.</code><code class="descname">remove_option</code><span class="sig-paren">(</span><em>section</em>, <em>option</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.remove_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the specified <em>option</em> from the specified <em>section</em>. If the section does
+not exist, raise <a class="reference internal" href="#ConfigParser.NoSectionError" title="ConfigParser.NoSectionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NoSectionError</span></code></a>.  If the option existed to be removed,
+return <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code></a>; otherwise return <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.remove_section">
+<code class="descclassname">RawConfigParser.</code><code class="descname">remove_section</code><span class="sig-paren">(</span><em>section</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.remove_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the specified <em>section</em> from the configuration. If the section in fact
+existed, return <code class="docutils literal notranslate"><span class="pre">True</span></code>. Otherwise return <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.RawConfigParser.optionxform">
+<code class="descclassname">RawConfigParser.</code><code class="descname">optionxform</code><span class="sig-paren">(</span><em>option</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.RawConfigParser.optionxform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the option name <em>option</em> as found in an input file or as passed in
+by client code to the form that should be used in the internal structures.
+The default implementation returns a lower-case version of <em>option</em>;
+subclasses may override this or client code can set an attribute of this name
+on instances to affect this behavior.</p>
+<p>You don’t necessarily need to subclass a ConfigParser to use this method, you
+can also re-set it on an instance, to a function that takes a string
+argument.  Setting it to <code class="docutils literal notranslate"><span class="pre">str</span></code>, for example, would make option names case
+sensitive:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cfgparser</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="n">cfgparser</span><span class="o">.</span><span class="n">optionxform</span> <span class="o">=</span> <span class="nb">str</span>
+</pre></div>
+</div>
+<p>Note that when reading configuration files, whitespace around the
+option names are stripped before <a class="reference internal" href="#ConfigParser.RawConfigParser.optionxform" title="ConfigParser.RawConfigParser.optionxform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">optionxform()</span></code></a> is called.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="configparser-objects">
+<span id="id2"></span><h2>13.2.2. ConfigParser Objects<a class="headerlink" href="#configparser-objects" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#ConfigParser.ConfigParser" title="ConfigParser.ConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code></a> class extends some methods of the
+<a class="reference internal" href="#ConfigParser.RawConfigParser" title="ConfigParser.RawConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">RawConfigParser</span></code></a> interface, adding some optional arguments.</p>
+<dl class="method">
+<dt id="ConfigParser.ConfigParser.get">
+<code class="descclassname">ConfigParser.</code><code class="descname">get</code><span class="sig-paren">(</span><em>section</em>, <em>option</em><span class="optional">[</span>, <em>raw</em><span class="optional">[</span>, <em>vars</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.ConfigParser.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an <em>option</em> value for the named <em>section</em>.  If <em>vars</em> is provided, it
+must be a dictionary.  The <em>option</em> is looked up in <em>vars</em> (if provided),
+<em>section</em>, and in <em>defaults</em> in that order.</p>
+<p>All the <code class="docutils literal notranslate"><span class="pre">'%'</span></code> interpolations are expanded in the return values, unless the
+<em>raw</em> argument is true.  Values for interpolation keys are looked up in the
+same manner as the option.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ConfigParser.ConfigParser.items">
+<code class="descclassname">ConfigParser.</code><code class="descname">items</code><span class="sig-paren">(</span><em>section</em><span class="optional">[</span>, <em>raw</em><span class="optional">[</span>, <em>vars</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.ConfigParser.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of <code class="docutils literal notranslate"><span class="pre">(name,</span> <span class="pre">value)</span></code> pairs for each option in the given <em>section</em>.
+Optional arguments have the same meaning as for the <a class="reference internal" href="#ConfigParser.ConfigParser.get" title="ConfigParser.ConfigParser.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> method.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="safeconfigparser-objects">
+<span id="id3"></span><h2>13.2.3. SafeConfigParser Objects<a class="headerlink" href="#safeconfigparser-objects" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#ConfigParser.SafeConfigParser" title="ConfigParser.SafeConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">SafeConfigParser</span></code></a> class implements the same extended interface as
+<a class="reference internal" href="#ConfigParser.ConfigParser" title="ConfigParser.ConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code></a>, with the following addition:</p>
+<dl class="method">
+<dt id="ConfigParser.SafeConfigParser.set">
+<code class="descclassname">SafeConfigParser.</code><code class="descname">set</code><span class="sig-paren">(</span><em>section</em>, <em>option</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#ConfigParser.SafeConfigParser.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the given section exists, set the given option to the specified value;
+otherwise raise <a class="reference internal" href="#ConfigParser.NoSectionError" title="ConfigParser.NoSectionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NoSectionError</span></code></a>.  <em>value</em> must be a string (<a class="reference internal" href="functions.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+or <a class="reference internal" href="functions.html#unicode" title="unicode"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></a>); if not, <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> is raised.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.4.</span></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="examples">
+<h2>13.2.4. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>An example of writing to a configuration file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ConfigParser</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">RawConfigParser</span><span class="p">()</span>
+
+<span class="c1"># When adding sections or items, add them in the reverse order of</span>
+<span class="c1"># how you want them to be displayed in the actual file.</span>
+<span class="c1"># In addition, please note that using RawConfigParser&#39;s and the raw</span>
+<span class="c1"># mode of ConfigParser&#39;s respective set functions, you can assign</span>
+<span class="c1"># non-string values to keys internally, but will receive an error</span>
+<span class="c1"># when attempting to write to a file or when you get it in non-raw</span>
+<span class="c1"># mode. SafeConfigParser does not allow such assignments to take place.</span>
+<span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">)</span>
+<span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;an_int&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">)</span>
+<span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;a_bool&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">)</span>
+<span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;a_float&#39;</span><span class="p">,</span> <span class="s1">&#39;3.1415&#39;</span><span class="p">)</span>
+<span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="s1">&#39;fun&#39;</span><span class="p">)</span>
+<span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;Python&#39;</span><span class="p">)</span>
+<span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%(bar)s</span><span class="s1"> is </span><span class="si">%(baz)s</span><span class="s1">!&#39;</span><span class="p">)</span>
+
+<span class="c1"># Writing our configuration file to &#39;example.cfg&#39;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;example.cfg&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">configfile</span><span class="p">:</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">configfile</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>An example of reading the configuration file again:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ConfigParser</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">RawConfigParser</span><span class="p">()</span>
+<span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;example.cfg&#39;</span><span class="p">)</span>
+
+<span class="c1"># getfloat() raises an exception if the value is not a float</span>
+<span class="c1"># getint() and getboolean() also do this for their respective types</span>
+<span class="n">a_float</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;a_float&#39;</span><span class="p">)</span>
+<span class="n">an_int</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;an_int&#39;</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">a_float</span> <span class="o">+</span> <span class="n">an_int</span>
+
+<span class="c1"># Notice that the next output does not interpolate &#39;%(bar)s&#39; or &#39;%(baz)s&#39;.</span>
+<span class="c1"># This is because we are using a RawConfigParser().</span>
+<span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;a_bool&#39;</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To get interpolation, you will need to use a <a class="reference internal" href="#ConfigParser.ConfigParser" title="ConfigParser.ConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code></a> or
+<a class="reference internal" href="#ConfigParser.SafeConfigParser" title="ConfigParser.SafeConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">SafeConfigParser</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ConfigParser</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+<span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;example.cfg&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set the third, optional argument of get to 1 if you wish to use raw mode.</span>
+<span class="nb">print</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># -&gt; &quot;Python is fun!&quot;</span>
+<span class="nb">print</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># -&gt; &quot;%(bar)s is %(baz)s!&quot;</span>
+
+<span class="c1"># The optional fourth argument is a dict with members that will take</span>
+<span class="c1"># precedence in interpolation.</span>
+<span class="nb">print</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="s1">&#39;Documentation&#39;</span><span class="p">,</span>
+                                        <span class="s1">&#39;baz&#39;</span><span class="p">:</span> <span class="s1">&#39;evil&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Defaults are available in all three types of ConfigParsers. They are used in
+interpolation if an option used is not defined elsewhere.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ConfigParser</span>
+
+<span class="c1"># New instance with &#39;bar&#39; and &#39;baz&#39; defaulting to &#39;Life&#39; and &#39;hard&#39; each</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">SafeConfigParser</span><span class="p">({</span><span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="s1">&#39;Life&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">:</span> <span class="s1">&#39;hard&#39;</span><span class="p">})</span>
+<span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;example.cfg&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>  <span class="c1"># -&gt; &quot;Python is fun!&quot;</span>
+<span class="n">config</span><span class="o">.</span><span class="n">remove_option</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="n">config</span><span class="o">.</span><span class="n">remove_option</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Section1&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>  <span class="c1"># -&gt; &quot;Life is hard!&quot;</span>
+</pre></div>
+</div>
+<p>The function <code class="docutils literal notranslate"><span class="pre">opt_move</span></code> below can be used to move options between sections:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">opt_move</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">section1</span><span class="p">,</span> <span class="n">section2</span><span class="p">,</span> <span class="n">option</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">section2</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section1</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">NoSectionError</span><span class="p">:</span>
+        <span class="c1"># Create non-existent section</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="n">section2</span><span class="p">)</span>
+        <span class="n">opt_move</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">section1</span><span class="p">,</span> <span class="n">section2</span><span class="p">,</span> <span class="n">option</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">remove_option</span><span class="p">(</span><span class="n">section1</span><span class="p">,</span> <span class="n">option</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Some configuration files are known to include settings without values, but which
+otherwise conform to the syntax supported by <a class="reference internal" href="#module-ConfigParser" title="ConfigParser: Configuration file parser."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConfigParser</span></code></a>.  The
+<em>allow_no_value</em> parameter to the constructor can be used to indicate that such
+values should be accepted:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ConfigParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample_config</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s2">[mysqld]</span>
+<span class="gp">... </span><span class="s2">user = mysql</span>
+<span class="gp">... </span><span class="s2">pid-file = /var/run/mysqld/mysqld.pid</span>
+<span class="gp">... </span><span class="s2">skip-external-locking</span>
+<span class="gp">... </span><span class="s2">old_passwords = 1</span>
+<span class="gp">... </span><span class="s2">skip-bdb</span>
+<span class="gp">... </span><span class="s2">skip-innodb</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">RawConfigParser</span><span class="p">(</span><span class="n">allow_no_value</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span><span class="o">.</span><span class="n">readfp</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">sample_config</span><span class="p">))</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Settings with values are treated as before:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mysqld&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">)</span>
+<span class="go">&#39;mysql&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Settings without values provide None:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mysqld&quot;</span><span class="p">,</span> <span class="s2">&quot;skip-bdb&quot;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Settings which aren&#39;t specified still raise an error:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mysqld&quot;</span><span class="p">,</span> <span class="s2">&quot;does-not-exist&quot;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">ConfigParser.NoOptionError</span>: <span class="n">No option &#39;does-not-exist&#39; in section: &#39;mysqld&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">13.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">ConfigParser</span></code> — Configuration file parser</a><ul>
+<li><a class="reference internal" href="#rawconfigparser-objects">13.2.1. RawConfigParser Objects</a></li>
+<li><a class="reference internal" href="#configparser-objects">13.2.2. ConfigParser Objects</a></li>
+<li><a class="reference internal" href="#safeconfigparser-objects">13.2.3. SafeConfigParser Objects</a></li>
+<li><a class="reference internal" href="#examples">13.2.4. Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="csv.html"
+                        title="previous chapter">13.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> — CSV File Reading and Writing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="robotparser.html"
+                        title="next chapter">13.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">robotparser</span></code> —  Parser for robots.txt</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/configparser.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="robotparser.html" title="13.3. robotparser — Parser for robots.txt"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="csv.html" title="13.1. csv — CSV File Reading and Writing"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="fileformats.html" >13. File Formats</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

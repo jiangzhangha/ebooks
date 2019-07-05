@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>8.12. UserDict — Class wrapper for dictionary objects &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="8.15. types — Names for built-in types" href="types.html" />
+    <link rel="prev" title="8.11. weakref — Weak references" href="weakref.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/userdict.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="types.html" title="8.15. types — Names for built-in types"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="weakref.html" title="8.11. weakref — Weak references"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" accesskey="U">8. Data Types</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-UserDict">
+<span id="userdict-class-wrapper-for-dictionary-objects"></span><h1>8.12. <a class="reference internal" href="#module-UserDict" title="UserDict: Class wrapper for dictionary objects."><code class="xref py py-mod docutils literal notranslate"><span class="pre">UserDict</span></code></a> — Class wrapper for dictionary objects<a class="headerlink" href="#module-UserDict" title="Permalink to this headline">¶</a></h1>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/UserDict.py">Lib/UserDict.py</a></p>
+<hr class="docutils" />
+<p>The module defines a mixin,  <a class="reference internal" href="#UserDict.DictMixin" title="UserDict.DictMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictMixin</span></code></a>, defining all dictionary methods
+for classes that already have a minimum mapping interface.  This greatly
+simplifies writing classes that need to be substitutable for dictionaries (such
+as the shelve module).</p>
+<p>This module also defines a class, <a class="reference internal" href="#UserDict.UserDict" title="UserDict.UserDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a>, that acts as a wrapper
+around dictionary objects.  The need for this class has been largely supplanted
+by the ability to subclass directly from <a class="reference internal" href="stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> (a feature that became
+available starting with Python version 2.2).  Prior to the introduction of
+<a class="reference internal" href="stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, the <a class="reference internal" href="#UserDict.UserDict" title="UserDict.UserDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a> class was used to create dictionary-like
+sub-classes that obtained new behaviors by overriding existing methods or adding
+new ones.</p>
+<p>The <a class="reference internal" href="#module-UserDict" title="UserDict: Class wrapper for dictionary objects."><code class="xref py py-mod docutils literal notranslate"><span class="pre">UserDict</span></code></a> module defines the <a class="reference internal" href="#UserDict.UserDict" title="UserDict.UserDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a> class and
+<a class="reference internal" href="#UserDict.DictMixin" title="UserDict.DictMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictMixin</span></code></a>:</p>
+<dl class="class">
+<dt id="UserDict.UserDict">
+<em class="property">class </em><code class="descclassname">UserDict.</code><code class="descname">UserDict</code><span class="sig-paren">(</span><span class="optional">[</span><em>initialdata</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UserDict.UserDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that simulates a dictionary.  The instance’s contents are kept in a
+regular dictionary, which is accessible via the <code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code> attribute of
+<a class="reference internal" href="#UserDict.UserDict" title="UserDict.UserDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a> instances.  If <em>initialdata</em> is provided, <code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code> is
+initialized with its contents; note that a reference to <em>initialdata</em> will not
+be kept, allowing it be used for other purposes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For backward compatibility, instances of <a class="reference internal" href="#UserDict.UserDict" title="UserDict.UserDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a> are not iterable.</p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="UserDict.IterableUserDict">
+<em class="property">class </em><code class="descclassname">UserDict.</code><code class="descname">IterableUserDict</code><span class="sig-paren">(</span><span class="optional">[</span><em>initialdata</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UserDict.IterableUserDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass of <a class="reference internal" href="#UserDict.UserDict" title="UserDict.UserDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a> that supports direct iteration (e.g.  <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">key</span> <span class="pre">in</span>
+<span class="pre">myDict</span></code>).</p>
+</dd></dl>
+
+<p>In addition to supporting the methods and operations of mappings (see section
+<a class="reference internal" href="stdtypes.html#typesmapping"><span class="std std-ref">Mapping Types — dict</span></a>), <a class="reference internal" href="#UserDict.UserDict" title="UserDict.UserDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a> and <a class="reference internal" href="#UserDict.IterableUserDict" title="UserDict.IterableUserDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">IterableUserDict</span></code></a> instances
+provide the following attribute:</p>
+<dl class="attribute">
+<dt id="UserDict.IterableUserDict.data">
+<code class="descclassname">IterableUserDict.</code><code class="descname">data</code><a class="headerlink" href="#UserDict.IterableUserDict.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>A real dictionary used to store the contents of the <a class="reference internal" href="#UserDict.UserDict" title="UserDict.UserDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a> class.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="UserDict.DictMixin">
+<em class="property">class </em><code class="descclassname">UserDict.</code><code class="descname">DictMixin</code><a class="headerlink" href="#UserDict.DictMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mixin defining all dictionary methods for classes that already have a minimum
+dictionary interface including <a class="reference internal" href="../reference/datamodel.html#object.__getitem__" title="object.__getitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__getitem__()</span></code></a>, <a class="reference internal" href="../reference/datamodel.html#object.__setitem__" title="object.__setitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__setitem__()</span></code></a>,
+<a class="reference internal" href="../reference/datamodel.html#object.__delitem__" title="object.__delitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__delitem__()</span></code></a>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">keys()</span></code>.</p>
+<p>This mixin should be used as a superclass.  Adding each of the above methods
+adds progressively more functionality.  For instance, defining all but
+<a class="reference internal" href="../reference/datamodel.html#object.__delitem__" title="object.__delitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__delitem__()</span></code></a> will preclude only <code class="xref py py-meth docutils literal notranslate"><span class="pre">pop()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">popitem()</span></code> from the
+full interface.</p>
+<p>In addition to the four base methods, progressively more efficiency comes with
+defining <a class="reference internal" href="../reference/datamodel.html#object.__contains__" title="object.__contains__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__contains__()</span></code></a>, <a class="reference internal" href="../reference/datamodel.html#object.__iter__" title="object.__iter__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__iter__()</span></code></a>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">iteritems()</span></code>.</p>
+<p>Since the mixin has no knowledge of the subclass constructor, it does not define
+<a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a> or <a class="reference internal" href="copy.html#module-copy" title="copy: Shallow and deep copy operations."><code class="xref py py-meth docutils literal notranslate"><span class="pre">copy()</span></code></a>.</p>
+<p>Starting with Python version 2.6, it is recommended to use
+<a class="reference internal" href="collections.html#collections.MutableMapping" title="collections.MutableMapping"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.MutableMapping</span></code></a> instead of <a class="reference internal" href="#UserDict.DictMixin" title="UserDict.DictMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictMixin</span></code></a>.</p>
+<p>Note that DictMixin does not implement the <a class="reference internal" href="stdtypes.html#dict.viewkeys" title="dict.viewkeys"><code class="xref py py-meth docutils literal notranslate"><span class="pre">viewkeys()</span></code></a>,
+<a class="reference internal" href="stdtypes.html#dict.viewvalues" title="dict.viewvalues"><code class="xref py py-meth docutils literal notranslate"><span class="pre">viewvalues()</span></code></a>, or <a class="reference internal" href="stdtypes.html#dict.viewitems" title="dict.viewitems"><code class="xref py py-meth docutils literal notranslate"><span class="pre">viewitems()</span></code></a> methods.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-UserList">
+<span id="userlist-class-wrapper-for-list-objects"></span><h1>8.13. <a class="reference internal" href="#module-UserList" title="UserList: Class wrapper for list objects."><code class="xref py py-mod docutils literal notranslate"><span class="pre">UserList</span></code></a> — Class wrapper for list objects<a class="headerlink" href="#module-UserList" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When Python 2.2 was released, many of the use cases for this class were
+subsumed by the ability to subclass <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> directly.  However, a
+handful of use cases remain.</p>
+<p>This module provides a list-interface around an underlying data store.  By
+default, that data store is a <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>; however, it can be used to wrap
+a list-like interface around other objects (such as persistent storage).</p>
+<p>In addition, this class can be mixed-in with built-in classes using multiple
+inheritance.  This can sometimes be useful.  For example, you can inherit
+from <a class="reference internal" href="#UserList.UserList" title="UserList.UserList"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserList</span></code></a> and <a class="reference internal" href="functions.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> at the same time.  That would not be
+possible with both a real <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> and a real <a class="reference internal" href="functions.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>.</p>
+</div>
+<p>This module defines a class that acts as a wrapper around list objects.  It is a
+useful base class for your own list-like classes, which can inherit from them
+and override existing methods or add new ones.  In this way one can add new
+behaviors to lists.</p>
+<p>The <a class="reference internal" href="#module-UserList" title="UserList: Class wrapper for list objects."><code class="xref py py-mod docutils literal notranslate"><span class="pre">UserList</span></code></a> module defines the <a class="reference internal" href="#UserList.UserList" title="UserList.UserList"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserList</span></code></a> class:</p>
+<dl class="class">
+<dt id="UserList.UserList">
+<em class="property">class </em><code class="descclassname">UserList.</code><code class="descname">UserList</code><span class="sig-paren">(</span><span class="optional">[</span><em>list</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UserList.UserList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that simulates a list.  The instance’s contents are kept in a regular
+list, which is accessible via the <a class="reference internal" href="#UserList.UserList.data" title="UserList.UserList.data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code></a> attribute of <a class="reference internal" href="#UserList.UserList" title="UserList.UserList"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserList</span></code></a>
+instances.  The instance’s contents are initially set to a copy of <em>list</em>,
+defaulting to the empty list <code class="docutils literal notranslate"><span class="pre">[]</span></code>.  <em>list</em> can be any iterable, e.g. a
+real Python list or a <a class="reference internal" href="#UserList.UserList" title="UserList.UserList"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserList</span></code></a> object.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#UserList.UserList" title="UserList.UserList"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserList</span></code></a> class has been moved to the <a class="reference internal" href="collections.html#module-collections" title="collections: High-performance datatypes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">collections</span></code></a>
+module in Python 3. The <a class="reference internal" href="../glossary.html#term-2to3"><span class="xref std std-term">2to3</span></a> tool will automatically adapt
+imports when converting your sources to Python 3.</p>
+</div>
+</dd></dl>
+
+<p>In addition to supporting the methods and operations of mutable sequences (see
+section <a class="reference internal" href="stdtypes.html#typesseq"><span class="std std-ref">Sequence Types — str, unicode, list, tuple, bytearray, buffer, xrange</span></a>), <a class="reference internal" href="#UserList.UserList" title="UserList.UserList"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserList</span></code></a> instances provide the following
+attribute:</p>
+<dl class="attribute">
+<dt id="UserList.UserList.data">
+<code class="descclassname">UserList.</code><code class="descname">data</code><a class="headerlink" href="#UserList.UserList.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>A real Python list object used to store the contents of the <a class="reference internal" href="#UserList.UserList" title="UserList.UserList"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserList</span></code></a>
+class.</p>
+</dd></dl>
+
+<p><strong>Subclassing requirements:</strong> Subclasses of <a class="reference internal" href="#UserList.UserList" title="UserList.UserList"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserList</span></code></a> are expected to
+offer a constructor which can be called with either no arguments or one
+argument.  List operations which return a new sequence attempt to create an
+instance of the actual implementation class.  To do so, it assumes that the
+constructor can be called with a single parameter, which is a sequence object
+used as a data source.</p>
+<p>If a derived class does not wish to comply with this requirement, all of the
+special methods supported by this class will need to be overridden; please
+consult the sources for information about the methods which need to be provided
+in that case.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.0: </span>Python versions 1.5.2 and 1.6 also required that the constructor be callable
+with no parameters, and offer a mutable <code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code> attribute.  Earlier
+versions of Python did not attempt to create instances of the derived class.</p>
+</div>
+</div>
+<div class="section" id="module-UserString">
+<span id="userstring-class-wrapper-for-string-objects"></span><h1>8.14. <a class="reference internal" href="#module-UserString" title="UserString: Class wrapper for string objects."><code class="xref py py-mod docutils literal notranslate"><span class="pre">UserString</span></code></a> — Class wrapper for string objects<a class="headerlink" href="#module-UserString" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This <a class="reference internal" href="#UserString.UserString" title="UserString.UserString"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserString</span></code></a> class from this module is available for backward
+compatibility only.  If you are writing code that does not need to work with
+versions of Python earlier than Python 2.2, please consider subclassing directly
+from the built-in <a class="reference internal" href="functions.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> type instead of using <a class="reference internal" href="#UserString.UserString" title="UserString.UserString"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserString</span></code></a> (there
+is no built-in equivalent to <a class="reference internal" href="#UserString.MutableString" title="UserString.MutableString"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableString</span></code></a>).</p>
+</div>
+<p>This module defines a class that acts as a wrapper around string objects.  It is
+a useful base class for your own string-like classes, which can inherit from
+them and override existing methods or add new ones.  In this way one can add new
+behaviors to strings.</p>
+<p>It should be noted that these classes are highly inefficient compared to real
+string or Unicode objects; this is especially the case for
+<a class="reference internal" href="#UserString.MutableString" title="UserString.MutableString"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableString</span></code></a>.</p>
+<p>The <a class="reference internal" href="#module-UserString" title="UserString: Class wrapper for string objects."><code class="xref py py-mod docutils literal notranslate"><span class="pre">UserString</span></code></a> module defines the following classes:</p>
+<dl class="class">
+<dt id="UserString.UserString">
+<em class="property">class </em><code class="descclassname">UserString.</code><code class="descname">UserString</code><span class="sig-paren">(</span><span class="optional">[</span><em>sequence</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UserString.UserString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that simulates a string or a Unicode string object.  The instance’s
+content is kept in a regular string or Unicode string object, which is
+accessible via the <code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code> attribute of <a class="reference internal" href="#UserString.UserString" title="UserString.UserString"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserString</span></code></a> instances.  The
+instance’s contents are initially set to a copy of <em>sequence</em>.  <em>sequence</em> can
+be either a regular Python string or Unicode string, an instance of
+<a class="reference internal" href="#UserString.UserString" title="UserString.UserString"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserString</span></code></a> (or a subclass) or an arbitrary sequence which can be
+converted into a string using the built-in <a class="reference internal" href="functions.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a> function.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#UserString.UserString" title="UserString.UserString"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserString</span></code></a> class has been moved to the <a class="reference internal" href="collections.html#module-collections" title="collections: High-performance datatypes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">collections</span></code></a>
+module in Python 3. The <a class="reference internal" href="../glossary.html#term-2to3"><span class="xref std std-term">2to3</span></a> tool will automatically adapt
+imports when converting your sources to Python 3.</p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="UserString.MutableString">
+<em class="property">class </em><code class="descclassname">UserString.</code><code class="descname">MutableString</code><span class="sig-paren">(</span><span class="optional">[</span><em>sequence</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UserString.MutableString" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is derived from the <a class="reference internal" href="#UserString.UserString" title="UserString.UserString"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserString</span></code></a> above and redefines strings
+to be <em>mutable</em>.  Mutable strings can’t be used as dictionary keys, because
+dictionaries require <em>immutable</em> objects as keys.  The main intention of this
+class is to serve as an educational example for inheritance and necessity to
+remove (override) the <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__hash__()</span></code></a> method in order to trap attempts to use a
+mutable object as dictionary key, which would be otherwise very error prone and
+hard to track down.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#UserString.MutableString" title="UserString.MutableString"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableString</span></code></a> class has been removed in Python 3.</p>
+</div>
+</dd></dl>
+
+<p>In addition to supporting the methods and operations of string and Unicode
+objects (see section <a class="reference internal" href="stdtypes.html#string-methods"><span class="std std-ref">String Methods</span></a>), <a class="reference internal" href="#UserString.UserString" title="UserString.UserString"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserString</span></code></a> instances
+provide the following attribute:</p>
+<dl class="attribute">
+<dt id="UserString.MutableString.data">
+<code class="descclassname">MutableString.</code><code class="descname">data</code><a class="headerlink" href="#UserString.MutableString.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>A real Python string or Unicode object used to store the content of the
+<a class="reference internal" href="#UserString.UserString" title="UserString.UserString"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserString</span></code></a> class.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">UserDict</span></code> — Class wrapper for dictionary objects</a></li>
+<li><a class="reference internal" href="#module-UserList">8.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">UserList</span></code> — Class wrapper for list objects</a></li>
+<li><a class="reference internal" href="#module-UserString">8.14. <code class="xref py py-mod docutils literal notranslate"><span class="pre">UserString</span></code> — Class wrapper for string objects</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="weakref.html"
+                        title="previous chapter">8.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">weakref</span></code> — Weak references</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="types.html"
+                        title="next chapter">8.15. <code class="xref py py-mod docutils literal notranslate"><span class="pre">types</span></code> — Names for built-in types</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/userdict.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="types.html" title="8.15. types — Names for built-in types"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="weakref.html" title="8.11. weakref — Weak references"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" >8. Data Types</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

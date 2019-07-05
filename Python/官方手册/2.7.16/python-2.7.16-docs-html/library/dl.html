@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>36.6. dl — Call C functions in shared objects &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="36.7. termios — POSIX style tty control" href="termios.html" />
+    <link rel="prev" title="36.5. crypt — Function to check Unix passwords" href="crypt.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/dl.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="termios.html" title="36.7. termios — POSIX style tty control"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="crypt.html" title="36.5. crypt — Function to check Unix passwords"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" accesskey="U">36. Unix Specific Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-dl">
+<span id="dl-call-c-functions-in-shared-objects"></span><h1>36.6. <a class="reference internal" href="#module-dl" title="dl: Call C functions in shared objects. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dl</span></code></a> — Call C functions in shared objects<a class="headerlink" href="#module-dl" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-dl" title="dl: Call C functions in shared objects. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dl</span></code></a> module has been removed in Python 3. Use the <a class="reference internal" href="ctypes.html#module-ctypes" title="ctypes: A foreign function library for Python."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ctypes</span></code></a>
+module instead.</p>
+</div>
+<p>The <a class="reference internal" href="#module-dl" title="dl: Call C functions in shared objects. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dl</span></code></a> module defines an interface to the <code class="xref c c-func docutils literal notranslate"><span class="pre">dlopen()</span></code> function, which
+is the most common interface on Unix platforms for handling dynamically linked
+libraries. It allows the program to call arbitrary functions in such a library.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <a class="reference internal" href="#module-dl" title="dl: Call C functions in shared objects. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dl</span></code></a> module bypasses the Python type system and  error handling. If
+used incorrectly it may cause segmentation faults, crashes or other incorrect
+behaviour.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module will not work unless <code class="docutils literal notranslate"><span class="pre">sizeof(int)</span> <span class="pre">==</span> <span class="pre">sizeof(long)</span> <span class="pre">==</span> <span class="pre">sizeof(char</span>
+<span class="pre">*)</span></code> If this is not the case, <a class="reference internal" href="exceptions.html#exceptions.SystemError" title="exceptions.SystemError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemError</span></code></a> will be raised on import.</p>
+</div>
+<p>The <a class="reference internal" href="#module-dl" title="dl: Call C functions in shared objects. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dl</span></code></a> module defines the following function:</p>
+<dl class="function">
+<dt id="dl.open">
+<code class="descclassname">dl.</code><code class="descname">open</code><span class="sig-paren">(</span><em>name</em><span class="optional">[</span>, <em>mode=RTLD_LAZY</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#dl.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a shared object file, and return a handle. Mode signifies late binding
+(<a class="reference internal" href="#dl.RTLD_LAZY" title="dl.RTLD_LAZY"><code class="xref py py-const docutils literal notranslate"><span class="pre">RTLD_LAZY</span></code></a>) or immediate binding (<a class="reference internal" href="#dl.RTLD_NOW" title="dl.RTLD_NOW"><code class="xref py py-const docutils literal notranslate"><span class="pre">RTLD_NOW</span></code></a>). Default is
+<a class="reference internal" href="#dl.RTLD_LAZY" title="dl.RTLD_LAZY"><code class="xref py py-const docutils literal notranslate"><span class="pre">RTLD_LAZY</span></code></a>. Note that some systems do not support <a class="reference internal" href="#dl.RTLD_NOW" title="dl.RTLD_NOW"><code class="xref py py-const docutils literal notranslate"><span class="pre">RTLD_NOW</span></code></a>.</p>
+<p>Return value is a <code class="xref py py-class docutils literal notranslate"><span class="pre">dlobject</span></code>.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-dl" title="dl: Call C functions in shared objects. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dl</span></code></a> module defines the following constants:</p>
+<dl class="data">
+<dt id="dl.RTLD_LAZY">
+<code class="descclassname">dl.</code><code class="descname">RTLD_LAZY</code><a class="headerlink" href="#dl.RTLD_LAZY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Useful as an argument to <a class="reference internal" href="#dl.open" title="dl.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dl.RTLD_NOW">
+<code class="descclassname">dl.</code><code class="descname">RTLD_NOW</code><a class="headerlink" href="#dl.RTLD_NOW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Useful as an argument to <a class="reference internal" href="#dl.open" title="dl.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a>.  Note that on systems which do not
+support immediate binding, this constant will not appear in the module. For
+maximum portability, use <a class="reference internal" href="functions.html#hasattr" title="hasattr"><code class="xref py py-func docutils literal notranslate"><span class="pre">hasattr()</span></code></a> to determine if the system supports
+immediate binding.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-dl" title="dl: Call C functions in shared objects. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dl</span></code></a> module defines the following exception:</p>
+<dl class="exception">
+<dt id="dl.error">
+<em class="property">exception </em><code class="descclassname">dl.</code><code class="descname">error</code><a class="headerlink" href="#dl.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when an error has occurred inside the dynamic loading and
+linking routines.</p>
+</dd></dl>
+
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dl</span><span class="o">,</span> <span class="nn">time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">dl</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;/lib/libc.so.6&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">),</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="go">(929723914, 929723914.498)</span>
+</pre></div>
+</div>
+<p>This example was tried on a Debian GNU/Linux system, and is a good example of
+the fact that using this module is usually a bad alternative.</p>
+<div class="section" id="dl-objects">
+<span id="id1"></span><h2>36.6.1. Dl Objects<a class="headerlink" href="#dl-objects" title="Permalink to this headline">¶</a></h2>
+<p>Dl objects, as returned by <a class="reference internal" href="#dl.open" title="dl.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> above, have the following methods:</p>
+<dl class="method">
+<dt id="dl.dl.close">
+<code class="descclassname">dl.</code><code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dl.dl.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Free all resources, except the memory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dl.dl.sym">
+<code class="descclassname">dl.</code><code class="descname">sym</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#dl.dl.sym" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the pointer for the function named <em>name</em>, as a number, if it exists in
+the referenced shared object, otherwise <code class="docutils literal notranslate"><span class="pre">None</span></code>. This is useful in code like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">sym</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">a</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(Note that this function will return a non-zero number, as zero is the <em>NULL</em>
+pointer)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dl.dl.call">
+<code class="descclassname">dl.</code><code class="descname">call</code><span class="sig-paren">(</span><em>name</em><span class="optional">[</span>, <em>arg1</em><span class="optional">[</span>, <em>arg2...</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#dl.dl.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the function named <em>name</em> in the referenced shared object. The arguments
+must be either Python integers, which will be  passed as is, Python strings, to
+which a pointer will be passed,  or <code class="docutils literal notranslate"><span class="pre">None</span></code>, which will be passed as <em>NULL</em>.
+Note that  strings should only be passed to functions as <code class="xref c c-type docutils literal notranslate"><span class="pre">const</span> <span class="pre">char*</span></code>,
+as Python will not like its string mutated.</p>
+<p>There must be at most 10 arguments, and arguments not given will be treated as
+<code class="docutils literal notranslate"><span class="pre">None</span></code>. The function’s return value must be a C <code class="xref c c-type docutils literal notranslate"><span class="pre">long</span></code>, which is a
+Python integer.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">36.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dl</span></code> — Call C functions in shared objects</a><ul>
+<li><a class="reference internal" href="#dl-objects">36.6.1. Dl Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="crypt.html"
+                        title="previous chapter">36.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">crypt</span></code> — Function to check Unix passwords</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="termios.html"
+                        title="next chapter">36.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">termios</span></code> — POSIX style tty control</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/dl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="termios.html" title="36.7. termios — POSIX style tty control"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="crypt.html" title="36.5. crypt — Function to check Unix passwords"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" >36. Unix Specific Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

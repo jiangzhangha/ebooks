@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>18.10. multifile — Support for files containing distinct parts &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="18.11. rfc822 — Parse RFC 2822 mail headers" href="rfc822.html" />
+    <link rel="prev" title="18.9. mimify — MIME processing of mail messages" href="mimify.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/multifile.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rfc822.html" title="18.11. rfc822 — Parse RFC 2822 mail headers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mimify.html" title="18.9. mimify — MIME processing of mail messages"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" accesskey="U">18. Internet Data Handling</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-multifile">
+<span id="multifile-support-for-files-containing-distinct-parts"></span><h1>18.10. <a class="reference internal" href="#module-multifile" title="multifile: Support for reading files which contain distinct parts, such as some MIME data. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">multifile</span></code></a> — Support for files containing distinct parts<a class="headerlink" href="#module-multifile" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.5: </span>The <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code></a> package should be used in preference to the <a class="reference internal" href="#module-multifile" title="multifile: Support for reading files which contain distinct parts, such as some MIME data. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">multifile</span></code></a>
+module. This module is present only to maintain backward compatibility.</p>
+</div>
+<p>The <a class="reference internal" href="#multifile.MultiFile" title="multifile.MultiFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFile</span></code></a> object enables you to treat sections of a text file as
+file-like input objects, with <code class="docutils literal notranslate"><span class="pre">''</span></code> being returned by <a class="reference internal" href="readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">readline()</span></code></a> when a
+given delimiter pattern is encountered.  The defaults of this class are designed
+to make it useful for parsing MIME multipart messages, but by subclassing it and
+overriding methods  it can be easily adapted for more general use.</p>
+<dl class="class">
+<dt id="multifile.MultiFile">
+<em class="property">class </em><code class="descclassname">multifile.</code><code class="descname">MultiFile</code><span class="sig-paren">(</span><em>fp</em><span class="optional">[</span>, <em>seekable</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a multi-file.  You must instantiate this class with an input object
+argument for the <a class="reference internal" href="#multifile.MultiFile" title="multifile.MultiFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFile</span></code></a> instance to get lines from, such as a file
+object returned by <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a>.</p>
+<p><a class="reference internal" href="#multifile.MultiFile" title="multifile.MultiFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFile</span></code></a> only ever looks at the input object’s <a class="reference internal" href="readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">readline()</span></code></a>,
+<a class="reference internal" href="#multifile.MultiFile.seek" title="multifile.MultiFile.seek"><code class="xref py py-meth docutils literal notranslate"><span class="pre">seek()</span></code></a> and <a class="reference internal" href="#multifile.MultiFile.tell" title="multifile.MultiFile.tell"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tell()</span></code></a> methods, and the latter two are only needed if you
+want random access to the individual MIME parts. To use <a class="reference internal" href="#multifile.MultiFile" title="multifile.MultiFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFile</span></code></a> on a
+non-seekable stream object, set the optional <em>seekable</em> argument to false; this
+will prevent using the input object’s <a class="reference internal" href="#multifile.MultiFile.seek" title="multifile.MultiFile.seek"><code class="xref py py-meth docutils literal notranslate"><span class="pre">seek()</span></code></a> and <a class="reference internal" href="#multifile.MultiFile.tell" title="multifile.MultiFile.tell"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tell()</span></code></a> methods.</p>
+</dd></dl>
+
+<p>It will be useful to know that in <a class="reference internal" href="#multifile.MultiFile" title="multifile.MultiFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFile</span></code></a>’s view of the world, text
+is composed of three kinds of lines: data, section-dividers, and end-markers.
+MultiFile is designed to support parsing of messages that may have multiple
+nested message parts, each with its own pattern for section-divider and
+end-marker lines.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code></a></dt><dd><p>Comprehensive email handling package; supersedes the <a class="reference internal" href="#module-multifile" title="multifile: Support for reading files which contain distinct parts, such as some MIME data. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">multifile</span></code></a> module.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="multifile-objects">
+<span id="id1"></span><h2>18.10.1. MultiFile Objects<a class="headerlink" href="#multifile-objects" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference internal" href="#multifile.MultiFile" title="multifile.MultiFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFile</span></code></a> instance has the following methods:</p>
+<dl class="method">
+<dt id="multifile.MultiFile.readline">
+<code class="descclassname">MultiFile.</code><code class="descname">readline</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile.readline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a line.  If the line is data (not a section-divider or end-marker or real
+EOF) return it.  If the line matches the most-recently-stacked boundary, return
+<code class="docutils literal notranslate"><span class="pre">''</span></code> and set <code class="docutils literal notranslate"><span class="pre">self.last</span></code> to 1 or 0 according as the match is or is not an
+end-marker.  If the line matches any other stacked boundary, raise an error.  On
+encountering end-of-file on the underlying stream object, the method raises
+<code class="xref py py-exc docutils literal notranslate"><span class="pre">Error</span></code> unless all boundaries have been popped.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multifile.MultiFile.readlines">
+<code class="descclassname">MultiFile.</code><code class="descname">readlines</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile.readlines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all lines remaining in this part as a list of strings.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multifile.MultiFile.read">
+<code class="descclassname">MultiFile.</code><code class="descname">read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read all lines, up to the next section.  Return them as a single (multiline)
+string.  Note that this doesn’t take a size argument!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multifile.MultiFile.seek">
+<code class="descclassname">MultiFile.</code><code class="descname">seek</code><span class="sig-paren">(</span><em>pos</em><span class="optional">[</span>, <em>whence</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile.seek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seek.  Seek indices are relative to the start of the current section. The <em>pos</em>
+and <em>whence</em> arguments are interpreted as for a file seek.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multifile.MultiFile.tell">
+<code class="descclassname">MultiFile.</code><code class="descname">tell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile.tell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the file position relative to the start of the current section.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multifile.MultiFile.next">
+<code class="descclassname">MultiFile.</code><code class="descname">next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip lines to the next section (that is, read lines until a section-divider or
+end-marker has been consumed).  Return true if there is such a section, false if
+an end-marker is seen.  Re-enable the most-recently-pushed boundary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multifile.MultiFile.is_data">
+<code class="descclassname">MultiFile.</code><code class="descname">is_data</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile.is_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>str</em> is data and false if it might be a section boundary.  As
+written, it tests for a prefix other than <code class="docutils literal notranslate"><span class="pre">'-</span></code><code class="docutils literal notranslate"><span class="pre">-'</span></code> at start of line (which
+all MIME boundaries have) but it is declared so it can be overridden in derived
+classes.</p>
+<p>Note that this test is used intended as a fast guard for the real boundary
+tests; if it always returns false it will merely slow processing, not cause it
+to fail.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multifile.MultiFile.push">
+<code class="descclassname">MultiFile.</code><code class="descname">push</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile.push" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push a boundary string.  When a decorated version of this boundary  is found as
+an input line, it will be interpreted as a section-divider  or end-marker
+(depending on the decoration, see <span class="target" id="index-0"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2045.html"><strong>RFC 2045</strong></a>).  All subsequent reads will
+return the empty string to indicate end-of-file, until a call to <a class="reference internal" href="#multifile.MultiFile.pop" title="multifile.MultiFile.pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pop()</span></code></a>
+removes the boundary a or <a class="reference internal" href="#multifile.MultiFile.next" title="multifile.MultiFile.next"><code class="xref py py-meth docutils literal notranslate"><span class="pre">next()</span></code></a> call reenables it.</p>
+<p>It is possible to push more than one boundary.  Encountering the
+most-recently-pushed boundary will return EOF; encountering any other
+boundary will raise an error.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multifile.MultiFile.pop">
+<code class="descclassname">MultiFile.</code><code class="descname">pop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pop a section boundary.  This boundary will no longer be interpreted as EOF.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multifile.MultiFile.section_divider">
+<code class="descclassname">MultiFile.</code><code class="descname">section_divider</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile.section_divider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn a boundary into a section-divider line.  By default, this method
+prepends <code class="docutils literal notranslate"><span class="pre">'--'</span></code> (which MIME section boundaries have) but it is declared so
+it can be overridden in derived classes.  This method need not append LF or
+CR-LF, as comparison with the result ignores trailing whitespace.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multifile.MultiFile.end_marker">
+<code class="descclassname">MultiFile.</code><code class="descname">end_marker</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="headerlink" href="#multifile.MultiFile.end_marker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn a boundary string into an end-marker line.  By default, this method
+prepends <code class="docutils literal notranslate"><span class="pre">'--'</span></code> and appends <code class="docutils literal notranslate"><span class="pre">'--'</span></code> (like a MIME-multipart end-of-message
+marker) but it is declared so it can be overridden in derived classes.  This
+method need not append LF or CR-LF, as comparison with the result ignores
+trailing whitespace.</p>
+</dd></dl>
+
+<p>Finally, <a class="reference internal" href="#multifile.MultiFile" title="multifile.MultiFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFile</span></code></a> instances have two public instance variables:</p>
+<dl class="attribute">
+<dt id="multifile.MultiFile.level">
+<code class="descclassname">MultiFile.</code><code class="descname">level</code><a class="headerlink" href="#multifile.MultiFile.level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nesting depth of the current part.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="multifile.MultiFile.last">
+<code class="descclassname">MultiFile.</code><code class="descname">last</code><a class="headerlink" href="#multifile.MultiFile.last" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the last end-of-file was for an end-of-message marker.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="multifile-example">
+<span id="id2"></span><h2>18.10.2. <a class="reference internal" href="#multifile.MultiFile" title="multifile.MultiFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFile</span></code></a> Example<a class="headerlink" href="#multifile-example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mimetools</span>
+<span class="kn">import</span> <span class="nn">multifile</span>
+<span class="kn">import</span> <span class="nn">StringIO</span>
+
+<span class="k">def</span> <span class="nf">extract_mime_part_matching</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">mimetype</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the first element in a multipart MIME message on stream</span>
+<span class="sd">    matching mimetype.&quot;&quot;&quot;</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">mimetools</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+    <span class="n">msgtype</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">gettype</span><span class="p">()</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">getplist</span><span class="p">()</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">msgtype</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;multipart/&quot;</span><span class="p">:</span>
+
+        <span class="n">file</span> <span class="o">=</span> <span class="n">multifile</span><span class="o">.</span><span class="n">MultiFile</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">getparam</span><span class="p">(</span><span class="s2">&quot;boundary&quot;</span><span class="p">))</span>
+        <span class="k">while</span> <span class="n">file</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
+            <span class="n">submsg</span> <span class="o">=</span> <span class="n">mimetools</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+                <span class="n">mimetools</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">submsg</span><span class="o">.</span><span class="n">getencoding</span><span class="p">())</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">submsg</span><span class="o">.</span><span class="n">gettype</span><span class="p">()</span> <span class="o">==</span> <span class="n">mimetype</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">multifile</span></code> — Support for files containing distinct parts</a><ul>
+<li><a class="reference internal" href="#multifile-objects">18.10.1. MultiFile Objects</a></li>
+<li><a class="reference internal" href="#multifile-example">18.10.2. <code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFile</span></code> Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mimify.html"
+                        title="previous chapter">18.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mimify</span></code> — MIME processing of mail messages</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rfc822.html"
+                        title="next chapter">18.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">rfc822</span></code> — Parse RFC 2822 mail headers</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/multifile.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rfc822.html" title="18.11. rfc822 — Parse RFC 2822 mail headers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mimify.html" title="18.9. mimify — MIME processing of mail messages"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >18. Internet Data Handling</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

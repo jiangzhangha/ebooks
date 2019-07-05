@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>37.8. Mac OS Toolbox Modules &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="37.9. ColorPicker — Color selection dialog" href="colorpicker.html" />
+    <link rel="prev" title="37.7. autoGIL — Global Interpreter Lock handling in event loops" href="autogil.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/carbon.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="colorpicker.html" title="37.9. ColorPicker — Color selection dialog"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="autogil.html" title="37.7. autoGIL — Global Interpreter Lock handling in event loops"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="mac.html" accesskey="U">37. Mac OS X specific services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mac-os-toolbox-modules">
+<span id="toolbox"></span><h1>37.8. Mac OS Toolbox Modules<a class="headerlink" href="#mac-os-toolbox-modules" title="Permalink to this headline">¶</a></h1>
+<p>These are a set of modules that provide interfaces to various legacy Mac OS toolboxes.
+If applicable the module will define a number of Python objects for the various
+structures declared by the toolbox, and operations will be implemented as
+methods of the object.  Other operations will be implemented as functions in the
+module.  Not all operations possible in C will also be possible in Python
+(callbacks are often a problem), and parameters will occasionally be different
+in Python (input and output buffers, especially).  All methods and functions
+have a <code class="xref py py-attr docutils literal notranslate"><span class="pre">__doc__</span></code> string describing their arguments and return values, and
+for additional description you are referred to <a class="reference external" href="http://developer.apple.com/legacy/mac/library/#documentation/macos8/mac8.html">Inside Macintosh</a> or similar works.</p>
+<p>These modules all live in a package called <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon</span></code>. Despite that name they
+are not all part of the Carbon framework: CF is really in the CoreFoundation
+framework and Qt is in the QuickTime framework. The normal use pattern is</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Carbon</span> <span class="k">import</span> <span class="n">AE</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Most of the OS X APIs that these modules use are deprecated or removed
+in recent versions of OS X.  Many are not available when Python is
+executing in 64-bit mode.  The Carbon modules have been removed in
+Python 3.  You should avoid using them in Python 2.</p>
+</div>
+<div class="section" id="module-Carbon.AE">
+<span id="carbon-ae-apple-events"></span><h2>37.8.1. <a class="reference internal" href="#module-Carbon.AE" title="Carbon.AE: Interface to the Apple Events toolbox. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.AE</span></code></a> — Apple Events<a class="headerlink" href="#module-Carbon.AE" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.AH">
+<span id="carbon-ah-apple-help"></span><h2>37.8.2. <a class="reference internal" href="#module-Carbon.AH" title="Carbon.AH: Interface to the Apple Help manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.AH</span></code></a> — Apple Help<a class="headerlink" href="#module-Carbon.AH" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.App">
+<span id="carbon-app-appearance-manager"></span><h2>37.8.3. <a class="reference internal" href="#module-Carbon.App" title="Carbon.App: Interface to the Appearance Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.App</span></code></a> — Appearance Manager<a class="headerlink" href="#module-Carbon.App" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Appearance">
+<span id="carbon-appearance-appearance-manager-constants"></span><h2>37.8.4. <a class="reference internal" href="#module-Carbon.Appearance" title="Carbon.Appearance: Constant definitions for the interface to the Appearance Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Appearance</span></code></a> — Appearance Manager constants<a class="headerlink" href="#module-Carbon.Appearance" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.CF">
+<span id="carbon-cf-core-foundation"></span><h2>37.8.5. <a class="reference internal" href="#module-Carbon.CF" title="Carbon.CF: Interface to the Core Foundation. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CF</span></code></a> — Core Foundation<a class="headerlink" href="#module-Carbon.CF" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">CFBase</span></code>, <code class="docutils literal notranslate"><span class="pre">CFArray</span></code>, <code class="docutils literal notranslate"><span class="pre">CFData</span></code>, <code class="docutils literal notranslate"><span class="pre">CFDictionary</span></code>, <code class="docutils literal notranslate"><span class="pre">CFString</span></code> and
+<code class="docutils literal notranslate"><span class="pre">CFURL</span></code> objects are supported, some only partially.</p>
+</div>
+<div class="section" id="module-Carbon.CG">
+<span id="carbon-cg-core-graphics"></span><h2>37.8.6. <a class="reference internal" href="#module-Carbon.CG" title="Carbon.CG: Interface to Core Graphics. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CG</span></code></a> — Core Graphics<a class="headerlink" href="#module-Carbon.CG" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.CarbonEvt">
+<span id="carbon-carbonevt-carbon-event-manager"></span><h2>37.8.7. <a class="reference internal" href="#module-Carbon.CarbonEvt" title="Carbon.CarbonEvt: Interface to the Carbon Event Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CarbonEvt</span></code></a> — Carbon Event Manager<a class="headerlink" href="#module-Carbon.CarbonEvt" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.CarbonEvents">
+<span id="carbon-carbonevents-carbon-event-manager-constants"></span><h2>37.8.8. <a class="reference internal" href="#module-Carbon.CarbonEvents" title="Carbon.CarbonEvents: Constants for the interface to the Carbon Event Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CarbonEvents</span></code></a> — Carbon Event Manager constants<a class="headerlink" href="#module-Carbon.CarbonEvents" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Cm">
+<span id="carbon-cm-component-manager"></span><h2>37.8.9. <a class="reference internal" href="#module-Carbon.Cm" title="Carbon.Cm: Interface to the Component Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Cm</span></code></a> — Component Manager<a class="headerlink" href="#module-Carbon.Cm" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Components">
+<span id="carbon-components-component-manager-constants"></span><h2>37.8.10. <a class="reference internal" href="#module-Carbon.Components" title="Carbon.Components: Constants for the interface to the Component Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Components</span></code></a> — Component Manager constants<a class="headerlink" href="#module-Carbon.Components" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.ControlAccessor">
+<span id="carbon-controlaccessor-control-manager-accssors"></span><h2>37.8.11. <a class="reference internal" href="#module-Carbon.ControlAccessor" title="Carbon.ControlAccessor: Accessor functions for the interface to the Control Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.ControlAccessor</span></code></a> — Control Manager accssors<a class="headerlink" href="#module-Carbon.ControlAccessor" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Controls">
+<span id="carbon-controls-control-manager-constants"></span><h2>37.8.12. <a class="reference internal" href="#module-Carbon.Controls" title="Carbon.Controls: Constants for the interface to the Control Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Controls</span></code></a> — Control Manager constants<a class="headerlink" href="#module-Carbon.Controls" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.CoreFounation">
+<span id="carbon-corefounation-corefounation-constants"></span><h2>37.8.13. <a class="reference internal" href="#module-Carbon.CoreFounation" title="Carbon.CoreFounation: Constants for the interface to CoreFoundation. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CoreFounation</span></code></a> — CoreFounation constants<a class="headerlink" href="#module-Carbon.CoreFounation" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.CoreGraphics">
+<span id="carbon-coregraphics-coregraphics-constants"></span><h2>37.8.14. <a class="reference internal" href="#module-Carbon.CoreGraphics" title="Carbon.CoreGraphics: Constants for the interface to CoreGraphics. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CoreGraphics</span></code></a> — CoreGraphics constants<a class="headerlink" href="#module-Carbon.CoreGraphics" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Ctl">
+<span id="carbon-ctl-control-manager"></span><h2>37.8.15. <a class="reference internal" href="#module-Carbon.Ctl" title="Carbon.Ctl: Interface to the Control Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Ctl</span></code></a> — Control Manager<a class="headerlink" href="#module-Carbon.Ctl" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Dialogs">
+<span id="carbon-dialogs-dialog-manager-constants"></span><h2>37.8.16. <a class="reference internal" href="#module-Carbon.Dialogs" title="Carbon.Dialogs: Constants for the interface to the Dialog Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Dialogs</span></code></a> — Dialog Manager constants<a class="headerlink" href="#module-Carbon.Dialogs" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Dlg">
+<span id="carbon-dlg-dialog-manager"></span><h2>37.8.17. <a class="reference internal" href="#module-Carbon.Dlg" title="Carbon.Dlg: Interface to the Dialog Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Dlg</span></code></a> — Dialog Manager<a class="headerlink" href="#module-Carbon.Dlg" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Drag">
+<span id="carbon-drag-drag-and-drop-manager"></span><h2>37.8.18. <a class="reference internal" href="#module-Carbon.Drag" title="Carbon.Drag: Interface to the Drag and Drop Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Drag</span></code></a> — Drag and Drop Manager<a class="headerlink" href="#module-Carbon.Drag" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Dragconst">
+<span id="carbon-dragconst-drag-and-drop-manager-constants"></span><h2>37.8.19. <a class="reference internal" href="#module-Carbon.Dragconst" title="Carbon.Dragconst: Constants for the interface to the Drag and Drop Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Dragconst</span></code></a> — Drag and Drop Manager constants<a class="headerlink" href="#module-Carbon.Dragconst" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Events">
+<span id="carbon-events-event-manager-constants"></span><h2>37.8.20. <a class="reference internal" href="#module-Carbon.Events" title="Carbon.Events: Constants for the interface to the classic Event Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Events</span></code></a> — Event Manager constants<a class="headerlink" href="#module-Carbon.Events" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Evt">
+<span id="carbon-evt-event-manager"></span><h2>37.8.21. <a class="reference internal" href="#module-Carbon.Evt" title="Carbon.Evt: Interface to the classic Event Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Evt</span></code></a> — Event Manager<a class="headerlink" href="#module-Carbon.Evt" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.File">
+<span id="carbon-file-file-manager"></span><h2>37.8.22. <a class="reference internal" href="#module-Carbon.File" title="Carbon.File: Interface to the File Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.File</span></code></a> — File Manager<a class="headerlink" href="#module-Carbon.File" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Files">
+<span id="carbon-files-file-manager-constants"></span><h2>37.8.23. <a class="reference internal" href="#module-Carbon.Files" title="Carbon.Files: Constants for the interface to the File Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Files</span></code></a> — File Manager constants<a class="headerlink" href="#module-Carbon.Files" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Fm">
+<span id="carbon-fm-font-manager"></span><h2>37.8.24. <a class="reference internal" href="#module-Carbon.Fm" title="Carbon.Fm: Interface to the Font Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Fm</span></code></a> — Font Manager<a class="headerlink" href="#module-Carbon.Fm" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Folder">
+<span id="carbon-folder-folder-manager"></span><h2>37.8.25. <a class="reference internal" href="#module-Carbon.Folder" title="Carbon.Folder: Interface to the Folder Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Folder</span></code></a> — Folder Manager<a class="headerlink" href="#module-Carbon.Folder" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Folders">
+<span id="carbon-folders-folder-manager-constants"></span><h2>37.8.26. <a class="reference internal" href="#module-Carbon.Folders" title="Carbon.Folders: Constants for the interface to the Folder Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Folders</span></code></a> — Folder Manager constants<a class="headerlink" href="#module-Carbon.Folders" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Fonts">
+<span id="carbon-fonts-font-manager-constants"></span><h2>37.8.27. <a class="reference internal" href="#module-Carbon.Fonts" title="Carbon.Fonts: Constants for the interface to the Font Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Fonts</span></code></a> — Font Manager constants<a class="headerlink" href="#module-Carbon.Fonts" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Help">
+<span id="carbon-help-help-manager"></span><h2>37.8.28. <a class="reference internal" href="#module-Carbon.Help" title="Carbon.Help: Interface to the Carbon Help Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Help</span></code></a> — Help Manager<a class="headerlink" href="#module-Carbon.Help" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.IBCarbon">
+<span id="carbon-ibcarbon-carbon-interfacebuilder"></span><h2>37.8.29. <a class="reference internal" href="#module-Carbon.IBCarbon" title="Carbon.IBCarbon: Interface to the Carbon InterfaceBuilder support libraries. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.IBCarbon</span></code></a> — Carbon InterfaceBuilder<a class="headerlink" href="#module-Carbon.IBCarbon" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.IBCarbonRuntime">
+<span id="carbon-ibcarbonruntime-carbon-interfacebuilder-constants"></span><h2>37.8.30. <a class="reference internal" href="#module-Carbon.IBCarbonRuntime" title="Carbon.IBCarbonRuntime: Constants for the interface to the Carbon InterfaceBuilder support libraries. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.IBCarbonRuntime</span></code></a> — Carbon InterfaceBuilder constants<a class="headerlink" href="#module-Carbon.IBCarbonRuntime" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Icns">
+<span id="carbon-icn-carbon-icon-manager"></span><h2>37.8.31. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Icn</span></code> — Carbon Icon Manager<a class="headerlink" href="#module-Carbon.Icns" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Icons">
+<span id="carbon-icons-carbon-icon-manager-constants"></span><h2>37.8.32. <a class="reference internal" href="#module-Carbon.Icons" title="Carbon.Icons: Constants for the interface to the Carbon Icon Manager (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Icons</span></code></a> — Carbon Icon Manager constants<a class="headerlink" href="#module-Carbon.Icons" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Launch">
+<span id="carbon-launch-carbon-launch-services"></span><h2>37.8.33. <a class="reference internal" href="#module-Carbon.Launch" title="Carbon.Launch: Interface to the Carbon Launch Services. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Launch</span></code></a> — Carbon Launch Services<a class="headerlink" href="#module-Carbon.Launch" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.LaunchServices">
+<span id="carbon-launchservices-carbon-launch-services-constants"></span><h2>37.8.34. <a class="reference internal" href="#module-Carbon.LaunchServices" title="Carbon.LaunchServices: Constants for the interface to the Carbon Launch Services. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.LaunchServices</span></code></a> — Carbon Launch Services constants<a class="headerlink" href="#module-Carbon.LaunchServices" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.List">
+<span id="carbon-list-list-manager"></span><h2>37.8.35. <a class="reference internal" href="#module-Carbon.List" title="Carbon.List: Interface to the List Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.List</span></code></a> — List Manager<a class="headerlink" href="#module-Carbon.List" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Lists">
+<span id="carbon-lists-list-manager-constants"></span><h2>37.8.36. <a class="reference internal" href="#module-Carbon.Lists" title="Carbon.Lists: Constants for the interface to the List Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Lists</span></code></a> — List Manager constants<a class="headerlink" href="#module-Carbon.Lists" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.MacHelp">
+<span id="carbon-machelp-help-manager-constants"></span><h2>37.8.37. <a class="reference internal" href="#module-Carbon.MacHelp" title="Carbon.MacHelp: Constants for the interface to the Carbon Help Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.MacHelp</span></code></a> — Help Manager constants<a class="headerlink" href="#module-Carbon.MacHelp" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.MediaDescr">
+<span id="carbon-mediadescr-parsers-and-generators-for-quicktime-media-descriptors"></span><h2>37.8.38. <a class="reference internal" href="#module-Carbon.MediaDescr" title="Carbon.MediaDescr: Parsers and generators for Quicktime Media descriptors (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.MediaDescr</span></code></a> — Parsers and generators for Quicktime Media descriptors<a class="headerlink" href="#module-Carbon.MediaDescr" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Menu">
+<span id="carbon-menu-menu-manager"></span><h2>37.8.39. <a class="reference internal" href="#module-Carbon.Menu" title="Carbon.Menu: Interface to the Menu Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Menu</span></code></a> — Menu Manager<a class="headerlink" href="#module-Carbon.Menu" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Menus">
+<span id="carbon-menus-menu-manager-constants"></span><h2>37.8.40. <a class="reference internal" href="#module-Carbon.Menus" title="Carbon.Menus: Constants for the interface to the Menu Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Menus</span></code></a> — Menu Manager constants<a class="headerlink" href="#module-Carbon.Menus" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Mlte">
+<span id="carbon-mlte-multilingual-text-editor"></span><h2>37.8.41. <a class="reference internal" href="#module-Carbon.Mlte" title="Carbon.Mlte: Interface to the MultiLingual Text Editor. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Mlte</span></code></a> — MultiLingual Text Editor<a class="headerlink" href="#module-Carbon.Mlte" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.OSA">
+<span id="carbon-osa-carbon-osa-interface"></span><h2>37.8.42. <a class="reference internal" href="#module-Carbon.OSA" title="Carbon.OSA: Interface to the Carbon OSA Library. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.OSA</span></code></a> — Carbon OSA Interface<a class="headerlink" href="#module-Carbon.OSA" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.OSAconst">
+<span id="carbon-osaconst-carbon-osa-interface-constants"></span><h2>37.8.43. <a class="reference internal" href="#module-Carbon.OSAconst" title="Carbon.OSAconst: Constants for the interface to the Carbon OSA Library. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.OSAconst</span></code></a> — Carbon OSA Interface constants<a class="headerlink" href="#module-Carbon.OSAconst" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.QDOffscreen">
+<span id="carbon-qdoffscreen-quickdraw-offscreen-constants"></span><h2>37.8.44. <a class="reference internal" href="#module-Carbon.QDOffscreen" title="Carbon.QDOffscreen: Constants for the interface to the QuickDraw Offscreen APIs. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.QDOffscreen</span></code></a> — QuickDraw Offscreen constants<a class="headerlink" href="#module-Carbon.QDOffscreen" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Qd">
+<span id="carbon-qd-quickdraw"></span><h2>37.8.45. <a class="reference internal" href="#module-Carbon.Qd" title="Carbon.Qd: Interface to the QuickDraw toolbox. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Qd</span></code></a> — QuickDraw<a class="headerlink" href="#module-Carbon.Qd" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Qdoffs">
+<span id="carbon-qdoffs-quickdraw-offscreen"></span><h2>37.8.46. <a class="reference internal" href="#module-Carbon.Qdoffs" title="Carbon.Qdoffs: Interface to the QuickDraw Offscreen APIs. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Qdoffs</span></code></a> — QuickDraw Offscreen<a class="headerlink" href="#module-Carbon.Qdoffs" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Qt">
+<span id="carbon-qt-quicktime"></span><h2>37.8.47. <a class="reference internal" href="#module-Carbon.Qt" title="Carbon.Qt: Interface to the QuickTime toolbox. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Qt</span></code></a> — QuickTime<a class="headerlink" href="#module-Carbon.Qt" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.QuickDraw">
+<span id="carbon-quickdraw-quickdraw-constants"></span><h2>37.8.48. <a class="reference internal" href="#module-Carbon.QuickDraw" title="Carbon.QuickDraw: Constants for the interface to the QuickDraw toolbox. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.QuickDraw</span></code></a> — QuickDraw constants<a class="headerlink" href="#module-Carbon.QuickDraw" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.QuickTime">
+<span id="carbon-quicktime-quicktime-constants"></span><h2>37.8.49. <a class="reference internal" href="#module-Carbon.QuickTime" title="Carbon.QuickTime: Constants for the interface to the QuickTime toolbox. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.QuickTime</span></code></a> — QuickTime constants<a class="headerlink" href="#module-Carbon.QuickTime" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Res">
+<span id="carbon-res-resource-manager-and-handles"></span><h2>37.8.50. <a class="reference internal" href="#module-Carbon.Res" title="Carbon.Res: Interface to the Resource Manager and Handles. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Res</span></code></a> — Resource Manager and Handles<a class="headerlink" href="#module-Carbon.Res" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Resources">
+<span id="carbon-resources-resource-manager-and-handles-constants"></span><h2>37.8.51. <a class="reference internal" href="#module-Carbon.Resources" title="Carbon.Resources: Constants for the interface to the Resource Manager and Handles. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Resources</span></code></a> — Resource Manager and Handles constants<a class="headerlink" href="#module-Carbon.Resources" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Scrap">
+<span id="carbon-scrap-scrap-manager"></span><h2>37.8.52. <a class="reference internal" href="#module-Carbon.Scrap" title="Carbon.Scrap: The Scrap Manager provides basic services for implementing cut &amp; paste and clipboard operations. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Scrap</span></code></a> — Scrap Manager<a class="headerlink" href="#module-Carbon.Scrap" title="Permalink to this headline">¶</a></h2>
+<p>This module is only fully available on Mac OS 9 and earlier under classic PPC
+MacPython.  Very limited functionality is available under Carbon MacPython.</p>
+<p id="index-0">The Scrap Manager supports the simplest form of cut &amp; paste operations on the
+Macintosh.  It can be use for both inter- and intra-application clipboard
+operations.</p>
+<p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">Scrap</span></code> module provides low-level access to the functions of the Scrap
+Manager.  It contains the following functions:</p>
+<dl class="function">
+<dt id="Carbon.Scrap.InfoScrap">
+<code class="descclassname">Carbon.Scrap.</code><code class="descname">InfoScrap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Carbon.Scrap.InfoScrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return current information about the scrap.  The information is encoded as a
+tuple containing the fields <code class="docutils literal notranslate"><span class="pre">(size,</span> <span class="pre">handle,</span> <span class="pre">count,</span> <span class="pre">state,</span> <span class="pre">path)</span></code>.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 82%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><em>size</em></p></td>
+<td><p>Size of the scrap in bytes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>handle</em></p></td>
+<td><p>Resource object representing the scrap.</p></td>
+</tr>
+<tr class="row-even"><td><p><em>count</em></p></td>
+<td><p>Serial number of the scrap contents.</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>state</em></p></td>
+<td><p>Integer; positive if in memory, <code class="docutils literal notranslate"><span class="pre">0</span></code> if on
+disk, negative if uninitialized.</p></td>
+</tr>
+<tr class="row-even"><td><p><em>path</em></p></td>
+<td><p>Filename of the scrap when stored on disk.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="http://developer.apple.com/legacy/mac/library/documentation/mac/MoreToolbox/MoreToolbox-109.html">Scrap Manager</a></dt><dd><p>Apple’s documentation for the Scrap Manager gives a lot of useful information
+about using the Scrap Manager in applications.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="module-Carbon.Snd">
+<span id="carbon-snd-sound-manager"></span><h2>37.8.53. <a class="reference internal" href="#module-Carbon.Snd" title="Carbon.Snd: Interface to the Sound Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Snd</span></code></a> — Sound Manager<a class="headerlink" href="#module-Carbon.Snd" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Sound">
+<span id="carbon-sound-sound-manager-constants"></span><h2>37.8.54. <a class="reference internal" href="#module-Carbon.Sound" title="Carbon.Sound: Constants for the interface to the Sound Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Sound</span></code></a> — Sound Manager constants<a class="headerlink" href="#module-Carbon.Sound" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.TE">
+<span id="carbon-te-textedit"></span><h2>37.8.55. <a class="reference internal" href="#module-Carbon.TE" title="Carbon.TE: Interface to TextEdit. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.TE</span></code></a> — TextEdit<a class="headerlink" href="#module-Carbon.TE" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.TextEdit">
+<span id="carbon-textedit-textedit-constants"></span><h2>37.8.56. <a class="reference internal" href="#module-Carbon.TextEdit" title="Carbon.TextEdit: Constants for the interface to TextEdit. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.TextEdit</span></code></a> — TextEdit constants<a class="headerlink" href="#module-Carbon.TextEdit" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Win">
+<span id="carbon-win-window-manager"></span><h2>37.8.57. <a class="reference internal" href="#module-Carbon.Win" title="Carbon.Win: Interface to the Window Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Win</span></code></a> — Window Manager<a class="headerlink" href="#module-Carbon.Win" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Carbon.Windows">
+<span id="carbon-windows-window-manager-constants"></span><h2>37.8.58. <a class="reference internal" href="#module-Carbon.Windows" title="Carbon.Windows: Constants for the interface to the Window Manager. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Windows</span></code></a> — Window Manager constants<a class="headerlink" href="#module-Carbon.Windows" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">37.8. Mac OS Toolbox Modules</a><ul>
+<li><a class="reference internal" href="#module-Carbon.AE">37.8.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.AE</span></code> — Apple Events</a></li>
+<li><a class="reference internal" href="#module-Carbon.AH">37.8.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.AH</span></code> — Apple Help</a></li>
+<li><a class="reference internal" href="#module-Carbon.App">37.8.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.App</span></code> — Appearance Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Appearance">37.8.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Appearance</span></code> — Appearance Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.CF">37.8.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CF</span></code> — Core Foundation</a></li>
+<li><a class="reference internal" href="#module-Carbon.CG">37.8.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CG</span></code> — Core Graphics</a></li>
+<li><a class="reference internal" href="#module-Carbon.CarbonEvt">37.8.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CarbonEvt</span></code> — Carbon Event Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.CarbonEvents">37.8.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CarbonEvents</span></code> — Carbon Event Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Cm">37.8.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Cm</span></code> — Component Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Components">37.8.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Components</span></code> — Component Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.ControlAccessor">37.8.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.ControlAccessor</span></code> — Control Manager accssors</a></li>
+<li><a class="reference internal" href="#module-Carbon.Controls">37.8.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Controls</span></code> — Control Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.CoreFounation">37.8.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CoreFounation</span></code> — CoreFounation constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.CoreGraphics">37.8.14. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.CoreGraphics</span></code> — CoreGraphics constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Ctl">37.8.15. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Ctl</span></code> — Control Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Dialogs">37.8.16. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Dialogs</span></code> — Dialog Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Dlg">37.8.17. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Dlg</span></code> — Dialog Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Drag">37.8.18. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Drag</span></code> — Drag and Drop Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Dragconst">37.8.19. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Dragconst</span></code> — Drag and Drop Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Events">37.8.20. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Events</span></code> — Event Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Evt">37.8.21. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Evt</span></code> — Event Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.File">37.8.22. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.File</span></code> — File Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Files">37.8.23. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Files</span></code> — File Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Fm">37.8.24. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Fm</span></code> — Font Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Folder">37.8.25. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Folder</span></code> — Folder Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Folders">37.8.26. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Folders</span></code> — Folder Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Fonts">37.8.27. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Fonts</span></code> — Font Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Help">37.8.28. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Help</span></code> — Help Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.IBCarbon">37.8.29. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.IBCarbon</span></code> — Carbon InterfaceBuilder</a></li>
+<li><a class="reference internal" href="#module-Carbon.IBCarbonRuntime">37.8.30. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.IBCarbonRuntime</span></code> — Carbon InterfaceBuilder constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Icns">37.8.31. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Icn</span></code> — Carbon Icon Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Icons">37.8.32. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Icons</span></code> — Carbon Icon Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Launch">37.8.33. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Launch</span></code> — Carbon Launch Services</a></li>
+<li><a class="reference internal" href="#module-Carbon.LaunchServices">37.8.34. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.LaunchServices</span></code> — Carbon Launch Services constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.List">37.8.35. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.List</span></code> — List Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Lists">37.8.36. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Lists</span></code> — List Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.MacHelp">37.8.37. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.MacHelp</span></code> — Help Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.MediaDescr">37.8.38. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.MediaDescr</span></code> — Parsers and generators for Quicktime Media descriptors</a></li>
+<li><a class="reference internal" href="#module-Carbon.Menu">37.8.39. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Menu</span></code> — Menu Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Menus">37.8.40. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Menus</span></code> — Menu Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Mlte">37.8.41. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Mlte</span></code> — MultiLingual Text Editor</a></li>
+<li><a class="reference internal" href="#module-Carbon.OSA">37.8.42. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.OSA</span></code> — Carbon OSA Interface</a></li>
+<li><a class="reference internal" href="#module-Carbon.OSAconst">37.8.43. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.OSAconst</span></code> — Carbon OSA Interface constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.QDOffscreen">37.8.44. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.QDOffscreen</span></code> — QuickDraw Offscreen constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Qd">37.8.45. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Qd</span></code> — QuickDraw</a></li>
+<li><a class="reference internal" href="#module-Carbon.Qdoffs">37.8.46. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Qdoffs</span></code> — QuickDraw Offscreen</a></li>
+<li><a class="reference internal" href="#module-Carbon.Qt">37.8.47. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Qt</span></code> — QuickTime</a></li>
+<li><a class="reference internal" href="#module-Carbon.QuickDraw">37.8.48. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.QuickDraw</span></code> — QuickDraw constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.QuickTime">37.8.49. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.QuickTime</span></code> — QuickTime constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Res">37.8.50. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Res</span></code> — Resource Manager and Handles</a></li>
+<li><a class="reference internal" href="#module-Carbon.Resources">37.8.51. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Resources</span></code> — Resource Manager and Handles constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Scrap">37.8.52. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Scrap</span></code> — Scrap Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Snd">37.8.53. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Snd</span></code> — Sound Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Sound">37.8.54. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Sound</span></code> — Sound Manager constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.TE">37.8.55. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.TE</span></code> — TextEdit</a></li>
+<li><a class="reference internal" href="#module-Carbon.TextEdit">37.8.56. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.TextEdit</span></code> — TextEdit constants</a></li>
+<li><a class="reference internal" href="#module-Carbon.Win">37.8.57. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Win</span></code> — Window Manager</a></li>
+<li><a class="reference internal" href="#module-Carbon.Windows">37.8.58. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Carbon.Windows</span></code> — Window Manager constants</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="autogil.html"
+                        title="previous chapter">37.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">autoGIL</span></code> — Global Interpreter Lock handling in event loops</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="colorpicker.html"
+                        title="next chapter">37.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">ColorPicker</span></code> — Color selection dialog</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/carbon.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="colorpicker.html" title="37.9. ColorPicker — Color selection dialog"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="autogil.html" title="37.7. autoGIL — Global Interpreter Lock handling in event loops"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="mac.html" >37. Mac OS X specific services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>18.6. mimetools — Tools for parsing MIME messages &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="18.7. mimetypes — Map filenames to MIME types" href="mimetypes.html" />
+    <link rel="prev" title="18.5. mhlib — Access to MH mailboxes" href="mhlib.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/mimetools.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mimetypes.html" title="18.7. mimetypes — Map filenames to MIME types"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mhlib.html" title="18.5. mhlib — Access to MH mailboxes"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" accesskey="U">18. Internet Data Handling</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-mimetools">
+<span id="mimetools-tools-for-parsing-mime-messages"></span><h1>18.6. <a class="reference internal" href="#module-mimetools" title="mimetools: Tools for parsing MIME-style message bodies. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mimetools</span></code></a> — Tools for parsing MIME messages<a class="headerlink" href="#module-mimetools" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.3: </span>The <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code></a> package should be used in preference to the <a class="reference internal" href="#module-mimetools" title="mimetools: Tools for parsing MIME-style message bodies. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mimetools</span></code></a>
+module.  This module is present only to maintain backward compatibility, and
+it has been removed in 3.x.</p>
+</div>
+<p id="index-0">This module defines a subclass of the <a class="reference internal" href="rfc822.html#module-rfc822" title="rfc822: Parse 2822 style mail messages. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rfc822</span></code></a> module’s <a class="reference internal" href="#mimetools.Message" title="mimetools.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a>
+class and a number of utility functions that are useful for the manipulation for
+MIME multipart or encoded message.</p>
+<p>It defines the following items:</p>
+<dl class="class">
+<dt id="mimetools.Message">
+<em class="property">class </em><code class="descclassname">mimetools.</code><code class="descname">Message</code><span class="sig-paren">(</span><em>fp</em><span class="optional">[</span>, <em>seekable</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.Message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new instance of the <a class="reference internal" href="#mimetools.Message" title="mimetools.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a> class.  This is a subclass of the
+<a class="reference internal" href="rfc822.html#rfc822.Message" title="rfc822.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">rfc822.Message</span></code></a> class, with some additional methods (see below).  The
+<em>seekable</em> argument has the same meaning as for <a class="reference internal" href="rfc822.html#rfc822.Message" title="rfc822.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">rfc822.Message</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mimetools.choose_boundary">
+<code class="descclassname">mimetools.</code><code class="descname">choose_boundary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.choose_boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a unique string that has a high likelihood of being usable as a part
+boundary.  The string has the form <code class="docutils literal notranslate"><span class="pre">'hostipaddr.uid.pid.timestamp.random'</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mimetools.decode">
+<code class="descclassname">mimetools.</code><code class="descname">decode</code><span class="sig-paren">(</span><em>input</em>, <em>output</em>, <em>encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data encoded using the allowed MIME <em>encoding</em> from open file object
+<em>input</em> and write the decoded data to open file object <em>output</em>.  Valid values
+for <em>encoding</em> include <code class="docutils literal notranslate"><span class="pre">'base64'</span></code>, <code class="docutils literal notranslate"><span class="pre">'quoted-printable'</span></code>, <code class="docutils literal notranslate"><span class="pre">'uuencode'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'x-uuencode'</span></code>, <code class="docutils literal notranslate"><span class="pre">'uue'</span></code>, <code class="docutils literal notranslate"><span class="pre">'x-uue'</span></code>, <code class="docutils literal notranslate"><span class="pre">'7bit'</span></code>, and  <code class="docutils literal notranslate"><span class="pre">'8bit'</span></code>.  Decoding
+messages encoded in <code class="docutils literal notranslate"><span class="pre">'7bit'</span></code> or <code class="docutils literal notranslate"><span class="pre">'8bit'</span></code> has no effect.  The input is simply
+copied to the output.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mimetools.encode">
+<code class="descclassname">mimetools.</code><code class="descname">encode</code><span class="sig-paren">(</span><em>input</em>, <em>output</em>, <em>encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data from open file object <em>input</em> and write it encoded using the allowed
+MIME <em>encoding</em> to open file object <em>output</em>. Valid values for <em>encoding</em> are
+the same as for <a class="reference internal" href="#mimetools.decode" title="mimetools.decode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">decode()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mimetools.copyliteral">
+<code class="descclassname">mimetools.</code><code class="descname">copyliteral</code><span class="sig-paren">(</span><em>input</em>, <em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.copyliteral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read lines from open file <em>input</em> until EOF and write them to open file
+<em>output</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mimetools.copybinary">
+<code class="descclassname">mimetools.</code><code class="descname">copybinary</code><span class="sig-paren">(</span><em>input</em>, <em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.copybinary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read blocks until EOF from open file <em>input</em> and write them to open file
+<em>output</em>.  The block size is currently fixed at 8192.</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code></a></dt><dd><p>Comprehensive email handling package; supersedes the <a class="reference internal" href="#module-mimetools" title="mimetools: Tools for parsing MIME-style message bodies. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mimetools</span></code></a> module.</p>
+</dd>
+<dt>Module <a class="reference internal" href="rfc822.html#module-rfc822" title="rfc822: Parse 2822 style mail messages. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rfc822</span></code></a></dt><dd><p>Provides the base class for <a class="reference internal" href="#mimetools.Message" title="mimetools.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">mimetools.Message</span></code></a>.</p>
+</dd>
+<dt>Module <a class="reference internal" href="multifile.html#module-multifile" title="multifile: Support for reading files which contain distinct parts, such as some MIME data. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">multifile</span></code></a></dt><dd><p>Support for reading files which contain distinct parts, such as MIME data.</p>
+</dd>
+<dt><a class="reference external" href="http://faqs.cs.uu.nl/na-dir/mail/mime-faq/.html">http://faqs.cs.uu.nl/na-dir/mail/mime-faq/.html</a></dt><dd><p>The MIME Frequently Asked Questions document.  For an overview of MIME, see the
+answer to question 1.1 in Part 1 of this document.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="additional-methods-of-message-objects">
+<span id="mimetools-message-objects"></span><h2>18.6.1. Additional Methods of Message Objects<a class="headerlink" href="#additional-methods-of-message-objects" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#mimetools.Message" title="mimetools.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a> class defines the following methods in addition to the
+<a class="reference internal" href="rfc822.html#rfc822.Message" title="rfc822.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">rfc822.Message</span></code></a> methods:</p>
+<dl class="method">
+<dt id="mimetools.Message.getplist">
+<code class="descclassname">Message.</code><code class="descname">getplist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.Message.getplist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the parameter list of the <em class="mailheader">Content-Type</em> header. This is a
+list of strings.  For parameters of the form <code class="docutils literal notranslate"><span class="pre">key=value</span></code>, <em>key</em> is converted
+to lower case but <em>value</em> is not.  For example, if the message contains the
+header <code class="docutils literal notranslate"><span class="pre">Content-type:</span> <span class="pre">text/html;</span> <span class="pre">spam=1;</span> <span class="pre">Spam=2;</span> <span class="pre">Spam</span></code> then <a class="reference internal" href="#mimetools.Message.getplist" title="mimetools.Message.getplist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getplist()</span></code></a>
+will return the Python list <code class="docutils literal notranslate"><span class="pre">['spam=1',</span> <span class="pre">'spam=2',</span> <span class="pre">'Spam']</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mimetools.Message.getparam">
+<code class="descclassname">Message.</code><code class="descname">getparam</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.Message.getparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <em>value</em> of the first parameter (as returned by <a class="reference internal" href="#mimetools.Message.getplist" title="mimetools.Message.getplist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getplist()</span></code></a>) of
+the form <code class="docutils literal notranslate"><span class="pre">name=value</span></code> for the given <em>name</em>.  If <em>value</em> is surrounded by
+quotes of the form ‘<code class="docutils literal notranslate"><span class="pre">&lt;</span></code>…<code class="docutils literal notranslate"><span class="pre">&gt;</span></code>’ or ‘<code class="docutils literal notranslate"><span class="pre">&quot;</span></code>…<code class="docutils literal notranslate"><span class="pre">&quot;</span></code>’, these are removed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mimetools.Message.getencoding">
+<code class="descclassname">Message.</code><code class="descname">getencoding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.Message.getencoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the encoding specified in the <em class="mailheader">Content-Transfer-Encoding</em>
+message header.  If no such header exists, return <code class="docutils literal notranslate"><span class="pre">'7bit'</span></code>.  The encoding is
+converted to lower case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mimetools.Message.gettype">
+<code class="descclassname">Message.</code><code class="descname">gettype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.Message.gettype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the message type (of the form <code class="docutils literal notranslate"><span class="pre">type/subtype</span></code>) as specified in the
+<em class="mailheader">Content-Type</em> header.  If no such header exists, return
+<code class="docutils literal notranslate"><span class="pre">'text/plain'</span></code>.  The type is converted to lower case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mimetools.Message.getmaintype">
+<code class="descclassname">Message.</code><code class="descname">getmaintype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.Message.getmaintype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the main type as specified in the <em class="mailheader">Content-Type</em> header.  If
+no such header exists, return <code class="docutils literal notranslate"><span class="pre">'text'</span></code>.  The main type is converted to lower
+case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mimetools.Message.getsubtype">
+<code class="descclassname">Message.</code><code class="descname">getsubtype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mimetools.Message.getsubtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the subtype as specified in the <em class="mailheader">Content-Type</em> header.  If no
+such header exists, return <code class="docutils literal notranslate"><span class="pre">'plain'</span></code>.  The subtype is converted to lower case.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mimetools</span></code> — Tools for parsing MIME messages</a><ul>
+<li><a class="reference internal" href="#additional-methods-of-message-objects">18.6.1. Additional Methods of Message Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mhlib.html"
+                        title="previous chapter">18.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mhlib</span></code> — Access to MH mailboxes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mimetypes.html"
+                        title="next chapter">18.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mimetypes</span></code> — Map filenames to MIME types</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/mimetools.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mimetypes.html" title="18.7. mimetypes — Map filenames to MIME types"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mhlib.html" title="18.5. mhlib — Access to MH mailboxes"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >18. Internet Data Handling</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>32.10. py_compile — Compile Python source files &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="32.11. compileall — Byte-compile Python libraries" href="compileall.html" />
+    <link rel="prev" title="32.9. pyclbr — Python class browser support" href="pyclbr.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/py_compile.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compileall.html" title="32.11. compileall — Byte-compile Python libraries"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyclbr.html" title="32.9. pyclbr — Python class browser support"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" accesskey="U">32. Python Language Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-py_compile">
+<span id="py-compile-compile-python-source-files"></span><h1>32.10. <a class="reference internal" href="#module-py_compile" title="py_compile: Generate byte-code files from Python source files."><code class="xref py py-mod docutils literal notranslate"><span class="pre">py_compile</span></code></a> — Compile Python source files<a class="headerlink" href="#module-py_compile" title="Permalink to this headline">¶</a></h1>
+<p id="index-0"><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/py_compile.py">Lib/py_compile.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-py_compile" title="py_compile: Generate byte-code files from Python source files."><code class="xref py py-mod docutils literal notranslate"><span class="pre">py_compile</span></code></a> module provides a function to generate a byte-code file
+from a source file, and another function used when the module source file is
+invoked as a script.</p>
+<p>Though not often needed, this function can be useful when installing modules for
+shared use, especially if some of the users may not have permission to write the
+byte-code cache files in the directory containing the source code.</p>
+<dl class="exception">
+<dt id="py_compile.PyCompileError">
+<em class="property">exception </em><code class="descclassname">py_compile.</code><code class="descname">PyCompileError</code><a class="headerlink" href="#py_compile.PyCompileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when an error occurs while attempting to compile the file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="py_compile.compile">
+<code class="descclassname">py_compile.</code><code class="descname">compile</code><span class="sig-paren">(</span><em>file</em><span class="optional">[</span>, <em>cfile</em><span class="optional">[</span>, <em>dfile</em><span class="optional">[</span>, <em>doraise</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#py_compile.compile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compile a source file to byte-code and write out the byte-code cache  file.  The
+source code is loaded from the file named <em>file</em>.  The  byte-code is written to
+<em>cfile</em>, which defaults to <em>file</em> <code class="docutils literal notranslate"><span class="pre">+</span></code> <code class="docutils literal notranslate"><span class="pre">'c'</span></code> (<code class="docutils literal notranslate"><span class="pre">'o'</span></code> if optimization is
+enabled in the current interpreter).  If <em>dfile</em> is specified, it is used as the
+name of the source file in error messages instead of <em>file</em>.  If <em>doraise</em> is
+true, a <a class="reference internal" href="#py_compile.PyCompileError" title="py_compile.PyCompileError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">PyCompileError</span></code></a> is raised when an error is encountered while
+compiling <em>file</em>. If <em>doraise</em> is false (the default), an error string is
+written to <code class="docutils literal notranslate"><span class="pre">sys.stderr</span></code>, but no exception is raised.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="py_compile.main">
+<code class="descclassname">py_compile.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="optional">[</span><em>args</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#py_compile.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compile several source files.  The files named in <em>args</em> (or on the command
+line, if <em>args</em> is not specified) are compiled and the resulting bytecode is
+cached in the normal manner.  This function does not search a directory
+structure to locate source files; it only compiles files named explicitly.
+If <code class="docutils literal notranslate"><span class="pre">'-'</span></code> is the only parameter in args, the list of files is taken from
+standard input.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span>Added support for <code class="docutils literal notranslate"><span class="pre">'-'</span></code>.</p>
+</div>
+</dd></dl>
+
+<p>When this module is run as a script, the <a class="reference internal" href="#py_compile.main" title="py_compile.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a> is used to compile all the
+files named on the command line.  The exit status is nonzero if one of the files
+could not be compiled.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Added the nonzero exit status when module is run as a script.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="compileall.html#module-compileall" title="compileall: Tools for byte-compiling all Python source files in a directory tree."><code class="xref py py-mod docutils literal notranslate"><span class="pre">compileall</span></code></a></dt><dd><p>Utilities to compile all Python source files in a directory tree.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pyclbr.html"
+                        title="previous chapter">32.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">pyclbr</span></code> — Python class browser support</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="compileall.html"
+                        title="next chapter">32.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">compileall</span></code> — Byte-compile Python libraries</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/py_compile.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compileall.html" title="32.11. compileall — Byte-compile Python libraries"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pyclbr.html" title="32.9. pyclbr — Python class browser support"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" >32. Python Language Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

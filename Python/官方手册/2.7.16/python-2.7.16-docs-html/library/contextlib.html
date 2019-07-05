@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>28.7. contextlib — Utilities for with-statement contexts &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="28.8. abc — Abstract Base Classes" href="abc.html" />
+    <link rel="prev" title="28.6. warnings — Warning control" href="warnings.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/contextlib.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="abc.html" title="28.8. abc — Abstract Base Classes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="warnings.html" title="28.6. warnings — Warning control"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" accesskey="U">28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-contextlib">
+<span id="contextlib-utilities-for-with-statement-contexts"></span><h1>28.7. <a class="reference internal" href="#module-contextlib" title="contextlib: Utilities for with-statement contexts."><code class="xref py py-mod docutils literal notranslate"><span class="pre">contextlib</span></code></a> — Utilities for <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a>-statement contexts<a class="headerlink" href="#module-contextlib" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/contextlib.py">Lib/contextlib.py</a></p>
+<hr class="docutils" />
+<p>This module provides utilities for common tasks involving the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a>
+statement. For more information see also <a class="reference internal" href="stdtypes.html#typecontextmanager"><span class="std std-ref">Context Manager Types</span></a> and
+<a class="reference internal" href="../reference/datamodel.html#context-managers"><span class="std std-ref">With Statement Context Managers</span></a>.</p>
+<p>Functions provided:</p>
+<dl class="function">
+<dt id="contextlib.contextmanager">
+<code class="descclassname">contextlib.</code><code class="descname">contextmanager</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#contextlib.contextmanager" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is a <a class="reference internal" href="../glossary.html#term-decorator"><span class="xref std std-term">decorator</span></a> that can be used to define a factory
+function for <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement context managers, without needing to
+create a class or separate <a class="reference internal" href="../reference/datamodel.html#object.__enter__" title="object.__enter__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__enter__()</span></code></a> and <a class="reference internal" href="../reference/datamodel.html#object.__exit__" title="object.__exit__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__exit__()</span></code></a> methods.</p>
+<p>While many objects natively support use in with statements, sometimes a
+resource needs to be managed that isn’t a context manager in its own right,
+and doesn’t implement a <code class="docutils literal notranslate"><span class="pre">close()</span></code> method for use with <code class="docutils literal notranslate"><span class="pre">contextlib.closing</span></code></p>
+<p>An abstract example would be the following to ensure correct resource
+management:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">managed_resource</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+    <span class="c1"># Code to acquire resource, e.g.:</span>
+    <span class="n">resource</span> <span class="o">=</span> <span class="n">acquire_resource</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">resource</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Code to release resource, e.g.:</span>
+        <span class="n">release_resource</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="k">with</span> <span class="n">managed_resource</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span> <span class="k">as</span> <span class="n">resource</span><span class="p">:</span>
+<span class="o">...</span>     <span class="c1"># Resource is released at the end of this block,</span>
+<span class="o">...</span>     <span class="c1"># even if code in the block raises an exception</span>
+</pre></div>
+</div>
+<p>The function being decorated must return a <a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">generator</span></a>-iterator when
+called. This iterator must yield exactly one value, which will be bound to
+the targets in the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement’s <a class="reference internal" href="../reference/compound_stmts.html#as"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">as</span></code></a> clause, if any.</p>
+<p>At the point where the generator yields, the block nested in the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a>
+statement is executed.  The generator is then resumed after the block is exited.
+If an unhandled exception occurs in the block, it is reraised inside the
+generator at the point where the yield occurred.  Thus, you can use a
+<a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">try</span></code></a>…<a class="reference internal" href="../reference/compound_stmts.html#except"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">except</span></code></a>…<a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">finally</span></code></a> statement to trap
+the error (if any), or ensure that some cleanup takes place. If an exception is
+trapped merely in order to log it or to perform some action (rather than to
+suppress it entirely), the generator must reraise that exception. Otherwise the
+generator context manager will indicate to the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement that
+the exception has been handled, and execution will resume with the statement
+immediately following the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="contextlib.nested">
+<code class="descclassname">contextlib.</code><code class="descname">nested</code><span class="sig-paren">(</span><em>mgr1</em><span class="optional">[</span>, <em>mgr2</em><span class="optional">[</span>, <em>...</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#contextlib.nested" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine multiple context managers into a single nested context manager.</p>
+<p>This function has been deprecated in favour of the multiple manager form
+of the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement.</p>
+<p>The one advantage of this function over the multiple manager form of the
+<a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement is that argument unpacking allows it to be
+used with a variable number of context managers as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">nested</span>
+
+<span class="k">with</span> <span class="n">nested</span><span class="p">(</span><span class="o">*</span><span class="n">managers</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Note that if the <a class="reference internal" href="../reference/datamodel.html#object.__exit__" title="object.__exit__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__exit__()</span></code></a> method of one of the nested context managers
+indicates an exception should be suppressed, no exception information will be
+passed to any remaining outer context managers. Similarly, if the
+<a class="reference internal" href="../reference/datamodel.html#object.__exit__" title="object.__exit__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__exit__()</span></code></a> method of one of the nested managers raises an exception, any
+previous exception state will be lost; the new exception will be passed to the
+<a class="reference internal" href="../reference/datamodel.html#object.__exit__" title="object.__exit__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__exit__()</span></code></a> methods of any remaining outer context managers. In general,
+<a class="reference internal" href="../reference/datamodel.html#object.__exit__" title="object.__exit__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__exit__()</span></code></a> methods should avoid raising exceptions, and in particular they
+should not re-raise a passed-in exception.</p>
+<p>This function has two major quirks that have led to it being deprecated. Firstly,
+as the context managers are all constructed before the function is invoked, the
+<a class="reference internal" href="../reference/datamodel.html#object.__new__" title="object.__new__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__new__()</span></code></a> and <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a> methods of the inner context managers are
+not actually covered by the scope of the outer context managers. That means, for
+example, that using <a class="reference internal" href="#contextlib.nested" title="contextlib.nested"><code class="xref py py-func docutils literal notranslate"><span class="pre">nested()</span></code></a> to open two files is a programming error as the
+first file will not be closed promptly if an exception is thrown when opening
+the second file.</p>
+<p>Secondly, if the <a class="reference internal" href="../reference/datamodel.html#object.__enter__" title="object.__enter__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__enter__()</span></code></a> method of one of the inner context managers
+raises an exception that is caught and suppressed by the <a class="reference internal" href="../reference/datamodel.html#object.__exit__" title="object.__exit__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__exit__()</span></code></a> method
+of one of the outer context managers, this construct will raise
+<a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> rather than skipping the body of the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a>
+statement.</p>
+<p>Developers that need to support nesting of a variable number of context managers
+can either use the <a class="reference internal" href="warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal notranslate"><span class="pre">warnings</span></code></a> module to suppress the DeprecationWarning
+raised by this function or else use this function as a model for an application
+specific implementation.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.7: </span>The with-statement now supports this functionality directly (without the
+confusing error prone quirks).</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="contextlib.closing">
+<code class="descclassname">contextlib.</code><code class="descname">closing</code><span class="sig-paren">(</span><em>thing</em><span class="sig-paren">)</span><a class="headerlink" href="#contextlib.closing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a context manager that closes <em>thing</em> upon completion of the block.  This
+is basically equivalent to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">closing</span><span class="p">(</span><span class="n">thing</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">thing</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">thing</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>And lets you write code like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">closing</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+
+<span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://www.python.org&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">page</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">page</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="n">line</span>
+</pre></div>
+</div>
+<p>without needing to explicitly close <code class="docutils literal notranslate"><span class="pre">page</span></code>.  Even if an error occurs,
+<code class="docutils literal notranslate"><span class="pre">page.close()</span></code> will be called when the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> block is exited.</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><span class="target" id="index-0"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0343"><strong>PEP 343</strong></a> - The “with” statement</dt><dd><p>The specification, background, and examples for the Python <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a>
+statement.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="warnings.html"
+                        title="previous chapter">28.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">warnings</span></code> — Warning control</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="abc.html"
+                        title="next chapter">28.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">abc</span></code> — Abstract Base Classes</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/contextlib.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="abc.html" title="28.8. abc — Abstract Base Classes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="warnings.html" title="28.6. warnings — Warning control"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" >28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

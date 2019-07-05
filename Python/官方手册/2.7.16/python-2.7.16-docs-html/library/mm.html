@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>21. Multimedia Services &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="21.1. audioop — Manipulate raw audio data" href="audioop.html" />
+    <link rel="prev" title="20.25. DocXMLRPCServer — Self-documenting XML-RPC server" href="docxmlrpcserver.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/mm.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="audioop.html" title="21.1. audioop — Manipulate raw audio data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="docxmlrpcserver.html" title="20.25. DocXMLRPCServer — Self-documenting XML-RPC server"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="multimedia-services">
+<span id="mmedia"></span><h1>21. Multimedia Services<a class="headerlink" href="#multimedia-services" title="Permalink to this headline">¶</a></h1>
+<p>The modules described in this chapter implement various algorithms or interfaces
+that are mainly useful for multimedia applications.  They are available at the
+discretion of the installation.  Here’s an overview:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="audioop.html">21.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">audioop</span></code> — Manipulate raw audio data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imageop.html">21.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">imageop</span></code> — Manipulate raw image data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aifc.html">21.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">aifc</span></code> — Read and write AIFF and AIFC files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sunau.html">21.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sunau</span></code> — Read and write Sun AU files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sunau.html#au-read-objects">21.4.1. AU_read Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sunau.html#au-write-objects">21.4.2. AU_write Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wave.html">21.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">wave</span></code> — Read and write WAV files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wave.html#wave-read-objects">21.5.1. Wave_read Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wave.html#wave-write-objects">21.5.2. Wave_write Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chunk.html">21.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">chunk</span></code> — Read IFF chunked data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colorsys.html">21.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">colorsys</span></code> — Conversions between color systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imghdr.html">21.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">imghdr</span></code> — Determine the type of an image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sndhdr.html">21.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sndhdr</span></code> — Determine type of sound file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ossaudiodev.html">21.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">ossaudiodev</span></code> — Access to OSS-compatible audio devices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ossaudiodev.html#audio-device-objects">21.10.1. Audio Device Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ossaudiodev.html#mixer-device-objects">21.10.2. Mixer Device Objects</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="docxmlrpcserver.html"
+                        title="previous chapter">20.25. <code class="xref py py-mod docutils literal notranslate"><span class="pre">DocXMLRPCServer</span></code> — Self-documenting XML-RPC server</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="audioop.html"
+                        title="next chapter">21.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">audioop</span></code> — Manipulate raw audio data</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/mm.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="audioop.html" title="21.1. audioop — Manipulate raw audio data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="docxmlrpcserver.html" title="20.25. DocXMLRPCServer — Self-documenting XML-RPC server"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 18, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>26. Debugging and Profiling &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="26.1. bdb — Debugger framework" href="bdb.html" />
+    <link rel="prev" title="25.5. test — Regression tests package for Python" href="test.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/debug.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bdb.html" title="26.1. bdb — Debugger framework"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="test.html" title="25.5. test — Regression tests package for Python"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="debugging-and-profiling">
+<h1>26. Debugging and Profiling<a class="headerlink" href="#debugging-and-profiling" title="Permalink to this headline">¶</a></h1>
+<p>These libraries help you with Python development: the debugger enables you to
+step through code, analyze stack frames and set breakpoints etc., and the
+profilers run code and give you a detailed breakdown of execution times,
+allowing you to identify bottlenecks in your programs.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bdb.html">26.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">bdb</span></code> — Debugger framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdb.html">26.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code> — The Python Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdb.html#debugger-commands">26.3. Debugger Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="profile.html">26.4. The Python Profilers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="profile.html#introduction-to-the-profilers">26.4.1. Introduction to the profilers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profile.html#instant-user-s-manual">26.4.2. Instant User’s Manual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profile.html#module-cProfile">26.4.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">profile</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">cProfile</span></code> Module Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profile.html#the-stats-class">26.4.4. The <code class="xref py py-class docutils literal notranslate"><span class="pre">Stats</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profile.html#what-is-deterministic-profiling">26.4.5. What Is Deterministic Profiling?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profile.html#limitations">26.4.6. Limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profile.html#calibration">26.4.7. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profile.html#using-a-custom-timer">26.4.8. Using a custom timer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hotshot.html">26.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">hotshot</span></code> — High performance logging profiler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hotshot.html#profile-objects">26.5.1. Profile Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotshot.html#module-hotshot.stats">26.5.2. Using hotshot data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotshot.html#example-usage">26.5.3. Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="timeit.html">26.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">timeit</span></code> — Measure execution time of small code snippets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="timeit.html#basic-examples">26.6.1. Basic Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeit.html#python-interface">26.6.2. Python Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeit.html#command-line-interface">26.6.3. Command-Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeit.html#examples">26.6.4. Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="trace.html">26.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">trace</span></code> — Trace or track Python statement execution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="trace.html#command-line-usage">26.7.1. Command-Line Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="trace.html#main-options">26.7.1.1. Main options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trace.html#modifiers">26.7.1.2. Modifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trace.html#filters">26.7.1.3. Filters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="trace.html#programmatic-interface">26.7.2. Programmatic Interface</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="test.html"
+                        title="previous chapter">25.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">test</span></code> — Regression tests package for Python</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bdb.html"
+                        title="next chapter">26.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">bdb</span></code> — Debugger framework</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/debug.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bdb.html" title="26.1. bdb — Debugger framework"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="test.html" title="25.5. test — Regression tests package for Python"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

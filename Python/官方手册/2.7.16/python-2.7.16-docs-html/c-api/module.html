@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Module Objects &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Iterator Objects" href="iterator.html" />
+    <link rel="prev" title="File Objects" href="file.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/c-api/module.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="iterator.html" title="Iterator Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="file.html" title="File Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-objects">
+<span id="moduleobjects"></span><h1>Module Objects<a class="headerlink" href="#module-objects" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">There are only a few functions special to module objects.</p>
+<dl class="var">
+<dt id="c.PyModule_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a> <code class="descname">PyModule_Type</code><a class="headerlink" href="#c.PyModule_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This instance of <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> represents the Python module type.  This
+is exposed to Python programs as <code class="docutils literal notranslate"><span class="pre">types.ModuleType</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyModule_Check">
+int <code class="descname">PyModule_Check</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>p</em> is a module object, or a subtype of a module object.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.2: </span>Allowed subtypes to be accepted.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyModule_CheckExact">
+int <code class="descname">PyModule_CheckExact</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>p</em> is a module object, but not a subtype of
+<a class="reference internal" href="#c.PyModule_Type" title="PyModule_Type"><code class="xref c c-data docutils literal notranslate"><span class="pre">PyModule_Type</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyModule_New">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyModule_New</code><span class="sig-paren">(</span>const char<em> *name</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_New" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p id="index-2">Return a new module object with the <code class="xref py py-attr docutils literal notranslate"><span class="pre">__name__</span></code> attribute set to <em>name</em>.
+Only the module’s <code class="xref py py-attr docutils literal notranslate"><span class="pre">__doc__</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">__name__</span></code> attributes are filled in;
+the caller is responsible for providing a <code class="xref py py-attr docutils literal notranslate"><span class="pre">__file__</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyModule_GetDict">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyModule_GetDict</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *module</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_GetDict" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p id="index-3">Return the dictionary object that implements <em>module</em>’s namespace; this object
+is the same as the <a class="reference internal" href="../library/stdtypes.html#object.__dict__" title="object.__dict__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__dict__</span></code></a> attribute of the module object.  This
+function never fails.  It is recommended extensions use other
+<code class="xref c c-func docutils literal notranslate"><span class="pre">PyModule_*()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_*()</span></code> functions rather than directly
+manipulate a module’s <a class="reference internal" href="../library/stdtypes.html#object.__dict__" title="object.__dict__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__dict__</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyModule_GetName">
+char* <code class="descname">PyModule_GetName</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *module</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_GetName" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-4">Return <em>module</em>’s <code class="xref py py-attr docutils literal notranslate"><span class="pre">__name__</span></code> value.  If the module does not provide one,
+or if it is not a string, <a class="reference internal" href="../library/exceptions.html#exceptions.SystemError" title="exceptions.SystemError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemError</span></code></a> is raised and <em>NULL</em> is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyModule_GetFilename">
+char* <code class="descname">PyModule_GetFilename</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *module</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_GetFilename" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-5">Return the name of the file from which <em>module</em> was loaded using <em>module</em>’s
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">__file__</span></code> attribute.  If this is not defined, or if it is not a string,
+raise <a class="reference internal" href="../library/exceptions.html#exceptions.SystemError" title="exceptions.SystemError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemError</span></code></a> and return <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyModule_AddObject">
+int <code class="descname">PyModule_AddObject</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *module</em>, const char<em> *name</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_AddObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an object to <em>module</em> as <em>name</em>.  This is a convenience function which can
+be used from the module’s initialization function.  This steals a reference to
+<em>value</em>.  Return <code class="docutils literal notranslate"><span class="pre">-1</span></code> on error, <code class="docutils literal notranslate"><span class="pre">0</span></code> on success.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyModule_AddIntConstant">
+int <code class="descname">PyModule_AddIntConstant</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *module</em>, const char<em> *name</em>, long<em> value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_AddIntConstant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an integer constant to <em>module</em> as <em>name</em>.  This convenience function can be
+used from the module’s initialization function. Return <code class="docutils literal notranslate"><span class="pre">-1</span></code> on error, <code class="docutils literal notranslate"><span class="pre">0</span></code> on
+success.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyModule_AddStringConstant">
+int <code class="descname">PyModule_AddStringConstant</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *module</em>, const char<em> *name</em>, const char<em> *value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_AddStringConstant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a string constant to <em>module</em> as <em>name</em>.  This convenience function can be
+used from the module’s initialization function.  The string <em>value</em> must be
+null-terminated.  Return <code class="docutils literal notranslate"><span class="pre">-1</span></code> on error, <code class="docutils literal notranslate"><span class="pre">0</span></code> on success.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyModule_AddIntMacro">
+int <code class="descname">PyModule_AddIntMacro</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *module</em>, macro<span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_AddIntMacro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an int constant to <em>module</em>. The name and the value are taken from
+<em>macro</em>. For example <code class="docutils literal notranslate"><span class="pre">PyModule_AddIntMacro(module,</span> <span class="pre">AF_INET)</span></code> adds the int
+constant <em>AF_INET</em> with the value of <em>AF_INET</em> to <em>module</em>.
+Return <code class="docutils literal notranslate"><span class="pre">-1</span></code> on error, <code class="docutils literal notranslate"><span class="pre">0</span></code> on success.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyModule_AddStringMacro">
+int <code class="descname">PyModule_AddStringMacro</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *module</em>, macro<span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_AddStringMacro" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Add a string constant to <em>module</em>.</p>
+</div></blockquote>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="file.html"
+                        title="previous chapter">File Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="iterator.html"
+                        title="next chapter">Iterator Objects</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/c-api/module.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="iterator.html" title="Iterator Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="file.html" title="File Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" >Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

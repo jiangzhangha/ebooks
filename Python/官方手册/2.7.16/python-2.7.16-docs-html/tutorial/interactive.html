@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>13. Interactive Input Editing and History Substitution &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="14. Floating Point Arithmetic: Issues and Limitations" href="floatingpoint.html" />
+    <link rel="prev" title="12. What Now?" href="whatnow.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/tutorial/interactive.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="floatingpoint.html" title="14. Floating Point Arithmetic: Issues and Limitations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="whatnow.html" title="12. What Now?"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Tutorial</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="interactive-input-editing-and-history-substitution">
+<span id="tut-interacting"></span><h1>13. Interactive Input Editing and History Substitution<a class="headerlink" href="#interactive-input-editing-and-history-substitution" title="Permalink to this headline">¶</a></h1>
+<p>Some versions of the Python interpreter support editing of the current input
+line and history substitution, similar to facilities found in the Korn shell and
+the GNU Bash shell.  This is implemented using the <a class="reference external" href="https://tiswww.case.edu/php/chet/readline/rltop.html">GNU Readline</a> library,
+which supports Emacs-style and vi-style editing.  This library has its own
+documentation which I won’t duplicate here; however, the basics are easily
+explained.  The interactive editing and history described here are optionally
+available in the Unix and Cygwin versions of the interpreter.</p>
+<p>This chapter does <em>not</em> document the editing facilities of Mark Hammond’s
+PythonWin package or the Tk-based environment, IDLE, distributed with Python.
+The command line history recall which operates within DOS boxes on NT and some
+other DOS and Windows flavors  is yet another beast.</p>
+<div class="section" id="line-editing">
+<span id="tut-lineediting"></span><h2>13.1. Line Editing<a class="headerlink" href="#line-editing" title="Permalink to this headline">¶</a></h2>
+<p>If supported, input line editing is active whenever the interpreter prints a
+primary or secondary prompt.  The current line can be edited using the
+conventional Emacs control characters.  The most important of these are:
+<kbd class="kbd docutils literal notranslate">C-A</kbd> (Control-A) moves the cursor to the beginning of the line, <kbd class="kbd docutils literal notranslate">C-E</kbd>
+to the end, <kbd class="kbd docutils literal notranslate">C-B</kbd> moves it one position to the left, <kbd class="kbd docutils literal notranslate">C-F</kbd> to the
+right.  Backspace erases the character to the left of the cursor, <kbd class="kbd docutils literal notranslate">C-D</kbd> the
+character to its right. <kbd class="kbd docutils literal notranslate">C-K</kbd> kills (erases) the rest of the line to the
+right of the cursor, <kbd class="kbd docutils literal notranslate">C-Y</kbd> yanks back the last killed string.
+<kbd class="kbd docutils literal notranslate">C-underscore</kbd> undoes the last change you made; it can be repeated for
+cumulative effect.</p>
+</div>
+<div class="section" id="history-substitution">
+<span id="tut-history"></span><h2>13.2. History Substitution<a class="headerlink" href="#history-substitution" title="Permalink to this headline">¶</a></h2>
+<p>History substitution works as follows.  All non-empty input lines issued are
+saved in a history buffer, and when a new prompt is given you are positioned on
+a new line at the bottom of this buffer. <kbd class="kbd docutils literal notranslate">C-P</kbd> moves one line up (back) in
+the history buffer, <kbd class="kbd docutils literal notranslate">C-N</kbd> moves one down.  Any line in the history buffer
+can be edited; an asterisk appears in front of the prompt to mark a line as
+modified.  Pressing the <kbd class="kbd docutils literal notranslate">Return</kbd> key passes the current line to the
+interpreter.  <kbd class="kbd docutils literal notranslate">C-R</kbd> starts an incremental reverse search; <kbd class="kbd docutils literal notranslate">C-S</kbd> starts
+a forward search.</p>
+</div>
+<div class="section" id="key-bindings">
+<span id="tut-keybindings"></span><h2>13.3. Key Bindings<a class="headerlink" href="#key-bindings" title="Permalink to this headline">¶</a></h2>
+<p>The key bindings and some other parameters of the Readline library can be
+customized by placing commands in an initialization file called
+<code class="file docutils literal notranslate"><span class="pre">~/.inputrc</span></code>.  Key bindings have the form</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">key</span><span class="o">-</span><span class="n">name</span><span class="p">:</span> <span class="n">function</span><span class="o">-</span><span class="n">name</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;string&quot;</span><span class="p">:</span> <span class="n">function</span><span class="o">-</span><span class="n">name</span>
+</pre></div>
+</div>
+<p>and options can be set with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">option</span><span class="o">-</span><span class="n">name</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># I prefer vi-style editing:</span>
+<span class="nb">set</span> <span class="n">editing</span><span class="o">-</span><span class="n">mode</span> <span class="n">vi</span>
+
+<span class="c1"># Edit using a single line:</span>
+<span class="nb">set</span> <span class="n">horizontal</span><span class="o">-</span><span class="n">scroll</span><span class="o">-</span><span class="n">mode</span> <span class="n">On</span>
+
+<span class="c1"># Rebind some keys:</span>
+<span class="n">Meta</span><span class="o">-</span><span class="n">h</span><span class="p">:</span> <span class="n">backward</span><span class="o">-</span><span class="n">kill</span><span class="o">-</span><span class="n">word</span>
+<span class="s2">&quot;\C-u&quot;</span><span class="p">:</span> <span class="n">universal</span><span class="o">-</span><span class="n">argument</span>
+<span class="s2">&quot;\C-x\C-r&quot;</span><span class="p">:</span> <span class="n">re</span><span class="o">-</span><span class="n">read</span><span class="o">-</span><span class="n">init</span><span class="o">-</span><span class="n">file</span>
+</pre></div>
+</div>
+<p>Note that the default binding for <kbd class="kbd docutils literal notranslate">Tab</kbd> in Python is to insert a <kbd class="kbd docutils literal notranslate">Tab</kbd>
+character instead of Readline’s default filename completion function.  If you
+insist, you can override this by putting</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Tab</span><span class="p">:</span> <span class="n">complete</span>
+</pre></div>
+</div>
+<p>in your <code class="file docutils literal notranslate"><span class="pre">~/.inputrc</span></code>.  (Of course, this makes it harder to type indented
+continuation lines if you’re accustomed to using <kbd class="kbd docutils literal notranslate">Tab</kbd> for that purpose.)</p>
+<p id="index-0">Automatic completion of variable and module names is optionally available.  To
+enable it in the interpreter’s interactive mode, add the following to your
+startup file: <a class="footnote-reference brackets" href="#id2" id="id1">1</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rlcompleter</span><span class="o">,</span> <span class="nn">readline</span>
+<span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;tab: complete&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This binds the <kbd class="kbd docutils literal notranslate">Tab</kbd> key to the completion function, so hitting the
+<kbd class="kbd docutils literal notranslate">Tab</kbd> key twice suggests completions; it looks at Python statement names,
+the current local variables, and the available module names.  For dotted
+expressions such as <code class="docutils literal notranslate"><span class="pre">string.a</span></code>, it will evaluate the expression up to the
+final <code class="docutils literal notranslate"><span class="pre">'.'</span></code> and then suggest completions from the attributes of the resulting
+object.  Note that this may execute application-defined code if an object with a
+<a class="reference internal" href="../reference/datamodel.html#object.__getattr__" title="object.__getattr__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__getattr__()</span></code></a> method is part of the expression.</p>
+<p>A more capable startup file might look like this example.  Note that this
+deletes the names it creates once they are no longer needed; this is done since
+the startup file is executed in the same namespace as the interactive commands,
+and removing the names avoids creating side effects in the interactive
+environment.  You may find it convenient to keep some of the imported modules,
+such as <a class="reference internal" href="../library/os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal notranslate"><span class="pre">os</span></code></a>, which turn out to be needed in most sessions with the
+interpreter.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add auto-completion and a stored history file of commands to your Python</span>
+<span class="c1"># interactive interpreter. Requires Python 2.0+, readline. Autocomplete is</span>
+<span class="c1"># bound to the Esc key by default (you can change it - see readline docs).</span>
+<span class="c1">#</span>
+<span class="c1"># Store the file in ~/.pystartup, and set an environment variable to point</span>
+<span class="c1"># to it:  &quot;export PYTHONSTARTUP=~/.pystartup&quot; in bash.</span>
+
+<span class="kn">import</span> <span class="nn">atexit</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">readline</span>
+<span class="kn">import</span> <span class="nn">rlcompleter</span>
+
+<span class="n">historyPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.pyhistory&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">save_history</span><span class="p">(</span><span class="n">historyPath</span><span class="o">=</span><span class="n">historyPath</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">readline</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">(</span><span class="n">historyPath</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">historyPath</span><span class="p">):</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">read_history_file</span><span class="p">(</span><span class="n">historyPath</span><span class="p">)</span>
+
+<span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">save_history</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">os</span><span class="p">,</span> <span class="n">atexit</span><span class="p">,</span> <span class="n">readline</span><span class="p">,</span> <span class="n">rlcompleter</span><span class="p">,</span> <span class="n">save_history</span><span class="p">,</span> <span class="n">historyPath</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="alternatives-to-the-interactive-interpreter">
+<span id="tut-commentary"></span><h2>13.4. Alternatives to the Interactive Interpreter<a class="headerlink" href="#alternatives-to-the-interactive-interpreter" title="Permalink to this headline">¶</a></h2>
+<p>This facility is an enormous step forward compared to earlier versions of the
+interpreter; however, some wishes are left: It would be nice if the proper
+indentation were suggested on continuation lines (the parser knows if an indent
+token is required next).  The completion mechanism might use the interpreter’s
+symbol table.  A command to check (or even suggest) matching parentheses,
+quotes, etc., would also be useful.</p>
+<p>One alternative enhanced interactive interpreter that has been around for quite
+some time is <a class="reference external" href="http://ipython.scipy.org/">IPython</a>, which features tab completion, object exploration and
+advanced history management.  It can also be thoroughly customized and embedded
+into other applications.  Another similar enhanced interactive environment is
+<a class="reference external" href="http://www.bpython-interpreter.org/">bpython</a>.</p>
+<p class="rubric">Footnotes</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Python will execute the contents of a file identified by the
+<span class="target" id="index-1"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONSTARTUP"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHONSTARTUP</span></code></a> environment variable when you start an interactive
+interpreter.  To customize Python even for non-interactive mode, see
+<a class="reference internal" href="appendix.html#tut-customize"><span class="std std-ref">The Customization Modules</span></a>.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">13. Interactive Input Editing and History Substitution</a><ul>
+<li><a class="reference internal" href="#line-editing">13.1. Line Editing</a></li>
+<li><a class="reference internal" href="#history-substitution">13.2. History Substitution</a></li>
+<li><a class="reference internal" href="#key-bindings">13.3. Key Bindings</a></li>
+<li><a class="reference internal" href="#alternatives-to-the-interactive-interpreter">13.4. Alternatives to the Interactive Interpreter</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="whatnow.html"
+                        title="previous chapter">12. What Now?</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="floatingpoint.html"
+                        title="next chapter">14. Floating Point Arithmetic:  Issues and Limitations</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorial/interactive.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="floatingpoint.html" title="14. Floating Point Arithmetic: Issues and Limitations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="whatnow.html" title="12. What Now?"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Tutorial</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

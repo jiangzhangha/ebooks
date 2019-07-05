@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>13.3. robotparser — Parser for robots.txt &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="13.4. netrc — netrc file processing" href="netrc.html" />
+    <link rel="prev" title="13.2. ConfigParser — Configuration file parser" href="configparser.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/robotparser.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="netrc.html" title="13.4. netrc — netrc file processing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="configparser.html" title="13.2. ConfigParser — Configuration file parser"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="fileformats.html" accesskey="U">13. File Formats</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-robotparser">
+<span id="robotparser-parser-for-robots-txt"></span><h1>13.3. <a class="reference internal" href="#module-robotparser" title="robotparser: Loads a robots.txt file and answers questions about fetchability of other URLs."><code class="xref py py-mod docutils literal notranslate"><span class="pre">robotparser</span></code></a> —  Parser for robots.txt<a class="headerlink" href="#module-robotparser" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note" id="index-0">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#module-robotparser" title="robotparser: Loads a robots.txt file and answers questions about fetchability of other URLs."><code class="xref py py-mod docutils literal notranslate"><span class="pre">robotparser</span></code></a> module has been renamed <code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.robotparser</span></code> in
+Python 3.
+The <a class="reference internal" href="../glossary.html#term-2to3"><span class="xref std std-term">2to3</span></a> tool will automatically adapt imports when converting
+your sources to Python 3.</p>
+</div>
+<p>This module provides a single class, <a class="reference internal" href="#robotparser.RobotFileParser" title="robotparser.RobotFileParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">RobotFileParser</span></code></a>, which answers
+questions about whether or not a particular user agent can fetch a URL on the
+Web site that published the <code class="file docutils literal notranslate"><span class="pre">robots.txt</span></code> file.  For more details on the
+structure of <code class="file docutils literal notranslate"><span class="pre">robots.txt</span></code> files, see <a class="reference external" href="http://www.robotstxt.org/orig.html">http://www.robotstxt.org/orig.html</a>.</p>
+<dl class="class">
+<dt id="robotparser.RobotFileParser">
+<em class="property">class </em><code class="descclassname">robotparser.</code><code class="descname">RobotFileParser</code><span class="sig-paren">(</span><em>url=''</em><span class="sig-paren">)</span><a class="headerlink" href="#robotparser.RobotFileParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides methods to read, parse and answer questions about the
+<code class="file docutils literal notranslate"><span class="pre">robots.txt</span></code> file at <em>url</em>.</p>
+<dl class="method">
+<dt id="robotparser.RobotFileParser.set_url">
+<code class="descname">set_url</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#robotparser.RobotFileParser.set_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the URL referring to a <code class="file docutils literal notranslate"><span class="pre">robots.txt</span></code> file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robotparser.RobotFileParser.read">
+<code class="descname">read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robotparser.RobotFileParser.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the <code class="file docutils literal notranslate"><span class="pre">robots.txt</span></code> URL and feeds it to the parser.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robotparser.RobotFileParser.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><em>lines</em><span class="sig-paren">)</span><a class="headerlink" href="#robotparser.RobotFileParser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the lines argument.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robotparser.RobotFileParser.can_fetch">
+<code class="descname">can_fetch</code><span class="sig-paren">(</span><em>useragent</em>, <em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#robotparser.RobotFileParser.can_fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if the <em>useragent</em> is allowed to fetch the <em>url</em>
+according to the rules contained in the parsed <code class="file docutils literal notranslate"><span class="pre">robots.txt</span></code>
+file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robotparser.RobotFileParser.mtime">
+<code class="descname">mtime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robotparser.RobotFileParser.mtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the time the <code class="docutils literal notranslate"><span class="pre">robots.txt</span></code> file was last fetched.  This is
+useful for long-running web spiders that need to check for new
+<code class="docutils literal notranslate"><span class="pre">robots.txt</span></code> files periodically.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robotparser.RobotFileParser.modified">
+<code class="descname">modified</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robotparser.RobotFileParser.modified" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the time the <code class="docutils literal notranslate"><span class="pre">robots.txt</span></code> file was last fetched to the current
+time.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>The following example demonstrates basic use of the RobotFileParser class.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">robotparser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rp</span> <span class="o">=</span> <span class="n">robotparser</span><span class="o">.</span><span class="n">RobotFileParser</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rp</span><span class="o">.</span><span class="n">set_url</span><span class="p">(</span><span class="s2">&quot;http://www.musi-cal.com/robots.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rp</span><span class="o">.</span><span class="n">can_fetch</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;http://www.musi-cal.com/cgi-bin/search?city=San+Francisco&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rp</span><span class="o">.</span><span class="n">can_fetch</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;http://www.musi-cal.com/&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="configparser.html"
+                        title="previous chapter">13.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">ConfigParser</span></code> — Configuration file parser</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="netrc.html"
+                        title="next chapter">13.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">netrc</span></code> — netrc file processing</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/robotparser.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="netrc.html" title="13.4. netrc — netrc file processing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="configparser.html" title="13.2. ConfigParser — Configuration file parser"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="fileformats.html" >13. File Formats</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,1173 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>32.12. dis — Disassembler for Python bytecode &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="32.13. pickletools — Tools for pickle developers" href="pickletools.html" />
+    <link rel="prev" title="32.11. compileall — Byte-compile Python libraries" href="compileall.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/dis.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pickletools.html" title="32.13. pickletools — Tools for pickle developers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="compileall.html" title="32.11. compileall — Byte-compile Python libraries"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" accesskey="U">32. Python Language Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-dis">
+<span id="dis-disassembler-for-python-bytecode"></span><h1>32.12. <a class="reference internal" href="#module-dis" title="dis: Disassembler for Python bytecode."><code class="xref py py-mod docutils literal notranslate"><span class="pre">dis</span></code></a> — Disassembler for Python bytecode<a class="headerlink" href="#module-dis" title="Permalink to this headline">¶</a></h1>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/dis.py">Lib/dis.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-dis" title="dis: Disassembler for Python bytecode."><code class="xref py py-mod docutils literal notranslate"><span class="pre">dis</span></code></a> module supports the analysis of CPython <a class="reference internal" href="../glossary.html#term-bytecode"><span class="xref std std-term">bytecode</span></a> by
+disassembling it. The CPython bytecode which this module takes as an input is
+defined in the file <code class="file docutils literal notranslate"><span class="pre">Include/opcode.h</span></code> and used by the compiler and the
+interpreter.</p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> Bytecode is an implementation detail of the CPython interpreter!  No
+guarantees are made that bytecode will not be added, removed, or changed
+between versions of Python.  Use of this module should not be considered to
+work across Python VMs or Python releases.</p>
+</div>
+<p>Example: Given the function <code class="xref py py-func docutils literal notranslate"><span class="pre">myfunc()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">alist</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">alist</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>the following command can be used to get the disassembly of <code class="xref py py-func docutils literal notranslate"><span class="pre">myfunc()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
+<span class="go">  2           0 LOAD_GLOBAL              0 (len)</span>
+<span class="go">              3 LOAD_FAST                0 (alist)</span>
+<span class="go">              6 CALL_FUNCTION            1</span>
+<span class="go">              9 RETURN_VALUE</span>
+</pre></div>
+</div>
+<p>(The “2” is a line number).</p>
+<p>The <a class="reference internal" href="#module-dis" title="dis: Disassembler for Python bytecode."><code class="xref py py-mod docutils literal notranslate"><span class="pre">dis</span></code></a> module defines the following functions and constants:</p>
+<dl class="function">
+<dt id="dis.dis">
+<code class="descclassname">dis.</code><code class="descname">dis</code><span class="sig-paren">(</span><span class="optional">[</span><em>bytesource</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#dis.dis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disassemble the <em>bytesource</em> object. <em>bytesource</em> can denote either a module,
+a class, a method, a function, or a code object.  For a module, it
+disassembles all functions.  For a class, it disassembles all methods.  For a
+single code sequence, it prints one line per bytecode instruction.  If no
+object is provided, it disassembles the last traceback.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dis.distb">
+<code class="descclassname">dis.</code><code class="descname">distb</code><span class="sig-paren">(</span><span class="optional">[</span><em>tb</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#dis.distb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disassembles the top-of-stack function of a traceback, using the last
+traceback if none was passed.  The instruction causing the exception is
+indicated.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dis.disassemble">
+<code class="descclassname">dis.</code><code class="descname">disassemble</code><span class="sig-paren">(</span><em>code</em><span class="optional">[</span>, <em>lasti</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#dis.disassemble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disassembles a code object, indicating the last instruction if <em>lasti</em> was
+provided.  The output is divided in the following columns:</p>
+<ol class="arabic simple">
+<li><p>the line number, for the first instruction of each line</p></li>
+<li><p>the current instruction, indicated as <code class="docutils literal notranslate"><span class="pre">--&gt;</span></code>,</p></li>
+<li><p>a labelled instruction, indicated with <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code>,</p></li>
+<li><p>the address of the instruction,</p></li>
+<li><p>the operation code name,</p></li>
+<li><p>operation parameters, and</p></li>
+<li><p>interpretation of the parameters in parentheses.</p></li>
+</ol>
+<p>The parameter interpretation recognizes local and global variable names,
+constant values, branch targets, and compare operators.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dis.disco">
+<code class="descclassname">dis.</code><code class="descname">disco</code><span class="sig-paren">(</span><em>code</em><span class="optional">[</span>, <em>lasti</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#dis.disco" title="Permalink to this definition">¶</a></dt>
+<dd><p>A synonym for <a class="reference internal" href="#dis.disassemble" title="dis.disassemble"><code class="xref py py-func docutils literal notranslate"><span class="pre">disassemble()</span></code></a>.  It is more convenient to type, and kept
+for compatibility with earlier Python releases.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dis.findlinestarts">
+<code class="descclassname">dis.</code><code class="descname">findlinestarts</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="headerlink" href="#dis.findlinestarts" title="Permalink to this definition">¶</a></dt>
+<dd><p>This generator function uses the <code class="docutils literal notranslate"><span class="pre">co_firstlineno</span></code> and <code class="docutils literal notranslate"><span class="pre">co_lnotab</span></code>
+attributes of the code object <em>code</em> to find the offsets which are starts of
+lines in the source code.  They are generated as <code class="docutils literal notranslate"><span class="pre">(offset,</span> <span class="pre">lineno)</span></code> pairs.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dis.findlabels">
+<code class="descclassname">dis.</code><code class="descname">findlabels</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="headerlink" href="#dis.findlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect all offsets in the code object <em>code</em> which are jump targets, and
+return a list of these offsets.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dis.opname">
+<code class="descclassname">dis.</code><code class="descname">opname</code><a class="headerlink" href="#dis.opname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of operation names, indexable using the bytecode.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dis.opmap">
+<code class="descclassname">dis.</code><code class="descname">opmap</code><a class="headerlink" href="#dis.opmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary mapping operation names to bytecodes.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dis.cmp_op">
+<code class="descclassname">dis.</code><code class="descname">cmp_op</code><a class="headerlink" href="#dis.cmp_op" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of all compare operation names.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dis.hasconst">
+<code class="descclassname">dis.</code><code class="descname">hasconst</code><a class="headerlink" href="#dis.hasconst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of bytecodes that access a constant.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dis.hasfree">
+<code class="descclassname">dis.</code><code class="descname">hasfree</code><a class="headerlink" href="#dis.hasfree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of bytecodes that access a free variable.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dis.hasname">
+<code class="descclassname">dis.</code><code class="descname">hasname</code><a class="headerlink" href="#dis.hasname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of bytecodes that access an attribute by name.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dis.hasjrel">
+<code class="descclassname">dis.</code><code class="descname">hasjrel</code><a class="headerlink" href="#dis.hasjrel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of bytecodes that have a relative jump target.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dis.hasjabs">
+<code class="descclassname">dis.</code><code class="descname">hasjabs</code><a class="headerlink" href="#dis.hasjabs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of bytecodes that have an absolute jump target.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dis.haslocal">
+<code class="descclassname">dis.</code><code class="descname">haslocal</code><a class="headerlink" href="#dis.haslocal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of bytecodes that access a local variable.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dis.hascompare">
+<code class="descclassname">dis.</code><code class="descname">hascompare</code><a class="headerlink" href="#dis.hascompare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of bytecodes of Boolean operations.</p>
+</dd></dl>
+
+<div class="section" id="python-bytecode-instructions">
+<span id="bytecodes"></span><h2>32.12.1. Python Bytecode Instructions<a class="headerlink" href="#python-bytecode-instructions" title="Permalink to this headline">¶</a></h2>
+<p>The Python compiler currently generates the following bytecode instructions.</p>
+<dl class="opcode">
+<dt id="opcode-STOP_CODE">
+<code class="descname">STOP_CODE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STOP_CODE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates end-of-code to the compiler, not used by the interpreter.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-NOP">
+<code class="descname">NOP</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-NOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do nothing code.  Used as a placeholder by the bytecode optimizer.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-POP_TOP">
+<code class="descname">POP_TOP</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-POP_TOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the top-of-stack (TOS) item.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-ROT_TWO">
+<code class="descname">ROT_TWO</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-ROT_TWO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Swaps the two top-most stack items.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-ROT_THREE">
+<code class="descname">ROT_THREE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-ROT_THREE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lifts second and third stack item one position up, moves top down to position
+three.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-ROT_FOUR">
+<code class="descname">ROT_FOUR</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-ROT_FOUR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lifts second, third and forth stack item one position up, moves top down to
+position four.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-DUP_TOP">
+<code class="descname">DUP_TOP</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-DUP_TOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Duplicates the reference on top of the stack.</p>
+</dd></dl>
+
+<p>Unary Operations take the top of the stack, apply the operation, and push the
+result back on the stack.</p>
+<dl class="opcode">
+<dt id="opcode-UNARY_POSITIVE">
+<code class="descname">UNARY_POSITIVE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-UNARY_POSITIVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">+TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-UNARY_NEGATIVE">
+<code class="descname">UNARY_NEGATIVE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-UNARY_NEGATIVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">-TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-UNARY_NOT">
+<code class="descname">UNARY_NOT</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-UNARY_NOT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">not</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-UNARY_CONVERT">
+<code class="descname">UNARY_CONVERT</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-UNARY_CONVERT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">`TOS`</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-UNARY_INVERT">
+<code class="descname">UNARY_INVERT</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-UNARY_INVERT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">~TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-GET_ITER">
+<code class="descname">GET_ITER</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-GET_ITER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">iter(TOS)</span></code>.</p>
+</dd></dl>
+
+<p>Binary operations remove the top of the stack (TOS) and the second top-most
+stack item (TOS1) from the stack.  They perform the operation, and put the
+result back on the stack.</p>
+<dl class="opcode">
+<dt id="opcode-BINARY_POWER">
+<code class="descname">BINARY_POWER</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_POWER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">**</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_MULTIPLY">
+<code class="descname">BINARY_MULTIPLY</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_MULTIPLY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">*</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_DIVIDE">
+<code class="descname">BINARY_DIVIDE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_DIVIDE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">/</span> <span class="pre">TOS</span></code> when <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">division</span></code> is
+not in effect.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_FLOOR_DIVIDE">
+<code class="descname">BINARY_FLOOR_DIVIDE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_FLOOR_DIVIDE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">//</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_TRUE_DIVIDE">
+<code class="descname">BINARY_TRUE_DIVIDE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_TRUE_DIVIDE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">/</span> <span class="pre">TOS</span></code> when <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">division</span></code> is
+in effect.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_MODULO">
+<code class="descname">BINARY_MODULO</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_MODULO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">%</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_ADD">
+<code class="descname">BINARY_ADD</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_ADD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">+</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_SUBTRACT">
+<code class="descname">BINARY_SUBTRACT</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_SUBTRACT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">-</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_SUBSCR">
+<code class="descname">BINARY_SUBSCR</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_SUBSCR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1[TOS]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_LSHIFT">
+<code class="descname">BINARY_LSHIFT</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_LSHIFT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">&lt;&lt;</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_RSHIFT">
+<code class="descname">BINARY_RSHIFT</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_RSHIFT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">&gt;&gt;</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_AND">
+<code class="descname">BINARY_AND</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_AND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">&amp;</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_XOR">
+<code class="descname">BINARY_XOR</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_XOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">^</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BINARY_OR">
+<code class="descname">BINARY_OR</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BINARY_OR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">|</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<p>In-place operations are like binary operations, in that they remove TOS and
+TOS1, and push the result back on the stack, but the operation is done in-place
+when TOS1 supports it, and the resulting TOS may be (but does not have to be)
+the original TOS1.</p>
+<dl class="opcode">
+<dt id="opcode-INPLACE_POWER">
+<code class="descname">INPLACE_POWER</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_POWER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">**</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_MULTIPLY">
+<code class="descname">INPLACE_MULTIPLY</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_MULTIPLY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">*</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_DIVIDE">
+<code class="descname">INPLACE_DIVIDE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_DIVIDE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">/</span> <span class="pre">TOS</span></code> when <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span>
+<span class="pre">division</span></code> is not in effect.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_FLOOR_DIVIDE">
+<code class="descname">INPLACE_FLOOR_DIVIDE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_FLOOR_DIVIDE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">//</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_TRUE_DIVIDE">
+<code class="descname">INPLACE_TRUE_DIVIDE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_TRUE_DIVIDE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">/</span> <span class="pre">TOS</span></code> when <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span>
+<span class="pre">division</span></code> is in effect.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_MODULO">
+<code class="descname">INPLACE_MODULO</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_MODULO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">%</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_ADD">
+<code class="descname">INPLACE_ADD</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_ADD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">+</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_SUBTRACT">
+<code class="descname">INPLACE_SUBTRACT</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_SUBTRACT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">-</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_LSHIFT">
+<code class="descname">INPLACE_LSHIFT</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_LSHIFT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">&lt;&lt;</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_RSHIFT">
+<code class="descname">INPLACE_RSHIFT</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_RSHIFT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">&gt;&gt;</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_AND">
+<code class="descname">INPLACE_AND</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_AND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">&amp;</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_XOR">
+<code class="descname">INPLACE_XOR</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_XOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">^</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-INPLACE_OR">
+<code class="descname">INPLACE_OR</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-INPLACE_OR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements in-place <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1</span> <span class="pre">|</span> <span class="pre">TOS</span></code>.</p>
+</dd></dl>
+
+<p>The slice opcodes take up to three parameters.</p>
+<dl class="opcode">
+<dt id="opcode-SLICE+0">
+<code class="descname">SLICE+0</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-SLICE+0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS[:]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-SLICE+1">
+<code class="descname">SLICE+1</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-SLICE+1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1[TOS:]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-SLICE+2">
+<code class="descname">SLICE+2</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-SLICE+2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS1[:TOS]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-SLICE+3">
+<code class="descname">SLICE+3</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-SLICE+3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS</span> <span class="pre">=</span> <span class="pre">TOS2[TOS1:TOS]</span></code>.</p>
+</dd></dl>
+
+<p>Slice assignment needs even an additional parameter.  As any statement, they put
+nothing on the stack.</p>
+<dl class="opcode">
+<dt id="opcode-STORE_SLICE+0">
+<code class="descname">STORE_SLICE+0</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STORE_SLICE+0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS[:]</span> <span class="pre">=</span> <span class="pre">TOS1</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-STORE_SLICE+1">
+<code class="descname">STORE_SLICE+1</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STORE_SLICE+1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS1[TOS:]</span> <span class="pre">=</span> <span class="pre">TOS2</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-STORE_SLICE+2">
+<code class="descname">STORE_SLICE+2</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STORE_SLICE+2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS1[:TOS]</span> <span class="pre">=</span> <span class="pre">TOS2</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-STORE_SLICE+3">
+<code class="descname">STORE_SLICE+3</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STORE_SLICE+3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS2[TOS1:TOS]</span> <span class="pre">=</span> <span class="pre">TOS3</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-DELETE_SLICE+0">
+<code class="descname">DELETE_SLICE+0</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-DELETE_SLICE+0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">del</span> <span class="pre">TOS[:]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-DELETE_SLICE+1">
+<code class="descname">DELETE_SLICE+1</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-DELETE_SLICE+1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">del</span> <span class="pre">TOS1[TOS:]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-DELETE_SLICE+2">
+<code class="descname">DELETE_SLICE+2</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-DELETE_SLICE+2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">del</span> <span class="pre">TOS1[:TOS]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-DELETE_SLICE+3">
+<code class="descname">DELETE_SLICE+3</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-DELETE_SLICE+3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">del</span> <span class="pre">TOS2[TOS1:TOS]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-STORE_SUBSCR">
+<code class="descname">STORE_SUBSCR</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STORE_SUBSCR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS1[TOS]</span> <span class="pre">=</span> <span class="pre">TOS2</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-DELETE_SUBSCR">
+<code class="descname">DELETE_SUBSCR</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-DELETE_SUBSCR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">del</span> <span class="pre">TOS1[TOS]</span></code>.</p>
+</dd></dl>
+
+<p>Miscellaneous opcodes.</p>
+<dl class="opcode">
+<dt id="opcode-PRINT_EXPR">
+<code class="descname">PRINT_EXPR</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-PRINT_EXPR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements the expression statement for the interactive mode.  TOS is removed
+from the stack and printed.  In non-interactive mode, an expression statement
+is terminated with <a class="reference internal" href="#opcode-POP_TOP"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">POP_TOP</span></code></a>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-PRINT_ITEM">
+<code class="descname">PRINT_ITEM</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-PRINT_ITEM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints TOS to the file-like object bound to <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>.  There is one
+such instruction for each item in the <a class="reference internal" href="../reference/simple_stmts.html#print"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">print</span></code></a> statement.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-PRINT_ITEM_TO">
+<code class="descname">PRINT_ITEM_TO</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-PRINT_ITEM_TO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <code class="docutils literal notranslate"><span class="pre">PRINT_ITEM</span></code>, but prints the item second from TOS to the file-like
+object at TOS.  This is used by the extended print statement.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-PRINT_NEWLINE">
+<code class="descname">PRINT_NEWLINE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-PRINT_NEWLINE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a new line on <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>.  This is generated as the last operation
+of a <a class="reference internal" href="../reference/simple_stmts.html#print"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">print</span></code></a> statement, unless the statement ends with a comma.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-PRINT_NEWLINE_TO">
+<code class="descname">PRINT_NEWLINE_TO</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-PRINT_NEWLINE_TO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <code class="docutils literal notranslate"><span class="pre">PRINT_NEWLINE</span></code>, but prints the new line on the file-like object on
+the TOS.  This is used by the extended print statement.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BREAK_LOOP">
+<code class="descname">BREAK_LOOP</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BREAK_LOOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminates a loop due to a <a class="reference internal" href="../reference/simple_stmts.html#break"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">break</span></code></a> statement.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-CONTINUE_LOOP">
+<code class="descname">CONTINUE_LOOP</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-CONTINUE_LOOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Continues a loop due to a <a class="reference internal" href="../reference/simple_stmts.html#continue"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">continue</span></code></a> statement.  <em>target</em> is the
+address to jump to (which should be a <a class="reference internal" href="#opcode-FOR_ITER"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">FOR_ITER</span></code></a> instruction).</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-LIST_APPEND">
+<code class="descname">LIST_APPEND</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-LIST_APPEND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls <code class="docutils literal notranslate"><span class="pre">list.append(TOS[-i],</span> <span class="pre">TOS)</span></code>.  Used to implement list comprehensions.
+While the appended value is popped off, the list object remains on the stack
+so that it is available for further iterations of the loop.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-LOAD_LOCALS">
+<code class="descname">LOAD_LOCALS</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-LOAD_LOCALS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes a reference to the locals of the current scope on the stack. This is
+used in the code for a class definition: After the class body is evaluated,
+the locals are passed to the class definition.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-RETURN_VALUE">
+<code class="descname">RETURN_VALUE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-RETURN_VALUE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns with TOS to the caller of the function.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-YIELD_VALUE">
+<code class="descname">YIELD_VALUE</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-YIELD_VALUE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pops <code class="docutils literal notranslate"><span class="pre">TOS</span></code> and yields it from a <a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">generator</span></a>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-IMPORT_STAR">
+<code class="descname">IMPORT_STAR</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-IMPORT_STAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads all symbols not starting with <code class="docutils literal notranslate"><span class="pre">'_'</span></code> directly from the module TOS to
+the local namespace. The module is popped after loading all names. This
+opcode implements <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">*</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-EXEC_STMT">
+<code class="descname">EXEC_STMT</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-EXEC_STMT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">exec</span> <span class="pre">TOS2,TOS1,TOS</span></code>.  The compiler fills missing optional
+parameters with <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-POP_BLOCK">
+<code class="descname">POP_BLOCK</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-POP_BLOCK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes one block from the block stack.  Per frame, there is a stack of
+blocks, denoting nested loops, try statements, and such.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-END_FINALLY">
+<code class="descname">END_FINALLY</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-END_FINALLY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminates a <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">finally</span></code></a> clause.  The interpreter recalls whether the
+exception has to be re-raised, or whether the function returns, and continues
+with the outer-next block.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_CLASS">
+<code class="descname">BUILD_CLASS</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_CLASS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new class object.  TOS is the methods dictionary, TOS1 the tuple of
+the names of the base classes, and TOS2 the class name.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-SETUP_WITH">
+<code class="descname">SETUP_WITH</code><span class="sig-paren">(</span><em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-SETUP_WITH" title="Permalink to this definition">¶</a></dt>
+<dd><p>This opcode performs several operations before a with block starts.  First,
+it loads <a class="reference internal" href="../reference/datamodel.html#object.__exit__" title="object.__exit__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__exit__()</span></code></a> from the context manager and pushes it onto
+the stack for later use by <a class="reference internal" href="#opcode-WITH_CLEANUP"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">WITH_CLEANUP</span></code></a>.  Then,
+<a class="reference internal" href="../reference/datamodel.html#object.__enter__" title="object.__enter__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__enter__()</span></code></a> is called, and a finally block pointing to <em>delta</em>
+is pushed.  Finally, the result of calling the enter method is pushed onto
+the stack.  The next opcode will either ignore it (<a class="reference internal" href="#opcode-POP_TOP"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">POP_TOP</span></code></a>), or
+store it in (a) variable(s) (<a class="reference internal" href="#opcode-STORE_FAST"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">STORE_FAST</span></code></a>, <a class="reference internal" href="#opcode-STORE_NAME"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">STORE_NAME</span></code></a>, or
+<a class="reference internal" href="#opcode-UNPACK_SEQUENCE"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">UNPACK_SEQUENCE</span></code></a>).</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-WITH_CLEANUP">
+<code class="descname">WITH_CLEANUP</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-WITH_CLEANUP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleans up the stack when a <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement block exits.  On top of
+the stack are 1–3 values indicating how/why the finally clause was entered:</p>
+<ul class="simple">
+<li><p>TOP = <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p>(TOP, SECOND) = (<code class="docutils literal notranslate"><span class="pre">WHY_{RETURN,CONTINUE}</span></code>), retval</p></li>
+<li><p>TOP = <code class="docutils literal notranslate"><span class="pre">WHY_*</span></code>; no retval below it</p></li>
+<li><p>(TOP, SECOND, THIRD) = exc_info()</p></li>
+</ul>
+<p>Under them is EXIT, the context manager’s <a class="reference internal" href="../reference/datamodel.html#object.__exit__" title="object.__exit__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__exit__()</span></code></a> bound method.</p>
+<p>In the last case, <code class="docutils literal notranslate"><span class="pre">EXIT(TOP,</span> <span class="pre">SECOND,</span> <span class="pre">THIRD)</span></code> is called, otherwise
+<code class="docutils literal notranslate"><span class="pre">EXIT(None,</span> <span class="pre">None,</span> <span class="pre">None)</span></code>.</p>
+<p>EXIT is removed from the stack, leaving the values above it in the same
+order. In addition, if the stack represents an exception, <em>and</em> the function
+call returns a ‘true’ value, this information is “zapped”, to prevent
+<code class="docutils literal notranslate"><span class="pre">END_FINALLY</span></code> from re-raising the exception.  (But non-local gotos should
+still be resumed.)</p>
+</dd></dl>
+
+<p>All of the following opcodes expect arguments.  An argument is two bytes, with
+the more significant byte last.</p>
+<dl class="opcode">
+<dt id="opcode-STORE_NAME">
+<code class="descname">STORE_NAME</code><span class="sig-paren">(</span><em>namei</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STORE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">=</span> <span class="pre">TOS</span></code>. <em>namei</em> is the index of <em>name</em> in the attribute
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">co_names</span></code> of the code object. The compiler tries to use <code class="docutils literal notranslate"><span class="pre">STORE_FAST</span></code>
+or <code class="docutils literal notranslate"><span class="pre">STORE_GLOBAL</span></code> if possible.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-DELETE_NAME">
+<code class="descname">DELETE_NAME</code><span class="sig-paren">(</span><em>namei</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-DELETE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">del</span> <span class="pre">name</span></code>, where <em>namei</em> is the index into <code class="xref py py-attr docutils literal notranslate"><span class="pre">co_names</span></code>
+attribute of the code object.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-UNPACK_SEQUENCE">
+<code class="descname">UNPACK_SEQUENCE</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-UNPACK_SEQUENCE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unpacks TOS into <em>count</em> individual values, which are put onto the stack
+right-to-left.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-DUP_TOPX">
+<code class="descname">DUP_TOPX</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-DUP_TOPX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Duplicate <em>count</em> items, keeping them in the same order. Due to
+implementation limits, <em>count</em> should be between 1 and 5 inclusive.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-STORE_ATTR">
+<code class="descname">STORE_ATTR</code><span class="sig-paren">(</span><em>namei</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STORE_ATTR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">TOS.name</span> <span class="pre">=</span> <span class="pre">TOS1</span></code>, where <em>namei</em> is the index of name in
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">co_names</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-DELETE_ATTR">
+<code class="descname">DELETE_ATTR</code><span class="sig-paren">(</span><em>namei</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-DELETE_ATTR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <code class="docutils literal notranslate"><span class="pre">del</span> <span class="pre">TOS.name</span></code>, using <em>namei</em> as index into <code class="xref py py-attr docutils literal notranslate"><span class="pre">co_names</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-STORE_GLOBAL">
+<code class="descname">STORE_GLOBAL</code><span class="sig-paren">(</span><em>namei</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STORE_GLOBAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Works as <code class="docutils literal notranslate"><span class="pre">STORE_NAME</span></code>, but stores the name as a global.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-DELETE_GLOBAL">
+<code class="descname">DELETE_GLOBAL</code><span class="sig-paren">(</span><em>namei</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-DELETE_GLOBAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Works as <code class="docutils literal notranslate"><span class="pre">DELETE_NAME</span></code>, but deletes a global name.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-LOAD_CONST">
+<code class="descname">LOAD_CONST</code><span class="sig-paren">(</span><em>consti</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-LOAD_CONST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes <code class="docutils literal notranslate"><span class="pre">co_consts[consti]</span></code> onto the stack.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-LOAD_NAME">
+<code class="descname">LOAD_NAME</code><span class="sig-paren">(</span><em>namei</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-LOAD_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes the value associated with <code class="docutils literal notranslate"><span class="pre">co_names[namei]</span></code> onto the stack.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_TUPLE">
+<code class="descname">BUILD_TUPLE</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_TUPLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a tuple consuming <em>count</em> items from the stack, and pushes the
+resulting tuple onto the stack.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_LIST">
+<code class="descname">BUILD_LIST</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_LIST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Works as <code class="docutils literal notranslate"><span class="pre">BUILD_TUPLE</span></code>, but creates a list.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_SET">
+<code class="descname">BUILD_SET</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_SET" title="Permalink to this definition">¶</a></dt>
+<dd><p>Works as <code class="docutils literal notranslate"><span class="pre">BUILD_TUPLE</span></code>, but creates a set.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.7.</span></p>
+</div>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_MAP">
+<code class="descname">BUILD_MAP</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_MAP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes a new dictionary object onto the stack.  The dictionary is pre-sized
+to hold <em>count</em> entries.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-LOAD_ATTR">
+<code class="descname">LOAD_ATTR</code><span class="sig-paren">(</span><em>namei</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-LOAD_ATTR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces TOS with <code class="docutils literal notranslate"><span class="pre">getattr(TOS,</span> <span class="pre">co_names[namei])</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-COMPARE_OP">
+<code class="descname">COMPARE_OP</code><span class="sig-paren">(</span><em>opname</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-COMPARE_OP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a Boolean operation.  The operation name can be found in
+<code class="docutils literal notranslate"><span class="pre">cmp_op[opname]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-IMPORT_NAME">
+<code class="descname">IMPORT_NAME</code><span class="sig-paren">(</span><em>namei</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-IMPORT_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports the module <code class="docutils literal notranslate"><span class="pre">co_names[namei]</span></code>.  TOS and TOS1 are popped and provide
+the <em>fromlist</em> and <em>level</em> arguments of <a class="reference internal" href="functions.html#__import__" title="__import__"><code class="xref py py-func docutils literal notranslate"><span class="pre">__import__()</span></code></a>.  The module
+object is pushed onto the stack.  The current namespace is not affected: for
+a proper import statement, a subsequent <code class="docutils literal notranslate"><span class="pre">STORE_FAST</span></code> instruction modifies
+the namespace.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-IMPORT_FROM">
+<code class="descname">IMPORT_FROM</code><span class="sig-paren">(</span><em>namei</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-IMPORT_FROM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the attribute <code class="docutils literal notranslate"><span class="pre">co_names[namei]</span></code> from the module found in TOS. The
+resulting object is pushed onto the stack, to be subsequently stored by a
+<code class="docutils literal notranslate"><span class="pre">STORE_FAST</span></code> instruction.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-JUMP_FORWARD">
+<code class="descname">JUMP_FORWARD</code><span class="sig-paren">(</span><em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-JUMP_FORWARD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increments bytecode counter by <em>delta</em>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-POP_JUMP_IF_TRUE">
+<code class="descname">POP_JUMP_IF_TRUE</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-POP_JUMP_IF_TRUE" title="Permalink to this definition">¶</a></dt>
+<dd><p>If TOS is true, sets the bytecode counter to <em>target</em>.  TOS is popped.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-POP_JUMP_IF_FALSE">
+<code class="descname">POP_JUMP_IF_FALSE</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-POP_JUMP_IF_FALSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>If TOS is false, sets the bytecode counter to <em>target</em>.  TOS is popped.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-JUMP_IF_TRUE_OR_POP">
+<code class="descname">JUMP_IF_TRUE_OR_POP</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-JUMP_IF_TRUE_OR_POP" title="Permalink to this definition">¶</a></dt>
+<dd><p>If TOS is true, sets the bytecode counter to <em>target</em> and leaves TOS on the
+stack.  Otherwise (TOS is false), TOS is popped.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-JUMP_IF_FALSE_OR_POP">
+<code class="descname">JUMP_IF_FALSE_OR_POP</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-JUMP_IF_FALSE_OR_POP" title="Permalink to this definition">¶</a></dt>
+<dd><p>If TOS is false, sets the bytecode counter to <em>target</em> and leaves TOS on the
+stack.  Otherwise (TOS is true), TOS is popped.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-JUMP_ABSOLUTE">
+<code class="descname">JUMP_ABSOLUTE</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-JUMP_ABSOLUTE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set bytecode counter to <em>target</em>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-FOR_ITER">
+<code class="descname">FOR_ITER</code><span class="sig-paren">(</span><em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-FOR_ITER" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">TOS</span></code> is an <a class="reference internal" href="../glossary.html#term-iterator"><span class="xref std std-term">iterator</span></a>.  Call its <code class="xref py py-meth docutils literal notranslate"><span class="pre">next()</span></code> method.  If this
+yields a new value, push it on the stack (leaving the iterator below it).  If
+the iterator indicates it is exhausted <code class="docutils literal notranslate"><span class="pre">TOS</span></code> is popped, and the bytecode
+counter is incremented by <em>delta</em>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-LOAD_GLOBAL">
+<code class="descname">LOAD_GLOBAL</code><span class="sig-paren">(</span><em>namei</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-LOAD_GLOBAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the global named <code class="docutils literal notranslate"><span class="pre">co_names[namei]</span></code> onto the stack.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-SETUP_LOOP">
+<code class="descname">SETUP_LOOP</code><span class="sig-paren">(</span><em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-SETUP_LOOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes a block for a loop onto the block stack.  The block spans from the
+current instruction with a size of <em>delta</em> bytes.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-SETUP_EXCEPT">
+<code class="descname">SETUP_EXCEPT</code><span class="sig-paren">(</span><em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-SETUP_EXCEPT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes a try block from a try-except clause onto the block stack. <em>delta</em>
+points to the first except block.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-SETUP_FINALLY">
+<code class="descname">SETUP_FINALLY</code><span class="sig-paren">(</span><em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-SETUP_FINALLY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes a try block from a try-except clause onto the block stack. <em>delta</em>
+points to the finally block.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-STORE_MAP">
+<code class="descname">STORE_MAP</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STORE_MAP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store a key and value pair in a dictionary.  Pops the key and value while
+leaving the dictionary on the stack.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-LOAD_FAST">
+<code class="descname">LOAD_FAST</code><span class="sig-paren">(</span><em>var_num</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-LOAD_FAST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes a reference to the local <code class="docutils literal notranslate"><span class="pre">co_varnames[var_num]</span></code> onto the stack.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-STORE_FAST">
+<code class="descname">STORE_FAST</code><span class="sig-paren">(</span><em>var_num</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STORE_FAST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores TOS into the local <code class="docutils literal notranslate"><span class="pre">co_varnames[var_num]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-DELETE_FAST">
+<code class="descname">DELETE_FAST</code><span class="sig-paren">(</span><em>var_num</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-DELETE_FAST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes local <code class="docutils literal notranslate"><span class="pre">co_varnames[var_num]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-LOAD_CLOSURE">
+<code class="descname">LOAD_CLOSURE</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-LOAD_CLOSURE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes a reference to the cell contained in slot <em>i</em> of the cell and free
+variable storage.  The name of the variable is <code class="docutils literal notranslate"><span class="pre">co_cellvars[i]</span></code> if <em>i</em> is
+less than the length of <em>co_cellvars</em>.  Otherwise it is <code class="docutils literal notranslate"><span class="pre">co_freevars[i</span> <span class="pre">-</span>
+<span class="pre">len(co_cellvars)]</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-LOAD_DEREF">
+<code class="descname">LOAD_DEREF</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-LOAD_DEREF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the cell contained in slot <em>i</em> of the cell and free variable storage.
+Pushes a reference to the object the cell contains on the stack.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-STORE_DEREF">
+<code class="descname">STORE_DEREF</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-STORE_DEREF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores TOS into the cell contained in slot <em>i</em> of the cell and free variable
+storage.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-SET_LINENO">
+<code class="descname">SET_LINENO</code><span class="sig-paren">(</span><em>lineno</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-SET_LINENO" title="Permalink to this definition">¶</a></dt>
+<dd><p>This opcode is obsolete.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-RAISE_VARARGS">
+<code class="descname">RAISE_VARARGS</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-RAISE_VARARGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raises an exception. <em>argc</em> indicates the number of arguments to the raise
+statement, ranging from 0 to 3.  The handler will find the traceback as TOS2,
+the parameter as TOS1, and the exception as TOS.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-CALL_FUNCTION">
+<code class="descname">CALL_FUNCTION</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-CALL_FUNCTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls a callable object.  The low byte of <em>argc</em> indicates the number of
+positional arguments, the high byte the number of keyword arguments.
+The stack contains keyword arguments on top (if any), then the positional
+arguments below that (if any), then the callable object to call below that.
+Each keyword argument is represented with two values on the stack:
+the argument’s name, and its value, with the argument’s value above the
+name on the stack.
+The positional arguments are pushed in the order that they are passed in
+to the callable object, with the right-most positional argument on top.
+<code class="docutils literal notranslate"><span class="pre">CALL_FUNCTION</span></code> pops all arguments and the callable object off the stack,
+calls the callable object with those arguments, and pushes the return value
+returned by the callable object.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-MAKE_FUNCTION">
+<code class="descname">MAKE_FUNCTION</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-MAKE_FUNCTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes a new function object on the stack.  TOS is the code associated with
+the function.  The function object is defined to have <em>argc</em> default
+parameters, which are found below TOS.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-MAKE_CLOSURE">
+<code class="descname">MAKE_CLOSURE</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-MAKE_CLOSURE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new function object, sets its <em>func_closure</em> slot, and pushes it on
+the stack.  TOS is the code associated with the function, TOS1 the tuple
+containing cells for the closure’s free variables.  The function also has
+<em>argc</em> default parameters, which are found below the cells.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_SLICE">
+<code class="descname">BUILD_SLICE</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_SLICE" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-0">Pushes a slice object on the stack.  <em>argc</em> must be 2 or 3.  If it is 2,
+<code class="docutils literal notranslate"><span class="pre">slice(TOS1,</span> <span class="pre">TOS)</span></code> is pushed; if it is 3, <code class="docutils literal notranslate"><span class="pre">slice(TOS2,</span> <span class="pre">TOS1,</span> <span class="pre">TOS)</span></code> is
+pushed. See the <a class="reference internal" href="functions.html#slice" title="slice"><code class="xref py py-func docutils literal notranslate"><span class="pre">slice()</span></code></a> built-in function for more information.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-EXTENDED_ARG">
+<code class="descname">EXTENDED_ARG</code><span class="sig-paren">(</span><em>ext</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-EXTENDED_ARG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prefixes any opcode which has an argument too big to fit into the default two
+bytes.  <em>ext</em> holds two additional bytes which, taken together with the
+subsequent opcode’s argument, comprise a four-byte argument, <em>ext</em> being the
+two most-significant bytes.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-CALL_FUNCTION_VAR">
+<code class="descname">CALL_FUNCTION_VAR</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-CALL_FUNCTION_VAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls a callable object, similarly to <a class="reference internal" href="#opcode-CALL_FUNCTION"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION</span></code></a>.
+<em>argc</em> represents the number of keyword and positional
+arguments, identically to <a class="reference internal" href="#opcode-CALL_FUNCTION"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION</span></code></a>.
+The top of the stack contains an iterable object containing
+additional positional arguments.
+Below that are keyword arguments (if any), positional arguments (if any)
+and a callable object, identically to <a class="reference internal" href="#opcode-CALL_FUNCTION"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION</span></code></a>.
+Before the callable object is called, the iterable object
+is “unpacked” and its contents are appended to the positional
+arguments passed in.
+The iterable object is ignored when computing
+the value of <code class="docutils literal notranslate"><span class="pre">argc</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-CALL_FUNCTION_KW">
+<code class="descname">CALL_FUNCTION_KW</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-CALL_FUNCTION_KW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls a callable object, similarly to <a class="reference internal" href="#opcode-CALL_FUNCTION"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION</span></code></a>.
+<em>argc</em> represents the number of keyword and positional
+arguments, identically to <a class="reference internal" href="#opcode-CALL_FUNCTION"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION</span></code></a>.
+The top of the stack contains a mapping object containing additional keyword
+arguments.
+Below that are keyword arguments (if any), positional arguments (if any)
+and a callable object, identically to <a class="reference internal" href="#opcode-CALL_FUNCTION"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION</span></code></a>.
+Before the callable is called, the mapping object at the top of the stack is
+“unpacked” and its contents are appended to the keyword arguments passed in.
+The mapping object at the top of the stack is ignored when computing
+the value of <code class="docutils literal notranslate"><span class="pre">argc</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-CALL_FUNCTION_VAR_KW">
+<code class="descname">CALL_FUNCTION_VAR_KW</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-CALL_FUNCTION_VAR_KW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls a callable object, similarly to <a class="reference internal" href="#opcode-CALL_FUNCTION_VAR"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION_VAR</span></code></a> and
+<a class="reference internal" href="#opcode-CALL_FUNCTION_KW"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION_KW</span></code></a>.
+<em>argc</em> represents the number of keyword and positional
+arguments, identically to <a class="reference internal" href="#opcode-CALL_FUNCTION"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION</span></code></a>.
+The top of the stack contains a mapping object, as per
+<a class="reference internal" href="#opcode-CALL_FUNCTION_KW"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION_KW</span></code></a>.
+Below that is an iterable object, as per
+<a class="reference internal" href="#opcode-CALL_FUNCTION_VAR"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION_VAR</span></code></a>.
+Below that are keyword arguments (if any), positional arguments (if any)
+and a callable object, identically to <a class="reference internal" href="#opcode-CALL_FUNCTION"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION</span></code></a>.
+Before the callable is called, the mapping object and iterable object
+are each “unpacked” and their contents passed in as keyword and
+positional arguments respectively,
+identically to <a class="reference internal" href="#opcode-CALL_FUNCTION_VAR"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION_VAR</span></code></a> and <a class="reference internal" href="#opcode-CALL_FUNCTION_KW"><code class="xref std std-opcode docutils literal notranslate"><span class="pre">CALL_FUNCTION_KW</span></code></a>.
+The mapping object and iterable object are both ignored when computing
+the value of <code class="docutils literal notranslate"><span class="pre">argc</span></code>.</p>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-HAVE_ARGUMENT">
+<code class="descname">HAVE_ARGUMENT</code><span class="sig-paren">(</span><em></em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-HAVE_ARGUMENT" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is not really an opcode.  It identifies the dividing line between
+opcodes which don’t take arguments <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">HAVE_ARGUMENT</span></code> and those which do
+<code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">HAVE_ARGUMENT</span></code>.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">32.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dis</span></code> — Disassembler for Python bytecode</a><ul>
+<li><a class="reference internal" href="#python-bytecode-instructions">32.12.1. Python Bytecode Instructions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="compileall.html"
+                        title="previous chapter">32.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">compileall</span></code> — Byte-compile Python libraries</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pickletools.html"
+                        title="next chapter">32.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickletools</span></code> — Tools for pickle developers</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/dis.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pickletools.html" title="32.13. pickletools — Tools for pickle developers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="compileall.html" title="32.11. compileall — Byte-compile Python libraries"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" >32. Python Language Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

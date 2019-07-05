@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>31.2. importlib — Convenience wrappers for __import__() &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="31.3. imputil — Import utilities" href="imputil.html" />
+    <link rel="prev" title="31.1. imp — Access the import internals" href="imp.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/importlib.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="imputil.html" title="31.3. imputil — Import utilities"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imp.html" title="31.1. imp — Access the import internals"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" accesskey="U">31. Importing Modules</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-importlib">
+<span id="importlib-convenience-wrappers-for-import"></span><h1>31.2. <a class="reference internal" href="#module-importlib" title="importlib: Convenience wrappers for __import__"><code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib</span></code></a> — Convenience wrappers for <a class="reference internal" href="functions.html#__import__" title="__import__"><code class="xref py py-func docutils literal notranslate"><span class="pre">__import__()</span></code></a><a class="headerlink" href="#module-importlib" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.7.</span></p>
+</div>
+<p>This module is a minor subset of what is available in the more full-featured
+package of the same name from Python 3.1 that provides a complete
+implementation of <a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">import</span></code></a>. What is here has been provided to
+help ease in transitioning from 2.7 to 3.1.</p>
+<dl class="function">
+<dt id="importlib.import_module">
+<code class="descclassname">importlib.</code><code class="descname">import_module</code><span class="sig-paren">(</span><em>name</em>, <em>package=None</em><span class="sig-paren">)</span><a class="headerlink" href="#importlib.import_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import a module. The <em>name</em> argument specifies what module to
+import in absolute or relative terms
+(e.g. either <code class="docutils literal notranslate"><span class="pre">pkg.mod</span></code> or <code class="docutils literal notranslate"><span class="pre">..mod</span></code>). If the name is
+specified in relative terms, then the <em>package</em> argument must be
+specified to the package which is to act as the anchor for resolving the
+package name (e.g. <code class="docutils literal notranslate"><span class="pre">import_module('..mod',</span> <span class="pre">'pkg.subpkg')</span></code> will import
+<code class="docutils literal notranslate"><span class="pre">pkg.mod</span></code>).  The specified module will be inserted into
+<a class="reference internal" href="sys.html#sys.modules" title="sys.modules"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.modules</span></code></a> and returned.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="imp.html"
+                        title="previous chapter">31.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">imp</span></code> — Access the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">import</span></code> internals</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="imputil.html"
+                        title="next chapter">31.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">imputil</span></code> — Import utilities</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/importlib.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="imputil.html" title="31.3. imputil — Import utilities"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imp.html" title="31.1. imp — Access the import internals"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" >31. Importing Modules</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

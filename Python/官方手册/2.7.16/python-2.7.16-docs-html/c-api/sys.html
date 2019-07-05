@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Operating System Utilities &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Importing Modules" href="import.html" />
+    <link rel="prev" title="Utilities" href="utilities.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/c-api/sys.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="import.html" title="Importing Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="utilities.html" title="Utilities"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="utilities.html" accesskey="U">Utilities</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="operating-system-utilities">
+<span id="os"></span><h1>Operating System Utilities<a class="headerlink" href="#operating-system-utilities" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="c.Py_FdIsInteractive">
+int <code class="descname">Py_FdIsInteractive</code><span class="sig-paren">(</span>FILE<em> *fp</em>, const char<em> *filename</em><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_FdIsInteractive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true (nonzero) if the standard I/O file <em>fp</em> with name <em>filename</em> is
+deemed interactive.  This is the case for files for which <code class="docutils literal notranslate"><span class="pre">isatty(fileno(fp))</span></code>
+is true.  If the global flag <code class="xref c c-data docutils literal notranslate"><span class="pre">Py_InteractiveFlag</span></code> is true, this function
+also returns true if the <em>filename</em> pointer is <em>NULL</em> or if the name is equal to
+one of the strings <code class="docutils literal notranslate"><span class="pre">'&lt;stdin&gt;'</span></code> or <code class="docutils literal notranslate"><span class="pre">'???'</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyOS_AfterFork">
+void <code class="descname">PyOS_AfterFork</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyOS_AfterFork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to update some internal state after a process fork; this should be
+called in the new process if the Python interpreter will continue to be used.
+If a new executable is loaded into the new process, this function does not need
+to be called.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyOS_CheckStack">
+int <code class="descname">PyOS_CheckStack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyOS_CheckStack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true when the interpreter runs out of stack space.  This is a reliable
+check, but is only available when <code class="xref py py-const docutils literal notranslate"><span class="pre">USE_STACKCHECK</span></code> is defined (currently
+on Windows using the Microsoft Visual C++ compiler).  <code class="xref py py-const docutils literal notranslate"><span class="pre">USE_STACKCHECK</span></code>
+will be defined automatically; you should never change the definition in your
+own code.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyOS_getsig">
+PyOS_sighandler_t <code class="descname">PyOS_getsig</code><span class="sig-paren">(</span>int<em> i</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyOS_getsig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current signal handler for signal <em>i</em>.  This is a thin wrapper around
+either <code class="xref c c-func docutils literal notranslate"><span class="pre">sigaction()</span></code> or <code class="xref c c-func docutils literal notranslate"><span class="pre">signal()</span></code>.  Do not call those functions
+directly! <code class="xref c c-type docutils literal notranslate"><span class="pre">PyOS_sighandler_t</span></code> is a typedef alias for <code class="xref c c-type docutils literal notranslate"><span class="pre">void</span>
+<span class="pre">(*)(int)</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyOS_setsig">
+PyOS_sighandler_t <code class="descname">PyOS_setsig</code><span class="sig-paren">(</span>int<em> i</em>, PyOS_sighandler_t<em> h</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyOS_setsig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the signal handler for signal <em>i</em> to be <em>h</em>; return the old signal handler.
+This is a thin wrapper around either <code class="xref c c-func docutils literal notranslate"><span class="pre">sigaction()</span></code> or <code class="xref c c-func docutils literal notranslate"><span class="pre">signal()</span></code>.  Do
+not call those functions directly!  <code class="xref c c-type docutils literal notranslate"><span class="pre">PyOS_sighandler_t</span></code> is a typedef
+alias for <code class="xref c c-type docutils literal notranslate"><span class="pre">void</span> <span class="pre">(*)(int)</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="system-functions">
+<span id="systemfunctions"></span><h1>System Functions<a class="headerlink" href="#system-functions" title="Permalink to this headline">¶</a></h1>
+<p>These are utility functions that make functionality from the <a class="reference internal" href="../library/sys.html#module-sys" title="sys: Access system-specific parameters and functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">sys</span></code></a> module
+accessible to C code.  They all work with the current interpreter thread’s
+<a class="reference internal" href="../library/sys.html#module-sys" title="sys: Access system-specific parameters and functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">sys</span></code></a> module’s dict, which is contained in the internal thread state structure.</p>
+<dl class="function">
+<dt id="c.PySys_GetObject">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a> *<code class="descname">PySys_GetObject</code><span class="sig-paren">(</span>char<em> *name</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PySys_GetObject" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Return the object <em>name</em> from the <a class="reference internal" href="../library/sys.html#module-sys" title="sys: Access system-specific parameters and functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">sys</span></code></a> module or <em>NULL</em> if it does
+not exist, without setting an exception.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PySys_GetFile">
+FILE *<code class="descname">PySys_GetFile</code><span class="sig-paren">(</span>char<em> *name</em>, FILE<em> *def</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PySys_GetFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <code class="xref c c-type docutils literal notranslate"><span class="pre">FILE*</span></code> associated with the object <em>name</em> in the
+<a class="reference internal" href="../library/sys.html#module-sys" title="sys: Access system-specific parameters and functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">sys</span></code></a> module, or <em>def</em> if <em>name</em> is not in the module or is not associated
+with a <code class="xref c c-type docutils literal notranslate"><span class="pre">FILE*</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PySys_SetObject">
+int <code class="descname">PySys_SetObject</code><span class="sig-paren">(</span>char<em> *name</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *v</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PySys_SetObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set <em>name</em> in the <a class="reference internal" href="../library/sys.html#module-sys" title="sys: Access system-specific parameters and functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">sys</span></code></a> module to <em>v</em> unless <em>v</em> is <em>NULL</em>, in which
+case <em>name</em> is deleted from the sys module. Returns <code class="docutils literal notranslate"><span class="pre">0</span></code> on success, <code class="docutils literal notranslate"><span class="pre">-1</span></code>
+on error.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PySys_ResetWarnOptions">
+void <code class="descname">PySys_ResetWarnOptions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PySys_ResetWarnOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset <a class="reference internal" href="../library/sys.html#sys.warnoptions" title="sys.warnoptions"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.warnoptions</span></code></a> to an empty list.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PySys_AddWarnOption">
+void <code class="descname">PySys_AddWarnOption</code><span class="sig-paren">(</span>char<em> *s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PySys_AddWarnOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append <em>s</em> to <a class="reference internal" href="../library/sys.html#sys.warnoptions" title="sys.warnoptions"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.warnoptions</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PySys_SetPath">
+void <code class="descname">PySys_SetPath</code><span class="sig-paren">(</span>char<em> *path</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PySys_SetPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.path</span></code></a> to a list object of paths found in <em>path</em> which should
+be a list of paths separated with the platform’s search path delimiter
+(<code class="docutils literal notranslate"><span class="pre">:</span></code> on Unix, <code class="docutils literal notranslate"><span class="pre">;</span></code> on Windows).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PySys_WriteStdout">
+void <code class="descname">PySys_WriteStdout</code><span class="sig-paren">(</span>const char<em> *format</em>, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.PySys_WriteStdout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the output string described by <em>format</em> to <a class="reference internal" href="../library/sys.html#sys.stdout" title="sys.stdout"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>.  No
+exceptions are raised, even if truncation occurs (see below).</p>
+<p><em>format</em> should limit the total size of the formatted output string to
+1000 bytes or less – after 1000 bytes, the output string is truncated.
+In particular, this means that no unrestricted “%s” formats should occur;
+these should be limited using “%.&lt;N&gt;s” where &lt;N&gt; is a decimal number
+calculated so that &lt;N&gt; plus the maximum size of other formatted text does not
+exceed 1000 bytes.  Also watch out for “%f”, which can print hundreds of
+digits for very large numbers.</p>
+<p>If a problem occurs, or <a class="reference internal" href="../library/sys.html#sys.stdout" title="sys.stdout"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a> is unset, the formatted message
+is written to the real (C level) <em>stdout</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PySys_WriteStderr">
+void <code class="descname">PySys_WriteStderr</code><span class="sig-paren">(</span>const char<em> *format</em>, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.PySys_WriteStderr" title="Permalink to this definition">¶</a></dt>
+<dd><p>As above, but write to <a class="reference internal" href="../library/sys.html#sys.stderr" title="sys.stderr"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stderr</span></code></a> or <em>stderr</em> instead.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="process-control">
+<span id="processcontrol"></span><h1>Process Control<a class="headerlink" href="#process-control" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="c.Py_FatalError">
+void <code class="descname">Py_FatalError</code><span class="sig-paren">(</span>const char<em> *message</em><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_FatalError" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-0">Print a fatal error message and kill the process.  No cleanup is performed.
+This function should only be invoked when a condition is detected that would
+make it dangerous to continue using the Python interpreter; e.g., when the
+object administration appears to be corrupted.  On Unix, the standard C library
+function <code class="xref c c-func docutils literal notranslate"><span class="pre">abort()</span></code> is called which will attempt to produce a <code class="file docutils literal notranslate"><span class="pre">core</span></code>
+file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_Exit">
+void <code class="descname">Py_Exit</code><span class="sig-paren">(</span>int<em> status</em><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_Exit" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">Exit the current process.  This calls <a class="reference internal" href="init.html#c.Py_Finalize" title="Py_Finalize"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_Finalize()</span></code></a> and then calls the
+standard C library function <code class="docutils literal notranslate"><span class="pre">exit(status)</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_AtExit">
+int <code class="descname">Py_AtExit</code><span class="sig-paren">(</span>void (<em>*func</em>)()<span class="sig-paren">)</span><a class="headerlink" href="#c.Py_AtExit" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">Register a cleanup function to be called by <a class="reference internal" href="init.html#c.Py_Finalize" title="Py_Finalize"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_Finalize()</span></code></a>.  The cleanup
+function will be called with no arguments and should return no value.  At most
+32 cleanup functions can be registered.  When the registration is successful,
+<a class="reference internal" href="#c.Py_AtExit" title="Py_AtExit"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_AtExit()</span></code></a> returns <code class="docutils literal notranslate"><span class="pre">0</span></code>; on failure, it returns <code class="docutils literal notranslate"><span class="pre">-1</span></code>.  The cleanup
+function registered last is called first. Each cleanup function will be called
+at most once.  Since Python’s internal finalization will have completed before
+the cleanup function, no Python APIs should be called by <em>func</em>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Operating System Utilities</a></li>
+<li><a class="reference internal" href="#system-functions">System Functions</a></li>
+<li><a class="reference internal" href="#process-control">Process Control</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="utilities.html"
+                        title="previous chapter">Utilities</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="import.html"
+                        title="next chapter">Importing Modules</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/c-api/sys.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="import.html" title="Importing Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="utilities.html" title="Utilities"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="utilities.html" >Utilities</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

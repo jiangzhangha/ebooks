@@ -1,0 +1,496 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>37.6. FrameWork — Interactive application framework &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="37.7. autoGIL — Global Interpreter Lock handling in event loops" href="autogil.html" />
+    <link rel="prev" title="37.5. EasyDialogs — Basic Macintosh dialogs" href="easydialogs.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/framework.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="autogil.html" title="37.7. autoGIL — Global Interpreter Lock handling in event loops"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="easydialogs.html" title="37.5. EasyDialogs — Basic Macintosh dialogs"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="mac.html" accesskey="U">37. Mac OS X specific services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-FrameWork">
+<span id="framework-interactive-application-framework"></span><h1>37.6. <a class="reference internal" href="#module-FrameWork" title="FrameWork: Interactive application framework. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FrameWork</span></code></a> — Interactive application framework<a class="headerlink" href="#module-FrameWork" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-FrameWork" title="FrameWork: Interactive application framework. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FrameWork</span></code></a> module contains classes that together provide a framework
+for an interactive Macintosh application. The programmer builds an application
+by creating subclasses that override various methods of the bases classes,
+thereby implementing the functionality wanted. Overriding functionality can
+often be done on various different levels, i.e. to handle clicks in a single
+dialog window in a non-standard way it is not necessary to override the complete
+event handling.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module has been removed in Python 3.x.</p>
+</div>
+<p>Work on the <a class="reference internal" href="#module-FrameWork" title="FrameWork: Interactive application framework. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FrameWork</span></code></a> has pretty much stopped, now that <code class="xref py py-mod docutils literal notranslate"><span class="pre">PyObjC</span></code> is
+available for full Cocoa access from Python, and the documentation describes
+only the most important functionality, and not in the most logical manner at
+that. Examine the source or the examples for more details.  The following are
+some comments posted on the MacPython newsgroup about the strengths and
+limitations of <a class="reference internal" href="#module-FrameWork" title="FrameWork: Interactive application framework. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FrameWork</span></code></a>:</p>
+<blockquote class="epigraph">
+<div><p>The strong point of <a class="reference internal" href="#module-FrameWork" title="FrameWork: Interactive application framework. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FrameWork</span></code></a> is that it allows you to break into the
+control-flow at many different places. <a class="reference internal" href="undoc.html#module-W" title="W: Widgets for the Mac, built on top of FrameWork. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">W</span></code></a>, for instance, uses a different
+way to enable/disable menus and that plugs right in leaving the rest intact.
+The weak points of <a class="reference internal" href="#module-FrameWork" title="FrameWork: Interactive application framework. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FrameWork</span></code></a> are that it has no abstract command
+interface (but that shouldn’t be difficult), that its dialog support is minimal
+and that its control/toolbar support is non-existent.</p>
+</div></blockquote>
+<p>The <a class="reference internal" href="#module-FrameWork" title="FrameWork: Interactive application framework. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FrameWork</span></code></a> module defines the following functions:</p>
+<dl class="function">
+<dt id="FrameWork.Application">
+<code class="descclassname">FrameWork.</code><code class="descname">Application</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Application" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object representing the complete application. See below for a description of
+the methods. The default <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a> routine creates an empty window
+dictionary and a menu bar with an apple menu.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="FrameWork.MenuBar">
+<code class="descclassname">FrameWork.</code><code class="descname">MenuBar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.MenuBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object representing the menubar. This object is usually not created by the
+user.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="FrameWork.Menu">
+<code class="descclassname">FrameWork.</code><code class="descname">Menu</code><span class="sig-paren">(</span><em>bar</em>, <em>title</em><span class="optional">[</span>, <em>after</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object representing a menu. Upon creation you pass the <code class="docutils literal notranslate"><span class="pre">MenuBar</span></code> the menu
+appears in, the <em>title</em> string and a position (1-based) <em>after</em> where the menu
+should appear (default: at the end).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="FrameWork.MenuItem">
+<code class="descclassname">FrameWork.</code><code class="descname">MenuItem</code><span class="sig-paren">(</span><em>menu</em>, <em>title</em><span class="optional">[</span>, <em>shortcut</em>, <em>callback</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.MenuItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a menu item object. The arguments are the menu to create, the item title
+string and optionally the keyboard shortcut and a callback routine. The callback
+is called with the arguments menu-id, item number within menu (1-based), current
+front window and the event record.</p>
+<p>Instead of a callable object the callback can also be a string. In this case
+menu selection causes the lookup of a method in the topmost window and the
+application. The method name is the callback string with <code class="docutils literal notranslate"><span class="pre">'domenu_'</span></code>
+prepended.</p>
+<p>Calling the <code class="docutils literal notranslate"><span class="pre">MenuBar</span></code> <code class="xref py py-meth docutils literal notranslate"><span class="pre">fixmenudimstate()</span></code> method sets the correct dimming
+for all menu items based on the current front window.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="FrameWork.Separator">
+<code class="descclassname">FrameWork.</code><code class="descname">Separator</code><span class="sig-paren">(</span><em>menu</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Separator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a separator to the end of a menu.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="FrameWork.SubMenu">
+<code class="descclassname">FrameWork.</code><code class="descname">SubMenu</code><span class="sig-paren">(</span><em>menu</em>, <em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.SubMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a submenu named <em>label</em> under menu <em>menu</em>. The menu object is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="FrameWork.Window">
+<code class="descclassname">FrameWork.</code><code class="descname">Window</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a (modeless) window. <em>Parent</em> is the application object to which the
+window belongs. The window is not displayed until later.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="FrameWork.DialogWindow">
+<code class="descclassname">FrameWork.</code><code class="descname">DialogWindow</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.DialogWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a modeless dialog window.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="FrameWork.windowbounds">
+<code class="descclassname">FrameWork.</code><code class="descname">windowbounds</code><span class="sig-paren">(</span><em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.windowbounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <code class="docutils literal notranslate"><span class="pre">(left,</span> <span class="pre">top,</span> <span class="pre">right,</span> <span class="pre">bottom)</span></code> tuple suitable for creation of a window
+of given width and height. The window will be staggered with respect to previous
+windows, and an attempt is made to keep the whole window on-screen. However, the
+window will however always be the exact size given, so parts may be offscreen.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="FrameWork.setwatchcursor">
+<code class="descclassname">FrameWork.</code><code class="descname">setwatchcursor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.setwatchcursor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the mouse cursor to a watch.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="FrameWork.setarrowcursor">
+<code class="descclassname">FrameWork.</code><code class="descname">setarrowcursor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.setarrowcursor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the mouse cursor to an arrow.</p>
+</dd></dl>
+
+<div class="section" id="application-objects">
+<span id="id1"></span><h2>37.6.1. Application Objects<a class="headerlink" href="#application-objects" title="Permalink to this headline">¶</a></h2>
+<p>Application objects have the following methods, among others:</p>
+<dl class="method">
+<dt id="FrameWork.Application.makeusermenus">
+<code class="descclassname">Application.</code><code class="descname">makeusermenus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Application.makeusermenus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this method if you need menus in your application. Append the menus to
+the attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">menubar</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Application.getabouttext">
+<code class="descclassname">Application.</code><code class="descname">getabouttext</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Application.getabouttext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this method to return a text string describing your application.
+Alternatively, override the <code class="xref py py-meth docutils literal notranslate"><span class="pre">do_about()</span></code> method for more elaborate “about”
+messages.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Application.mainloop">
+<code class="descclassname">Application.</code><code class="descname">mainloop</code><span class="sig-paren">(</span><span class="optional">[</span><em>mask</em><span class="optional">[</span>, <em>wait</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Application.mainloop" title="Permalink to this definition">¶</a></dt>
+<dd><p>This routine is the main event loop, call it to set your application rolling.
+<em>Mask</em> is the mask of events you want to handle, <em>wait</em> is the number of ticks
+you want to leave to other concurrent application (default 0, which is probably
+not a good idea). While raising <em>self</em> to exit the mainloop is still supported
+it is not recommended: call <code class="docutils literal notranslate"><span class="pre">self._quit()</span></code> instead.</p>
+<p>The event loop is split into many small parts, each of which can be overridden.
+The default methods take care of dispatching events to windows and dialogs,
+handling drags and resizes, Apple Events, events for non-FrameWork windows, etc.</p>
+<p>In general, all event handlers should return <code class="docutils literal notranslate"><span class="pre">1</span></code> if the event is fully handled
+and <code class="docutils literal notranslate"><span class="pre">0</span></code> otherwise (because the front window was not a FrameWork window, for
+instance). This is needed so that update events and such can be passed on to
+other windows like the Sioux console window. Calling <code class="xref py py-func docutils literal notranslate"><span class="pre">MacOS.HandleEvent()</span></code>
+is not allowed within <em>our_dispatch</em> or its callees, since this may result in an
+infinite loop if the code is called through the Python inner-loop event handler.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Application.asyncevents">
+<code class="descclassname">Application.</code><code class="descname">asyncevents</code><span class="sig-paren">(</span><em>onoff</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Application.asyncevents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call this method with a nonzero parameter to enable asynchronous event handling.
+This will tell the inner interpreter loop to call the application event handler
+<em>async_dispatch</em> whenever events are available. This will cause FrameWork window
+updates and the user interface to remain working during long computations, but
+will slow the interpreter down and may cause surprising results in non-reentrant
+code (such as FrameWork itself). By default <em>async_dispatch</em> will immediately
+call <em>our_dispatch</em> but you may override this to handle only certain events
+asynchronously. Events you do not handle will be passed to Sioux and such.</p>
+<p>The old on/off value is returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Application._quit">
+<code class="descclassname">Application.</code><code class="descname">_quit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Application._quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminate the running <a class="reference internal" href="#FrameWork.Application.mainloop" title="FrameWork.Application.mainloop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mainloop()</span></code></a> call at the next convenient moment.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Application.do_char">
+<code class="descclassname">Application.</code><code class="descname">do_char</code><span class="sig-paren">(</span><em>c</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Application.do_char" title="Permalink to this definition">¶</a></dt>
+<dd><p>The user typed character <em>c</em>. The complete details of the event can be found in
+the <em>event</em> structure. This method can also be provided in a <code class="docutils literal notranslate"><span class="pre">Window</span></code> object,
+which overrides the application-wide handler if the window is frontmost.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Application.do_dialogevent">
+<code class="descclassname">Application.</code><code class="descname">do_dialogevent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Application.do_dialogevent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called early in the event loop to handle modeless dialog events. The default
+method simply dispatches the event to the relevant dialog (not through the
+<code class="docutils literal notranslate"><span class="pre">DialogWindow</span></code> object involved). Override if you need special handling of
+dialog events (keyboard shortcuts, etc).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Application.idle">
+<code class="descclassname">Application.</code><code class="descname">idle</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Application.idle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by the main event loop when no events are available. The null-event is
+passed (so you can look at mouse position, etc).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="window-objects">
+<span id="id2"></span><h2>37.6.2. Window Objects<a class="headerlink" href="#window-objects" title="Permalink to this headline">¶</a></h2>
+<p>Window objects have the following methods, among others:</p>
+<dl class="method">
+<dt id="FrameWork.Window.open">
+<code class="descclassname">Window.</code><code class="descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Window.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this method to open a window. Store the Mac OS window-id in
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">self.wid</span></code> and call the <code class="xref py py-meth docutils literal notranslate"><span class="pre">do_postopen()</span></code> method to register the window
+with the parent application.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Window.close">
+<code class="descclassname">Window.</code><code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Window.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this method to do any special processing on window close. Call the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">do_postclose()</span></code> method to cleanup the parent state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Window.do_postresize">
+<code class="descclassname">Window.</code><code class="descname">do_postresize</code><span class="sig-paren">(</span><em>width</em>, <em>height</em>, <em>macoswindowid</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Window.do_postresize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called after the window is resized. Override if more needs to be done than
+calling <code class="docutils literal notranslate"><span class="pre">InvalRect</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Window.do_contentclick">
+<code class="descclassname">Window.</code><code class="descname">do_contentclick</code><span class="sig-paren">(</span><em>local</em>, <em>modifiers</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Window.do_contentclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>The user clicked in the content part of a window. The arguments are the
+coordinates (window-relative), the key modifiers and the raw event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Window.do_update">
+<code class="descclassname">Window.</code><code class="descname">do_update</code><span class="sig-paren">(</span><em>macoswindowid</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Window.do_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>An update event for the window was received. Redraw the window.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.Window.do_activate">
+<code class="descclassname">Window.</code><code class="descname">do_activate</code><span class="sig-paren">(</span><em>activate</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.Window.do_activate" title="Permalink to this definition">¶</a></dt>
+<dd><p>The window was activated (<code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">==</span> <span class="pre">1</span></code>) or deactivated (<code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">==</span> <span class="pre">0</span></code>).
+Handle things like focus highlighting, etc.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="controlswindow-object">
+<span id="id3"></span><h2>37.6.3. ControlsWindow Object<a class="headerlink" href="#controlswindow-object" title="Permalink to this headline">¶</a></h2>
+<p>ControlsWindow objects have the following methods besides those of <code class="docutils literal notranslate"><span class="pre">Window</span></code>
+objects:</p>
+<dl class="method">
+<dt id="FrameWork.ControlsWindow.do_controlhit">
+<code class="descclassname">ControlsWindow.</code><code class="descname">do_controlhit</code><span class="sig-paren">(</span><em>window</em>, <em>control</em>, <em>pcode</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.ControlsWindow.do_controlhit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Part <em>pcode</em> of control <em>control</em> was hit by the user. Tracking and such has
+already been taken care of.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="scrolledwindow-object">
+<span id="id4"></span><h2>37.6.4. ScrolledWindow Object<a class="headerlink" href="#scrolledwindow-object" title="Permalink to this headline">¶</a></h2>
+<p>ScrolledWindow objects are ControlsWindow objects with the following extra
+methods:</p>
+<dl class="method">
+<dt id="FrameWork.ScrolledWindow.scrollbars">
+<code class="descclassname">ScrolledWindow.</code><code class="descname">scrollbars</code><span class="sig-paren">(</span><span class="optional">[</span><em>wantx</em><span class="optional">[</span>, <em>wanty</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.ScrolledWindow.scrollbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create (or destroy) horizontal and vertical scrollbars. The arguments specify
+which you want (default: both). The scrollbars always have minimum <code class="docutils literal notranslate"><span class="pre">0</span></code> and
+maximum <code class="docutils literal notranslate"><span class="pre">32767</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.ScrolledWindow.getscrollbarvalues">
+<code class="descclassname">ScrolledWindow.</code><code class="descname">getscrollbarvalues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.ScrolledWindow.getscrollbarvalues" title="Permalink to this definition">¶</a></dt>
+<dd><p>You must supply this method. It should return a tuple <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> giving the
+current position of the scrollbars (between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">32767</span></code>). You can return
+<code class="docutils literal notranslate"><span class="pre">None</span></code> for either to indicate the whole document is visible in that direction.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.ScrolledWindow.updatescrollbars">
+<code class="descclassname">ScrolledWindow.</code><code class="descname">updatescrollbars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.ScrolledWindow.updatescrollbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call this method when the document has changed. It will call
+<a class="reference internal" href="#FrameWork.ScrolledWindow.getscrollbarvalues" title="FrameWork.ScrolledWindow.getscrollbarvalues"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getscrollbarvalues()</span></code></a> and update the scrollbars.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.ScrolledWindow.scrollbar_callback">
+<code class="descclassname">ScrolledWindow.</code><code class="descname">scrollbar_callback</code><span class="sig-paren">(</span><em>which</em>, <em>what</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.ScrolledWindow.scrollbar_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supplied by you and called after user interaction. <em>which</em> will be <code class="docutils literal notranslate"><span class="pre">'x'</span></code> or
+<code class="docutils literal notranslate"><span class="pre">'y'</span></code>, <em>what</em> will be <code class="docutils literal notranslate"><span class="pre">'-'</span></code>, <code class="docutils literal notranslate"><span class="pre">'--'</span></code>, <code class="docutils literal notranslate"><span class="pre">'set'</span></code>, <code class="docutils literal notranslate"><span class="pre">'++'</span></code> or <code class="docutils literal notranslate"><span class="pre">'+'</span></code>. For
+<code class="docutils literal notranslate"><span class="pre">'set'</span></code>, <em>value</em> will contain the new scrollbar position.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.ScrolledWindow.scalebarvalues">
+<code class="descclassname">ScrolledWindow.</code><code class="descname">scalebarvalues</code><span class="sig-paren">(</span><em>absmin</em>, <em>absmax</em>, <em>curmin</em>, <em>curmax</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.ScrolledWindow.scalebarvalues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary method to help you calculate values to return from
+<a class="reference internal" href="#FrameWork.ScrolledWindow.getscrollbarvalues" title="FrameWork.ScrolledWindow.getscrollbarvalues"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getscrollbarvalues()</span></code></a>. You pass document minimum and maximum value and
+topmost (leftmost) and bottommost (rightmost) visible values and it returns the
+correct number or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.ScrolledWindow.do_activate">
+<code class="descclassname">ScrolledWindow.</code><code class="descname">do_activate</code><span class="sig-paren">(</span><em>onoff</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.ScrolledWindow.do_activate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes care of dimming/highlighting scrollbars when a window becomes frontmost.
+If you override this method, call this one at the end of your method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.ScrolledWindow.do_postresize">
+<code class="descclassname">ScrolledWindow.</code><code class="descname">do_postresize</code><span class="sig-paren">(</span><em>width</em>, <em>height</em>, <em>window</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.ScrolledWindow.do_postresize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves scrollbars to the correct position. Call this method initially if you
+override it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.ScrolledWindow.do_controlhit">
+<code class="descclassname">ScrolledWindow.</code><code class="descname">do_controlhit</code><span class="sig-paren">(</span><em>window</em>, <em>control</em>, <em>pcode</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.ScrolledWindow.do_controlhit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles scrollbar interaction. If you override it call this method first, a
+nonzero return value indicates the hit was in the scrollbars and has been
+handled.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="dialogwindow-objects">
+<span id="id5"></span><h2>37.6.5. DialogWindow Objects<a class="headerlink" href="#dialogwindow-objects" title="Permalink to this headline">¶</a></h2>
+<p>DialogWindow objects have the following methods besides those of <code class="docutils literal notranslate"><span class="pre">Window</span></code>
+objects:</p>
+<dl class="method">
+<dt id="FrameWork.DialogWindow.open">
+<code class="descclassname">DialogWindow.</code><code class="descname">open</code><span class="sig-paren">(</span><em>resid</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.DialogWindow.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dialog window, from the DLOG resource with id <em>resid</em>. The dialog
+object is stored in <code class="xref py py-attr docutils literal notranslate"><span class="pre">self.wid</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FrameWork.DialogWindow.do_itemhit">
+<code class="descclassname">DialogWindow.</code><code class="descname">do_itemhit</code><span class="sig-paren">(</span><em>item</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#FrameWork.DialogWindow.do_itemhit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Item number <em>item</em> was hit. You are responsible for redrawing toggle buttons,
+etc.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">37.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">FrameWork</span></code> — Interactive application framework</a><ul>
+<li><a class="reference internal" href="#application-objects">37.6.1. Application Objects</a></li>
+<li><a class="reference internal" href="#window-objects">37.6.2. Window Objects</a></li>
+<li><a class="reference internal" href="#controlswindow-object">37.6.3. ControlsWindow Object</a></li>
+<li><a class="reference internal" href="#scrolledwindow-object">37.6.4. ScrolledWindow Object</a></li>
+<li><a class="reference internal" href="#dialogwindow-objects">37.6.5. DialogWindow Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="easydialogs.html"
+                        title="previous chapter">37.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">EasyDialogs</span></code> — Basic Macintosh dialogs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="autogil.html"
+                        title="next chapter">37.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">autoGIL</span></code> — Global Interpreter Lock handling in event loops</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/framework.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="autogil.html" title="37.7. autoGIL — Global Interpreter Lock handling in event loops"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="easydialogs.html" title="37.5. EasyDialogs — Basic Macintosh dialogs"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="mac.html" >37. Mac OS X specific services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

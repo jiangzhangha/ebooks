@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>18.8. MimeWriter — Generic MIME file writer &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="18.9. mimify — MIME processing of mail messages" href="mimify.html" />
+    <link rel="prev" title="18.7. mimetypes — Map filenames to MIME types" href="mimetypes.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/mimewriter.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mimify.html" title="18.9. mimify — MIME processing of mail messages"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mimetypes.html" title="18.7. mimetypes — Map filenames to MIME types"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" accesskey="U">18. Internet Data Handling</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-MimeWriter">
+<span id="mimewriter-generic-mime-file-writer"></span><h1>18.8. <a class="reference internal" href="#module-MimeWriter" title="MimeWriter: Write MIME format files. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">MimeWriter</span></code></a> — Generic MIME file writer<a class="headerlink" href="#module-MimeWriter" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.3: </span>The <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code></a> package should be used in preference to the <a class="reference internal" href="#module-MimeWriter" title="MimeWriter: Write MIME format files. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">MimeWriter</span></code></a>
+module.  This module is present only to maintain backward compatibility.</p>
+</div>
+<p>This module defines the class <a class="reference internal" href="#MimeWriter.MimeWriter" title="MimeWriter.MimeWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">MimeWriter</span></code></a>.  The <a class="reference internal" href="#MimeWriter.MimeWriter" title="MimeWriter.MimeWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">MimeWriter</span></code></a>
+class implements a basic formatter for creating MIME multi-part files.  It
+doesn’t seek around the output file nor does it use large amounts of buffer
+space. You must write the parts out in the order that they should occur in the
+final file. <a class="reference internal" href="#MimeWriter.MimeWriter" title="MimeWriter.MimeWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">MimeWriter</span></code></a> does buffer the headers you add, allowing you
+to rearrange their order.</p>
+<dl class="class">
+<dt id="MimeWriter.MimeWriter">
+<em class="property">class </em><code class="descclassname">MimeWriter.</code><code class="descname">MimeWriter</code><span class="sig-paren">(</span><em>fp</em><span class="sig-paren">)</span><a class="headerlink" href="#MimeWriter.MimeWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new instance of the <a class="reference internal" href="#MimeWriter.MimeWriter" title="MimeWriter.MimeWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">MimeWriter</span></code></a> class.  The only argument
+passed, <em>fp</em>, is a file object to be used for writing. Note that a
+<a class="reference internal" href="stringio.html#StringIO.StringIO" title="StringIO.StringIO"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringIO</span></code></a> object could also be used.</p>
+</dd></dl>
+
+<div class="section" id="mimewriter-objects">
+<span id="id1"></span><h2>18.8.1. MimeWriter Objects<a class="headerlink" href="#mimewriter-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#MimeWriter.MimeWriter" title="MimeWriter.MimeWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">MimeWriter</span></code></a> instances have the following methods:</p>
+<dl class="method">
+<dt id="MimeWriter.MimeWriter.addheader">
+<code class="descclassname">MimeWriter.</code><code class="descname">addheader</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="optional">[</span>, <em>prefix</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#MimeWriter.MimeWriter.addheader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a header line to the MIME message. The <em>key</em> is the name of the header,
+where the <em>value</em> obviously provides the value of the header. The optional
+argument <em>prefix</em> determines where the header  is inserted; <code class="docutils literal notranslate"><span class="pre">0</span></code> means append
+at the end, <code class="docutils literal notranslate"><span class="pre">1</span></code> is insert at the start. The default is to append.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MimeWriter.MimeWriter.flushheaders">
+<code class="descclassname">MimeWriter.</code><code class="descname">flushheaders</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MimeWriter.MimeWriter.flushheaders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Causes all headers accumulated so far to be written out (and forgotten). This is
+useful if you don’t need a body part at all, e.g. for a subpart of type
+<em class="mimetype">message/rfc822</em> that’s (mis)used to store some header-like
+information.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MimeWriter.MimeWriter.startbody">
+<code class="descclassname">MimeWriter.</code><code class="descname">startbody</code><span class="sig-paren">(</span><em>ctype</em><span class="optional">[</span>, <em>plist</em><span class="optional">[</span>, <em>prefix</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#MimeWriter.MimeWriter.startbody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a file-like object which can be used to write to the body of the
+message.  The content-type is set to the provided <em>ctype</em>, and the optional
+parameter <em>plist</em> provides additional parameters for the content-type
+declaration. <em>prefix</em> functions as in <a class="reference internal" href="#MimeWriter.MimeWriter.addheader" title="MimeWriter.MimeWriter.addheader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addheader()</span></code></a> except that the default
+is to insert at the start.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MimeWriter.MimeWriter.startmultipartbody">
+<code class="descclassname">MimeWriter.</code><code class="descname">startmultipartbody</code><span class="sig-paren">(</span><em>subtype</em><span class="optional">[</span>, <em>boundary</em><span class="optional">[</span>, <em>plist</em><span class="optional">[</span>, <em>prefix</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#MimeWriter.MimeWriter.startmultipartbody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a file-like object which can be used to write to the body of the
+message.  Additionally, this method initializes the multi-part code, where
+<em>subtype</em> provides the multipart subtype, <em>boundary</em> may provide a user-defined
+boundary specification, and <em>plist</em> provides optional parameters for the
+subtype. <em>prefix</em> functions as in <a class="reference internal" href="#MimeWriter.MimeWriter.startbody" title="MimeWriter.MimeWriter.startbody"><code class="xref py py-meth docutils literal notranslate"><span class="pre">startbody()</span></code></a>.  Subparts should be created
+using <a class="reference internal" href="#MimeWriter.MimeWriter.nextpart" title="MimeWriter.MimeWriter.nextpart"><code class="xref py py-meth docutils literal notranslate"><span class="pre">nextpart()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MimeWriter.MimeWriter.nextpart">
+<code class="descclassname">MimeWriter.</code><code class="descname">nextpart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MimeWriter.MimeWriter.nextpart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new instance of <a class="reference internal" href="#MimeWriter.MimeWriter" title="MimeWriter.MimeWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">MimeWriter</span></code></a> which represents an individual
+part in a multipart message.  This may be used to write the  part as well as
+used for creating recursively complex multipart messages. The message must first
+be initialized with <a class="reference internal" href="#MimeWriter.MimeWriter.startmultipartbody" title="MimeWriter.MimeWriter.startmultipartbody"><code class="xref py py-meth docutils literal notranslate"><span class="pre">startmultipartbody()</span></code></a> before using <a class="reference internal" href="#MimeWriter.MimeWriter.nextpart" title="MimeWriter.MimeWriter.nextpart"><code class="xref py py-meth docutils literal notranslate"><span class="pre">nextpart()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MimeWriter.MimeWriter.lastpart">
+<code class="descclassname">MimeWriter.</code><code class="descname">lastpart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MimeWriter.MimeWriter.lastpart" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is used to designate the last part of a multipart message, and should
+<em>always</em> be used when writing multipart messages.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">MimeWriter</span></code> — Generic MIME file writer</a><ul>
+<li><a class="reference internal" href="#mimewriter-objects">18.8.1. MimeWriter Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mimetypes.html"
+                        title="previous chapter">18.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mimetypes</span></code> — Map filenames to MIME types</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mimify.html"
+                        title="next chapter">18.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mimify</span></code> — MIME processing of mail messages</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/mimewriter.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mimify.html" title="18.9. mimify — MIME processing of mail messages"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mimetypes.html" title="18.7. mimetypes — Map filenames to MIME types"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >18. Internet Data Handling</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Iterator Protocol &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Old Buffer Protocol" href="objbuffer.html" />
+    <link rel="prev" title="Mapping Protocol" href="mapping.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/c-api/iter.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="objbuffer.html" title="Old Buffer Protocol"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mapping.html" title="Mapping Protocol"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="abstract.html" accesskey="U">Abstract Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="iterator-protocol">
+<span id="iterator"></span><h1>Iterator Protocol<a class="headerlink" href="#iterator-protocol" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+<p>There are two functions specifically for working with iterators.</p>
+<dl class="function">
+<dt id="c.PyIter_Check">
+int <code class="descname">PyIter_Check</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyIter_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object <em>o</em> supports the iterator protocol.</p>
+<p>This function can return a false positive in the case of old-style
+classes because those classes always define a <code class="xref c c-member docutils literal notranslate"><span class="pre">tp_iternext</span></code>
+slot with logic that either invokes a <a class="reference internal" href="../library/functions.html#next" title="next"><code class="xref py py-meth docutils literal notranslate"><span class="pre">next()</span></code></a> method or raises
+a <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyIter_Next">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyIter_Next</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyIter_Next" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return the next value from the iteration <em>o</em>.  The object must be an iterator
+(it is up to the caller to check this).  If there are no remaining values,
+returns <em>NULL</em> with no exception set.  If an error occurs while retrieving
+the item, returns <em>NULL</em> and passes along the exception.</p>
+</dd></dl>
+
+<p>To write a loop which iterates over an iterator, the C code should look
+something like this:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">iterator</span> <span class="o">=</span> <span class="n">PyObject_GetIter</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+<span class="n">PyObject</span> <span class="o">*</span><span class="n">item</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">iterator</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/* propagate error */</span>
+<span class="p">}</span>
+
+<span class="k">while</span> <span class="p">(</span><span class="n">item</span> <span class="o">=</span> <span class="n">PyIter_Next</span><span class="p">(</span><span class="n">iterator</span><span class="p">))</span> <span class="p">{</span>
+    <span class="cm">/* do something with item */</span>
+    <span class="p">...</span>
+    <span class="cm">/* release reference when done */</span>
+    <span class="n">Py_DECREF</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">Py_DECREF</span><span class="p">(</span><span class="n">iterator</span><span class="p">);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">PyErr_Occurred</span><span class="p">())</span> <span class="p">{</span>
+    <span class="cm">/* propagate error */</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="p">{</span>
+    <span class="cm">/* continue doing useful work */</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mapping.html"
+                        title="previous chapter">Mapping Protocol</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="objbuffer.html"
+                        title="next chapter">Old Buffer Protocol</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/c-api/iter.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="objbuffer.html" title="Old Buffer Protocol"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mapping.html" title="Mapping Protocol"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="abstract.html" >Abstract Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

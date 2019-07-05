@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>20.1. webbrowser — Convenient Web-browser controller &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="20.2. cgi — Common Gateway Interface support" href="cgi.html" />
+    <link rel="prev" title="20. Internet Protocols and Support" href="internet.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/webbrowser.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cgi.html" title="20.2. cgi — Common Gateway Interface support"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="internet.html" title="20. Internet Protocols and Support"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" accesskey="U">20. Internet Protocols and Support</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-webbrowser">
+<span id="webbrowser-convenient-web-browser-controller"></span><h1>20.1. <a class="reference internal" href="#module-webbrowser" title="webbrowser: Easy-to-use controller for Web browsers."><code class="xref py py-mod docutils literal notranslate"><span class="pre">webbrowser</span></code></a> — Convenient Web-browser controller<a class="headerlink" href="#module-webbrowser" title="Permalink to this headline">¶</a></h1>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/webbrowser.py">Lib/webbrowser.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-webbrowser" title="webbrowser: Easy-to-use controller for Web browsers."><code class="xref py py-mod docutils literal notranslate"><span class="pre">webbrowser</span></code></a> module provides a high-level interface to allow displaying
+Web-based documents to users. Under most circumstances, simply calling the
+<a class="reference internal" href="#webbrowser.open" title="webbrowser.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> function from this module will do the right thing.</p>
+<p>Under Unix, graphical browsers are preferred under X11, but text-mode browsers
+will be used if graphical browsers are not available or an X11 display isn’t
+available.  If text-mode browsers are used, the calling process will block until
+the user exits the browser.</p>
+<p>If the environment variable <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">BROWSER</span></code> exists, it is interpreted to
+override the platform default list of browsers, as an <a class="reference internal" href="os.html#os.pathsep" title="os.pathsep"><code class="xref py py-data docutils literal notranslate"><span class="pre">os.pathsep</span></code></a>-separated
+list of browsers to try in order.  When the value of a list part contains the
+string <code class="docutils literal notranslate"><span class="pre">%s</span></code>, then it is  interpreted as a literal browser command line to be
+used with the argument URL substituted for <code class="docutils literal notranslate"><span class="pre">%s</span></code>; if the part does not contain
+<code class="docutils literal notranslate"><span class="pre">%s</span></code>, it is simply interpreted as the name of the browser to launch. <a class="footnote-reference brackets" href="#id2" id="id1">1</a></p>
+<p>For non-Unix platforms, or when a remote browser is available on Unix, the
+controlling process will not wait for the user to finish with the browser, but
+allow the remote browser to maintain its own windows on the display.  If remote
+browsers are not available on Unix, the controlling process will launch a new
+browser and wait.</p>
+<p>The script <strong class="program">webbrowser</strong> can be used as a command-line interface for the
+module. It accepts a URL as the argument. It accepts the following optional
+parameters: <code class="docutils literal notranslate"><span class="pre">-n</span></code> opens the URL in a new browser window, if possible;
+<code class="docutils literal notranslate"><span class="pre">-t</span></code> opens the URL in a new browser page (“tab”). The options are,
+naturally, mutually exclusive.  Usage example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">webbrowser</span> <span class="o">-</span><span class="n">t</span> <span class="s2">&quot;http://www.python.org&quot;</span>
+</pre></div>
+</div>
+<p>The following exception is defined:</p>
+<dl class="exception">
+<dt id="webbrowser.Error">
+<em class="property">exception </em><code class="descclassname">webbrowser.</code><code class="descname">Error</code><a class="headerlink" href="#webbrowser.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when a browser control error occurs.</p>
+</dd></dl>
+
+<p>The following functions are defined:</p>
+<dl class="function">
+<dt id="webbrowser.open">
+<code class="descclassname">webbrowser.</code><code class="descname">open</code><span class="sig-paren">(</span><em>url</em>, <em>new=0</em>, <em>autoraise=True</em><span class="sig-paren">)</span><a class="headerlink" href="#webbrowser.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display <em>url</em> using the default browser. If <em>new</em> is 0, the <em>url</em> is opened
+in the same browser window if possible.  If <em>new</em> is 1, a new browser window
+is opened if possible.  If <em>new</em> is 2, a new browser page (“tab”) is opened
+if possible.  If <em>autoraise</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the window is raised if possible
+(note that under many window managers this will occur regardless of the
+setting of this variable).</p>
+<p>Note that on some platforms, trying to open a filename using this function,
+may work and start the operating system’s associated program.  However, this
+is neither supported nor portable.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span><em>new</em> can now be 2.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="webbrowser.open_new">
+<code class="descclassname">webbrowser.</code><code class="descname">open_new</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#webbrowser.open_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open <em>url</em> in a new window of the default browser, if possible, otherwise, open
+<em>url</em> in the only browser window.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="webbrowser.open_new_tab">
+<code class="descclassname">webbrowser.</code><code class="descname">open_new_tab</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#webbrowser.open_new_tab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open <em>url</em> in a new page (“tab”) of the default browser, if possible, otherwise
+equivalent to <a class="reference internal" href="#webbrowser.open_new" title="webbrowser.open_new"><code class="xref py py-func docutils literal notranslate"><span class="pre">open_new()</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="webbrowser.get">
+<code class="descclassname">webbrowser.</code><code class="descname">get</code><span class="sig-paren">(</span><span class="optional">[</span><em>name</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#webbrowser.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a controller object for the browser type <em>name</em>.  If <em>name</em> is empty,
+return a controller for a default browser appropriate to the caller’s
+environment.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="webbrowser.register">
+<code class="descclassname">webbrowser.</code><code class="descname">register</code><span class="sig-paren">(</span><em>name</em>, <em>constructor</em><span class="optional">[</span>, <em>instance</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#webbrowser.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register the browser type <em>name</em>.  Once a browser type is registered, the
+<a class="reference internal" href="#webbrowser.get" title="webbrowser.get"><code class="xref py py-func docutils literal notranslate"><span class="pre">get()</span></code></a> function can return a controller for that browser type.  If
+<em>instance</em> is not provided, or is <code class="docutils literal notranslate"><span class="pre">None</span></code>, <em>constructor</em> will be called without
+parameters to create an instance when needed.  If <em>instance</em> is provided,
+<em>constructor</em> will never be called, and may be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>This entry point is only useful if you plan to either set the <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">BROWSER</span></code>
+variable or call <a class="reference internal" href="#webbrowser.get" title="webbrowser.get"><code class="xref py py-func docutils literal notranslate"><span class="pre">get()</span></code></a> with a nonempty argument matching the name of a
+handler you declare.</p>
+</dd></dl>
+
+<p>A number of browser types are predefined.  This table gives the type names that
+may be passed to the <a class="reference internal" href="#webbrowser.get" title="webbrowser.get"><code class="xref py py-func docutils literal notranslate"><span class="pre">get()</span></code></a> function and the corresponding instantiations
+for the controller classes, all defined in this module.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 58%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type Name</p></th>
+<th class="head"><p>Class Name</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'mozilla'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Mozilla('mozilla')</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'firefox'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Mozilla('mozilla')</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'netscape'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Mozilla('netscape')</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'galeon'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Galeon('galeon')</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'epiphany'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Galeon('epiphany')</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'skipstone'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundBrowser('skipstone')</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'kfmclient'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Konqueror()</span></code></p></td>
+<td><p>(1)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'konqueror'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Konqueror()</span></code></p></td>
+<td><p>(1)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'kfm'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Konqueror()</span></code></p></td>
+<td><p>(1)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'mosaic'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundBrowser('mosaic')</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'opera'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Opera()</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'grail'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Grail()</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'links'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericBrowser('links')</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'elinks'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Elinks('elinks')</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'lynx'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericBrowser('lynx')</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'w3m'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericBrowser('w3m')</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'windows-default'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">WindowsDefault</span></code></p></td>
+<td><p>(2)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'macosx'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">MacOSX('default')</span></code></p></td>
+<td><p>(3)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'safari'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">MacOSX('safari')</span></code></p></td>
+<td><p>(3)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'google-chrome'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Chrome('google-chrome')</span></code></p></td>
+<td><p>(4)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'chrome'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Chrome('chrome')</span></code></p></td>
+<td><p>(4)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'chromium'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Chromium('chromium')</span></code></p></td>
+<td><p>(4)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'chromium-browser'</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Chromium('chromium-browser')</span></code></p></td>
+<td><p>(4)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Notes:</p>
+<ol class="arabic simple">
+<li><p>“Konqueror” is the file manager for the KDE desktop environment for Unix, and
+only makes sense to use if KDE is running.  Some way of reliably detecting KDE
+would be nice; the <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">KDEDIR</span></code> variable is not sufficient.  Note also that
+the name “kfm” is used even when using the <strong class="program">konqueror</strong> command with KDE
+2 — the implementation selects the best strategy for running Konqueror.</p></li>
+<li><p>Only on Windows platforms.</p></li>
+<li><p>Only on Mac OS X platform.</p></li>
+<li><p>Support for Chrome/Chromium has been added in version 2.7.5.</p></li>
+</ol>
+<p>Here are some simple examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://www.python.org/&#39;</span>
+
+<span class="c1"># Open URL in a new tab, if a browser window is already open.</span>
+<span class="n">webbrowser</span><span class="o">.</span><span class="n">open_new_tab</span><span class="p">(</span><span class="n">url</span> <span class="o">+</span> <span class="s1">&#39;doc/&#39;</span><span class="p">)</span>
+
+<span class="c1"># Open URL in new window, raising the window if possible.</span>
+<span class="n">webbrowser</span><span class="o">.</span><span class="n">open_new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="browser-controller-objects">
+<span id="browser-controllers"></span><h2>20.1.1. Browser Controller Objects<a class="headerlink" href="#browser-controller-objects" title="Permalink to this headline">¶</a></h2>
+<p>Browser controllers provide these methods which parallel three of the
+module-level convenience functions:</p>
+<dl class="method">
+<dt id="webbrowser.controller.open">
+<code class="descclassname">controller.</code><code class="descname">open</code><span class="sig-paren">(</span><em>url</em>, <em>new=0</em>, <em>autoraise=True</em><span class="sig-paren">)</span><a class="headerlink" href="#webbrowser.controller.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display <em>url</em> using the browser handled by this controller. If <em>new</em> is 1, a new
+browser window is opened if possible. If <em>new</em> is 2, a new browser page (“tab”)
+is opened if possible.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="webbrowser.controller.open_new">
+<code class="descclassname">controller.</code><code class="descname">open_new</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#webbrowser.controller.open_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open <em>url</em> in a new window of the browser handled by this controller, if
+possible, otherwise, open <em>url</em> in the only browser window.  Alias
+<a class="reference internal" href="#webbrowser.open_new" title="webbrowser.open_new"><code class="xref py py-func docutils literal notranslate"><span class="pre">open_new()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="webbrowser.controller.open_new_tab">
+<code class="descclassname">controller.</code><code class="descname">open_new_tab</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#webbrowser.controller.open_new_tab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open <em>url</em> in a new page (“tab”) of the browser handled by this controller, if
+possible, otherwise equivalent to <a class="reference internal" href="#webbrowser.open_new" title="webbrowser.open_new"><code class="xref py py-func docutils literal notranslate"><span class="pre">open_new()</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+</dd></dl>
+
+<p class="rubric">Footnotes</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Executables named here without a full path will be searched in the
+directories given in the <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code> environment variable.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">20.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">webbrowser</span></code> — Convenient Web-browser controller</a><ul>
+<li><a class="reference internal" href="#browser-controller-objects">20.1.1. Browser Controller Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="internet.html"
+                        title="previous chapter">20. Internet Protocols and Support</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cgi.html"
+                        title="next chapter">20.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">cgi</span></code> — Common Gateway Interface support</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/webbrowser.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cgi.html" title="20.2. cgi — Common Gateway Interface support"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="internet.html" title="20. Internet Protocols and Support"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" >20. Internet Protocols and Support</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

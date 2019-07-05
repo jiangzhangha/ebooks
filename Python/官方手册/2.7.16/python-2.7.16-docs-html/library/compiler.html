@@ -1,0 +1,1041 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>33. Python compiler package &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="34. Miscellaneous Services" href="misc.html" />
+    <link rel="prev" title="32.13. pickletools — Tools for pickle developers" href="pickletools.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/compiler.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="34. Miscellaneous Services"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pickletools.html" title="32.13. pickletools — Tools for pickle developers"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="python-compiler-package">
+<span id="compiler"></span><h1>33. Python compiler package<a class="headerlink" href="#python-compiler-package" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-compiler" title="compiler: Python code compiler written in Python. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compiler</span></code></a> package has been removed in Python 3.</p>
+</div>
+<p>The Python compiler package is a tool for analyzing Python source code and
+generating Python bytecode.  The compiler contains libraries to generate an
+abstract syntax tree from Python source code and to generate Python
+<a class="reference internal" href="../glossary.html#term-bytecode"><span class="xref std std-term">bytecode</span></a> from the tree.</p>
+<p>The <a class="reference internal" href="#module-compiler" title="compiler: Python code compiler written in Python. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compiler</span></code></a> package is a Python source to bytecode translator written in
+Python.  It uses the built-in parser and standard <a class="reference internal" href="parser.html#module-parser" title="parser: Access parse trees for Python source code."><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a> module to
+generate a concrete syntax tree.  This tree is used to generate an abstract
+syntax tree (AST) and then Python bytecode.</p>
+<p>The full functionality of the package duplicates the built-in compiler provided
+with the Python interpreter.  It is intended to match its behavior almost
+exactly.  Why implement another compiler that does the same thing?  The package
+is useful for a variety of purposes.  It can be modified more easily than the
+built-in compiler.  The AST it generates is useful for analyzing Python source
+code.</p>
+<p>This chapter explains how the various components of the <a class="reference internal" href="#module-compiler" title="compiler: Python code compiler written in Python. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compiler</span></code></a> package
+work.  It blends reference material with a tutorial.</p>
+<div class="section" id="module-compiler">
+<span id="the-basic-interface"></span><h2>33.1. The basic interface<a class="headerlink" href="#module-compiler" title="Permalink to this headline">¶</a></h2>
+<p>The top-level of the package defines four functions.  If you import
+<a class="reference internal" href="#module-compiler" title="compiler: Python code compiler written in Python. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compiler</span></code></a>, you will get these functions and a collection of modules
+contained in the package.</p>
+<dl class="function">
+<dt id="compiler.parse">
+<code class="descclassname">compiler.</code><code class="descname">parse</code><span class="sig-paren">(</span><em>buf</em><span class="sig-paren">)</span><a class="headerlink" href="#compiler.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an abstract syntax tree for the Python source code in <em>buf</em>. The
+function raises <a class="reference internal" href="exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SyntaxError</span></code></a> if there is an error in the source code.  The
+return value is a <code class="xref py py-class docutils literal notranslate"><span class="pre">compiler.ast.Module</span></code> instance that contains the tree.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compiler.parseFile">
+<code class="descclassname">compiler.</code><code class="descname">parseFile</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#compiler.parseFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an abstract syntax tree for the Python source code in the file specified
+by <em>path</em>.  It is equivalent to <code class="docutils literal notranslate"><span class="pre">parse(open(path).read())</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compiler.walk">
+<code class="descclassname">compiler.</code><code class="descname">walk</code><span class="sig-paren">(</span><em>ast</em>, <em>visitor</em><span class="optional">[</span>, <em>verbose</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#compiler.walk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do a pre-order walk over the abstract syntax tree <em>ast</em>.  Call the appropriate
+method on the <em>visitor</em> instance for each node encountered.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compiler.compile">
+<code class="descclassname">compiler.</code><code class="descname">compile</code><span class="sig-paren">(</span><em>source</em>, <em>filename</em>, <em>mode</em>, <em>flags=None</em>, <em>dont_inherit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#compiler.compile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compile the string <em>source</em>, a Python module, statement or expression, into a
+code object that can be executed by the exec statement or <a class="reference internal" href="functions.html#eval" title="eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code></a>. This
+function is a replacement for the built-in <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a> function.</p>
+<p>The <em>filename</em> will be used for run-time error messages.</p>
+<p>The <em>mode</em> must be ‘exec’ to compile a module, ‘single’ to compile a single
+(interactive) statement, or ‘eval’ to compile an expression.</p>
+<p>The <em>flags</em> and <em>dont_inherit</em> arguments affect future-related statements, but
+are not supported yet.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compiler.compileFile">
+<code class="descclassname">compiler.</code><code class="descname">compileFile</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#compiler.compileFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compiles the file <em>source</em> and generates a .pyc file.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-compiler" title="compiler: Python code compiler written in Python. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compiler</span></code></a> package contains the following modules: <a class="reference internal" href="ast.html#module-ast" title="ast: Abstract Syntax Tree classes and manipulation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ast</span></code></a>,
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">consts</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">future</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">misc</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">pyassem</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">pycodegen</span></code>,
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">symbols</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">transformer</span></code>, and <code class="xref py py-mod docutils literal notranslate"><span class="pre">visitor</span></code>.</p>
+</div>
+<div class="section" id="limitations">
+<h2>33.2. Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
+<p>There are some problems with the error checking of the compiler package.  The
+interpreter detects syntax errors in two distinct phases.  One set of errors is
+detected by the interpreter’s parser, the other set by the compiler.  The
+compiler package relies on the interpreter’s parser, so it get the first phases
+of error checking for free.  It implements the second phase itself, and that
+implementation is incomplete.  For example, the compiler package does not raise
+an error if a name appears more than once in an argument list:  <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">f(x,</span> <span class="pre">x):</span>
+<span class="pre">...</span></code></p>
+<p>A future version of the compiler should fix these problems.</p>
+</div>
+<div class="section" id="python-abstract-syntax">
+<h2>33.3. Python Abstract Syntax<a class="headerlink" href="#python-abstract-syntax" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-compiler.ast" title="compiler.ast"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compiler.ast</span></code></a> module defines an abstract syntax for Python.  In the
+abstract syntax tree, each node represents a syntactic construct.  The root of
+the tree is <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> object.</p>
+<p>The abstract syntax offers a higher level interface to parsed Python source
+code.  The <a class="reference internal" href="parser.html#module-parser" title="parser: Access parse trees for Python source code."><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a> module and the compiler written in C for the Python
+interpreter use a concrete syntax tree.  The concrete syntax is tied closely to
+the grammar description used for the Python parser.  Instead of a single node
+for a construct, there are often several levels of nested nodes that are
+introduced by Python’s precedence rules.</p>
+<p>The abstract syntax tree is created by the <code class="xref py py-mod docutils literal notranslate"><span class="pre">compiler.transformer</span></code> module.
+The transformer relies on the built-in Python parser to generate a concrete
+syntax tree.  It generates an abstract syntax tree from the concrete tree.</p>
+<p id="index-0">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">transformer</span></code> module was created by Greg Stein and Bill Tutt for an
+experimental Python-to-C compiler.  The current version contains a number of
+modifications and improvements, but the basic form of the abstract syntax and of
+the transformer are due to Stein and Tutt.</p>
+<div class="section" id="module-compiler.ast">
+<span id="ast-nodes"></span><h3>33.3.1. AST Nodes<a class="headerlink" href="#module-compiler.ast" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="#module-compiler.ast" title="compiler.ast"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compiler.ast</span></code></a> module is generated from a text file that describes each
+node type and its elements.  Each node type is represented as a class that
+inherits from the abstract base class <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">compiler.ast.Node</span></code></a> and defines a
+set of named attributes for child nodes.</p>
+<dl class="class">
+<dt id="compiler.ast.Node">
+<em class="property">class </em><code class="descclassname">compiler.ast.</code><code class="descname">Node</code><a class="headerlink" href="#compiler.ast.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> instances are created automatically by the parser generator.
+The recommended interface for specific <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> instances is to use the
+public attributes to access child nodes.  A public attribute may be bound to a
+single node or to a sequence of nodes, depending on the <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> type.  For
+example, the <code class="xref py py-attr docutils literal notranslate"><span class="pre">bases</span></code> attribute of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Class</span></code> node, is bound to a
+list of base class nodes, and the <code class="xref py py-attr docutils literal notranslate"><span class="pre">doc</span></code> attribute is bound to a single
+node.</p>
+<p>Each <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> instance has a <code class="xref py py-attr docutils literal notranslate"><span class="pre">lineno</span></code> attribute which may be
+<code class="docutils literal notranslate"><span class="pre">None</span></code>.  XXX Not sure what the rules are for which nodes will have a useful
+lineno.</p>
+<p>All <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> objects offer the following methods:</p>
+<dl class="method">
+<dt id="compiler.ast.Node.getChildren">
+<code class="descname">getChildren</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#compiler.ast.Node.getChildren" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a flattened list of the child nodes and objects in the order they
+occur.  Specifically, the order of the nodes is the order in which they
+appear in the Python grammar.  Not all of the children are <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a>
+instances.  The names of functions and classes, for example, are plain
+strings.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compiler.ast.Node.getChildNodes">
+<code class="descname">getChildNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#compiler.ast.Node.getChildNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a flattened list of the child nodes in the order they occur.  This
+method is like <a class="reference internal" href="#compiler.ast.Node.getChildren" title="compiler.ast.Node.getChildren"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getChildren()</span></code></a>, except that it only returns those
+children that are <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> instances.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>Two examples illustrate the general structure of <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> classes.  The
+<a class="reference internal" href="../reference/compound_stmts.html#while"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">while</span></code></a> statement is defined by the following grammar production:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">while_stmt</span><span class="p">:</span>     <span class="s2">&quot;while&quot;</span> <span class="n">expression</span> <span class="s2">&quot;:&quot;</span> <span class="n">suite</span>
+               <span class="p">[</span><span class="s2">&quot;else&quot;</span> <span class="s2">&quot;:&quot;</span> <span class="n">suite</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">While</span></code> node has three attributes: <a class="reference internal" href="test.html#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-attr docutils literal notranslate"><span class="pre">test</span></code></a>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">body</span></code>, and
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">else_</span></code>.  (If the natural name for an attribute is also a Python reserved
+word, it can’t be used as an attribute name.  An underscore is appended to the
+word to make it a legal identifier, hence <code class="xref py py-attr docutils literal notranslate"><span class="pre">else_</span></code> instead of
+<a class="reference internal" href="../reference/compound_stmts.html#else"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">else</span></code></a>.)</p>
+<p>The <a class="reference internal" href="../reference/compound_stmts.html#if"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">if</span></code></a> statement is more complicated because it can include several
+tests.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">if_stmt</span><span class="p">:</span> <span class="s1">&#39;if&#39;</span> <span class="n">test</span> <span class="s1">&#39;:&#39;</span> <span class="n">suite</span> <span class="p">(</span><span class="s1">&#39;elif&#39;</span> <span class="n">test</span> <span class="s1">&#39;:&#39;</span> <span class="n">suite</span><span class="p">)</span><span class="o">*</span> <span class="p">[</span><span class="s1">&#39;else&#39;</span> <span class="s1">&#39;:&#39;</span> <span class="n">suite</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">If</span></code> node only defines two attributes: <code class="xref py py-attr docutils literal notranslate"><span class="pre">tests</span></code> and
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">else_</span></code>.  The <code class="xref py py-attr docutils literal notranslate"><span class="pre">tests</span></code> attribute is a sequence of test expression,
+consequent body pairs.  There is one pair for each <a class="reference internal" href="../reference/compound_stmts.html#if"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">if</span></code></a>/<a class="reference internal" href="../reference/compound_stmts.html#elif"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">elif</span></code></a>
+clause.  The first element of the pair is the test expression.  The second
+elements is a <code class="xref py py-class docutils literal notranslate"><span class="pre">Stmt</span></code> node that contains the code to execute if the test
+is true.</p>
+<p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">getChildren()</span></code> method of <code class="xref py py-class docutils literal notranslate"><span class="pre">If</span></code> returns a flat list of child
+nodes.  If there are three <a class="reference internal" href="../reference/compound_stmts.html#if"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">if</span></code></a>/<a class="reference internal" href="../reference/compound_stmts.html#elif"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">elif</span></code></a> clauses and no
+<a class="reference internal" href="../reference/compound_stmts.html#else"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">else</span></code></a> clause, then <code class="xref py py-meth docutils literal notranslate"><span class="pre">getChildren()</span></code> will return a list of six
+elements: the first test expression, the first <code class="xref py py-class docutils literal notranslate"><span class="pre">Stmt</span></code>, the second text
+expression, etc.</p>
+<p>The following table lists each of the <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> subclasses defined in
+<a class="reference internal" href="#module-compiler.ast" title="compiler.ast"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compiler.ast</span></code></a> and each of the public attributes available on their
+instances.  The values of most of the attributes are themselves <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a>
+instances or sequences of instances.  When the value is something other than an
+instance, the type is noted in the comment.  The attributes are listed in the
+order in which they are returned by <code class="xref py py-meth docutils literal notranslate"><span class="pre">getChildren()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">getChildNodes()</span></code>.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 26%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Node type</p></th>
+<th class="head"><p>Attribute</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Add</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">left</span></code></p></td>
+<td><p>left operand</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">right</span></code></p></td>
+<td><p>right operand</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">And</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td><p>list of operands</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AssAttr</span></code></p></td>
+<td></td>
+<td><p><em>attribute as target of
+assignment</em></p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td><p>expression on the left-hand
+side of the dot</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">attrname</span></code></p></td>
+<td><p>the attribute name, a string</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">flags</span></code></p></td>
+<td><p>XXX</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AssList</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td><p>list of list elements being
+assigned to</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AssName</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>name being assigned to</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">flags</span></code></p></td>
+<td><p>XXX</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AssTuple</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td><p>list of tuple elements being
+assigned to</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Assert</span></code></p></td>
+<td><p><a class="reference internal" href="test.html#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-attr docutils literal notranslate"><span class="pre">test</span></code></a></p></td>
+<td><p>the expression to be tested</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fail</span></code></p></td>
+<td><p>the value of the
+<a class="reference internal" href="exceptions.html#exceptions.AssertionError" title="exceptions.AssertionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AssertionError</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Assign</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td><p>a list of assignment targets,
+one per equal sign</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td><p>the value being assigned</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AugAssign</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">node</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">op</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Backquote</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Bitand</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Bitor</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Bitxor</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Break</span></code></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">CallFunc</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">node</span></code></p></td>
+<td><p>expression for the callee</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">args</span></code></p></td>
+<td><p>a list of arguments</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">star_args</span></code></p></td>
+<td><p>the extended *-arg value</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">dstar_args</span></code></p></td>
+<td><p>the extended **-arg value</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Class</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>the name of the class, a string</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">bases</span></code></p></td>
+<td><p>a list of base classes</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">doc</span></code></p></td>
+<td><p>doc string, a string or
+<code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><code class="xref py py-attr docutils literal notranslate"><span class="pre">code</span></code></a></p></td>
+<td><p>the body of the class statement</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Compare</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">ops</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Const</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Continue</span></code></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Decorators</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td><p>List of function decorator
+expressions</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">items</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Discard</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Div</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">left</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">right</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="constants.html#Ellipsis" title="Ellipsis"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ellipsis</span></code></a></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">node</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Exec</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><a class="reference internal" href="functions.html#locals" title="locals"><code class="xref py py-attr docutils literal notranslate"><span class="pre">locals</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><a class="reference internal" href="functions.html#globals" title="globals"><code class="xref py py-attr docutils literal notranslate"><span class="pre">globals</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FloorDiv</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">left</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">right</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">For</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">assign</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">list</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">body</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">else_</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">From</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">modname</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">names</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">decorators</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Decorators</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>name used in def, a string</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">argnames</span></code></p></td>
+<td><p>list of argument names, as
+strings</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">defaults</span></code></p></td>
+<td><p>list of default values</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">flags</span></code></p></td>
+<td><p>xxx</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">doc</span></code></p></td>
+<td><p>doc string, a string or
+<code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><code class="xref py py-attr docutils literal notranslate"><span class="pre">code</span></code></a></p></td>
+<td><p>the body of the function</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GenExpr</span></code></p></td>
+<td><p><a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><code class="xref py py-attr docutils literal notranslate"><span class="pre">code</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GenExprFor</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">assign</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><a class="reference internal" href="functions.html#iter" title="iter"><code class="xref py py-attr docutils literal notranslate"><span class="pre">iter</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">ifs</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GenExprIf</span></code></p></td>
+<td><p><a class="reference internal" href="test.html#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-attr docutils literal notranslate"><span class="pre">test</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GenExprInner</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">quals</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Getattr</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">attrname</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Global</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">names</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">If</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">tests</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">else_</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Import</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">names</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Invert</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Keyword</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Lambda</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">argnames</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">defaults</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">flags</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><code class="xref py py-attr docutils literal notranslate"><span class="pre">code</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LeftShift</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">left</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">right</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ListComp</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">quals</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ListCompFor</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">assign</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">list</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">ifs</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ListCompIf</span></code></p></td>
+<td><p><a class="reference internal" href="test.html#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-attr docutils literal notranslate"><span class="pre">test</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Mod</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">left</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">right</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">doc</span></code></p></td>
+<td><p>doc string, a string or
+<code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">node</span></code></p></td>
+<td><p>body of the module, a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Stmt</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Mul</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">left</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">right</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Not</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Or</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Pass</span></code></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Power</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">left</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">right</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Print</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">dest</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Printnl</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">dest</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Raise</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr1</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr2</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr3</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Return</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">RightShift</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">left</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">right</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Slice</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">flags</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">lower</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">upper</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Sliceobj</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td><p>list of statements</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Stmt</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Sub</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">left</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">right</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Subscript</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">flags</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">subs</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TryExcept</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">body</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">handlers</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">else_</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TryFinally</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">body</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">final</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">UnaryAdd</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">UnarySub</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">While</span></code></p></td>
+<td><p><a class="reference internal" href="test.html#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-attr docutils literal notranslate"><span class="pre">test</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">body</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">else_</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">With</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><a class="reference internal" href="functions.html#vars" title="vars"><code class="xref py py-attr docutils literal notranslate"><span class="pre">vars</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">body</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Yield</span></code></p></td>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="assignment-nodes">
+<h3>33.3.2. Assignment nodes<a class="headerlink" href="#assignment-nodes" title="Permalink to this headline">¶</a></h3>
+<p>There is a collection of nodes used to represent assignments.  Each assignment
+statement in the source code becomes a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Assign</span></code> node in the AST.
+The <code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code> attribute is a list that contains a node for each assignment
+target.  This is necessary because assignment can be chained, e.g. <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">b</span> <span class="pre">=</span>
+<span class="pre">2</span></code>. Each <a class="reference internal" href="#compiler.ast.Node" title="compiler.ast.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> in the list will be one of the following classes:
+<code class="xref py py-class docutils literal notranslate"><span class="pre">AssAttr</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AssList</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AssName</span></code>, or <code class="xref py py-class docutils literal notranslate"><span class="pre">AssTuple</span></code>.</p>
+<p>Each target assignment node will describe the kind of object being assigned to:
+<code class="xref py py-class docutils literal notranslate"><span class="pre">AssName</span></code> for a simple name, e.g. <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">1</span></code>. <code class="xref py py-class docutils literal notranslate"><span class="pre">AssAttr</span></code> for an
+attribute assigned, e.g. <code class="docutils literal notranslate"><span class="pre">a.x</span> <span class="pre">=</span> <span class="pre">1</span></code>. <code class="xref py py-class docutils literal notranslate"><span class="pre">AssList</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">AssTuple</span></code> for
+list and tuple expansion respectively, e.g. <code class="docutils literal notranslate"><span class="pre">a,</span> <span class="pre">b,</span> <span class="pre">c</span> <span class="pre">=</span> <span class="pre">a_tuple</span></code>.</p>
+<p>The target assignment nodes also have a <code class="xref py py-attr docutils literal notranslate"><span class="pre">flags</span></code> attribute that indicates
+whether the node is being used for assignment or in a delete statement.  The
+<code class="xref py py-class docutils literal notranslate"><span class="pre">AssName</span></code> is also used to represent a delete statement, e.g. <code class="xref py py-class docutils literal notranslate"><span class="pre">del</span>
+<span class="pre">x</span></code>.</p>
+<p>When an expression contains several attribute references, an assignment or
+delete statement will contain only one <code class="xref py py-class docutils literal notranslate"><span class="pre">AssAttr</span></code> node – for the final
+attribute reference.  The other attribute references will be represented as
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Getattr</span></code> nodes in the <code class="xref py py-attr docutils literal notranslate"><span class="pre">expr</span></code> attribute of the <code class="xref py py-class docutils literal notranslate"><span class="pre">AssAttr</span></code>
+instance.</p>
+</div>
+<div class="section" id="examples">
+<h3>33.3.3. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<p>This section shows several simple examples of ASTs for Python source code.  The
+examples demonstrate how to use the <code class="xref py py-func docutils literal notranslate"><span class="pre">parse()</span></code> function, what the repr of an
+AST looks like, and how to access attributes of an AST node.</p>
+<p>The first module defines a single function.  Assume it is stored in
+<code class="file docutils literal notranslate"><span class="pre">doublelib.py</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;This is an example module.</span>
+
+<span class="sd">This is the docstring.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="nf">double</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="s2">&quot;Return twice the argument&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>In the interactive interpreter session below, I have reformatted the long AST
+reprs for readability.  The AST reprs use unqualified class names.  If you want
+to create an instance from a repr, you must import the class names from the
+<a class="reference internal" href="#module-compiler.ast" title="compiler.ast"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compiler.ast</span></code></a> module.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">compiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">compiler</span><span class="o">.</span><span class="n">parseFile</span><span class="p">(</span><span class="s2">&quot;doublelib.py&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span>
+<span class="go">Module(&#39;This is an example module.\n\nThis is the docstring.\n&#39;,</span>
+<span class="go">       Stmt([Function(None, &#39;double&#39;, [&#39;x&#39;], [], 0,</span>
+<span class="go">                      &#39;Return twice the argument&#39;,</span>
+<span class="go">                      Stmt([Return(Mul((Name(&#39;x&#39;), Const(2))))]))]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compiler.ast</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Module</span><span class="p">(</span><span class="s1">&#39;This is an example module.</span><span class="se">\n\n</span><span class="s1">This is the docstring.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">Stmt</span><span class="p">([</span><span class="n">Function</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>                  <span class="s1">&#39;Return twice the argument&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                  <span class="n">Stmt</span><span class="p">([</span><span class="n">Return</span><span class="p">(</span><span class="n">Mul</span><span class="p">((</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">),</span> <span class="n">Const</span><span class="p">(</span><span class="mi">2</span><span class="p">))))]))]))</span>
+<span class="go">Module(&#39;This is an example module.\n\nThis is the docstring.\n&#39;,</span>
+<span class="go">       Stmt([Function(None, &#39;double&#39;, [&#39;x&#39;], [], 0,</span>
+<span class="go">                      &#39;Return twice the argument&#39;,</span>
+<span class="go">                      Stmt([Return(Mul((Name(&#39;x&#39;), Const(2))))]))]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span><span class="o">.</span><span class="n">doc</span>
+<span class="go">&#39;This is an example module.\n\nThis is the docstring.\n&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">mod</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">node</span>
+<span class="gp">...</span>
+<span class="go">Function(None, &#39;double&#39;, [&#39;x&#39;], [], 0, &#39;Return twice the argument&#39;,</span>
+<span class="go">         Stmt([Return(Mul((Name(&#39;x&#39;), Const(2))))]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="o">.</span><span class="n">code</span>
+<span class="go">Stmt([Return(Mul((Name(&#39;x&#39;), Const(2))))])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="module-compiler.visitor">
+<span id="using-visitors-to-walk-asts"></span><h2>33.4. Using Visitors to Walk ASTs<a class="headerlink" href="#module-compiler.visitor" title="Permalink to this headline">¶</a></h2>
+<p>The visitor pattern is …  The <a class="reference internal" href="#module-compiler" title="compiler: Python code compiler written in Python. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compiler</span></code></a> package uses a variant on the
+visitor pattern that takes advantage of Python’s introspection features to
+eliminate the need for much of the visitor’s infrastructure.</p>
+<p>The classes being visited do not need to be programmed to accept visitors.  The
+visitor need only define visit methods for classes it is specifically interested
+in; a default visit method can handle the rest.</p>
+<p>XXX The magic <code class="xref py py-meth docutils literal notranslate"><span class="pre">visit()</span></code> method for visitors.</p>
+<dl class="function">
+<dt id="compiler.visitor.walk">
+<code class="descclassname">compiler.visitor.</code><code class="descname">walk</code><span class="sig-paren">(</span><em>tree</em>, <em>visitor</em><span class="optional">[</span>, <em>verbose</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#compiler.visitor.walk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="compiler.visitor.ASTVisitor">
+<em class="property">class </em><code class="descclassname">compiler.visitor.</code><code class="descname">ASTVisitor</code><a class="headerlink" href="#compiler.visitor.ASTVisitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#compiler.visitor.ASTVisitor" title="compiler.visitor.ASTVisitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ASTVisitor</span></code></a> is responsible for walking over the tree in the correct
+order.  A walk begins with a call to <a class="reference internal" href="#compiler.visitor.ASTVisitor.preorder" title="compiler.visitor.ASTVisitor.preorder"><code class="xref py py-meth docutils literal notranslate"><span class="pre">preorder()</span></code></a>.  For each node, it checks
+the <em>visitor</em> argument to <a class="reference internal" href="#compiler.visitor.ASTVisitor.preorder" title="compiler.visitor.ASTVisitor.preorder"><code class="xref py py-meth docutils literal notranslate"><span class="pre">preorder()</span></code></a> for a method named ‘visitNodeType,’
+where NodeType is the name of the node’s class, e.g. for a <code class="xref py py-class docutils literal notranslate"><span class="pre">While</span></code> node a
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">visitWhile()</span></code> would be called.  If the method exists, it is called with the
+node as its first argument.</p>
+<p>The visitor method for a particular node type can control how child nodes are
+visited during the walk.  The <a class="reference internal" href="#compiler.visitor.ASTVisitor" title="compiler.visitor.ASTVisitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ASTVisitor</span></code></a> modifies the visitor argument
+by adding a visit method to the visitor; this method can be used to visit a
+particular child node.  If no visitor is found for a particular node type, the
+<a class="reference internal" href="#compiler.visitor.ASTVisitor.default" title="compiler.visitor.ASTVisitor.default"><code class="xref py py-meth docutils literal notranslate"><span class="pre">default()</span></code></a> method is called.</p>
+<p><a class="reference internal" href="#compiler.visitor.ASTVisitor" title="compiler.visitor.ASTVisitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ASTVisitor</span></code></a> objects have the following methods:</p>
+<p>XXX describe extra arguments</p>
+<dl class="method">
+<dt id="compiler.visitor.ASTVisitor.default">
+<code class="descname">default</code><span class="sig-paren">(</span><em>node</em><span class="optional">[</span>, <em>...</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#compiler.visitor.ASTVisitor.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="compiler.visitor.ASTVisitor.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><em>node</em><span class="optional">[</span>, <em>...</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#compiler.visitor.ASTVisitor.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="compiler.visitor.ASTVisitor.preorder">
+<code class="descname">preorder</code><span class="sig-paren">(</span><em>tree</em>, <em>visitor</em><span class="sig-paren">)</span><a class="headerlink" href="#compiler.visitor.ASTVisitor.preorder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="bytecode-generation">
+<h2>33.5. Bytecode Generation<a class="headerlink" href="#bytecode-generation" title="Permalink to this headline">¶</a></h2>
+<p>The code generator is a visitor that emits bytecodes.  Each visit method can
+call the <code class="xref py py-meth docutils literal notranslate"><span class="pre">emit()</span></code> method to emit a new bytecode.  The basic code generator
+is specialized for modules, classes, and functions.  An assembler converts that
+emitted instructions to the low-level bytecode format.  It handles things like
+generation of constant lists of code objects and calculation of jump offsets.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">33. Python compiler package</a><ul>
+<li><a class="reference internal" href="#module-compiler">33.1. The basic interface</a></li>
+<li><a class="reference internal" href="#limitations">33.2. Limitations</a></li>
+<li><a class="reference internal" href="#python-abstract-syntax">33.3. Python Abstract Syntax</a><ul>
+<li><a class="reference internal" href="#module-compiler.ast">33.3.1. AST Nodes</a></li>
+<li><a class="reference internal" href="#assignment-nodes">33.3.2. Assignment nodes</a></li>
+<li><a class="reference internal" href="#examples">33.3.3. Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-compiler.visitor">33.4. Using Visitors to Walk ASTs</a></li>
+<li><a class="reference internal" href="#bytecode-generation">33.5. Bytecode Generation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pickletools.html"
+                        title="previous chapter">32.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickletools</span></code> — Tools for pickle developers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="misc.html"
+                        title="next chapter">34. Miscellaneous Services</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/compiler.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="34. Miscellaneous Services"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pickletools.html" title="32.13. pickletools — Tools for pickle developers"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

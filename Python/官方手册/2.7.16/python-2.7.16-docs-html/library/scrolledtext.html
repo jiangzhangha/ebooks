@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>24.4. ScrolledText — Scrolled Text Widget &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="24.5. turtle — Turtle graphics for Tk" href="turtle.html" />
+    <link rel="prev" title="24.3. Tix — Extension widgets for Tk" href="tix.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/scrolledtext.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="turtle.html" title="24.5. turtle — Turtle graphics for Tk"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tix.html" title="24.3. Tix — Extension widgets for Tk"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="tk.html" accesskey="U">24. Graphical User Interfaces with Tk</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-ScrolledText">
+<span id="scrolledtext-scrolled-text-widget"></span><h1>24.4. <a class="reference internal" href="#module-ScrolledText" title="ScrolledText: Text widget with a vertical scroll bar. (Tk)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ScrolledText</span></code></a> — Scrolled Text Widget<a class="headerlink" href="#module-ScrolledText" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-ScrolledText" title="ScrolledText: Text widget with a vertical scroll bar. (Tk)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ScrolledText</span></code></a> module provides a class of the same name which
+implements a basic text widget which has a vertical scroll bar configured to do
+the “right thing.”  Using the <code class="xref py py-class docutils literal notranslate"><span class="pre">ScrolledText</span></code> class is a lot easier than
+setting up a text widget and scroll bar directly.  The constructor is the same
+as that of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Tkinter.Text</span></code> class.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#module-ScrolledText" title="ScrolledText: Text widget with a vertical scroll bar. (Tk)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ScrolledText</span></code></a> has been renamed to <code class="xref py py-mod docutils literal notranslate"><span class="pre">tkinter.scrolledtext</span></code> in Python
+3.  The <a class="reference internal" href="../glossary.html#term-2to3"><span class="xref std std-term">2to3</span></a> tool will automatically adapt imports when converting
+your sources to Python 3.</p>
+</div>
+<p>The text widget and scrollbar are packed together in a <code class="xref py py-class docutils literal notranslate"><span class="pre">Frame</span></code>, and the
+methods of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">Pack</span></code> geometry managers are acquired
+from the <code class="xref py py-class docutils literal notranslate"><span class="pre">Frame</span></code> object.  This allows the <code class="xref py py-class docutils literal notranslate"><span class="pre">ScrolledText</span></code> widget to
+be used directly to achieve most normal geometry management behavior.</p>
+<p>Should more specific control be necessary, the following attributes are
+available:</p>
+<dl class="attribute">
+<dt id="ScrolledText.ScrolledText.frame">
+<code class="descclassname">ScrolledText.</code><code class="descname">frame</code><a class="headerlink" href="#ScrolledText.ScrolledText.frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>The frame which surrounds the text and scroll bar widgets.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ScrolledText.ScrolledText.vbar">
+<code class="descclassname">ScrolledText.</code><code class="descname">vbar</code><a class="headerlink" href="#ScrolledText.ScrolledText.vbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>The scroll bar widget.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tix.html"
+                        title="previous chapter">24.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Tix</span></code> — Extension widgets for Tk</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="turtle.html"
+                        title="next chapter">24.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">turtle</span></code> — Turtle graphics for Tk</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/scrolledtext.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="turtle.html" title="24.5. turtle — Turtle graphics for Tk"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tix.html" title="24.3. Tix — Extension widgets for Tk"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="tk.html" >24. Graphical User Interfaces with Tk</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

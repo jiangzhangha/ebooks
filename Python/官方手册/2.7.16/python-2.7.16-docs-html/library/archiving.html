@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>12. Data Compression and Archiving &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="12.1. zlib — Compression compatible with gzip" href="zlib.html" />
+    <link rel="prev" title="11.13. sqlite3 — DB-API 2.0 interface for SQLite databases" href="sqlite3.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/archiving.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="zlib.html" title="12.1. zlib — Compression compatible with gzip"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sqlite3.html" title="11.13. sqlite3 — DB-API 2.0 interface for SQLite databases"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="data-compression-and-archiving">
+<span id="archiving"></span><h1>12. Data Compression and Archiving<a class="headerlink" href="#data-compression-and-archiving" title="Permalink to this headline">¶</a></h1>
+<p>The modules described in this chapter support data compression with the zlib,
+gzip, and bzip2 algorithms, and  the creation of ZIP- and tar-format archives.
+See also <a class="reference internal" href="shutil.html#archiving-operations"><span class="std std-ref">Archiving operations</span></a> provided by the <a class="reference internal" href="shutil.html#module-shutil" title="shutil: High-level file operations, including copying."><code class="xref py py-mod docutils literal notranslate"><span class="pre">shutil</span></code></a> module.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zlib.html">12.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">zlib</span></code> — Compression compatible with <strong class="program">gzip</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gzip.html">12.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">gzip</span></code> — Support for <strong class="program">gzip</strong> files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gzip.html#examples-of-usage">12.2.1. Examples of usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bz2.html">12.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">bz2</span></code> — Compression compatible with <strong class="program">bzip2</strong></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bz2.html#de-compression-of-files">12.3.1. (De)compression of files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bz2.html#sequential-de-compression">12.3.2. Sequential (de)compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bz2.html#one-shot-de-compression">12.3.3. One-shot (de)compression</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="zipfile.html">12.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">zipfile</span></code> — Work with ZIP archives</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="zipfile.html#zipfile-objects">12.4.1. ZipFile Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zipfile.html#pyzipfile-objects">12.4.2. PyZipFile Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zipfile.html#zipinfo-objects">12.4.3. ZipInfo Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zipfile.html#command-line-interface">12.4.4. Command-Line Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="zipfile.html#command-line-options">12.4.4.1. Command-line options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tarfile.html">12.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">tarfile</span></code> — Read and write tar archive files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tarfile.html#tarfile-objects">12.5.1. TarFile Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarfile.html#tarinfo-objects">12.5.2. TarInfo Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarfile.html#examples">12.5.3. Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarfile.html#supported-tar-formats">12.5.4. Supported tar formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarfile.html#unicode-issues">12.5.5. Unicode issues</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sqlite3.html"
+                        title="previous chapter">11.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlite3</span></code> — DB-API 2.0 interface for SQLite databases</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="zlib.html"
+                        title="next chapter">12.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">zlib</span></code> — Compression compatible with <strong class="program">gzip</strong></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/archiving.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="zlib.html" title="12.1. zlib — Compression compatible with gzip"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sqlite3.html" title="11.13. sqlite3 — DB-API 2.0 interface for SQLite databases"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

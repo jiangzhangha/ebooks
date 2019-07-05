@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>35. MS Windows Specific Services &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="35.1. msilib — Read and write Microsoft Installer files" href="msilib.html" />
+    <link rel="prev" title="34.1. formatter — Generic output formatting" href="formatter.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/windows.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="msilib.html" title="35.1. msilib — Read and write Microsoft Installer files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="formatter.html" title="34.1. formatter — Generic output formatting"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ms-windows-specific-services">
+<span id="mswin-specific-services"></span><h1>35. MS Windows Specific Services<a class="headerlink" href="#ms-windows-specific-services" title="Permalink to this headline">¶</a></h1>
+<p>This chapter describes modules that are only available on MS Windows platforms.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="msilib.html">35.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">msilib</span></code> — Read and write Microsoft Installer files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="msilib.html#database-objects">35.1.1. Database Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msilib.html#view-objects">35.1.2. View Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msilib.html#summary-information-objects">35.1.3. Summary Information Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msilib.html#record-objects">35.1.4. Record Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msilib.html#errors">35.1.5. Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msilib.html#cab-objects">35.1.6. CAB Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msilib.html#directory-objects">35.1.7. Directory Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msilib.html#features">35.1.8. Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msilib.html#gui-classes">35.1.9. GUI classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msilib.html#precomputed-tables">35.1.10. Precomputed tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="msvcrt.html">35.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">msvcrt</span></code> — Useful routines from the MS VC++ runtime</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="msvcrt.html#file-operations">35.2.1. File Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msvcrt.html#console-i-o">35.2.2. Console I/O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msvcrt.html#other-functions">35.2.3. Other Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="_winreg.html">35.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">_winreg</span></code> — Windows registry access</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="_winreg.html#constants">35.3.1. Constants</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_winreg.html#hkey-constants">35.3.1.1. HKEY_* Constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_winreg.html#access-rights">35.3.1.2. Access Rights</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="_winreg.html#bit-specific">35.3.1.2.1. 64-bit Specific</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="_winreg.html#value-types">35.3.1.3. Value Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="_winreg.html#registry-handle-objects">35.3.2. Registry Handle Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="winsound.html">35.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">winsound</span></code> — Sound-playing interface for Windows</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="formatter.html"
+                        title="previous chapter">34.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">formatter</span></code> — Generic output formatting</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="msilib.html"
+                        title="next chapter">35.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">msilib</span></code> — Read and write Microsoft Installer files</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/windows.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="msilib.html" title="35.1. msilib — Read and write Microsoft Installer files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="formatter.html" title="34.1. formatter — Generic output formatting"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,454 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Idioms and Anti-Idioms in Python &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Functional Programming HOWTO" href="functional.html" />
+    <link rel="prev" title="Descriptor HowTo Guide" href="descriptor.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/howto/doanddont.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="functional.html" title="Functional Programming HOWTO"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="descriptor.html" title="Descriptor HowTo Guide"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python HOWTOs</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="idioms-and-anti-idioms-in-python">
+<h1>Idioms and Anti-Idioms in Python<a class="headerlink" href="#idioms-and-anti-idioms-in-python" title="Permalink to this headline">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Moshe Zadka</p>
+</dd>
+</dl>
+<p>This document is placed in the public domain.</p>
+<div class="topic">
+<p class="topic-title first">Abstract</p>
+<p>This document can be considered a companion to the tutorial. It shows how to use
+Python, and even more importantly, how <em>not</em> to use Python.</p>
+</div>
+<div class="section" id="language-constructs-you-should-not-use">
+<h2>Language Constructs You Should Not Use<a class="headerlink" href="#language-constructs-you-should-not-use" title="Permalink to this headline">¶</a></h2>
+<p>While Python has relatively few gotchas compared to other languages, it still
+has some constructs which are only useful in corner cases, or are plain
+dangerous.</p>
+<div class="section" id="from-module-import">
+<h3>from module import *<a class="headerlink" href="#from-module-import" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="inside-function-definitions">
+<h4>Inside Function Definitions<a class="headerlink" href="#inside-function-definitions" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">*</span></code> is <em>invalid</em> inside function definitions. While many
+versions of Python do not check for the invalidity, it does not make it more
+valid, no more than having a smart lawyer makes a man innocent. Do not use it
+like that ever. Even in versions where it was accepted, it made the function
+execution slower, because the compiler could not be certain which names were
+local and which were global. In Python 2.1 this construct causes warnings, and
+sometimes even errors.</p>
+</div>
+<div class="section" id="at-module-level">
+<h4>At Module Level<a class="headerlink" href="#at-module-level" title="Permalink to this headline">¶</a></h4>
+<p>While it is valid to use <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">*</span></code> at module level it is usually
+a bad idea. For one, this loses an important property Python otherwise has —
+you can know where each toplevel name is defined by a simple “search” function
+in your favourite editor. You also open yourself to trouble in the future, if
+some module grows additional functions or classes.</p>
+<p>One of the most awful questions asked on the newsgroup is why this code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;www&quot;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>does not work. Of course, it works just fine (assuming you have a file called
+“www”.) But it does not work if somewhere in the module, the statement <code class="docutils literal notranslate"><span class="pre">from</span>
+<span class="pre">os</span> <span class="pre">import</span> <span class="pre">*</span></code> is present. The <a class="reference internal" href="../library/os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal notranslate"><span class="pre">os</span></code></a> module has a function called
+<a class="reference internal" href="../library/functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> which returns an integer. While it is very useful, shadowing a
+builtin is one of its least useful properties.</p>
+<p>Remember, you can never know for sure what names a module exports, so either
+take what you need — <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">name1,</span> <span class="pre">name2</span></code>, or keep them in the
+module and access on a per-need basis —  <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">module;print</span> <span class="pre">module.name</span></code>.</p>
+</div>
+<div class="section" id="when-it-is-just-fine">
+<h4>When It Is Just Fine<a class="headerlink" href="#when-it-is-just-fine" title="Permalink to this headline">¶</a></h4>
+<p>There are situations in which <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">*</span></code> is just fine:</p>
+<ul class="simple">
+<li><p>The interactive prompt. For example, <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">math</span> <span class="pre">import</span> <span class="pre">*</span></code> makes Python an
+amazing scientific calculator.</p></li>
+<li><p>When extending a module in C with a module in Python.</p></li>
+<li><p>When the module advertises itself as <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">import</span> <span class="pre">*</span></code> safe.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="unadorned-exec-execfile-and-friends">
+<h3>Unadorned <a class="reference internal" href="../reference/simple_stmts.html#exec"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">exec</span></code></a>, <a class="reference internal" href="../library/functions.html#execfile" title="execfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">execfile()</span></code></a> and friends<a class="headerlink" href="#unadorned-exec-execfile-and-friends" title="Permalink to this headline">¶</a></h3>
+<p>The word “unadorned” refers to the use without an explicit dictionary, in which
+case those constructs evaluate code in the <em>current</em> environment. This is
+dangerous for the same reasons <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">import</span> <span class="pre">*</span></code> is dangerous — it might step
+over variables you are counting on and mess up things for the rest of your code.
+Simply do not do that.</p>
+<p>Bad examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">exec</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=1&quot;</span> <span class="o">%</span> <span class="n">name</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kw</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">exec</span> <span class="s2">&quot;s.</span><span class="si">%s</span><span class="s2">=val&quot;</span> <span class="o">%</span> <span class="n">var</span>  <span class="c1"># invalid!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">execfile</span><span class="p">(</span><span class="s2">&quot;handler.py&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handle</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Good examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">d</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kw</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="nb">setattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">=</span><span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">execfile</span><span class="p">(</span><span class="s2">&quot;handle.py&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handle</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;handle&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handle</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="from-module-import-name1-name2">
+<h3>from module import name1, name2<a class="headerlink" href="#from-module-import-name1-name2" title="Permalink to this headline">¶</a></h3>
+<p>This is a “don’t” which is much weaker than the previous “don’t”s but is still
+something you should not do if you don’t have good reasons to do that. The
+reason it is usually a bad idea is because you suddenly have an object which lives
+in two separate namespaces. When the binding in one namespace changes, the
+binding in the other will not, so there will be a discrepancy between them. This
+happens when, for example, one module is reloaded, or changes the definition of
+a function at runtime.</p>
+<p>Bad example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># foo.py</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># bar.py</span>
+<span class="kn">from</span> <span class="nn">foo</span> <span class="k">import</span> <span class="n">a</span>
+<span class="k">if</span> <span class="n">something</span><span class="p">():</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># danger: foo.a != a</span>
+</pre></div>
+</div>
+<p>Good example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># foo.py</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># bar.py</span>
+<span class="kn">import</span> <span class="nn">foo</span>
+<span class="k">if</span> <span class="n">something</span><span class="p">():</span>
+    <span class="n">foo</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="except">
+<h3>except:<a class="headerlink" href="#except" title="Permalink to this headline">¶</a></h3>
+<p>Python has the <code class="docutils literal notranslate"><span class="pre">except:</span></code> clause, which catches all exceptions. Since <em>every</em>
+error in Python raises an exception, using <code class="docutils literal notranslate"><span class="pre">except:</span></code> can make many
+programming errors look like runtime problems, which hinders the debugging
+process.</p>
+<p>The following code shows a great example of why this is bad:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">opne</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">)</span> <span class="c1"># misspelled &quot;open&quot;</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;could not open file!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The second line triggers a <a class="reference internal" href="../library/exceptions.html#exceptions.NameError" title="exceptions.NameError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NameError</span></code></a>, which is caught by the except
+clause. The program will exit, and the error message the program prints will
+make you think the problem is the readability of <code class="docutils literal notranslate"><span class="pre">&quot;file&quot;</span></code> when in fact
+the real error has nothing to do with <code class="docutils literal notranslate"><span class="pre">&quot;file&quot;</span></code>.</p>
+<p>A better way to write the above is</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">opne</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;could not open file&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When this is run, Python will produce a traceback showing the <a class="reference internal" href="../library/exceptions.html#exceptions.NameError" title="exceptions.NameError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NameError</span></code></a>,
+and it will be immediately apparent what needs to be fixed.</p>
+<p id="index-0">Because <code class="docutils literal notranslate"><span class="pre">except:</span></code> catches <em>all</em> exceptions, including <a class="reference internal" href="../library/exceptions.html#exceptions.SystemExit" title="exceptions.SystemExit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemExit</span></code></a>,
+<a class="reference internal" href="../library/exceptions.html#exceptions.KeyboardInterrupt" title="exceptions.KeyboardInterrupt"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code></a>, and <a class="reference internal" href="../library/exceptions.html#exceptions.GeneratorExit" title="exceptions.GeneratorExit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">GeneratorExit</span></code></a> (which is not an error and
+should not normally be caught by user code), using a bare <code class="docutils literal notranslate"><span class="pre">except:</span></code> is almost
+never a good idea.  In situations where you need to catch all “normal” errors,
+such as in a framework that runs callbacks, you can catch the base class for
+all normal exceptions, <a class="reference internal" href="../library/exceptions.html#exceptions.Exception" title="exceptions.Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a>.  Unfortunately in Python 2.x it is
+possible for third-party code to raise exceptions that do not inherit from
+<a class="reference internal" href="../library/exceptions.html#exceptions.Exception" title="exceptions.Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a>, so in Python 2.x there are some cases where you may have to
+use a bare <code class="docutils literal notranslate"><span class="pre">except:</span></code> and manually re-raise the exceptions you don’t want
+to catch.</p>
+</div>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<p>Exceptions are a useful feature of Python. You should learn to raise them
+whenever something unexpected occurs, and catch them only where you can do
+something about them.</p>
+<p>The following is a very popular anti-idiom</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+        <span class="nb">print</span> <span class="s2">&quot;file not found&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Consider the case where the file gets deleted between the time the call to
+<a class="reference internal" href="../library/os.path.html#os.path.exists" title="os.path.exists"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.path.exists()</span></code></a> is made and the time <a class="reference internal" href="../library/functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> is called. In that
+case the last line will raise an <a class="reference internal" href="../library/exceptions.html#exceptions.IOError" title="exceptions.IOError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IOError</span></code></a>.  The same thing would happen
+if <em>file</em> exists but has no read permission.  Since testing this on a normal
+machine on existent and non-existent files makes it seem bugless, the test
+results will seem fine, and the code will get shipped.  Later an unhandled
+<a class="reference internal" href="../library/exceptions.html#exceptions.IOError" title="exceptions.IOError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IOError</span></code></a> (or perhaps some other <a class="reference internal" href="../library/exceptions.html#exceptions.EnvironmentError" title="exceptions.EnvironmentError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">EnvironmentError</span></code></a>) escapes to the
+user, who gets to watch the ugly traceback.</p>
+<p>Here is a somewhat better way to do it.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">EnvironmentError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&quot;Unable to open file: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this version, <em>either</em> the file gets opened and the line is read (so it
+works even on flaky NFS or SMB connections), or an error message is printed
+that provides all the available information on why the open failed, and the
+application is aborted.</p>
+<p>However, even this version of <code class="xref py py-func docutils literal notranslate"><span class="pre">get_status()</span></code> makes too many assumptions —
+that it will only be used in a short running script, and not, say, in a long
+running server. Sure, the caller could do something like</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">get_status</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">SystemExit</span><span class="p">:</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>But there is a better way.  You should try to use as few <code class="docutils literal notranslate"><span class="pre">except</span></code> clauses in
+your code as you can — the ones you do use will usually be inside calls which
+should always succeed, or a catch-all in a main function.</p>
+<p>So, an even better version of <code class="xref py py-func docutils literal notranslate"><span class="pre">get_status()</span></code> is probably</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The caller can deal with the exception if it wants (for example, if it tries
+several files in a loop), or just let the exception filter upwards to <em>its</em>
+caller.</p>
+<p>But the last version still has a serious problem — due to implementation
+details in CPython, the file would not be closed when an exception is raised
+until the exception handler finishes; and, worse, in other implementations
+(e.g., Jython) it might not be closed at all regardless of whether or not
+an exception is raised.</p>
+<p>The best version of this function uses the <code class="docutils literal notranslate"><span class="pre">open()</span></code> call as a context
+manager, which will ensure that the file gets closed as soon as the
+function returns:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fp</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-the-batteries">
+<h2>Using the Batteries<a class="headerlink" href="#using-the-batteries" title="Permalink to this headline">¶</a></h2>
+<p>Every so often, people seem to be writing stuff in the Python library again,
+usually poorly. While the occasional module has a poor interface, it is usually
+much better to use the rich standard library and data types that come with
+Python than inventing your own.</p>
+<p>A useful module very few people know about is <a class="reference internal" href="../library/os.path.html#module-os.path" title="os.path: Operations on pathnames."><code class="xref py py-mod docutils literal notranslate"><span class="pre">os.path</span></code></a>. It  always has the
+correct path arithmetic for your operating system, and will usually be much
+better than whatever you come up with yourself.</p>
+<p>Compare:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ugh!</span>
+<span class="k">return</span> <span class="nb">dir</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">file</span>
+<span class="c1"># better</span>
+<span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>More useful functions in <a class="reference internal" href="../library/os.path.html#module-os.path" title="os.path: Operations on pathnames."><code class="xref py py-mod docutils literal notranslate"><span class="pre">os.path</span></code></a>: <code class="xref py py-func docutils literal notranslate"><span class="pre">basename()</span></code>,  <code class="xref py py-func docutils literal notranslate"><span class="pre">dirname()</span></code> and
+<code class="xref py py-func docutils literal notranslate"><span class="pre">splitext()</span></code>.</p>
+<p>There are also many useful built-in functions people seem not to be aware of
+for some reason: <a class="reference internal" href="../library/functions.html#min" title="min"><code class="xref py py-func docutils literal notranslate"><span class="pre">min()</span></code></a> and <a class="reference internal" href="../library/functions.html#max" title="max"><code class="xref py py-func docutils literal notranslate"><span class="pre">max()</span></code></a> can find the minimum/maximum of
+any sequence with comparable semantics, for example, yet many people write
+their own <a class="reference internal" href="../library/functions.html#max" title="max"><code class="xref py py-func docutils literal notranslate"><span class="pre">max()</span></code></a>/<a class="reference internal" href="../library/functions.html#min" title="min"><code class="xref py py-func docutils literal notranslate"><span class="pre">min()</span></code></a>. Another highly useful function is
+<a class="reference internal" href="../library/functions.html#reduce" title="reduce"><code class="xref py py-func docutils literal notranslate"><span class="pre">reduce()</span></code></a> which can be used to repeatedly apply a binary operation to a
+sequence, reducing it to a single value.  For example, compute a factorial
+with a series of multiply operations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">operator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<span class="go">24</span>
+</pre></div>
+</div>
+<p>When it comes to parsing numbers, note that <a class="reference internal" href="../library/functions.html#float" title="float"><code class="xref py py-func docutils literal notranslate"><span class="pre">float()</span></code></a>, <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-func docutils literal notranslate"><span class="pre">int()</span></code></a> and
+<a class="reference internal" href="../library/functions.html#long" title="long"><code class="xref py py-func docutils literal notranslate"><span class="pre">long()</span></code></a> all accept string arguments and will reject ill-formed strings
+by raising an <a class="reference internal" href="../library/exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>.</p>
+</div>
+<div class="section" id="using-backslash-to-continue-statements">
+<h2>Using Backslash to Continue Statements<a class="headerlink" href="#using-backslash-to-continue-statements" title="Permalink to this headline">¶</a></h2>
+<p>Since Python treats a newline as a statement terminator, and since statements
+are often more than is comfortable to put in one line, many people do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="p">()[</span><span class="s1">&#39;first&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">baz</span><span class="o">.</span><span class="n">quux</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">5</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span> <span class="ow">and</span> \
+   <span class="n">calculate_number</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span> <span class="o">!=</span> <span class="n">forbulate</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">360</span><span class="p">):</span>
+      <span class="k">pass</span>
+</pre></div>
+</div>
+<p>You should realize that this is dangerous: a stray space after the <code class="docutils literal notranslate"><span class="pre">\</span></code> would
+make this line wrong, and stray spaces are notoriously hard to see in editors.
+In this case, at least it would be a syntax error, but if the code was:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">value</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="p">()[</span><span class="s1">&#39;first&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">baz</span><span class="o">.</span><span class="n">quux</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">5</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span> \
+        <span class="o">+</span> <span class="n">calculate_number</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span><span class="o">*</span><span class="n">forbulate</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>then it would just be subtly wrong.</p>
+<p>It is usually much better to use the implicit continuation inside parenthesis:</p>
+<p>This version is bulletproof:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="p">()[</span><span class="s1">&#39;first&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">baz</span><span class="o">.</span><span class="n">quux</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">5</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">calculate_number</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span><span class="o">*</span><span class="n">forbulate</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">360</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Idioms and Anti-Idioms in Python</a><ul>
+<li><a class="reference internal" href="#language-constructs-you-should-not-use">Language Constructs You Should Not Use</a><ul>
+<li><a class="reference internal" href="#from-module-import">from module import *</a><ul>
+<li><a class="reference internal" href="#inside-function-definitions">Inside Function Definitions</a></li>
+<li><a class="reference internal" href="#at-module-level">At Module Level</a></li>
+<li><a class="reference internal" href="#when-it-is-just-fine">When It Is Just Fine</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#unadorned-exec-execfile-and-friends">Unadorned <code class="xref std std-keyword docutils literal notranslate"><span class="pre">exec</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">execfile()</span></code> and friends</a></li>
+<li><a class="reference internal" href="#from-module-import-name1-name2">from module import name1, name2</a></li>
+<li><a class="reference internal" href="#except">except:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#using-the-batteries">Using the Batteries</a></li>
+<li><a class="reference internal" href="#using-backslash-to-continue-statements">Using Backslash to Continue Statements</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="descriptor.html"
+                        title="previous chapter">Descriptor HowTo Guide</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="functional.html"
+                        title="next chapter">Functional Programming HOWTO</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/howto/doanddont.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="functional.html" title="Functional Programming HOWTO"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="descriptor.html" title="Descriptor HowTo Guide"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python HOWTOs</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

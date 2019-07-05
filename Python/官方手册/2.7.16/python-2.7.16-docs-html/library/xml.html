@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>19.5. XML Processing Modules &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="19.7. xml.etree.ElementTree — The ElementTree XML API" href="xml.etree.elementtree.html" />
+    <link rel="prev" title="19.3. htmllib — A parser for HTML documents" href="htmllib.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/xml.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xml.etree.elementtree.html" title="19.7. xml.etree.ElementTree — The ElementTree XML API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="htmllib.html" title="19.3. htmllib — A parser for HTML documents"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="markup.html" accesskey="U">19. Structured Markup Processing Tools</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-xml">
+<span id="xml-processing-modules"></span><span id="xml"></span><h1>19.5. XML Processing Modules<a class="headerlink" href="#module-xml" title="Permalink to this headline">¶</a></h1>
+<p>Python’s interfaces for processing XML are grouped in the <code class="docutils literal notranslate"><span class="pre">xml</span></code> package.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The XML modules are not secure against erroneous or maliciously
+constructed data.  If you need to parse untrusted or unauthenticated data see
+<a class="reference internal" href="#xml-vulnerabilities"><span class="std std-ref">XML vulnerabilities</span></a>.</p>
+</div>
+<p>It is important to note that modules in the <a class="reference internal" href="#module-xml" title="xml: Package containing XML processing modules"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml</span></code></a> package require that
+there be at least one SAX-compliant XML parser available. The Expat parser is
+included with Python, so the <a class="reference internal" href="pyexpat.html#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.parsers.expat</span></code></a> module will always be
+available.</p>
+<p>The documentation for the <a class="reference internal" href="xml.dom.html#module-xml.dom" title="xml.dom: Document Object Model API for Python."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom</span></code></a> and <a class="reference internal" href="xml.sax.html#module-xml.sax" title="xml.sax: Package containing SAX2 base classes and convenience functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code></a> packages are the
+definition of the Python bindings for the DOM and SAX interfaces.</p>
+<p>The XML handling submodules are:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="xml.etree.elementtree.html#module-xml.etree.ElementTree" title="xml.etree.ElementTree: Implementation of the ElementTree API."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.etree.ElementTree</span></code></a>: the ElementTree API, a simple and lightweight
+XML processor</p></li>
+</ul>
+<ul class="simple">
+<li><p><a class="reference internal" href="xml.dom.html#module-xml.dom" title="xml.dom: Document Object Model API for Python."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom</span></code></a>: the DOM API definition</p></li>
+<li><p><a class="reference internal" href="xml.dom.minidom.html#module-xml.dom.minidom" title="xml.dom.minidom: Minimal Document Object Model (DOM) implementation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom.minidom</span></code></a>: a minimal DOM implementation</p></li>
+<li><p><a class="reference internal" href="xml.dom.pulldom.html#module-xml.dom.pulldom" title="xml.dom.pulldom: Support for building partial DOM trees from SAX events."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom.pulldom</span></code></a>: support for building partial DOM trees</p></li>
+</ul>
+<ul class="simple">
+<li><p><a class="reference internal" href="xml.sax.html#module-xml.sax" title="xml.sax: Package containing SAX2 base classes and convenience functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code></a>: SAX2 base classes and convenience functions</p></li>
+<li><p><a class="reference internal" href="pyexpat.html#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.parsers.expat</span></code></a>: the Expat parser binding</p></li>
+</ul>
+</div>
+<div class="section" id="xml-vulnerabilities">
+<span id="id1"></span><h1>19.6. XML vulnerabilities<a class="headerlink" href="#xml-vulnerabilities" title="Permalink to this headline">¶</a></h1>
+<p>The XML processing modules are not secure against maliciously constructed data.
+An attacker can abuse vulnerabilities for e.g. denial of service attacks, to
+access local files, to generate network connections to other machines, or
+to or circumvent firewalls. The attacks on XML abuse unfamiliar features
+like inline <a class="reference external" href="https://en.wikipedia.org/wiki/Document_type_definition">DTD</a> (document type definition) with entities.</p>
+<p>The following table gives an overview of the known attacks and if the various
+modules are vulnerable to them.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 15%" />
+<col style="width: 16%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>kind</p></th>
+<th class="head"><p>sax</p></th>
+<th class="head"><p>etree</p></th>
+<th class="head"><p>minidom</p></th>
+<th class="head"><p>pulldom</p></th>
+<th class="head"><p>xmlrpc</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>billion laughs</p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>quadratic blowup</p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>external entity expansion</p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p>Safe    (1)</p></td>
+<td><p>Safe    (2)</p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p>Safe    (3)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Document_type_definition">DTD</a> retrieval</p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p>Safe</p></td>
+<td><p>Safe</p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+<td><p>Safe</p></td>
+</tr>
+<tr class="row-even"><td><p>decompression bomb</p></td>
+<td><p>Safe</p></td>
+<td><p>Safe</p></td>
+<td><p>Safe</p></td>
+<td><p>Safe</p></td>
+<td><p><strong>Vulnerable</strong></p></td>
+</tr>
+</tbody>
+</table>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="xml.etree.elementtree.html#module-xml.etree.ElementTree" title="xml.etree.ElementTree: Implementation of the ElementTree API."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.etree.ElementTree</span></code></a> doesn’t expand external entities and raises a
+ParserError when an entity occurs.</p></li>
+<li><p><a class="reference internal" href="xml.dom.minidom.html#module-xml.dom.minidom" title="xml.dom.minidom: Minimal Document Object Model (DOM) implementation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom.minidom</span></code></a> doesn’t expand external entities and simply returns
+the unexpanded entity verbatim.</p></li>
+<li><p><a class="reference internal" href="xmlrpclib.html#module-xmlrpclib" title="xmlrpclib: XML-RPC client access."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xmlrpclib</span></code></a> doesn’t expand external entities and omits them.</p></li>
+</ol>
+<dl class="simple">
+<dt>billion laughs / exponential entity expansion</dt><dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Billion_laughs">Billion Laughs</a> attack – also known as exponential entity expansion –
+uses multiple levels of nested entities. Each entity refers to another entity
+several times, the final entity definition contains a small string. Eventually
+the small string is expanded to several gigabytes. The exponential expansion
+consumes lots of CPU time, too.</p>
+</dd>
+<dt>quadratic blowup entity expansion</dt><dd><p>A quadratic blowup attack is similar to a <a class="reference external" href="https://en.wikipedia.org/wiki/Billion_laughs">Billion Laughs</a> attack; it abuses
+entity expansion, too. Instead of nested entities it repeats one large entity
+with a couple of thousand chars over and over again. The attack isn’t as
+efficient as the exponential case but it avoids triggering countermeasures of
+parsers against heavily nested entities.</p>
+</dd>
+<dt>external entity expansion</dt><dd><p>Entity declarations can contain more than just text for replacement. They can
+also point to external resources by public identifiers or system identifiers.
+System identifiers are standard URIs or can refer to local files. The XML
+parser retrieves the resource with e.g. HTTP or FTP requests and embeds the
+content into the XML document.</p>
+</dd>
+<dt><a class="reference external" href="https://en.wikipedia.org/wiki/Document_type_definition">DTD</a> retrieval</dt><dd><p>Some XML libraries like Python’s <a class="reference internal" href="xml.dom.pulldom.html#module-xml.dom.pulldom" title="xml.dom.pulldom: Support for building partial DOM trees from SAX events."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom.pulldom</span></code></a> retrieve document type
+definitions from remote or local locations. The feature has similar
+implications as the external entity expansion issue.</p>
+</dd>
+<dt>decompression bomb</dt><dd><p>The issue of decompression bombs (aka <a class="reference external" href="https://en.wikipedia.org/wiki/Zip_bomb">ZIP bomb</a>) apply to all XML libraries
+that can parse compressed XML stream like gzipped HTTP streams or LZMA-ed
+files. For an attacker it can reduce the amount of transmitted data by three
+magnitudes or more.</p>
+</dd>
+</dl>
+<p>The documentation of <a class="reference external" href="https://pypi.org/project/defusedxml/">defusedxml</a> on PyPI has further information about
+all known attack vectors with examples and references.</p>
+<div class="section" id="defused-packages">
+<h2>19.6.1. defused packages<a class="headerlink" href="#defused-packages" title="Permalink to this headline">¶</a></h2>
+<p>These external packages are recommended for any code that parses
+untrusted XML data.</p>
+<p><a class="reference external" href="https://pypi.org/project/defusedxml/">defusedxml</a> is a pure Python package with modified subclasses of all stdlib
+XML parsers that prevent any potentially malicious operation. The
+package also ships with example exploits and extended documentation on more
+XML exploits like xpath injection.</p>
+<p><a class="reference external" href="https://pypi.org/project/defusedexpat/">defusedexpat</a> provides a modified libexpat and patched replacement
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyexpat</span></code> extension module with countermeasures against entity expansion
+DoS attacks. Defusedexpat still allows a sane and configurable amount of entity
+expansions. The modifications will be merged into future releases of Python.</p>
+<p>The workarounds and modifications are not included in patch releases as they
+break backward compatibility. After all inline DTD and entity expansion are
+well-defined XML features.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">19.5. XML Processing Modules</a></li>
+<li><a class="reference internal" href="#xml-vulnerabilities">19.6. XML vulnerabilities</a><ul>
+<li><a class="reference internal" href="#defused-packages">19.6.1. defused packages</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="htmllib.html"
+                        title="previous chapter">19.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">htmllib</span></code> — A parser for HTML documents</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="xml.etree.elementtree.html"
+                        title="next chapter">19.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.etree.ElementTree</span></code> — The ElementTree XML API</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/xml.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xml.etree.elementtree.html" title="19.7. xml.etree.ElementTree — The ElementTree XML API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="htmllib.html" title="19.3. htmllib — A parser for HTML documents"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="markup.html" >19. Structured Markup Processing Tools</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

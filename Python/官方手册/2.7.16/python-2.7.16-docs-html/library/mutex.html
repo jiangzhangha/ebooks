@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>8.9. mutex — Mutual exclusion support &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="8.10. Queue — A synchronized queue class" href="queue.html" />
+    <link rel="prev" title="8.8. sched — Event scheduler" href="sched.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/mutex.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="queue.html" title="8.10. Queue — A synchronized queue class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sched.html" title="8.8. sched — Event scheduler"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" accesskey="U">8. Data Types</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-mutex">
+<span id="mutex-mutual-exclusion-support"></span><h1>8.9. <a class="reference internal" href="#module-mutex" title="mutex: Lock and queue for mutual exclusion. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mutex</span></code></a> — Mutual exclusion support<a class="headerlink" href="#module-mutex" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-mutex" title="mutex: Lock and queue for mutual exclusion. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mutex</span></code></a> module has been removed in Python 3.</p>
+</div>
+<p>The <a class="reference internal" href="#module-mutex" title="mutex: Lock and queue for mutual exclusion. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mutex</span></code></a> module defines a class that allows mutual-exclusion via
+acquiring and releasing locks. It does not require (or imply)
+<a class="reference internal" href="threading.html#module-threading" title="threading: Higher-level threading interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">threading</span></code></a> or multi-tasking, though it could be useful for those
+purposes.</p>
+<p>The <a class="reference internal" href="#module-mutex" title="mutex: Lock and queue for mutual exclusion. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mutex</span></code></a> module defines the following class:</p>
+<dl class="class">
+<dt id="mutex.mutex">
+<em class="property">class </em><code class="descclassname">mutex.</code><code class="descname">mutex</code><a class="headerlink" href="#mutex.mutex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new (unlocked) mutex.</p>
+<p>A mutex has two pieces of state — a “locked” bit and a queue. When the mutex
+is not locked, the queue is empty. Otherwise, the queue contains zero or more
+<code class="docutils literal notranslate"><span class="pre">(function,</span> <span class="pre">argument)</span></code> pairs representing functions (or methods) waiting to
+acquire the lock. When the mutex is unlocked while the queue is not empty, the
+first queue entry is removed and its  <code class="docutils literal notranslate"><span class="pre">function(argument)</span></code> pair called,
+implying it now has the lock.</p>
+<p>Of course, no multi-threading is implied – hence the funny interface for
+<a class="reference internal" href="#mutex.mutex.lock" title="mutex.mutex.lock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lock()</span></code></a>, where a function is called once the lock is acquired.</p>
+</dd></dl>
+
+<div class="section" id="mutex-objects">
+<span id="id1"></span><h2>8.9.1. Mutex Objects<a class="headerlink" href="#mutex-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#mutex.mutex" title="mutex.mutex"><code class="xref py py-class docutils literal notranslate"><span class="pre">mutex</span></code></a> objects have following methods:</p>
+<dl class="method">
+<dt id="mutex.mutex.test">
+<code class="descclassname">mutex.</code><code class="descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mutex.mutex.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the mutex is locked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mutex.mutex.testandset">
+<code class="descclassname">mutex.</code><code class="descname">testandset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mutex.mutex.testandset" title="Permalink to this definition">¶</a></dt>
+<dd><p>“Atomic” test-and-set, grab the lock if it is not set, and return <code class="docutils literal notranslate"><span class="pre">True</span></code>,
+otherwise, return <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mutex.mutex.lock">
+<code class="descclassname">mutex.</code><code class="descname">lock</code><span class="sig-paren">(</span><em>function</em>, <em>argument</em><span class="sig-paren">)</span><a class="headerlink" href="#mutex.mutex.lock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute <code class="docutils literal notranslate"><span class="pre">function(argument)</span></code>, unless the mutex is locked. In the case it is
+locked, place the function and argument on the queue. See <a class="reference internal" href="#mutex.mutex.unlock" title="mutex.mutex.unlock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unlock()</span></code></a> for
+explanation of when <code class="docutils literal notranslate"><span class="pre">function(argument)</span></code> is executed in that case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mutex.mutex.unlock">
+<code class="descclassname">mutex.</code><code class="descname">unlock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mutex.mutex.unlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unlock the mutex if queue is empty, otherwise execute the first element in the
+queue.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mutex</span></code> — Mutual exclusion support</a><ul>
+<li><a class="reference internal" href="#mutex-objects">8.9.1. Mutex Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sched.html"
+                        title="previous chapter">8.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sched</span></code> — Event scheduler</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="queue.html"
+                        title="next chapter">8.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">Queue</span></code> — A synchronized queue class</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/mutex.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="queue.html" title="8.10. Queue — A synchronized queue class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sched.html" title="8.8. sched — Event scheduler"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" >8. Data Types</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

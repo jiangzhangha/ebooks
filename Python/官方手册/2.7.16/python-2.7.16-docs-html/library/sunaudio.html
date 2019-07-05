@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>40.1. sunaudiodev — Access to Sun audio hardware &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="41. Undocumented Modules" href="undoc.html" />
+    <link rel="prev" title="40. SunOS Specific Services" href="sun.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/sunaudio.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="undoc.html" title="41. Undocumented Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sun.html" title="40. SunOS Specific Services"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="sun.html" accesskey="U">40. SunOS Specific Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sunaudiodev">
+<span id="sunaudiodev-access-to-sun-audio-hardware"></span><h1>40.1. <a class="reference internal" href="#module-sunaudiodev" title="sunaudiodev: Access to Sun audio hardware. (deprecated) (SunOS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sunaudiodev</span></code></a> — Access to Sun audio hardware<a class="headerlink" href="#module-sunaudiodev" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-sunaudiodev" title="sunaudiodev: Access to Sun audio hardware. (deprecated) (SunOS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sunaudiodev</span></code></a> module has been removed in Python 3.</p>
+</div>
+<p id="index-0">This module allows you to access the Sun audio interface. The Sun audio hardware
+is capable of recording and playing back audio data in u-LAW format with a
+sample rate of 8K per second. A full description can be found in the
+<em class="manpage">audio(7I)</em> manual page.</p>
+<p id="index-1">The module <a class="reference internal" href="#module-SUNAUDIODEV" title="SUNAUDIODEV: Constants for use with sunaudiodev. (deprecated) (SunOS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SUNAUDIODEV</span></code></a>  defines constants which may be used with this
+module.</p>
+<p>This module defines the following variables and functions:</p>
+<dl class="exception">
+<dt id="sunaudiodev.error">
+<em class="property">exception </em><code class="descclassname">sunaudiodev.</code><code class="descname">error</code><a class="headerlink" href="#sunaudiodev.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>This exception is raised on all errors. The argument is a string describing what
+went wrong.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sunaudiodev.open">
+<code class="descclassname">sunaudiodev.</code><code class="descname">open</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#sunaudiodev.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function opens the audio device and returns a Sun audio device object. This
+object can then be used to do I/O on. The <em>mode</em> parameter is one of <code class="docutils literal notranslate"><span class="pre">'r'</span></code> for
+record-only access, <code class="docutils literal notranslate"><span class="pre">'w'</span></code> for play-only access, <code class="docutils literal notranslate"><span class="pre">'rw'</span></code> for both and
+<code class="docutils literal notranslate"><span class="pre">'control'</span></code> for access to the control device. Since only one process is
+allowed to have the recorder or player open at the same time it is a good idea
+to open the device only for the activity needed. See <em class="manpage">audio(7I)</em> for
+details.</p>
+<p>As per the manpage, this module first looks in the environment variable
+<code class="docutils literal notranslate"><span class="pre">AUDIODEV</span></code> for the base audio device filename.  If not found, it falls back to
+<code class="file docutils literal notranslate"><span class="pre">/dev/audio</span></code>.  The control device is calculated by appending “ctl” to the
+base audio device.</p>
+</dd></dl>
+
+<div class="section" id="audio-device-objects">
+<span id="id1"></span><h2>40.1.1. Audio Device Objects<a class="headerlink" href="#audio-device-objects" title="Permalink to this headline">¶</a></h2>
+<p>The audio device objects are returned by <a class="reference internal" href="#sunaudiodev.open" title="sunaudiodev.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> define the following
+methods (except <code class="docutils literal notranslate"><span class="pre">control</span></code> objects which only provide <code class="xref py py-meth docutils literal notranslate"><span class="pre">getinfo()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">setinfo()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">fileno()</span></code>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">drain()</span></code>):</p>
+<dl class="method">
+<dt>
+<code class="descname">audio device.close()</code></dt>
+<dd><p>This method explicitly closes the device. It is useful in situations where
+deleting the object does not immediately close it since there are other
+references to it. A closed device should not be used again.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">audio device.fileno()</code></dt>
+<dd><p>Returns the file descriptor associated with the device.  This can be used to set
+up <code class="docutils literal notranslate"><span class="pre">SIGPOLL</span></code> notification, as described below.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">audio device.drain()</code></dt>
+<dd><p>This method waits until all pending output is processed and then returns.
+Calling this method is often not necessary: destroying the object will
+automatically close the audio device and this will do an implicit drain.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">audio device.flush()</code></dt>
+<dd><p>This method discards all pending output. It can be used avoid the slow response
+to a user’s stop request (due to buffering of up to one second of sound).</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">audio device.getinfo()</code></dt>
+<dd><p>This method retrieves status information like input and output volume, etc. and
+returns it in the form of an audio status object. This object has no methods but
+it contains a number of attributes describing the current device status. The
+names and meanings of the attributes are described in <code class="docutils literal notranslate"><span class="pre">&lt;sun/audioio.h&gt;</span></code> and in
+the <em class="manpage">audio(7I)</em> manual page.  Member names are slightly different from
+their C counterparts: a status object is only a single structure. Members of the
+<code class="xref c c-data docutils literal notranslate"><span class="pre">play</span></code> substructure have <code class="docutils literal notranslate"><span class="pre">o_</span></code> prepended to their name and members of
+the <code class="xref c c-data docutils literal notranslate"><span class="pre">record</span></code> structure have <code class="docutils literal notranslate"><span class="pre">i_</span></code>. So, the C member
+<code class="xref c c-data docutils literal notranslate"><span class="pre">play.sample_rate</span></code> is accessed as <code class="xref py py-attr docutils literal notranslate"><span class="pre">o_sample_rate</span></code>,
+<code class="xref c c-data docutils literal notranslate"><span class="pre">record.gain</span></code> as <code class="xref py py-attr docutils literal notranslate"><span class="pre">i_gain</span></code> and <code class="xref c c-data docutils literal notranslate"><span class="pre">monitor_gain</span></code> plainly as
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">monitor_gain</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">audio device.ibufcount()</code></dt>
+<dd><p>This method returns the number of samples that are buffered on the recording
+side, i.e. the program will not block on a <code class="xref py py-func docutils literal notranslate"><span class="pre">read()</span></code> call of so many samples.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">audio device.obufcount()</code></dt>
+<dd><p>This method returns the number of samples buffered on the playback side.
+Unfortunately, this number cannot be used to determine a number of samples that
+can be written without blocking since the kernel output queue length seems to be
+variable.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">audio device.read(size)</code></dt>
+<dd><p>This method reads <em>size</em> samples from the audio input and returns them as a
+Python string. The function blocks until enough data is available.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">audio device.setinfo(status)</code></dt>
+<dd><p>This method sets the audio device status parameters. The <em>status</em> parameter is
+a device status object as returned by <code class="xref py py-func docutils literal notranslate"><span class="pre">getinfo()</span></code> and possibly modified by
+the program.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">audio device.write(samples)</code></dt>
+<dd><p>Write is passed a Python string containing audio samples to be played. If there
+is enough buffer space free it will immediately return, otherwise it will block.</p>
+</dd></dl>
+
+<p>The audio device supports asynchronous notification of various events, through
+the SIGPOLL signal.  Here’s an example of how you might enable this in Python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">handle_sigpoll</span><span class="p">(</span><span class="n">signum</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="s1">&#39;I got a SIGPOLL update&#39;</span>
+
+<span class="kn">import</span> <span class="nn">fcntl</span><span class="o">,</span> <span class="nn">signal</span><span class="o">,</span> <span class="nn">STROPTS</span>
+
+<span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGPOLL</span><span class="p">,</span> <span class="n">handle_sigpoll</span><span class="p">)</span>
+<span class="n">fcntl</span><span class="o">.</span><span class="n">ioctl</span><span class="p">(</span><span class="n">audio_obj</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">STROPTS</span><span class="o">.</span><span class="n">I_SETSIG</span><span class="p">,</span> <span class="n">STROPTS</span><span class="o">.</span><span class="n">S_MSG</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="module-SUNAUDIODEV">
+<span id="sunaudiodev-constants-used-with-sunaudiodev"></span><h1>40.2. <a class="reference internal" href="#module-SUNAUDIODEV" title="SUNAUDIODEV: Constants for use with sunaudiodev. (deprecated) (SunOS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SUNAUDIODEV</span></code></a> — Constants used with <a class="reference internal" href="#module-sunaudiodev" title="sunaudiodev: Access to Sun audio hardware. (deprecated) (SunOS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sunaudiodev</span></code></a><a class="headerlink" href="#module-SUNAUDIODEV" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-SUNAUDIODEV" title="SUNAUDIODEV: Constants for use with sunaudiodev. (deprecated) (SunOS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SUNAUDIODEV</span></code></a> module has been removed in Python 3.</p>
+</div>
+<p id="index-2">This is a companion module to <a class="reference internal" href="#module-sunaudiodev" title="sunaudiodev: Access to Sun audio hardware. (deprecated) (SunOS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sunaudiodev</span></code></a> which defines useful symbolic
+constants like <code class="xref py py-const docutils literal notranslate"><span class="pre">MIN_GAIN</span></code>, <code class="xref py py-const docutils literal notranslate"><span class="pre">MAX_GAIN</span></code>, <code class="xref py py-const docutils literal notranslate"><span class="pre">SPEAKER</span></code>, etc. The
+names of the constants are the same names as used in the C include file
+<code class="docutils literal notranslate"><span class="pre">&lt;sun/audioio.h&gt;</span></code>, with the leading string <code class="docutils literal notranslate"><span class="pre">AUDIO_</span></code> stripped.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">40.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sunaudiodev</span></code> — Access to Sun audio hardware</a><ul>
+<li><a class="reference internal" href="#audio-device-objects">40.1.1. Audio Device Objects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-SUNAUDIODEV">40.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">SUNAUDIODEV</span></code> — Constants used with <code class="xref py py-mod docutils literal notranslate"><span class="pre">sunaudiodev</span></code></a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sun.html"
+                        title="previous chapter">40. SunOS Specific Services</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="undoc.html"
+                        title="next chapter">41. Undocumented Modules</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/sunaudio.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="undoc.html" title="41. Undocumented Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sun.html" title="40. SunOS Specific Services"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="sun.html" >40. SunOS Specific Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,636 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Buffers and Memoryview Objects &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Tuple Objects" href="tuple.html" />
+    <link rel="prev" title="Unicode Objects and Codecs" href="unicode.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/c-api/buffer.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tuple.html" title="Tuple Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="unicode.html" title="Unicode Objects and Codecs"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="buffers-and-memoryview-objects">
+<span id="bufferobjects"></span><h1>Buffers and Memoryview Objects<a class="headerlink" href="#buffers-and-memoryview-objects" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Python objects implemented in C can export a group of functions called the
+“buffer interface.”  These functions can be used by an object to expose its
+data in a raw, byte-oriented format. Clients of the object can use the buffer
+interface to access the object data directly, without needing to copy it
+first.</p>
+<p>Two examples of objects that support the buffer interface are strings and
+arrays. The string object exposes the character contents in the buffer
+interface’s byte-oriented form. An array can only expose its contents via the
+old-style buffer interface. This limitation does not apply to Python 3,
+where <a class="reference internal" href="../library/stdtypes.html#memoryview" title="memoryview"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects can be constructed from arrays, too.
+Array elements may be multi-byte values.</p>
+<p>An example user of the buffer interface is the file object’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">write()</span></code>
+method. Any object that can export a series of bytes through the buffer
+interface can be written to a file. There are a number of format codes to
+<a class="reference internal" href="arg.html#c.PyArg_ParseTuple" title="PyArg_ParseTuple"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyArg_ParseTuple()</span></code></a> that operate against an object’s buffer interface,
+returning data from the target object.</p>
+<p>Starting from version 1.6, Python has been providing Python-level buffer
+objects and a C-level buffer API so that any built-in or used-defined type can
+expose its characteristics. Both, however, have been deprecated because of
+various shortcomings, and have been officially removed in Python 3 in favour
+of a new C-level buffer API and a new Python-level object named
+<a class="reference internal" href="../library/stdtypes.html#memoryview" title="memoryview"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
+<p>The new buffer API has been backported to Python 2.6, and the
+<a class="reference internal" href="../library/stdtypes.html#memoryview" title="memoryview"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> object has been backported to Python 2.7. It is strongly
+advised to use them rather than the old APIs, unless you are blocked from
+doing so for compatibility reasons.</p>
+<div class="section" id="the-new-style-py-buffer-struct">
+<h2>The new-style Py_buffer struct<a class="headerlink" href="#the-new-style-py-buffer-struct" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="c.Py_buffer">
+<code class="descname">Py_buffer</code><a class="headerlink" href="#c.Py_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.Py_buffer.buf">
+void *<code class="descname">buf</code><a class="headerlink" href="#c.Py_buffer.buf" title="Permalink to this definition">¶</a></dt>
+<dd><p>A pointer to the start of the memory for the object.</p>
+</dd></dl>
+
+<dl class="member">
+<dt>
+Py_ssize_t <code class="descname">len</code></dt>
+<dd><p>The total length of the memory in bytes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.Py_buffer.readonly">
+int <code class="descname">readonly</code><a class="headerlink" href="#c.Py_buffer.readonly" title="Permalink to this definition">¶</a></dt>
+<dd><p>An indicator of whether the buffer is read only.</p>
+</dd></dl>
+
+<dl class="member">
+<dt>
+const char *<code class="descname">format</code></dt>
+<dd><p>A <em>NULL</em> terminated string in <a class="reference internal" href="../library/struct.html#module-struct" title="struct: Interpret strings as packed binary data."><code class="xref py py-mod docutils literal notranslate"><span class="pre">struct</span></code></a> module style syntax giving
+the contents of the elements available through the buffer.  If this is
+<em>NULL</em>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code> (unsigned bytes) is assumed.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.Py_buffer.ndim">
+int <code class="descname">ndim</code><a class="headerlink" href="#c.Py_buffer.ndim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of dimensions the memory represents as a multi-dimensional
+array.  If it is <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="xref c c-data docutils literal notranslate"><span class="pre">strides</span></code> and <code class="xref c c-data docutils literal notranslate"><span class="pre">suboffsets</span></code> must be
+<em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.Py_buffer.shape">
+Py_ssize_t *<code class="descname">shape</code><a class="headerlink" href="#c.Py_buffer.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>An array of <code class="xref c c-type docutils literal notranslate"><span class="pre">Py_ssize_t</span></code>s the length of <code class="xref c c-data docutils literal notranslate"><span class="pre">ndim</span></code> giving the
+shape of the memory as a multi-dimensional array.  Note that
+<code class="docutils literal notranslate"><span class="pre">((*shape)[0]</span> <span class="pre">*</span> <span class="pre">...</span> <span class="pre">*</span> <span class="pre">(*shape)[ndims-1])*itemsize</span></code> should be equal to
+<code class="xref c c-data docutils literal notranslate"><span class="pre">len</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.Py_buffer.strides">
+Py_ssize_t *<code class="descname">strides</code><a class="headerlink" href="#c.Py_buffer.strides" title="Permalink to this definition">¶</a></dt>
+<dd><p>An array of <code class="xref c c-type docutils literal notranslate"><span class="pre">Py_ssize_t</span></code>s the length of <code class="xref c c-data docutils literal notranslate"><span class="pre">ndim</span></code> giving the
+number of bytes to skip to get to a new element in each dimension.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.Py_buffer.suboffsets">
+Py_ssize_t *<code class="descname">suboffsets</code><a class="headerlink" href="#c.Py_buffer.suboffsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>An array of <code class="xref c c-type docutils literal notranslate"><span class="pre">Py_ssize_t</span></code>s the length of <code class="xref c c-data docutils literal notranslate"><span class="pre">ndim</span></code>.  If these
+suboffset numbers are greater than or equal to 0, then the value stored
+along the indicated dimension is a pointer and the suboffset value
+dictates how many bytes to add to the pointer after de-referencing. A
+suboffset value that it negative indicates that no de-referencing should
+occur (striding in a contiguous memory block).</p>
+<p>If all suboffsets are negative (i.e. no de-referencing is needed), then
+this field must be NULL (the default value).</p>
+<p>Here is a function that returns a pointer to the element in an N-D array
+pointed to by an N-dimensional index when there are both non-NULL strides
+and suboffsets:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="o">*</span><span class="nf">get_item_pointer</span><span class="p">(</span><span class="kt">int</span> <span class="n">ndim</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="n">Py_ssize_t</span> <span class="o">*</span><span class="n">strides</span><span class="p">,</span>
+    <span class="n">Py_ssize_t</span> <span class="o">*</span><span class="n">suboffsets</span><span class="p">,</span> <span class="n">Py_ssize_t</span> <span class="o">*</span><span class="n">indices</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">pointer</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ndim</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pointer</span> <span class="o">+=</span> <span class="n">strides</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">suboffsets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span><span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="n">pointer</span> <span class="o">=</span> <span class="o">*</span><span class="p">((</span><span class="kt">char</span><span class="o">**</span><span class="p">)</span><span class="n">pointer</span><span class="p">)</span> <span class="o">+</span> <span class="n">suboffsets</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">pointer</span><span class="p">;</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.Py_buffer.itemsize">
+Py_ssize_t <code class="descname">itemsize</code><a class="headerlink" href="#c.Py_buffer.itemsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a storage for the itemsize (in bytes) of each element of the
+shared memory. It is technically un-necessary as it can be obtained
+using <a class="reference internal" href="#c.PyBuffer_SizeFromFormat" title="PyBuffer_SizeFromFormat"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyBuffer_SizeFromFormat()</span></code></a>, however an exporter may know
+this information without parsing the format string and it is necessary
+to know the itemsize for proper interpretation of striding. Therefore,
+storing it is more convenient and faster.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.Py_buffer.internal">
+void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_buffer.internal" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is for use internally by the exporting object. For example, this
+might be re-cast as an integer by the exporter and used to store flags
+about whether or not the shape, strides, and suboffsets arrays must be
+freed when the buffer is released. The consumer should never alter this
+value.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="buffer-related-functions">
+<h2>Buffer related functions<a class="headerlink" href="#buffer-related-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.PyObject_CheckBuffer">
+int <code class="descname">PyObject_CheckBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyObject_CheckBuffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">1</span></code> if <em>obj</em> supports the buffer interface otherwise <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyObject_GetBuffer">
+int <code class="descname">PyObject_GetBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *obj</em>, <a class="reference internal" href="#c.Py_buffer" title="Py_buffer">Py_buffer</a><em> *view</em>, int<em> flags</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyObject_GetBuffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export <em>obj</em> into a <a class="reference internal" href="#c.Py_buffer" title="Py_buffer"><code class="xref c c-type docutils literal notranslate"><span class="pre">Py_buffer</span></code></a>, <em>view</em>.  These arguments must
+never be <em>NULL</em>.  The <em>flags</em> argument is a bit field indicating what
+kind of buffer the caller is prepared to deal with and therefore what
+kind of buffer the exporter is allowed to return.  The buffer interface
+allows for complicated memory sharing possibilities, but some caller may
+not be able to handle all the complexity but may want to see if the
+exporter will let them take a simpler view to its memory.</p>
+<p>Some exporters may not be able to share memory in every possible way and
+may need to raise errors to signal to some consumers that something is
+just not possible. These errors should be a <a class="reference internal" href="../library/exceptions.html#exceptions.BufferError" title="exceptions.BufferError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BufferError</span></code></a> unless
+there is another error that is actually causing the problem. The
+exporter can use flags information to simplify how much of the
+<a class="reference internal" href="#c.Py_buffer" title="Py_buffer"><code class="xref c c-data docutils literal notranslate"><span class="pre">Py_buffer</span></code></a> structure is filled in with non-default values and/or
+raise an error if the object can’t support a simpler view of its memory.</p>
+<p><code class="docutils literal notranslate"><span class="pre">0</span></code> is returned on success and <code class="docutils literal notranslate"><span class="pre">-1</span></code> on error.</p>
+<p>The following table gives possible values to the <em>flags</em> arguments.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_SIMPLE</span></code></p></td>
+<td><p>This is the default flag state.  The returned
+buffer may or may not have writable memory.  The
+format of the data will be assumed to be unsigned
+bytes.  This is a “stand-alone” flag constant. It
+never needs to be ‘|’d to the others. The exporter
+will raise an error if it cannot provide such a
+contiguous buffer of bytes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_WRITABLE</span></code></p></td>
+<td><p>The returned buffer must be writable.  If it is
+not writable, then raise an error.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_STRIDES</span></code></p></td>
+<td><p>This implies <code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_ND</span></code>. The returned
+buffer must provide strides information (i.e. the
+strides cannot be NULL). This would be used when
+the consumer can handle strided, discontiguous
+arrays.  Handling strides automatically assumes
+you can handle shape.  The exporter can raise an
+error if a strided representation of the data is
+not possible (i.e. without the suboffsets).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_ND</span></code></p></td>
+<td><p>The returned buffer must provide shape
+information. The memory will be assumed C-style
+contiguous (last dimension varies the
+fastest). The exporter may raise an error if it
+cannot provide this kind of contiguous buffer. If
+this is not given then shape will be <em>NULL</em>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_C_CONTIGUOUS</span></code>
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_F_CONTIGUOUS</span></code>
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_ANY_CONTIGUOUS</span></code></p></td>
+<td><p>These flags indicate that the contiguity returned
+buffer must be respectively, C-contiguous (last
+dimension varies the fastest), Fortran contiguous
+(first dimension varies the fastest) or either
+one.  All of these flags imply
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_STRIDES</span></code> and guarantee that the
+strides buffer info structure will be filled in
+correctly.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_INDIRECT</span></code></p></td>
+<td><p>This flag indicates the returned buffer must have
+suboffsets information (which can be NULL if no
+suboffsets are needed).  This can be used when
+the consumer can handle indirect array
+referencing implied by these suboffsets. This
+implies <code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_STRIDES</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_FORMAT</span></code></p></td>
+<td><p>The returned buffer must have true format
+information if this flag is provided. This would
+be used when the consumer is going to be checking
+for what ‘kind’ of data is actually stored. An
+exporter should always be able to provide this
+information if requested. If format is not
+explicitly requested then the format must be
+returned as <em>NULL</em> (which means <code class="docutils literal notranslate"><span class="pre">'B'</span></code>, or
+unsigned bytes)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_STRIDED</span></code></p></td>
+<td><p>This is equivalent to <code class="docutils literal notranslate"><span class="pre">(PyBUF_STRIDES</span> <span class="pre">|</span>
+<span class="pre">PyBUF_WRITABLE)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_STRIDED_RO</span></code></p></td>
+<td><p>This is equivalent to <code class="docutils literal notranslate"><span class="pre">(PyBUF_STRIDES)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_RECORDS</span></code></p></td>
+<td><p>This is equivalent to <code class="docutils literal notranslate"><span class="pre">(PyBUF_STRIDES</span> <span class="pre">|</span>
+<span class="pre">PyBUF_FORMAT</span> <span class="pre">|</span> <span class="pre">PyBUF_WRITABLE)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_RECORDS_RO</span></code></p></td>
+<td><p>This is equivalent to <code class="docutils literal notranslate"><span class="pre">(PyBUF_STRIDES</span> <span class="pre">|</span>
+<span class="pre">PyBUF_FORMAT)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_FULL</span></code></p></td>
+<td><p>This is equivalent to <code class="docutils literal notranslate"><span class="pre">(PyBUF_INDIRECT</span> <span class="pre">|</span>
+<span class="pre">PyBUF_FORMAT</span> <span class="pre">|</span> <span class="pre">PyBUF_WRITABLE)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_FULL_RO</span></code></p></td>
+<td><p>This is equivalent to <code class="docutils literal notranslate"><span class="pre">(PyBUF_INDIRECT</span> <span class="pre">|</span>
+<span class="pre">PyBUF_FORMAT)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_CONTIG</span></code></p></td>
+<td><p>This is equivalent to <code class="docutils literal notranslate"><span class="pre">(PyBUF_ND</span> <span class="pre">|</span>
+<span class="pre">PyBUF_WRITABLE)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyBUF_CONTIG_RO</span></code></p></td>
+<td><p>This is equivalent to <code class="docutils literal notranslate"><span class="pre">(PyBUF_ND)</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBuffer_Release">
+void <code class="descname">PyBuffer_Release</code><span class="sig-paren">(</span><a class="reference internal" href="#c.Py_buffer" title="Py_buffer">Py_buffer</a><em> *view</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBuffer_Release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release the buffer <em>view</em>.  This should be called when the buffer
+is no longer being used as it may free memory from it.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBuffer_SizeFromFormat">
+Py_ssize_t <code class="descname">PyBuffer_SizeFromFormat</code><span class="sig-paren">(</span>const char<em> *</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBuffer_SizeFromFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the implied <a class="reference internal" href="#c.Py_buffer.itemsize" title="Py_buffer.itemsize"><code class="xref c c-data docutils literal notranslate"><span class="pre">itemsize</span></code></a> from the struct-stype
+<code class="xref c c-data docutils literal notranslate"><span class="pre">format</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBuffer_IsContiguous">
+int <code class="descname">PyBuffer_IsContiguous</code><span class="sig-paren">(</span><a class="reference internal" href="#c.Py_buffer" title="Py_buffer">Py_buffer</a><em> *view</em>, char<em> fortran</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBuffer_IsContiguous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">1</span></code> if the memory defined by the <em>view</em> is C-style (<em>fortran</em> is
+<code class="docutils literal notranslate"><span class="pre">'C'</span></code>) or Fortran-style (<em>fortran</em> is <code class="docutils literal notranslate"><span class="pre">'F'</span></code>) contiguous or either one
+(<em>fortran</em> is <code class="docutils literal notranslate"><span class="pre">'A'</span></code>).  Return <code class="docutils literal notranslate"><span class="pre">0</span></code> otherwise.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBuffer_FillContiguousStrides">
+void <code class="descname">PyBuffer_FillContiguousStrides</code><span class="sig-paren">(</span>int<em> ndims</em>, Py_ssize_t<em> *shape</em>, Py_ssize_t<em> *strides</em>, int<em> itemsize</em>, char<em> fortran</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBuffer_FillContiguousStrides" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill the <em>strides</em> array with byte-strides of a contiguous (C-style if
+<em>fortran</em> is <code class="docutils literal notranslate"><span class="pre">'C'</span></code> or Fortran-style if <em>fortran</em> is <code class="docutils literal notranslate"><span class="pre">'F'</span></code>) array of the
+given shape with the given number of bytes per element.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBuffer_FillInfo">
+int <code class="descname">PyBuffer_FillInfo</code><span class="sig-paren">(</span><a class="reference internal" href="#c.Py_buffer" title="Py_buffer">Py_buffer</a><em> *view</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *obj</em>, void<em> *buf</em>, Py_ssize_t<em> len</em>, int<em> readonly</em>, int<em> infoflags</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBuffer_FillInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill in a buffer-info structure, <em>view</em>, correctly for an exporter that can
+only share a contiguous chunk of memory of “unsigned bytes” of the given
+length.  Return <code class="docutils literal notranslate"><span class="pre">0</span></code> on success and <code class="docutils literal notranslate"><span class="pre">-1</span></code> (with raising an error) on error.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="memoryview-objects">
+<h2>MemoryView objects<a class="headerlink" href="#memoryview-objects" title="Permalink to this headline">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.7.</span></p>
+</div>
+<p>A <a class="reference internal" href="../library/stdtypes.html#memoryview" title="memoryview"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> object exposes the new C level buffer interface as a
+Python object which can then be passed around like any other object.</p>
+<dl class="function">
+<dt id="c.PyMemoryView_FromObject">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a> *<code class="descname">PyMemoryView_FromObject</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMemoryView_FromObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a memoryview object from an object that defines the new buffer
+interface.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyMemoryView_FromBuffer">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a> *<code class="descname">PyMemoryView_FromBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="#c.Py_buffer" title="Py_buffer">Py_buffer</a><em> *view</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMemoryView_FromBuffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a memoryview object wrapping the given buffer-info structure <em>view</em>.
+The memoryview object then owns the buffer, which means you shouldn’t
+try to release it yourself: it will be released on deallocation of the
+memoryview object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyMemoryView_GetContiguous">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a> *<code class="descname">PyMemoryView_GetContiguous</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *obj</em>, int<em> buffertype</em>, char<em> order</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMemoryView_GetContiguous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a memoryview object to a contiguous chunk of memory (in either
+‘C’ or ‘F’ortran <em>order</em>) from an object that defines the buffer
+interface. If memory is contiguous, the memoryview object points to the
+original memory. Otherwise copy is made and the memoryview points to a
+new bytes object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyMemoryView_Check">
+int <code class="descname">PyMemoryView_Check</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMemoryView_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object <em>obj</em> is a memoryview object.  It is not
+currently allowed to create subclasses of <a class="reference internal" href="../library/stdtypes.html#memoryview" title="memoryview"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyMemoryView_GET_BUFFER">
+<a class="reference internal" href="#c.Py_buffer" title="Py_buffer">Py_buffer</a> *<code class="descname">PyMemoryView_GET_BUFFER</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMemoryView_GET_BUFFER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a pointer to the buffer-info structure wrapped by the given
+object.  The object <strong>must</strong> be a memoryview instance; this macro doesn’t
+check its type, you must do it yourself or you will risk crashes.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="old-style-buffer-objects">
+<h2>Old-style buffer objects<a class="headerlink" href="#old-style-buffer-objects" title="Permalink to this headline">¶</a></h2>
+<p id="index-1">More information on the old buffer interface is provided in the section
+<a class="reference internal" href="typeobj.html#buffer-structs"><span class="std std-ref">Buffer Object Structures</span></a>, under the description for <a class="reference internal" href="typeobj.html#c.PyBufferProcs" title="PyBufferProcs"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyBufferProcs</span></code></a>.</p>
+<p>A “buffer object” is defined in the <code class="file docutils literal notranslate"><span class="pre">bufferobject.h</span></code> header (included by
+<code class="file docutils literal notranslate"><span class="pre">Python.h</span></code>). These objects look very similar to string objects at the
+Python programming level: they support slicing, indexing, concatenation, and
+some other standard string operations. However, their data can come from one
+of two sources: from a block of memory, or from another object which exports
+the buffer interface.</p>
+<p>Buffer objects are useful as a way to expose the data from another object’s
+buffer interface to the Python programmer. They can also be used as a
+zero-copy slicing mechanism. Using their ability to reference a block of
+memory, it is possible to expose any data to the Python programmer quite
+easily. The memory could be a large, constant array in a C extension, it could
+be a raw block of memory for manipulation before passing to an operating
+system library, or it could be used to pass around structured data in its
+native, in-memory format.</p>
+<dl class="type">
+<dt id="c.PyBufferObject">
+<code class="descname">PyBufferObject</code><a class="headerlink" href="#c.PyBufferObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This subtype of <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyObject</span></code></a> represents a buffer object.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyBuffer_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a> <code class="descname">PyBuffer_Type</code><a class="headerlink" href="#c.PyBuffer_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">The instance of <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> which represents the Python buffer type;
+it is the same object as <code class="docutils literal notranslate"><span class="pre">buffer</span></code> and  <code class="docutils literal notranslate"><span class="pre">types.BufferType</span></code> in the Python
+layer. .</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.Py_END_OF_BUFFER">
+int <code class="descname">Py_END_OF_BUFFER</code><a class="headerlink" href="#c.Py_END_OF_BUFFER" title="Permalink to this definition">¶</a></dt>
+<dd><p>This constant may be passed as the <em>size</em> parameter to
+<a class="reference internal" href="#c.PyBuffer_FromObject" title="PyBuffer_FromObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyBuffer_FromObject()</span></code></a> or <a class="reference internal" href="#c.PyBuffer_FromReadWriteObject" title="PyBuffer_FromReadWriteObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyBuffer_FromReadWriteObject()</span></code></a>.  It
+indicates that the new <a class="reference internal" href="#c.PyBufferObject" title="PyBufferObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyBufferObject</span></code></a> should refer to <em>base</em>
+object from the specified <em>offset</em> to the end of its exported buffer.
+Using this enables the caller to avoid querying the <em>base</em> object for its
+length.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBuffer_Check">
+int <code class="descname">PyBuffer_Check</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBuffer_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the argument has type <a class="reference internal" href="#c.PyBuffer_Type" title="PyBuffer_Type"><code class="xref c c-data docutils literal notranslate"><span class="pre">PyBuffer_Type</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBuffer_FromObject">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyBuffer_FromObject</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *base</em>, Py_ssize_t<em> offset</em>, Py_ssize_t<em> size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBuffer_FromObject" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new read-only buffer object.  This raises <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> if
+<em>base</em> doesn’t support the read-only buffer protocol or doesn’t provide
+exactly one buffer segment, or it raises <a class="reference internal" href="../library/exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> if <em>offset</em> is
+less than zero.  The buffer will hold a reference to the <em>base</em> object, and
+the buffer’s contents will refer to the <em>base</em> object’s buffer interface,
+starting as position <em>offset</em> and extending for <em>size</em> bytes. If <em>size</em> is
+<code class="xref py py-const docutils literal notranslate"><span class="pre">Py_END_OF_BUFFER</span></code>, then the new buffer’s contents extend to the
+length of the <em>base</em> object’s exported buffer data.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function used an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type for <em>offset</em> and <em>size</em>. This
+might require changes in your code for properly supporting 64-bit
+systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBuffer_FromReadWriteObject">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyBuffer_FromReadWriteObject</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *base</em>, Py_ssize_t<em> offset</em>, Py_ssize_t<em> size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBuffer_FromReadWriteObject" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new writable buffer object.  Parameters and exceptions are similar
+to those for <a class="reference internal" href="#c.PyBuffer_FromObject" title="PyBuffer_FromObject"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyBuffer_FromObject()</span></code></a>.  If the <em>base</em> object does not
+export the writeable buffer protocol, then <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> is raised.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function used an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type for <em>offset</em> and <em>size</em>. This
+might require changes in your code for properly supporting 64-bit
+systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBuffer_FromMemory">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyBuffer_FromMemory</code><span class="sig-paren">(</span>void<em> *ptr</em>, Py_ssize_t<em> size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBuffer_FromMemory" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new read-only buffer object that reads from a specified location
+in memory, with a specified size.  The caller is responsible for ensuring
+that the memory buffer, passed in as <em>ptr</em>, is not deallocated while the
+returned buffer object exists.  Raises <a class="reference internal" href="../library/exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> if <em>size</em> is less
+than zero.  Note that <code class="xref py py-const docutils literal notranslate"><span class="pre">Py_END_OF_BUFFER</span></code> may <em>not</em> be passed for the
+<em>size</em> parameter; <a class="reference internal" href="../library/exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> will be raised in that case.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function used an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type for <em>size</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBuffer_FromReadWriteMemory">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyBuffer_FromReadWriteMemory</code><span class="sig-paren">(</span>void<em> *ptr</em>, Py_ssize_t<em> size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBuffer_FromReadWriteMemory" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Similar to <a class="reference internal" href="#c.PyBuffer_FromMemory" title="PyBuffer_FromMemory"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyBuffer_FromMemory()</span></code></a>, but the returned buffer is
+writable.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function used an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type for <em>size</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBuffer_New">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyBuffer_New</code><span class="sig-paren">(</span>Py_ssize_t<em> size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBuffer_New" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new writable buffer object that maintains its own memory buffer of
+<em>size</em> bytes.  <a class="reference internal" href="../library/exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> is returned if <em>size</em> is not zero or
+positive.  Note that the memory buffer (as returned by
+<a class="reference internal" href="objbuffer.html#c.PyObject_AsWriteBuffer" title="PyObject_AsWriteBuffer"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_AsWriteBuffer()</span></code></a>) is not specifically aligned.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function used an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type for <em>size</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Buffers and Memoryview Objects</a><ul>
+<li><a class="reference internal" href="#the-new-style-py-buffer-struct">The new-style Py_buffer struct</a></li>
+<li><a class="reference internal" href="#buffer-related-functions">Buffer related functions</a></li>
+<li><a class="reference internal" href="#memoryview-objects">MemoryView objects</a></li>
+<li><a class="reference internal" href="#old-style-buffer-objects">Old-style buffer objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="unicode.html"
+                        title="previous chapter">Unicode Objects and Codecs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tuple.html"
+                        title="next chapter">Tuple Objects</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/c-api/buffer.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tuple.html" title="Tuple Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="unicode.html" title="Unicode Objects and Codecs"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" >Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

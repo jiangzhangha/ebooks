@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>28. Python Runtime Services &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="28.1. sys — System-specific parameters and functions" href="sys.html" />
+    <link rel="prev" title="27.2. ensurepip — Bootstrapping the pip installer" href="ensurepip.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/python.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sys.html" title="28.1. sys — System-specific parameters and functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ensurepip.html" title="27.2. ensurepip — Bootstrapping the pip installer"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="python-runtime-services">
+<span id="python"></span><h1>28. Python Runtime Services<a class="headerlink" href="#python-runtime-services" title="Permalink to this headline">¶</a></h1>
+<p>The modules described in this chapter provide a wide range of services related
+to the Python interpreter and its interaction with its environment.  Here’s an
+overview:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sys.html">28.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sys</span></code> — System-specific parameters and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sysconfig.html">28.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sysconfig</span></code> — Provide access to Python’s configuration information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sysconfig.html#configuration-variables">28.2.1. Configuration variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysconfig.html#installation-paths">28.2.2. Installation paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysconfig.html#other-functions">28.2.3. Other functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="__builtin__.html">28.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">__builtin__</span></code> — Built-in objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future_builtins.html">28.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">future_builtins</span></code> — Python 3 builtins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="__main__.html">28.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code> — Top-level script environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="warnings.html">28.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">warnings</span></code> — Warning control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="warnings.html#warning-categories">28.6.1. Warning Categories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="warnings.html#the-warnings-filter">28.6.2. The Warnings Filter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="warnings.html#default-warning-filters">28.6.2.1. Default Warning Filters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="warnings.html#temporarily-suppressing-warnings">28.6.3. Temporarily Suppressing Warnings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="warnings.html#testing-warnings">28.6.4. Testing Warnings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="warnings.html#updating-code-for-new-versions-of-python">28.6.5. Updating Code For New Versions of Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="warnings.html#available-functions">28.6.6. Available Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="warnings.html#available-context-managers">28.6.7. Available Context Managers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contextlib.html">28.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">contextlib</span></code> — Utilities for <code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code>-statement contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abc.html">28.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">abc</span></code> — Abstract Base Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atexit.html">28.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">atexit</span></code> — Exit handlers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="atexit.html#atexit-example">28.9.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">atexit</span></code> Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="traceback.html">28.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">traceback</span></code> — Print or retrieve a stack traceback</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="traceback.html#traceback-examples">28.10.1. Traceback Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="__future__.html">28.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">__future__</span></code> — Future statement definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gc.html">28.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">gc</span></code> — Garbage Collector interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inspect.html">28.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">inspect</span></code> — Inspect live objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="inspect.html#types-and-members">28.13.1. Types and members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inspect.html#retrieving-source-code">28.13.2. Retrieving source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inspect.html#classes-and-functions">28.13.3. Classes and functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inspect.html#the-interpreter-stack">28.13.4. The interpreter stack</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="site.html">28.14. <code class="xref py py-mod docutils literal notranslate"><span class="pre">site</span></code> — Site-specific configuration hook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">28.15. <code class="xref py py-mod docutils literal notranslate"><span class="pre">user</span></code> — User-specific configuration hook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fpectl.html">28.16. <code class="xref py py-mod docutils literal notranslate"><span class="pre">fpectl</span></code> — Floating point exception control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fpectl.html#example">28.16.1. Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpectl.html#limitations-and-other-considerations">28.16.2. Limitations and other considerations</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ensurepip.html"
+                        title="previous chapter">27.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">ensurepip</span></code> — Bootstrapping the <code class="docutils literal notranslate"><span class="pre">pip</span></code> installer</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sys.html"
+                        title="next chapter">28.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sys</span></code> — System-specific parameters and functions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/python.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sys.html" title="28.1. sys — System-specific parameters and functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ensurepip.html" title="27.2. ensurepip — Bootstrapping the pip installer"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 05, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

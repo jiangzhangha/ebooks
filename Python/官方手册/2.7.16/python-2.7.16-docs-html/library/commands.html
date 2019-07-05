@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>36.16. commands — Utilities for running commands &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="37. Mac OS X specific services" href="mac.html" />
+    <link rel="prev" title="36.15. syslog — Unix syslog library routines" href="syslog.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/commands.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mac.html" title="37. Mac OS X specific services"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="syslog.html" title="36.15. syslog — Unix syslog library routines"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" accesskey="U">36. Unix Specific Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-commands">
+<span id="commands-utilities-for-running-commands"></span><h1>36.16. <a class="reference internal" href="#module-commands" title="commands: Utility functions for running external commands. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">commands</span></code></a> — Utilities for running commands<a class="headerlink" href="#module-commands" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-commands" title="commands: Utility functions for running external commands. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">commands</span></code></a> module has been removed in Python 3.  Use the
+<a class="reference internal" href="subprocess.html#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal notranslate"><span class="pre">subprocess</span></code></a> module instead.</p>
+</div>
+<p>The <a class="reference internal" href="#module-commands" title="commands: Utility functions for running external commands. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">commands</span></code></a> module contains wrapper functions for <a class="reference internal" href="os.html#os.popen" title="os.popen"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.popen()</span></code></a> which
+take a system command as a string and return any output generated by the command
+and, optionally, the exit status.</p>
+<p>The <a class="reference internal" href="subprocess.html#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal notranslate"><span class="pre">subprocess</span></code></a> module provides more powerful facilities for spawning new
+processes and retrieving their results.  Using the <a class="reference internal" href="subprocess.html#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal notranslate"><span class="pre">subprocess</span></code></a> module is
+preferable to using the <a class="reference internal" href="#module-commands" title="commands: Utility functions for running external commands. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">commands</span></code></a> module.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In Python 3.x, <a class="reference internal" href="#commands.getstatus" title="commands.getstatus"><code class="xref py py-func docutils literal notranslate"><span class="pre">getstatus()</span></code></a> and two undocumented functions
+(<code class="xref py py-func docutils literal notranslate"><span class="pre">mk2arg()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">mkarg()</span></code>) have been removed.  Also,
+<a class="reference internal" href="#commands.getstatusoutput" title="commands.getstatusoutput"><code class="xref py py-func docutils literal notranslate"><span class="pre">getstatusoutput()</span></code></a> and <a class="reference internal" href="#commands.getoutput" title="commands.getoutput"><code class="xref py py-func docutils literal notranslate"><span class="pre">getoutput()</span></code></a> have been moved to the
+<a class="reference internal" href="subprocess.html#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal notranslate"><span class="pre">subprocess</span></code></a> module.</p>
+</div>
+<p>The <a class="reference internal" href="#module-commands" title="commands: Utility functions for running external commands. (deprecated) (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">commands</span></code></a> module defines the following functions:</p>
+<dl class="function">
+<dt id="commands.getstatusoutput">
+<code class="descclassname">commands.</code><code class="descname">getstatusoutput</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#commands.getstatusoutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the string <em>cmd</em> in a shell with <a class="reference internal" href="os.html#os.popen" title="os.popen"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.popen()</span></code></a> and return a 2-tuple
+<code class="docutils literal notranslate"><span class="pre">(status,</span> <span class="pre">output)</span></code>.  <em>cmd</em> is actually run as <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">cmd</span> <span class="pre">;</span> <span class="pre">}</span> <span class="pre">2&gt;&amp;1</span></code>, so that the
+returned output will contain output or error messages. A trailing newline is
+stripped from the output. The exit status for the command can be interpreted
+according to the rules for the C function <code class="xref c c-func docutils literal notranslate"><span class="pre">wait()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="commands.getoutput">
+<code class="descclassname">commands.</code><code class="descname">getoutput</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#commands.getoutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <a class="reference internal" href="#commands.getstatusoutput" title="commands.getstatusoutput"><code class="xref py py-func docutils literal notranslate"><span class="pre">getstatusoutput()</span></code></a>, except the exit status is ignored and the return
+value is a string containing the command’s output.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="commands.getstatus">
+<code class="descclassname">commands.</code><code class="descname">getstatus</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#commands.getstatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the output of <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-ld</span> <span class="pre">file</span></code> as a string.  This function uses the
+<a class="reference internal" href="#commands.getoutput" title="commands.getoutput"><code class="xref py py-func docutils literal notranslate"><span class="pre">getoutput()</span></code></a> function, and properly escapes backslashes and dollar signs in
+the argument.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>This function is nonobvious and useless.  The name is also misleading in the
+presence of <a class="reference internal" href="#commands.getstatusoutput" title="commands.getstatusoutput"><code class="xref py py-func docutils literal notranslate"><span class="pre">getstatusoutput()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">commands</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">commands</span><span class="o">.</span><span class="n">getstatusoutput</span><span class="p">(</span><span class="s1">&#39;ls /bin/ls&#39;</span><span class="p">)</span>
+<span class="go">(0, &#39;/bin/ls&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">commands</span><span class="o">.</span><span class="n">getstatusoutput</span><span class="p">(</span><span class="s1">&#39;cat /bin/junk&#39;</span><span class="p">)</span>
+<span class="go">(256, &#39;cat: /bin/junk: No such file or directory&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">commands</span><span class="o">.</span><span class="n">getstatusoutput</span><span class="p">(</span><span class="s1">&#39;/bin/junk&#39;</span><span class="p">)</span>
+<span class="go">(256, &#39;sh: /bin/junk: not found&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">commands</span><span class="o">.</span><span class="n">getoutput</span><span class="p">(</span><span class="s1">&#39;ls /bin/ls&#39;</span><span class="p">)</span>
+<span class="go">&#39;/bin/ls&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">commands</span><span class="o">.</span><span class="n">getstatus</span><span class="p">(</span><span class="s1">&#39;/bin/ls&#39;</span><span class="p">)</span>
+<span class="go">&#39;-rwxr-xr-x  1 root        13352 Oct 14  1994 /bin/ls&#39;</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="subprocess.html#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal notranslate"><span class="pre">subprocess</span></code></a></dt><dd><p>Module for spawning and managing subprocesses.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="syslog.html"
+                        title="previous chapter">36.15. <code class="xref py py-mod docutils literal notranslate"><span class="pre">syslog</span></code> — Unix syslog library routines</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mac.html"
+                        title="next chapter">37. Mac OS X specific services</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/commands.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mac.html" title="37. Mac OS X specific services"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="syslog.html" title="36.15. syslog — Unix syslog library routines"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" >36. Unix Specific Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

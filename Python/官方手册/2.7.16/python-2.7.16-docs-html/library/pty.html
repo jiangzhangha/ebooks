@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>36.9. pty — Pseudo-terminal utilities &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="36.10. fcntl — The fcntl and ioctl system calls" href="fcntl.html" />
+    <link rel="prev" title="36.8. tty — Terminal control functions" href="tty.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/pty.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fcntl.html" title="36.10. fcntl — The fcntl and ioctl system calls"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tty.html" title="36.8. tty — Terminal control functions"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" accesskey="U">36. Unix Specific Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pty">
+<span id="pty-pseudo-terminal-utilities"></span><h1>36.9. <a class="reference internal" href="#module-pty" title="pty: Pseudo-Terminal Handling for Linux. (Linux)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pty</span></code></a> — Pseudo-terminal utilities<a class="headerlink" href="#module-pty" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-pty" title="pty: Pseudo-Terminal Handling for Linux. (Linux)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pty</span></code></a> module defines operations for handling the pseudo-terminal
+concept: starting another process and being able to write to and read from its
+controlling terminal programmatically.</p>
+<p>Because pseudo-terminal handling is highly platform dependent, there is code to
+do it only for Linux. (The Linux code is supposed to work on other platforms,
+but hasn’t been tested yet.)</p>
+<p>The <a class="reference internal" href="#module-pty" title="pty: Pseudo-Terminal Handling for Linux. (Linux)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pty</span></code></a> module defines the following functions:</p>
+<dl class="function">
+<dt id="pty.fork">
+<code class="descclassname">pty.</code><code class="descname">fork</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pty.fork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fork. Connect the child’s controlling terminal to a pseudo-terminal. Return
+value is <code class="docutils literal notranslate"><span class="pre">(pid,</span> <span class="pre">fd)</span></code>. Note that the child  gets <em>pid</em> 0, and the <em>fd</em> is
+<em>invalid</em>. The parent’s return value is the <em>pid</em> of the child, and <em>fd</em> is a
+file descriptor connected to the child’s controlling terminal (and also to the
+child’s standard input and output).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pty.openpty">
+<code class="descclassname">pty.</code><code class="descname">openpty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pty.openpty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a new pseudo-terminal pair, using <a class="reference internal" href="os.html#os.openpty" title="os.openpty"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.openpty()</span></code></a> if possible, or
+emulation code for generic Unix systems. Return a pair of file descriptors
+<code class="docutils literal notranslate"><span class="pre">(master,</span> <span class="pre">slave)</span></code>, for the master and the slave end, respectively.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pty.spawn">
+<code class="descclassname">pty.</code><code class="descname">spawn</code><span class="sig-paren">(</span><em>argv</em><span class="optional">[</span>, <em>master_read</em><span class="optional">[</span>, <em>stdin_read</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#pty.spawn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spawn a process, and connect its controlling terminal with the current
+process’s standard io. This is often used to baffle programs which insist on
+reading from the controlling terminal.</p>
+<p>The functions <em>master_read</em> and <em>stdin_read</em> should be functions which read from
+a file descriptor. The defaults try to read 1024 bytes each time they are
+called.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tty.html"
+                        title="previous chapter">36.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">tty</span></code> — Terminal control functions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fcntl.html"
+                        title="next chapter">36.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">fcntl</span></code> — The <code class="docutils literal notranslate"><span class="pre">fcntl</span></code> and <code class="docutils literal notranslate"><span class="pre">ioctl</span></code> system calls</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/pty.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fcntl.html" title="36.10. fcntl — The fcntl and ioctl system calls"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tty.html" title="36.8. tty — Terminal control functions"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" >36. Unix Specific Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

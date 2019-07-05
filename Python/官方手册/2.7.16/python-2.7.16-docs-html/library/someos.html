@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>16. Optional Operating System Services &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="16.1. select — Waiting for I/O completion" href="select.html" />
+    <link rel="prev" title="15.17. ctypes — A foreign function library for Python" href="ctypes.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/someos.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="select.html" title="16.1. select — Waiting for I/O completion"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ctypes.html" title="15.17. ctypes — A foreign function library for Python"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="optional-operating-system-services">
+<span id="someos"></span><h1>16. Optional Operating System Services<a class="headerlink" href="#optional-operating-system-services" title="Permalink to this headline">¶</a></h1>
+<p>The modules described in this chapter provide interfaces to operating system
+features that are available on selected operating systems only. The interfaces
+are generally modeled after the Unix or C interfaces but they are available on
+some other systems as well (e.g. Windows or NT).  Here’s an overview:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="select.html">16.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">select</span></code> — Waiting for I/O completion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="select.html#edge-and-level-trigger-polling-epoll-objects">16.1.1. Edge and Level Trigger Polling (epoll) Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="select.html#polling-objects">16.1.2. Polling Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="select.html#kqueue-objects">16.1.3. Kqueue Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="select.html#kevent-objects">16.1.4. Kevent Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="threading.html">16.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">threading</span></code> — Higher-level threading interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#thread-objects">16.2.1. Thread Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#lock-objects">16.2.2. Lock Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#rlock-objects">16.2.3. RLock Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#condition-objects">16.2.4. Condition Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#semaphore-objects">16.2.5. Semaphore Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="threading.html#semaphore-example">16.2.5.1. <code class="xref py py-class docutils literal notranslate"><span class="pre">Semaphore</span></code> Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#event-objects">16.2.6. Event Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#timer-objects">16.2.7. Timer Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#using-locks-conditions-and-semaphores-in-the-with-statement">16.2.8. Using locks, conditions, and semaphores in the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code> statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#importing-in-threaded-code">16.2.9. Importing in threaded code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="thread.html">16.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">thread</span></code> — Multiple threads of control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dummy_threading.html">16.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dummy_threading</span></code> — Drop-in replacement for the <code class="xref py py-mod docutils literal notranslate"><span class="pre">threading</span></code> module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dummy_thread.html">16.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dummy_thread</span></code> — Drop-in replacement for the <code class="xref py py-mod docutils literal notranslate"><span class="pre">thread</span></code> module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multiprocessing.html">16.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">multiprocessing</span></code> — Process-based “threading” interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="multiprocessing.html#introduction">16.6.1. Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#the-process-class">16.6.1.1. The <code class="xref py py-class docutils literal notranslate"><span class="pre">Process</span></code> class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#exchanging-objects-between-processes">16.6.1.2. Exchanging objects between processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#synchronization-between-processes">16.6.1.3. Synchronization between processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#sharing-state-between-processes">16.6.1.4. Sharing state between processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#using-a-pool-of-workers">16.6.1.5. Using a pool of workers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="multiprocessing.html#reference">16.6.2. Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#process-and-exceptions">16.6.2.1. <code class="xref py py-class docutils literal notranslate"><span class="pre">Process</span></code> and exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#pipes-and-queues">16.6.2.2. Pipes and Queues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#miscellaneous">16.6.2.3. Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#connection-objects">16.6.2.4. Connection Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#synchronization-primitives">16.6.2.5. Synchronization primitives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#shared-ctypes-objects">16.6.2.6. Shared <code class="xref py py-mod docutils literal notranslate"><span class="pre">ctypes</span></code> Objects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="multiprocessing.html#module-multiprocessing.sharedctypes">16.6.2.6.1. The <code class="xref py py-mod docutils literal notranslate"><span class="pre">multiprocessing.sharedctypes</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#managers">16.6.2.7. Managers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="multiprocessing.html#customized-managers">16.6.2.7.1. Customized managers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multiprocessing.html#using-a-remote-manager">16.6.2.7.2. Using a remote manager</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#proxy-objects">16.6.2.8. Proxy Objects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="multiprocessing.html#cleanup">16.6.2.8.1. Cleanup</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#module-multiprocessing.pool">16.6.2.9. Process Pools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#module-multiprocessing.connection">16.6.2.10. Listeners and Clients</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="multiprocessing.html#address-formats">16.6.2.10.1. Address Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#authentication-keys">16.6.2.11. Authentication keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#logging">16.6.2.12. Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#module-multiprocessing.dummy">16.6.2.13. The <code class="xref py py-mod docutils literal notranslate"><span class="pre">multiprocessing.dummy</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="multiprocessing.html#programming-guidelines">16.6.3. Programming guidelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#all-platforms">16.6.3.1. All platforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#windows">16.6.3.2. Windows</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="multiprocessing.html#examples">16.6.4. Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mmap.html">16.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mmap</span></code> — Memory-mapped file support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readline.html">16.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">readline</span></code> — GNU readline interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="readline.html#init-file">16.8.1. Init file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readline.html#line-buffer">16.8.2. Line buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readline.html#history-file">16.8.3. History file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readline.html#history-list">16.8.4. History list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readline.html#startup-hooks">16.8.5. Startup hooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readline.html#completion">16.8.6. Completion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readline.html#example">16.8.7. Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rlcompleter.html">16.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">rlcompleter</span></code> — Completion function for GNU readline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rlcompleter.html#completer-objects">16.9.1. Completer Objects</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ctypes.html"
+                        title="previous chapter">15.17. <code class="xref py py-mod docutils literal notranslate"><span class="pre">ctypes</span></code> — A foreign function library for Python</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="select.html"
+                        title="next chapter">16.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">select</span></code> — Waiting for I/O completion</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/someos.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="select.html" title="16.1. select — Waiting for I/O completion"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ctypes.html" title="15.17. ctypes — A foreign function library for Python"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

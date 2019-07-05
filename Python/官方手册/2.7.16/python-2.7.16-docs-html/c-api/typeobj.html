@@ -1,0 +1,1625 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Type Objects &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Supporting Cyclic Garbage Collection" href="gcsupport.html" />
+    <link rel="prev" title="Common Object Structures" href="structures.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/c-api/typeobj.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gcsupport.html" title="Supporting Cyclic Garbage Collection"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structures.html" title="Common Object Structures"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="objimpl.html" accesskey="U">Object Implementation Support</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="type-objects">
+<span id="type-structs"></span><h1>Type Objects<a class="headerlink" href="#type-objects" title="Permalink to this headline">¶</a></h1>
+<p>Perhaps one of the most important structures of the Python object system is the
+structure that defines a new type: the <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> structure.  Type
+objects can be handled using any of the <code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_*()</span></code> or
+<code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_*()</span></code> functions, but do not offer much that’s interesting to most
+Python applications. These objects are fundamental to how objects behave, so
+they are very important to the interpreter itself and to any extension module
+that implements new types.</p>
+<p>Type objects are fairly large compared to most of the standard types. The reason
+for the size is that each type object stores a large number of values, mostly C
+function pointers, each of which implements a small part of the type’s
+functionality.  The fields of the type object are examined in detail in this
+section.  The fields will be described in the order in which they occur in the
+structure.</p>
+<p>Typedefs: unaryfunc, binaryfunc, ternaryfunc, inquiry, coercion, intargfunc,
+intintargfunc, intobjargproc, intintobjargproc, objobjargproc, destructor,
+freefunc, printfunc, getattrfunc, getattrofunc, setattrfunc, setattrofunc,
+cmpfunc, reprfunc, hashfunc</p>
+<p>The structure definition for <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> can be found in
+<code class="file docutils literal notranslate"><span class="pre">Include/object.h</span></code>.  For convenience of reference, this repeats the
+definition found there:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_typeobject</span> <span class="p">{</span>
+    <span class="n">PyObject_VAR_HEAD</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">tp_name</span><span class="p">;</span> <span class="cm">/* For printing, in format &quot;&lt;module&gt;.&lt;name&gt;&quot; */</span>
+    <span class="kt">int</span> <span class="n">tp_basicsize</span><span class="p">,</span> <span class="n">tp_itemsize</span><span class="p">;</span> <span class="cm">/* For allocation */</span>
+
+    <span class="cm">/* Methods to implement standard operations */</span>
+
+    <span class="n">destructor</span> <span class="n">tp_dealloc</span><span class="p">;</span>
+    <span class="n">printfunc</span> <span class="n">tp_print</span><span class="p">;</span>
+    <span class="n">getattrfunc</span> <span class="n">tp_getattr</span><span class="p">;</span>
+    <span class="n">setattrfunc</span> <span class="n">tp_setattr</span><span class="p">;</span>
+    <span class="n">cmpfunc</span> <span class="n">tp_compare</span><span class="p">;</span>
+    <span class="n">reprfunc</span> <span class="n">tp_repr</span><span class="p">;</span>
+
+    <span class="cm">/* Method suites for standard classes */</span>
+
+    <span class="n">PyNumberMethods</span> <span class="o">*</span><span class="n">tp_as_number</span><span class="p">;</span>
+    <span class="n">PySequenceMethods</span> <span class="o">*</span><span class="n">tp_as_sequence</span><span class="p">;</span>
+    <span class="n">PyMappingMethods</span> <span class="o">*</span><span class="n">tp_as_mapping</span><span class="p">;</span>
+
+    <span class="cm">/* More standard operations (here for binary compatibility) */</span>
+
+    <span class="n">hashfunc</span> <span class="n">tp_hash</span><span class="p">;</span>
+    <span class="n">ternaryfunc</span> <span class="n">tp_call</span><span class="p">;</span>
+    <span class="n">reprfunc</span> <span class="n">tp_str</span><span class="p">;</span>
+    <span class="n">getattrofunc</span> <span class="n">tp_getattro</span><span class="p">;</span>
+    <span class="n">setattrofunc</span> <span class="n">tp_setattro</span><span class="p">;</span>
+
+    <span class="cm">/* Functions to access object as input/output buffer */</span>
+    <span class="n">PyBufferProcs</span> <span class="o">*</span><span class="n">tp_as_buffer</span><span class="p">;</span>
+
+    <span class="cm">/* Flags to define presence of optional/expanded features */</span>
+    <span class="kt">long</span> <span class="n">tp_flags</span><span class="p">;</span>
+
+    <span class="kt">char</span> <span class="o">*</span><span class="n">tp_doc</span><span class="p">;</span> <span class="cm">/* Documentation string */</span>
+
+    <span class="cm">/* Assigned meaning in release 2.0 */</span>
+    <span class="cm">/* call function for all accessible objects */</span>
+    <span class="n">traverseproc</span> <span class="n">tp_traverse</span><span class="p">;</span>
+
+    <span class="cm">/* delete references to contained objects */</span>
+    <span class="n">inquiry</span> <span class="n">tp_clear</span><span class="p">;</span>
+
+    <span class="cm">/* Assigned meaning in release 2.1 */</span>
+    <span class="cm">/* rich comparisons */</span>
+    <span class="n">richcmpfunc</span> <span class="n">tp_richcompare</span><span class="p">;</span>
+
+    <span class="cm">/* weak reference enabler */</span>
+    <span class="kt">long</span> <span class="n">tp_weaklistoffset</span><span class="p">;</span>
+
+    <span class="cm">/* Added in release 2.2 */</span>
+    <span class="cm">/* Iterators */</span>
+    <span class="n">getiterfunc</span> <span class="n">tp_iter</span><span class="p">;</span>
+    <span class="n">iternextfunc</span> <span class="n">tp_iternext</span><span class="p">;</span>
+
+    <span class="cm">/* Attribute descriptor and subclassing stuff */</span>
+    <span class="k">struct</span> <span class="n">PyMethodDef</span> <span class="o">*</span><span class="n">tp_methods</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">PyMemberDef</span> <span class="o">*</span><span class="n">tp_members</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">PyGetSetDef</span> <span class="o">*</span><span class="n">tp_getset</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">_typeobject</span> <span class="o">*</span><span class="n">tp_base</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_dict</span><span class="p">;</span>
+    <span class="n">descrgetfunc</span> <span class="n">tp_descr_get</span><span class="p">;</span>
+    <span class="n">descrsetfunc</span> <span class="n">tp_descr_set</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">tp_dictoffset</span><span class="p">;</span>
+    <span class="n">initproc</span> <span class="n">tp_init</span><span class="p">;</span>
+    <span class="n">allocfunc</span> <span class="n">tp_alloc</span><span class="p">;</span>
+    <span class="n">newfunc</span> <span class="n">tp_new</span><span class="p">;</span>
+    <span class="n">freefunc</span> <span class="n">tp_free</span><span class="p">;</span> <span class="cm">/* Low-level free-memory routine */</span>
+    <span class="n">inquiry</span> <span class="n">tp_is_gc</span><span class="p">;</span> <span class="cm">/* For PyObject_IS_GC */</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_bases</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_mro</span><span class="p">;</span> <span class="cm">/* method resolution order */</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_cache</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_subclasses</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_weaklist</span><span class="p">;</span>
+
+<span class="p">}</span> <span class="n">PyTypeObject</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The type object structure extends the <a class="reference internal" href="structures.html#c.PyVarObject" title="PyVarObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyVarObject</span></code></a> structure. The
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_size</span></code> field is used for dynamic types (created by  <code class="xref py py-func docutils literal notranslate"><span class="pre">type_new()</span></code>,
+usually called from a class statement). Note that <a class="reference internal" href="type.html#c.PyType_Type" title="PyType_Type"><code class="xref c c-data docutils literal notranslate"><span class="pre">PyType_Type</span></code></a> (the
+metatype) initializes <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_itemsize</span></code></a>, which means that its instances (i.e.
+type objects) <em>must</em> have the <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_size</span></code> field.</p>
+<dl class="member">
+<dt id="c.PyObject._ob_next">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyObject._ob_next</code><a class="headerlink" href="#c.PyObject._ob_next" title="Permalink to this definition">¶</a></dt>
+<dt id="c.PyObject._ob_prev">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyObject._ob_prev</code><a class="headerlink" href="#c.PyObject._ob_prev" title="Permalink to this definition">¶</a></dt>
+<dd><p>These fields are only present when the macro <code class="docutils literal notranslate"><span class="pre">Py_TRACE_REFS</span></code> is defined.
+Their initialization to <em>NULL</em> is taken care of by the <code class="docutils literal notranslate"><span class="pre">PyObject_HEAD_INIT</span></code>
+macro.  For statically allocated objects, these fields always remain <em>NULL</em>.
+For dynamically allocated objects, these two fields are used to link the object
+into a doubly-linked list of <em>all</em> live objects on the heap.  This could be used
+for various debugging purposes; currently the only use is to print the objects
+that are still alive at the end of a run when the environment variable
+<span class="target" id="index-0"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONDUMPREFS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHONDUMPREFS</span></code></a> is set.</p>
+<p>These fields are not inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyObject.ob_refcnt">
+Py_ssize_t <code class="descname">PyObject.ob_refcnt</code><a class="headerlink" href="#c.PyObject.ob_refcnt" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the type object’s reference count, initialized to <code class="docutils literal notranslate"><span class="pre">1</span></code> by the
+<code class="docutils literal notranslate"><span class="pre">PyObject_HEAD_INIT</span></code> macro.  Note that for statically allocated type objects,
+the type’s instances (objects whose <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_type</span></code> points back to the type) do
+<em>not</em> count as references.  But for dynamically allocated type objects, the
+instances <em>do</em> count as references.</p>
+<p>This field is not inherited by subtypes.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This field used to be an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type. This might require changes
+in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyObject.ob_type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a>* <code class="descname">PyObject.ob_type</code><a class="headerlink" href="#c.PyObject.ob_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the type’s type, in other words its metatype.  It is initialized by the
+argument to the <code class="docutils literal notranslate"><span class="pre">PyObject_HEAD_INIT</span></code> macro, and its value should normally be
+<code class="docutils literal notranslate"><span class="pre">&amp;PyType_Type</span></code>.  However, for dynamically loadable extension modules that must
+be usable on Windows (at least), the compiler complains that this is not a valid
+initializer.  Therefore, the convention is to pass <em>NULL</em> to the
+<code class="docutils literal notranslate"><span class="pre">PyObject_HEAD_INIT</span></code> macro and to initialize this field explicitly at the
+start of the module’s initialization function, before doing anything else.  This
+is typically done like this:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">Foo_Type</span><span class="p">.</span><span class="n">ob_type</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">PyType_Type</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This should be done before any instances of the type are created.
+<a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_Ready()</span></code></a> checks if <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_type</span></code> is <em>NULL</em>, and if so,
+initializes it: in Python 2.2, it is set to <code class="docutils literal notranslate"><span class="pre">&amp;PyType_Type</span></code>; in Python 2.2.1
+and later it is initialized to the <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_type</span></code> field of the base class.
+<a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_Ready()</span></code></a> will not change this field if it is non-zero.</p>
+<p>In Python 2.2, this field is not inherited by subtypes.  In 2.2.1, and in 2.3
+and beyond, it is inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyVarObject.ob_size">
+Py_ssize_t <code class="descname">PyVarObject.ob_size</code><a class="headerlink" href="#c.PyVarObject.ob_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>For statically allocated type objects, this should be initialized to zero.  For
+dynamically allocated type objects, this field has a special internal meaning.</p>
+<p>This field is not inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_name">
+char* <code class="descname">PyTypeObject.tp_name</code><a class="headerlink" href="#c.PyTypeObject.tp_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pointer to a NUL-terminated string containing the name of the type. For types
+that are accessible as module globals, the string should be the full module
+name, followed by a dot, followed by the type name; for built-in types, it
+should be just the type name.  If the module is a submodule of a package, the
+full package name is part of the full module name.  For example, a type named
+<code class="xref py py-class docutils literal notranslate"><span class="pre">T</span></code> defined in module <code class="xref py py-mod docutils literal notranslate"><span class="pre">M</span></code> in subpackage <code class="xref py py-mod docutils literal notranslate"><span class="pre">Q</span></code> in package <code class="xref py py-mod docutils literal notranslate"><span class="pre">P</span></code>
+should have the <a class="reference internal" href="#c.PyTypeObject.tp_name" title="PyTypeObject.tp_name"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_name</span></code></a> initializer <code class="docutils literal notranslate"><span class="pre">&quot;P.Q.M.T&quot;</span></code>.</p>
+<p>For dynamically allocated type objects, this should just be the type name, and
+the module name explicitly stored in the type dict as the value for key
+<code class="docutils literal notranslate"><span class="pre">'__module__'</span></code>.</p>
+<p>For statically allocated type objects, the tp_name field should contain a dot.
+Everything before the last dot is made accessible as the <code class="xref py py-attr docutils literal notranslate"><span class="pre">__module__</span></code>
+attribute, and everything after the last dot is made accessible as the
+<a class="reference internal" href="../library/stdtypes.html#definition.__name__" title="definition.__name__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__name__</span></code></a> attribute.</p>
+<p>If no dot is present, the entire <a class="reference internal" href="#c.PyTypeObject.tp_name" title="PyTypeObject.tp_name"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_name</span></code></a> field is made accessible as the
+<a class="reference internal" href="../library/stdtypes.html#definition.__name__" title="definition.__name__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__name__</span></code></a> attribute, and the <code class="xref py py-attr docutils literal notranslate"><span class="pre">__module__</span></code> attribute is undefined
+(unless explicitly set in the dictionary, as explained above).  This means your
+type will be impossible to pickle.  Additionally, it will not be listed in
+module documentations created with pydoc.</p>
+<p>This field is not inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_basicsize">
+Py_ssize_t <code class="descname">PyTypeObject.tp_basicsize</code><a class="headerlink" href="#c.PyTypeObject.tp_basicsize" title="Permalink to this definition">¶</a></dt>
+<dt id="c.PyTypeObject.tp_itemsize">
+Py_ssize_t <code class="descname">PyTypeObject.tp_itemsize</code><a class="headerlink" href="#c.PyTypeObject.tp_itemsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>These fields allow calculating the size in bytes of instances of the type.</p>
+<p>There are two kinds of types: types with fixed-length instances have a zero
+<a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_itemsize</span></code></a> field, types with variable-length instances have a non-zero
+<a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_itemsize</span></code></a> field.  For a type with fixed-length instances, all
+instances have the same size, given in <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_basicsize</span></code></a>.</p>
+<p>For a type with variable-length instances, the instances must have an
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_size</span></code> field, and the instance size is <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_basicsize</span></code></a> plus N
+times <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_itemsize</span></code></a>, where N is the “length” of the object.  The value of
+N is typically stored in the instance’s <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_size</span></code> field.  There are
+exceptions:  for example, long ints use a negative <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_size</span></code> to indicate a
+negative number, and N is <code class="docutils literal notranslate"><span class="pre">abs(ob_size)</span></code> there.  Also, the presence of an
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_size</span></code> field in the instance layout doesn’t mean that the instance
+structure is variable-length (for example, the structure for the list type has
+fixed-length instances, yet those instances have a meaningful <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_size</span></code>
+field).</p>
+<p>The basic size includes the fields in the instance declared by the macro
+<a class="reference internal" href="structures.html#c.PyObject_HEAD" title="PyObject_HEAD"><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyObject_HEAD</span></code></a> or <a class="reference internal" href="structures.html#c.PyObject_VAR_HEAD" title="PyObject_VAR_HEAD"><code class="xref c c-macro docutils literal notranslate"><span class="pre">PyObject_VAR_HEAD</span></code></a> (whichever is used to
+declare the instance struct) and this in turn includes the <code class="xref py py-attr docutils literal notranslate"><span class="pre">_ob_prev</span></code> and
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">_ob_next</span></code> fields if they are present.  This means that the only correct
+way to get an initializer for the <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_basicsize</span></code></a> is to use the
+<code class="docutils literal notranslate"><span class="pre">sizeof</span></code> operator on the struct used to declare the instance layout.
+The basic size does not include the GC header size (this is new in Python 2.2;
+in 2.1 and 2.0, the GC header size was included in <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_basicsize</span></code></a>).</p>
+<p>These fields are inherited separately by subtypes.  If the base type has a
+non-zero <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_itemsize</span></code></a>, it is generally not safe to set
+<a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_itemsize</span></code></a> to a different non-zero value in a subtype (though this
+depends on the implementation of the base type).</p>
+<p>A note about alignment: if the variable items require a particular alignment,
+this should be taken care of by the value of <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_basicsize</span></code></a>.  Example:
+suppose a type implements an array of <code class="docutils literal notranslate"><span class="pre">double</span></code>. <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_itemsize</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">sizeof(double)</span></code>. It is the programmer’s responsibility that
+<a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_basicsize</span></code></a> is a multiple of <code class="docutils literal notranslate"><span class="pre">sizeof(double)</span></code> (assuming this is the
+alignment requirement for <code class="docutils literal notranslate"><span class="pre">double</span></code>).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_dealloc">
+destructor <code class="descname">PyTypeObject.tp_dealloc</code><a class="headerlink" href="#c.PyTypeObject.tp_dealloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>A pointer to the instance destructor function.  This function must be defined
+unless the type guarantees that its instances will never be deallocated (as is
+the case for the singletons <code class="docutils literal notranslate"><span class="pre">None</span></code> and <code class="docutils literal notranslate"><span class="pre">Ellipsis</span></code>).</p>
+<p>The destructor function is called by the <a class="reference internal" href="refcounting.html#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_DECREF()</span></code></a> and
+<a class="reference internal" href="refcounting.html#c.Py_XDECREF" title="Py_XDECREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_XDECREF()</span></code></a> macros when the new reference count is zero.  At this point,
+the instance is still in existence, but there are no references to it.  The
+destructor function should free all references which the instance owns, free all
+memory buffers owned by the instance (using the freeing function corresponding
+to the allocation function used to allocate the buffer), and finally (as its
+last action) call the type’s <a class="reference internal" href="#c.PyTypeObject.tp_free" title="PyTypeObject.tp_free"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_free</span></code></a> function.  If the type is not
+subtypable (doesn’t have the <a class="reference internal" href="#Py_TPFLAGS_BASETYPE" title="Py_TPFLAGS_BASETYPE"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_BASETYPE</span></code></a> flag bit set), it is
+permissible to call the object deallocator directly instead of via
+<a class="reference internal" href="#c.PyTypeObject.tp_free" title="PyTypeObject.tp_free"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_free</span></code></a>.  The object deallocator should be the one used to allocate the
+instance; this is normally <a class="reference internal" href="allocation.html#c.PyObject_Del" title="PyObject_Del"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Del()</span></code></a> if the instance was allocated
+using <a class="reference internal" href="allocation.html#c.PyObject_New" title="PyObject_New"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_New()</span></code></a> or <code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_VarNew()</span></code>, or
+<a class="reference internal" href="gcsupport.html#c.PyObject_GC_Del" title="PyObject_GC_Del"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GC_Del()</span></code></a> if the instance was allocated using
+<a class="reference internal" href="gcsupport.html#c.PyObject_GC_New" title="PyObject_GC_New"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GC_New()</span></code></a> or <a class="reference internal" href="gcsupport.html#c.PyObject_GC_NewVar" title="PyObject_GC_NewVar"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GC_NewVar()</span></code></a>.</p>
+<p>This field is inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_print">
+printfunc <code class="descname">PyTypeObject.tp_print</code><a class="headerlink" href="#c.PyTypeObject.tp_print" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to the instance print function.</p>
+<p>The print function is only called when the instance is printed to a <em>real</em> file;
+when it is printed to a pseudo-file (like a <a class="reference internal" href="../library/stringio.html#StringIO.StringIO" title="StringIO.StringIO"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringIO</span></code></a> instance), the
+instance’s <a class="reference internal" href="#c.PyTypeObject.tp_repr" title="PyTypeObject.tp_repr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_repr</span></code></a> or <a class="reference internal" href="#c.PyTypeObject.tp_str" title="PyTypeObject.tp_str"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_str</span></code></a> function is called to convert it to
+a string.  These are also called when the type’s <a class="reference internal" href="#c.PyTypeObject.tp_print" title="PyTypeObject.tp_print"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_print</span></code></a> field is
+<em>NULL</em>.  A type should never implement <a class="reference internal" href="#c.PyTypeObject.tp_print" title="PyTypeObject.tp_print"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_print</span></code></a> in a way that produces
+different output than <a class="reference internal" href="#c.PyTypeObject.tp_repr" title="PyTypeObject.tp_repr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_repr</span></code></a> or <a class="reference internal" href="#c.PyTypeObject.tp_str" title="PyTypeObject.tp_str"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_str</span></code></a> would.</p>
+<p>The print function is called with the same signature as <a class="reference internal" href="object.html#c.PyObject_Print" title="PyObject_Print"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Print()</span></code></a>:
+<code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">tp_print(PyObject</span> <span class="pre">*self,</span> <span class="pre">FILE</span> <span class="pre">*file,</span> <span class="pre">int</span> <span class="pre">flags)</span></code>.  The <em>self</em> argument is
+the instance to be printed.  The <em>file</em> argument is the stdio file to which it
+is to be printed.  The <em>flags</em> argument is composed of flag bits. The only flag
+bit currently defined is <code class="xref py py-const docutils literal notranslate"><span class="pre">Py_PRINT_RAW</span></code>. When the <code class="xref py py-const docutils literal notranslate"><span class="pre">Py_PRINT_RAW</span></code>
+flag bit is set, the instance should be printed the same way as <a class="reference internal" href="#c.PyTypeObject.tp_str" title="PyTypeObject.tp_str"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_str</span></code></a>
+would format it; when the <code class="xref py py-const docutils literal notranslate"><span class="pre">Py_PRINT_RAW</span></code> flag bit is clear, the instance
+should be printed the same was as <a class="reference internal" href="#c.PyTypeObject.tp_repr" title="PyTypeObject.tp_repr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_repr</span></code></a> would format it. It should
+return <code class="docutils literal notranslate"><span class="pre">-1</span></code> and set an exception condition when an error occurred during the
+comparison.</p>
+<p>It is possible that the <a class="reference internal" href="#c.PyTypeObject.tp_print" title="PyTypeObject.tp_print"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_print</span></code></a> field will be deprecated. In any case,
+it is recommended not to define <a class="reference internal" href="#c.PyTypeObject.tp_print" title="PyTypeObject.tp_print"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_print</span></code></a>, but instead to rely on
+<a class="reference internal" href="#c.PyTypeObject.tp_repr" title="PyTypeObject.tp_repr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_repr</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_str" title="PyTypeObject.tp_str"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_str</span></code></a> for printing.</p>
+<p>This field is inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_getattr">
+getattrfunc <code class="descname">PyTypeObject.tp_getattr</code><a class="headerlink" href="#c.PyTypeObject.tp_getattr" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to the get-attribute-string function.</p>
+<p>This field is deprecated.  When it is defined, it should point to a function
+that acts the same as the <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getattro</span></code></a> function, but taking a C string
+instead of a Python string object to give the attribute name.  The signature is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span> <span class="nf">tp_getattr</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">o</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">attr_name</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This field is inherited by subtypes together with <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getattro</span></code></a>: a subtype
+inherits both <a class="reference internal" href="#c.PyTypeObject.tp_getattr" title="PyTypeObject.tp_getattr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getattr</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getattro</span></code></a> from its base type when
+the subtype’s <a class="reference internal" href="#c.PyTypeObject.tp_getattr" title="PyTypeObject.tp_getattr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getattr</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getattro</span></code></a> are both <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_setattr">
+setattrfunc <code class="descname">PyTypeObject.tp_setattr</code><a class="headerlink" href="#c.PyTypeObject.tp_setattr" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to the function for setting and deleting attributes.</p>
+<p>This field is deprecated.  When it is defined, it should point to a function
+that acts the same as the <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_setattro</span></code></a> function, but taking a C string
+instead of a Python string object to give the attribute name.  The signature is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span> <span class="nf">tp_setattr</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">o</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">attr_name</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">v</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The <em>v</em> argument is set to <em>NULL</em> to delete the attribute.
+This field is inherited by subtypes together with <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_setattro</span></code></a>: a subtype
+inherits both <a class="reference internal" href="#c.PyTypeObject.tp_setattr" title="PyTypeObject.tp_setattr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_setattr</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_setattro</span></code></a> from its base type when
+the subtype’s <a class="reference internal" href="#c.PyTypeObject.tp_setattr" title="PyTypeObject.tp_setattr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_setattr</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_setattro</span></code></a> are both <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_compare">
+cmpfunc <code class="descname">PyTypeObject.tp_compare</code><a class="headerlink" href="#c.PyTypeObject.tp_compare" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to the three-way comparison function.</p>
+<p>The signature is the same as for <a class="reference internal" href="object.html#c.PyObject_Compare" title="PyObject_Compare"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Compare()</span></code></a>. The function should
+return <code class="docutils literal notranslate"><span class="pre">1</span></code> if <em>self</em> greater than <em>other</em>, <code class="docutils literal notranslate"><span class="pre">0</span></code> if <em>self</em> is equal to
+<em>other</em>, and <code class="docutils literal notranslate"><span class="pre">-1</span></code> if <em>self</em> less than <em>other</em>.  It should return <code class="docutils literal notranslate"><span class="pre">-1</span></code> and
+set an exception condition when an error occurred during the comparison.</p>
+<p>This field is inherited by subtypes together with <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_richcompare</span></code></a> and
+<a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_hash</span></code></a>: a subtypes inherits all three of <a class="reference internal" href="#c.PyTypeObject.tp_compare" title="PyTypeObject.tp_compare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_compare</span></code></a>,
+<a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_richcompare</span></code></a>, and <a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_hash</span></code></a> when the subtype’s
+<a class="reference internal" href="#c.PyTypeObject.tp_compare" title="PyTypeObject.tp_compare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_compare</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_richcompare</span></code></a>, and <a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_hash</span></code></a> are all <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_repr">
+reprfunc <code class="descname">PyTypeObject.tp_repr</code><a class="headerlink" href="#c.PyTypeObject.tp_repr" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">An optional pointer to a function that implements the built-in function
+<a class="reference internal" href="../library/functions.html#repr" title="repr"><code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code></a>.</p>
+<p>The signature is the same as for <a class="reference internal" href="object.html#c.PyObject_Repr" title="PyObject_Repr"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Repr()</span></code></a>; it must return a string
+or a Unicode object.  Ideally, this function should return a string that, when
+passed to <a class="reference internal" href="../library/functions.html#eval" title="eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code></a>, given a suitable environment, returns an object with the
+same value.  If this is not feasible, it should return a string starting with
+<code class="docutils literal notranslate"><span class="pre">'&lt;'</span></code> and ending with <code class="docutils literal notranslate"><span class="pre">'&gt;'</span></code> from which both the type and the value of the
+object can be deduced.</p>
+<p>When this field is not set, a string of the form <code class="docutils literal notranslate"><span class="pre">&lt;%s</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">%p&gt;</span></code> is
+returned, where <code class="docutils literal notranslate"><span class="pre">%s</span></code> is replaced by the type name, and <code class="docutils literal notranslate"><span class="pre">%p</span></code> by the object’s
+memory address.</p>
+<p>This field is inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.tp_as_number">
+<a class="reference internal" href="#c.PyNumberMethods" title="PyNumberMethods">PyNumberMethods</a>* <code class="descname">tp_as_number</code><a class="headerlink" href="#c.tp_as_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pointer to an additional structure that contains fields relevant only to
+objects which implement the number protocol.  These fields are documented in
+<a class="reference internal" href="#number-structs"><span class="std std-ref">Number Object Structures</span></a>.</p>
+<p>The <code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_number</span></code> field is not inherited, but the contained fields are
+inherited individually.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.tp_as_sequence">
+<a class="reference internal" href="#c.PySequenceMethods" title="PySequenceMethods">PySequenceMethods</a>* <code class="descname">tp_as_sequence</code><a class="headerlink" href="#c.tp_as_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pointer to an additional structure that contains fields relevant only to
+objects which implement the sequence protocol.  These fields are documented
+in <a class="reference internal" href="#sequence-structs"><span class="std std-ref">Sequence Object Structures</span></a>.</p>
+<p>The <code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_sequence</span></code> field is not inherited, but the contained fields
+are inherited individually.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.tp_as_mapping">
+<a class="reference internal" href="#c.PyMappingMethods" title="PyMappingMethods">PyMappingMethods</a>* <code class="descname">tp_as_mapping</code><a class="headerlink" href="#c.tp_as_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pointer to an additional structure that contains fields relevant only to
+objects which implement the mapping protocol.  These fields are documented in
+<a class="reference internal" href="#mapping-structs"><span class="std std-ref">Mapping Object Structures</span></a>.</p>
+<p>The <code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_mapping</span></code> field is not inherited, but the contained fields
+are inherited individually.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_hash">
+hashfunc <code class="descname">PyTypeObject.tp_hash</code><a class="headerlink" href="#c.PyTypeObject.tp_hash" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">An optional pointer to a function that implements the built-in function
+<a class="reference internal" href="../library/functions.html#hash" title="hash"><code class="xref py py-func docutils literal notranslate"><span class="pre">hash()</span></code></a>.</p>
+<p>The signature is the same as for <a class="reference internal" href="object.html#c.PyObject_Hash" title="PyObject_Hash"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Hash()</span></code></a>; it must return a C
+long.  The value <code class="docutils literal notranslate"><span class="pre">-1</span></code> should not be returned as a normal return value; when an
+error occurs during the computation of the hash value, the function should set
+an exception and return <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p>
+<p>This field can be set explicitly to <a class="reference internal" href="object.html#c.PyObject_HashNotImplemented" title="PyObject_HashNotImplemented"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_HashNotImplemented()</span></code></a> to
+block inheritance of the hash method from a parent type. This is interpreted
+as the equivalent of <code class="docutils literal notranslate"><span class="pre">__hash__</span> <span class="pre">=</span> <span class="pre">None</span></code> at the Python level, causing
+<code class="docutils literal notranslate"><span class="pre">isinstance(o,</span> <span class="pre">collections.Hashable)</span></code> to correctly return <code class="docutils literal notranslate"><span class="pre">False</span></code>. Note
+that the converse is also true - setting <code class="docutils literal notranslate"><span class="pre">__hash__</span> <span class="pre">=</span> <span class="pre">None</span></code> on a class at
+the Python level will result in the <code class="docutils literal notranslate"><span class="pre">tp_hash</span></code> slot being set to
+<a class="reference internal" href="object.html#c.PyObject_HashNotImplemented" title="PyObject_HashNotImplemented"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_HashNotImplemented()</span></code></a>.</p>
+<p>When this field is not set, two possibilities exist: if the <a class="reference internal" href="#c.PyTypeObject.tp_compare" title="PyTypeObject.tp_compare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_compare</span></code></a>
+and <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_richcompare</span></code></a> fields are both <em>NULL</em>, a default hash value based on
+the object’s address is returned; otherwise, a <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> is raised.</p>
+<p>This field is inherited by subtypes together with <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_richcompare</span></code></a> and
+<a class="reference internal" href="#c.PyTypeObject.tp_compare" title="PyTypeObject.tp_compare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_compare</span></code></a>: a subtypes inherits all three of <a class="reference internal" href="#c.PyTypeObject.tp_compare" title="PyTypeObject.tp_compare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_compare</span></code></a>,
+<a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_richcompare</span></code></a>, and <a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_hash</span></code></a>, when the subtype’s
+<a class="reference internal" href="#c.PyTypeObject.tp_compare" title="PyTypeObject.tp_compare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_compare</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_richcompare</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_hash</span></code></a> are all <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_call">
+ternaryfunc <code class="descname">PyTypeObject.tp_call</code><a class="headerlink" href="#c.PyTypeObject.tp_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a function that implements calling the object.  This
+should be <em>NULL</em> if the object is not callable.  The signature is the same as
+for <a class="reference internal" href="object.html#c.PyObject_Call" title="PyObject_Call"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Call()</span></code></a>.</p>
+<p>This field is inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_str">
+reprfunc <code class="descname">PyTypeObject.tp_str</code><a class="headerlink" href="#c.PyTypeObject.tp_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a function that implements the built-in operation
+<a class="reference internal" href="../library/functions.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a>.  (Note that <a class="reference internal" href="../library/functions.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> is a type now, and <a class="reference internal" href="../library/functions.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a> calls the
+constructor for that type.  This constructor calls <a class="reference internal" href="object.html#c.PyObject_Str" title="PyObject_Str"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Str()</span></code></a> to do
+the actual work, and <a class="reference internal" href="object.html#c.PyObject_Str" title="PyObject_Str"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Str()</span></code></a> will call this handler.)</p>
+<p>The signature is the same as for <a class="reference internal" href="object.html#c.PyObject_Str" title="PyObject_Str"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Str()</span></code></a>; it must return a string
+or a Unicode object.  This function should return a “friendly” string
+representation of the object, as this is the representation that will be used by
+the print statement.</p>
+<p>When this field is not set, <a class="reference internal" href="object.html#c.PyObject_Repr" title="PyObject_Repr"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Repr()</span></code></a> is called to return a string
+representation.</p>
+<p>This field is inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_getattro">
+getattrofunc <code class="descname">PyTypeObject.tp_getattro</code><a class="headerlink" href="#c.PyTypeObject.tp_getattro" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to the get-attribute function.</p>
+<p>The signature is the same as for <a class="reference internal" href="object.html#c.PyObject_GetAttr" title="PyObject_GetAttr"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GetAttr()</span></code></a>.  It is usually
+convenient to set this field to <a class="reference internal" href="object.html#c.PyObject_GenericGetAttr" title="PyObject_GenericGetAttr"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GenericGetAttr()</span></code></a>, which
+implements the normal way of looking for object attributes.</p>
+<p>This field is inherited by subtypes together with <a class="reference internal" href="#c.PyTypeObject.tp_getattr" title="PyTypeObject.tp_getattr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getattr</span></code></a>: a subtype
+inherits both <a class="reference internal" href="#c.PyTypeObject.tp_getattr" title="PyTypeObject.tp_getattr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getattr</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getattro</span></code></a> from its base type when
+the subtype’s <a class="reference internal" href="#c.PyTypeObject.tp_getattr" title="PyTypeObject.tp_getattr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getattr</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getattro</span></code></a> are both <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_setattro">
+setattrofunc <code class="descname">PyTypeObject.tp_setattro</code><a class="headerlink" href="#c.PyTypeObject.tp_setattro" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to the function for setting and deleting attributes.</p>
+<p>The signature is the same as for <a class="reference internal" href="object.html#c.PyObject_SetAttr" title="PyObject_SetAttr"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_SetAttr()</span></code></a>, but setting
+<em>v</em> to <em>NULL</em> to delete an attribute must be supported.  It is usually
+convenient to set this field to <a class="reference internal" href="object.html#c.PyObject_GenericSetAttr" title="PyObject_GenericSetAttr"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GenericSetAttr()</span></code></a>, which
+implements the normal way of setting object attributes.</p>
+<p>This field is inherited by subtypes together with <a class="reference internal" href="#c.PyTypeObject.tp_setattr" title="PyTypeObject.tp_setattr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_setattr</span></code></a>: a subtype
+inherits both <a class="reference internal" href="#c.PyTypeObject.tp_setattr" title="PyTypeObject.tp_setattr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_setattr</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_setattro</span></code></a> from its base type when
+the subtype’s <a class="reference internal" href="#c.PyTypeObject.tp_setattr" title="PyTypeObject.tp_setattr"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_setattr</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_setattro</span></code></a> are both <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_as_buffer">
+<a class="reference internal" href="#c.PyBufferProcs" title="PyBufferProcs">PyBufferProcs</a>* <code class="descname">PyTypeObject.tp_as_buffer</code><a class="headerlink" href="#c.PyTypeObject.tp_as_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pointer to an additional structure that contains fields relevant only to objects
+which implement the buffer interface.  These fields are documented in
+<a class="reference internal" href="#buffer-structs"><span class="std std-ref">Buffer Object Structures</span></a>.</p>
+<p>The <a class="reference internal" href="#c.PyTypeObject.tp_as_buffer" title="PyTypeObject.tp_as_buffer"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_buffer</span></code></a> field is not inherited, but the contained fields are
+inherited individually.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_flags">
+long <code class="descname">PyTypeObject.tp_flags</code><a class="headerlink" href="#c.PyTypeObject.tp_flags" title="Permalink to this definition">¶</a></dt>
+<dd><p>This field is a bit mask of various flags.  Some flags indicate variant
+semantics for certain situations; others are used to indicate that certain
+fields in the type object (or in the extension structures referenced via
+<code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_number</span></code>, <code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_sequence</span></code>, <code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_mapping</span></code>, and
+<a class="reference internal" href="#c.PyTypeObject.tp_as_buffer" title="PyTypeObject.tp_as_buffer"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_buffer</span></code></a>) that were historically not always present are valid; if
+such a flag bit is clear, the type fields it guards must not be accessed and
+must be considered to have a zero or <em>NULL</em> value instead.</p>
+<p>Inheritance of this field is complicated.  Most flag bits are inherited
+individually, i.e. if the base type has a flag bit set, the subtype inherits
+this flag bit.  The flag bits that pertain to extension structures are strictly
+inherited if the extension structure is inherited, i.e. the base type’s value of
+the flag bit is copied into the subtype together with a pointer to the extension
+structure.  The <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> flag bit is inherited together with
+the <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_traverse</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> fields, i.e. if the
+<a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> flag bit is clear in the subtype and the
+<a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_traverse</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> fields in the subtype exist (as
+indicated by the <a class="reference internal" href="#Py_TPFLAGS_HAVE_RICHCOMPARE" title="Py_TPFLAGS_HAVE_RICHCOMPARE"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_RICHCOMPARE</span></code></a> flag bit) and have <em>NULL</em>
+values.</p>
+<p>The following bit masks are currently defined; these can be ORed together using
+the <code class="docutils literal notranslate"><span class="pre">|</span></code> operator to form the value of the <a class="reference internal" href="#c.PyTypeObject.tp_flags" title="PyTypeObject.tp_flags"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_flags</span></code></a> field.  The macro
+<a class="reference internal" href="type.html#c.PyType_HasFeature" title="PyType_HasFeature"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_HasFeature()</span></code></a> takes a type and a flags value, <em>tp</em> and <em>f</em>, and
+checks whether <code class="docutils literal notranslate"><span class="pre">tp-&gt;tp_flags</span> <span class="pre">&amp;</span> <span class="pre">f</span></code> is non-zero.</p>
+<dl class="data">
+<dt id="Py_TPFLAGS_HAVE_GETCHARBUFFER">
+<code class="descname">Py_TPFLAGS_HAVE_GETCHARBUFFER</code><a class="headerlink" href="#Py_TPFLAGS_HAVE_GETCHARBUFFER" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this bit is set, the <a class="reference internal" href="#c.PyBufferProcs" title="PyBufferProcs"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyBufferProcs</span></code></a> struct referenced by
+<a class="reference internal" href="#c.PyTypeObject.tp_as_buffer" title="PyTypeObject.tp_as_buffer"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_buffer</span></code></a> has the <code class="xref py py-attr docutils literal notranslate"><span class="pre">bf_getcharbuffer</span></code> field.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_HAVE_SEQUENCE_IN">
+<code class="descname">Py_TPFLAGS_HAVE_SEQUENCE_IN</code><a class="headerlink" href="#Py_TPFLAGS_HAVE_SEQUENCE_IN" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this bit is set, the <a class="reference internal" href="#c.PySequenceMethods" title="PySequenceMethods"><code class="xref c c-type docutils literal notranslate"><span class="pre">PySequenceMethods</span></code></a> struct referenced by
+<code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_sequence</span></code> has the <code class="xref py py-attr docutils literal notranslate"><span class="pre">sq_contains</span></code> field.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_GC">
+<code class="descname">Py_TPFLAGS_GC</code><a class="headerlink" href="#Py_TPFLAGS_GC" title="Permalink to this definition">¶</a></dt>
+<dd><p>This bit is obsolete.  The bit it used to name is no longer in use.  The symbol
+is now defined as zero.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_HAVE_INPLACEOPS">
+<code class="descname">Py_TPFLAGS_HAVE_INPLACEOPS</code><a class="headerlink" href="#Py_TPFLAGS_HAVE_INPLACEOPS" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this bit is set, the <a class="reference internal" href="#c.PySequenceMethods" title="PySequenceMethods"><code class="xref c c-type docutils literal notranslate"><span class="pre">PySequenceMethods</span></code></a> struct referenced by
+<code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_sequence</span></code> and the <a class="reference internal" href="#c.PyNumberMethods" title="PyNumberMethods"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyNumberMethods</span></code></a> structure referenced by
+<code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_number</span></code> contain the fields for in-place operators. In particular,
+this means that the <a class="reference internal" href="#c.PyNumberMethods" title="PyNumberMethods"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyNumberMethods</span></code></a> structure has the fields
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_inplace_add</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_inplace_subtract</span></code>,
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_inplace_multiply</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_inplace_divide</span></code>,
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_inplace_remainder</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_inplace_power</span></code>,
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_inplace_lshift</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_inplace_rshift</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_inplace_and</span></code>,
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_inplace_xor</span></code>, and <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_inplace_or</span></code>; and the
+<a class="reference internal" href="#c.PySequenceMethods" title="PySequenceMethods"><code class="xref c c-type docutils literal notranslate"><span class="pre">PySequenceMethods</span></code></a> struct has the fields <code class="xref py py-attr docutils literal notranslate"><span class="pre">sq_inplace_concat</span></code> and
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">sq_inplace_repeat</span></code>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_CHECKTYPES">
+<code class="descname">Py_TPFLAGS_CHECKTYPES</code><a class="headerlink" href="#Py_TPFLAGS_CHECKTYPES" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this bit is set, the binary and ternary operations in the
+<a class="reference internal" href="#c.PyNumberMethods" title="PyNumberMethods"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyNumberMethods</span></code></a> structure referenced by <code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_number</span></code> accept
+arguments of arbitrary object types, and do their own type conversions if
+needed.  If this bit is clear, those operations require that all arguments have
+the current type as their type, and the caller is supposed to perform a coercion
+operation first.  This applies to <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_add</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_subtract</span></code>,
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_multiply</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_divide</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_remainder</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_divmod</span></code>,
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_power</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_lshift</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_rshift</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_and</span></code>,
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_xor</span></code>, and <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_or</span></code>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_HAVE_RICHCOMPARE">
+<code class="descname">Py_TPFLAGS_HAVE_RICHCOMPARE</code><a class="headerlink" href="#Py_TPFLAGS_HAVE_RICHCOMPARE" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this bit is set, the type object has the <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_richcompare</span></code></a> field, as
+well as the <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_traverse</span></code></a> and the <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> fields.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_HAVE_WEAKREFS">
+<code class="descname">Py_TPFLAGS_HAVE_WEAKREFS</code><a class="headerlink" href="#Py_TPFLAGS_HAVE_WEAKREFS" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this bit is set, the <a class="reference internal" href="#c.PyTypeObject.tp_weaklistoffset" title="PyTypeObject.tp_weaklistoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_weaklistoffset</span></code></a> field is defined.  Instances
+of a type are weakly referenceable if the type’s <a class="reference internal" href="#c.PyTypeObject.tp_weaklistoffset" title="PyTypeObject.tp_weaklistoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_weaklistoffset</span></code></a> field
+has a value greater than zero.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_HAVE_ITER">
+<code class="descname">Py_TPFLAGS_HAVE_ITER</code><a class="headerlink" href="#Py_TPFLAGS_HAVE_ITER" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this bit is set, the type object has the <a class="reference internal" href="#c.PyTypeObject.tp_iter" title="PyTypeObject.tp_iter"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_iter</span></code></a> and
+<a class="reference internal" href="#c.PyTypeObject.tp_iternext" title="PyTypeObject.tp_iternext"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_iternext</span></code></a> fields.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_HAVE_CLASS">
+<code class="descname">Py_TPFLAGS_HAVE_CLASS</code><a class="headerlink" href="#Py_TPFLAGS_HAVE_CLASS" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this bit is set, the type object has several new fields defined starting in
+Python 2.2: <a class="reference internal" href="#c.PyTypeObject.tp_methods" title="PyTypeObject.tp_methods"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_methods</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_members" title="PyTypeObject.tp_members"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_members</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_getset" title="PyTypeObject.tp_getset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_getset</span></code></a>,
+<a class="reference internal" href="#c.PyTypeObject.tp_base" title="PyTypeObject.tp_base"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_base</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_dict" title="PyTypeObject.tp_dict"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dict</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_descr_get" title="PyTypeObject.tp_descr_get"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_descr_get</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_descr_set" title="PyTypeObject.tp_descr_set"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_descr_set</span></code></a>,
+<a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dictoffset</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_init</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_alloc" title="PyTypeObject.tp_alloc"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_alloc</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_new</span></code></a>,
+<a class="reference internal" href="#c.PyTypeObject.tp_free" title="PyTypeObject.tp_free"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_free</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_is_gc" title="PyTypeObject.tp_is_gc"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_is_gc</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_bases" title="PyTypeObject.tp_bases"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_bases</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_mro" title="PyTypeObject.tp_mro"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_mro</span></code></a>,
+<a class="reference internal" href="#c.PyTypeObject.tp_cache" title="PyTypeObject.tp_cache"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_cache</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_subclasses" title="PyTypeObject.tp_subclasses"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_subclasses</span></code></a>, and <a class="reference internal" href="#c.PyTypeObject.tp_weaklist" title="PyTypeObject.tp_weaklist"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_weaklist</span></code></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_HEAPTYPE">
+<code class="descname">Py_TPFLAGS_HEAPTYPE</code><a class="headerlink" href="#Py_TPFLAGS_HEAPTYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>This bit is set when the type object itself is allocated on the heap.  In this
+case, the <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_type</span></code> field of its instances is considered a reference to
+the type, and the type object is INCREF’ed when a new instance is created, and
+DECREF’ed when an instance is destroyed (this does not apply to instances of
+subtypes; only the type referenced by the instance’s ob_type gets INCREF’ed or
+DECREF’ed).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_BASETYPE">
+<code class="descname">Py_TPFLAGS_BASETYPE</code><a class="headerlink" href="#Py_TPFLAGS_BASETYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>This bit is set when the type can be used as the base type of another type.  If
+this bit is clear, the type cannot be subtyped (similar to a “final” class in
+Java).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_READY">
+<code class="descname">Py_TPFLAGS_READY</code><a class="headerlink" href="#Py_TPFLAGS_READY" title="Permalink to this definition">¶</a></dt>
+<dd><p>This bit is set when the type object has been fully initialized by
+<a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_Ready()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_READYING">
+<code class="descname">Py_TPFLAGS_READYING</code><a class="headerlink" href="#Py_TPFLAGS_READYING" title="Permalink to this definition">¶</a></dt>
+<dd><p>This bit is set while <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_Ready()</span></code></a> is in the process of initializing
+the type object.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_HAVE_GC">
+<code class="descname">Py_TPFLAGS_HAVE_GC</code><a class="headerlink" href="#Py_TPFLAGS_HAVE_GC" title="Permalink to this definition">¶</a></dt>
+<dd><p>This bit is set when the object supports garbage collection.  If this bit
+is set, instances must be created using <a class="reference internal" href="gcsupport.html#c.PyObject_GC_New" title="PyObject_GC_New"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GC_New()</span></code></a> and
+destroyed using <a class="reference internal" href="gcsupport.html#c.PyObject_GC_Del" title="PyObject_GC_Del"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GC_Del()</span></code></a>.  More information in section
+<a class="reference internal" href="gcsupport.html#supporting-cycle-detection"><span class="std std-ref">Supporting Cyclic Garbage Collection</span></a>.  This bit also implies that the
+GC-related fields <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_traverse</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> are present in
+the type object; but those fields also exist when
+<a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> is clear but
+<a class="reference internal" href="#Py_TPFLAGS_HAVE_RICHCOMPARE" title="Py_TPFLAGS_HAVE_RICHCOMPARE"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_RICHCOMPARE</span></code></a> is set.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_DEFAULT">
+<code class="descname">Py_TPFLAGS_DEFAULT</code><a class="headerlink" href="#Py_TPFLAGS_DEFAULT" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a bitmask of all the bits that pertain to the existence of certain
+fields in the type object and its extension structures. Currently, it includes
+the following bits: <a class="reference internal" href="#Py_TPFLAGS_HAVE_GETCHARBUFFER" title="Py_TPFLAGS_HAVE_GETCHARBUFFER"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_GETCHARBUFFER</span></code></a>,
+<a class="reference internal" href="#Py_TPFLAGS_HAVE_SEQUENCE_IN" title="Py_TPFLAGS_HAVE_SEQUENCE_IN"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_SEQUENCE_IN</span></code></a>, <a class="reference internal" href="#Py_TPFLAGS_HAVE_INPLACEOPS" title="Py_TPFLAGS_HAVE_INPLACEOPS"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_INPLACEOPS</span></code></a>,
+<a class="reference internal" href="#Py_TPFLAGS_HAVE_RICHCOMPARE" title="Py_TPFLAGS_HAVE_RICHCOMPARE"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_RICHCOMPARE</span></code></a>, <a class="reference internal" href="#Py_TPFLAGS_HAVE_WEAKREFS" title="Py_TPFLAGS_HAVE_WEAKREFS"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_WEAKREFS</span></code></a>,
+<a class="reference internal" href="#Py_TPFLAGS_HAVE_ITER" title="Py_TPFLAGS_HAVE_ITER"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_ITER</span></code></a>, and <a class="reference internal" href="#Py_TPFLAGS_HAVE_CLASS" title="Py_TPFLAGS_HAVE_CLASS"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_CLASS</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_doc">
+char* <code class="descname">PyTypeObject.tp_doc</code><a class="headerlink" href="#c.PyTypeObject.tp_doc" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a NUL-terminated C string giving the docstring for this
+type object.  This is exposed as the <code class="xref py py-attr docutils literal notranslate"><span class="pre">__doc__</span></code> attribute on the type and
+instances of the type.</p>
+<p>This field is <em>not</em> inherited by subtypes.</p>
+</dd></dl>
+
+<p>The following three fields only exist if the
+<a class="reference internal" href="#Py_TPFLAGS_HAVE_RICHCOMPARE" title="Py_TPFLAGS_HAVE_RICHCOMPARE"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_RICHCOMPARE</span></code></a> flag bit is set.</p>
+<dl class="member">
+<dt id="c.PyTypeObject.tp_traverse">
+<a class="reference internal" href="gcsupport.html#c.traverseproc" title="traverseproc">traverseproc</a> <code class="descname">PyTypeObject.tp_traverse</code><a class="headerlink" href="#c.PyTypeObject.tp_traverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a traversal function for the garbage collector.  This is
+only used if the <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> flag bit is set.  More information
+about Python’s garbage collection scheme can be found in section
+<a class="reference internal" href="gcsupport.html#supporting-cycle-detection"><span class="std std-ref">Supporting Cyclic Garbage Collection</span></a>.</p>
+<p>The <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_traverse</span></code></a> pointer is used by the garbage collector to detect
+reference cycles. A typical implementation of a <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_traverse</span></code></a> function
+simply calls <a class="reference internal" href="gcsupport.html#c.Py_VISIT" title="Py_VISIT"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_VISIT()</span></code></a> on each of the instance’s members that are Python
+objects.  For example, this is function <code class="xref c c-func docutils literal notranslate"><span class="pre">local_traverse()</span></code> from the
+<a class="reference internal" href="../library/thread.html#module-thread" title="thread: Create multiple threads of control within one interpreter."><code class="xref py py-mod docutils literal notranslate"><span class="pre">thread</span></code></a> extension module:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="nf">local_traverse</span><span class="p">(</span><span class="n">localobject</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">visitproc</span> <span class="n">visit</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Py_VISIT</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">args</span><span class="p">);</span>
+    <span class="n">Py_VISIT</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">kw</span><span class="p">);</span>
+    <span class="n">Py_VISIT</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">dict</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that <a class="reference internal" href="gcsupport.html#c.Py_VISIT" title="Py_VISIT"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_VISIT()</span></code></a> is called only on those members that can participate
+in reference cycles.  Although there is also a <code class="docutils literal notranslate"><span class="pre">self-&gt;key</span></code> member, it can only
+be <em>NULL</em> or a Python string and therefore cannot be part of a reference cycle.</p>
+<p>On the other hand, even if you know a member can never be part of a cycle, as a
+debugging aid you may want to visit it anyway just so the <a class="reference internal" href="../library/gc.html#module-gc" title="gc: Interface to the cycle-detecting garbage collector."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gc</span></code></a> module’s
+<a class="reference internal" href="../library/gc.html#gc.get_referents" title="gc.get_referents"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_referents()</span></code></a> function will include it.</p>
+<p>Note that <a class="reference internal" href="gcsupport.html#c.Py_VISIT" title="Py_VISIT"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_VISIT()</span></code></a> requires the <em>visit</em> and <em>arg</em> parameters to
+<code class="xref c c-func docutils literal notranslate"><span class="pre">local_traverse()</span></code> to have these specific names; don’t name them just
+anything.</p>
+<p>This field is inherited by subtypes together with <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> and the
+<a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> flag bit: the flag bit, <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_traverse</span></code></a>, and
+<a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> are all inherited from the base type if they are all zero in
+the subtype <em>and</em> the subtype has the <a class="reference internal" href="#Py_TPFLAGS_HAVE_RICHCOMPARE" title="Py_TPFLAGS_HAVE_RICHCOMPARE"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_RICHCOMPARE</span></code></a> flag
+bit set.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_clear">
+<a class="reference internal" href="gcsupport.html#c.inquiry" title="inquiry">inquiry</a> <code class="descname">PyTypeObject.tp_clear</code><a class="headerlink" href="#c.PyTypeObject.tp_clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a clear function for the garbage collector. This is only
+used if the <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> flag bit is set.</p>
+<p>The <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> member function is used to break reference cycles in cyclic
+garbage detected by the garbage collector.  Taken together, all <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a>
+functions in the system must combine to break all reference cycles.  This is
+subtle, and if in any doubt supply a <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> function.  For example,
+the tuple type does not implement a <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> function, because it’s
+possible to prove that no reference cycle can be composed entirely of tuples.
+Therefore the <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> functions of other types must be sufficient to
+break any cycle containing a tuple.  This isn’t immediately obvious, and there’s
+rarely a good reason to avoid implementing <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a>.</p>
+<p>Implementations of <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> should drop the instance’s references to
+those of its members that may be Python objects, and set its pointers to those
+members to <em>NULL</em>, as in the following example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="nf">local_clear</span><span class="p">(</span><span class="n">localobject</span> <span class="o">*</span><span class="n">self</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Py_CLEAR</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">key</span><span class="p">);</span>
+    <span class="n">Py_CLEAR</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">args</span><span class="p">);</span>
+    <span class="n">Py_CLEAR</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">kw</span><span class="p">);</span>
+    <span class="n">Py_CLEAR</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">dict</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="refcounting.html#c.Py_CLEAR" title="Py_CLEAR"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_CLEAR()</span></code></a> macro should be used, because clearing references is
+delicate:  the reference to the contained object must not be decremented until
+after the pointer to the contained object is set to <em>NULL</em>.  This is because
+decrementing the reference count may cause the contained object to become trash,
+triggering a chain of reclamation activity that may include invoking arbitrary
+Python code (due to finalizers, or weakref callbacks, associated with the
+contained object). If it’s possible for such code to reference <em>self</em> again,
+it’s important that the pointer to the contained object be <em>NULL</em> at that time,
+so that <em>self</em> knows the contained object can no longer be used.  The
+<a class="reference internal" href="refcounting.html#c.Py_CLEAR" title="Py_CLEAR"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_CLEAR()</span></code></a> macro performs the operations in a safe order.</p>
+<p>Because the goal of <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> functions is to break reference cycles,
+it’s not necessary to clear contained objects like Python strings or Python
+integers, which can’t participate in reference cycles. On the other hand, it may
+be convenient to clear all contained Python objects, and write the type’s
+<a class="reference internal" href="#c.PyTypeObject.tp_dealloc" title="PyTypeObject.tp_dealloc"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dealloc</span></code></a> function to invoke <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a>.</p>
+<p>More information about Python’s garbage collection scheme can be found in
+section <a class="reference internal" href="gcsupport.html#supporting-cycle-detection"><span class="std std-ref">Supporting Cyclic Garbage Collection</span></a>.</p>
+<p>This field is inherited by subtypes together with <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_traverse</span></code></a> and the
+<a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> flag bit: the flag bit, <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_traverse</span></code></a>, and
+<a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_clear</span></code></a> are all inherited from the base type if they are all zero in
+the subtype <em>and</em> the subtype has the <a class="reference internal" href="#Py_TPFLAGS_HAVE_RICHCOMPARE" title="Py_TPFLAGS_HAVE_RICHCOMPARE"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_RICHCOMPARE</span></code></a> flag
+bit set.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_richcompare">
+richcmpfunc <code class="descname">PyTypeObject.tp_richcompare</code><a class="headerlink" href="#c.PyTypeObject.tp_richcompare" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to the rich comparison function, whose signature is
+<code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">*tp_richcompare(PyObject</span> <span class="pre">*a,</span> <span class="pre">PyObject</span> <span class="pre">*b,</span> <span class="pre">int</span> <span class="pre">op)</span></code>.</p>
+<p>The function should return the result of the comparison (usually <code class="docutils literal notranslate"><span class="pre">Py_True</span></code>
+or <code class="docutils literal notranslate"><span class="pre">Py_False</span></code>).  If the comparison is undefined, it must return
+<code class="docutils literal notranslate"><span class="pre">Py_NotImplemented</span></code>, if another error occurred it must return <code class="docutils literal notranslate"><span class="pre">NULL</span></code> and
+set an exception condition.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to implement a type for which only a limited set of
+comparisons makes sense (e.g. <code class="docutils literal notranslate"><span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">!=</span></code>, but not <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> and
+friends), directly raise <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> in the rich comparison function.</p>
+</div>
+<p>This field is inherited by subtypes together with <a class="reference internal" href="#c.PyTypeObject.tp_compare" title="PyTypeObject.tp_compare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_compare</span></code></a> and
+<a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_hash</span></code></a>: a subtype inherits all three of <a class="reference internal" href="#c.PyTypeObject.tp_compare" title="PyTypeObject.tp_compare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_compare</span></code></a>,
+<a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_richcompare</span></code></a>, and <a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_hash</span></code></a>, when the subtype’s
+<a class="reference internal" href="#c.PyTypeObject.tp_compare" title="PyTypeObject.tp_compare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_compare</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_richcompare</span></code></a>, and <a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_hash</span></code></a> are all <em>NULL</em>.</p>
+<p>The following constants are defined to be used as the third argument for
+<a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_richcompare</span></code></a> and for <a class="reference internal" href="object.html#c.PyObject_RichCompare" title="PyObject_RichCompare"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_RichCompare()</span></code></a>:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 57%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Constant</p></th>
+<th class="head"><p>Comparison</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_LT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_LE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_EQ</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">==</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_NE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">!=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_GT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_GE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&gt;=</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>The next field only exists if the <a class="reference internal" href="#Py_TPFLAGS_HAVE_WEAKREFS" title="Py_TPFLAGS_HAVE_WEAKREFS"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_WEAKREFS</span></code></a> flag bit is
+set.</p>
+<dl class="member">
+<dt id="c.PyTypeObject.tp_weaklistoffset">
+long <code class="descname">PyTypeObject.tp_weaklistoffset</code><a class="headerlink" href="#c.PyTypeObject.tp_weaklistoffset" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the instances of this type are weakly referenceable, this field is greater
+than zero and contains the offset in the instance structure of the weak
+reference list head (ignoring the GC header, if present); this offset is used by
+<code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_ClearWeakRefs()</span></code> and the <code class="xref c c-func docutils literal notranslate"><span class="pre">PyWeakref_*()</span></code> functions.  The
+instance structure needs to include a field of type <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyObject*</span></code></a> which is
+initialized to <em>NULL</em>.</p>
+<p>Do not confuse this field with <a class="reference internal" href="#c.PyTypeObject.tp_weaklist" title="PyTypeObject.tp_weaklist"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_weaklist</span></code></a>; that is the list head for
+weak references to the type object itself.</p>
+<p>This field is inherited by subtypes, but see the rules listed below. A subtype
+may override this offset; this means that the subtype uses a different weak
+reference list head than the base type.  Since the list head is always found via
+<a class="reference internal" href="#c.PyTypeObject.tp_weaklistoffset" title="PyTypeObject.tp_weaklistoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_weaklistoffset</span></code></a>, this should not be a problem.</p>
+<p>When a type defined by a class statement has no <code class="xref py py-attr docutils literal notranslate"><span class="pre">__slots__</span></code> declaration,
+and none of its base types are weakly referenceable, the type is made weakly
+referenceable by adding a weak reference list head slot to the instance layout
+and setting the <a class="reference internal" href="#c.PyTypeObject.tp_weaklistoffset" title="PyTypeObject.tp_weaklistoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_weaklistoffset</span></code></a> of that slot’s offset.</p>
+<p>When a type’s <a class="reference internal" href="../reference/datamodel.html#__slots__" title="__slots__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__slots__</span></code></a> declaration contains a slot named
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">__weakref__</span></code>, that slot becomes the weak reference list head for
+instances of the type, and the slot’s offset is stored in the type’s
+<a class="reference internal" href="#c.PyTypeObject.tp_weaklistoffset" title="PyTypeObject.tp_weaklistoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_weaklistoffset</span></code></a>.</p>
+<p>When a type’s <a class="reference internal" href="../reference/datamodel.html#__slots__" title="__slots__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__slots__</span></code></a> declaration does not contain a slot named
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">__weakref__</span></code>, the type inherits its <a class="reference internal" href="#c.PyTypeObject.tp_weaklistoffset" title="PyTypeObject.tp_weaklistoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_weaklistoffset</span></code></a> from its
+base type.</p>
+</dd></dl>
+
+<p>The next two fields only exist if the <a class="reference internal" href="#Py_TPFLAGS_HAVE_ITER" title="Py_TPFLAGS_HAVE_ITER"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_ITER</span></code></a> flag bit is
+set.</p>
+<dl class="member">
+<dt id="c.PyTypeObject.tp_iter">
+getiterfunc <code class="descname">PyTypeObject.tp_iter</code><a class="headerlink" href="#c.PyTypeObject.tp_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a function that returns an iterator for the object.  Its
+presence normally signals that the instances of this type are iterable (although
+sequences may be iterable without this function, and classic instances always
+have this function, even if they don’t define an <a class="reference internal" href="../reference/datamodel.html#object.__iter__" title="object.__iter__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__iter__()</span></code></a> method).</p>
+<p>This function has the same signature as <a class="reference internal" href="object.html#c.PyObject_GetIter" title="PyObject_GetIter"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GetIter()</span></code></a>.</p>
+<p>This field is inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_iternext">
+iternextfunc <code class="descname">PyTypeObject.tp_iternext</code><a class="headerlink" href="#c.PyTypeObject.tp_iternext" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a function that returns the next item in an iterator.
+When the iterator is exhausted, it must return <em>NULL</em>; a <a class="reference internal" href="../library/exceptions.html#exceptions.StopIteration" title="exceptions.StopIteration"><code class="xref py py-exc docutils literal notranslate"><span class="pre">StopIteration</span></code></a>
+exception may or may not be set.  When another error occurs, it must return
+<em>NULL</em> too.  Its presence normally signals that the instances of this type
+are iterators (although classic instances always have this function, even if
+they don’t define a <a class="reference internal" href="../library/stdtypes.html#iterator.next" title="iterator.next"><code class="xref py py-meth docutils literal notranslate"><span class="pre">next()</span></code></a> method).</p>
+<p>Iterator types should also define the <a class="reference internal" href="#c.PyTypeObject.tp_iter" title="PyTypeObject.tp_iter"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_iter</span></code></a> function, and that
+function should return the iterator instance itself (not a new iterator
+instance).</p>
+<p>This function has the same signature as <a class="reference internal" href="iter.html#c.PyIter_Next" title="PyIter_Next"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyIter_Next()</span></code></a>.</p>
+<p>This field is inherited by subtypes.</p>
+</dd></dl>
+
+<p>The next fields, up to and including <a class="reference internal" href="#c.PyTypeObject.tp_weaklist" title="PyTypeObject.tp_weaklist"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_weaklist</span></code></a>, only exist if the
+<a class="reference internal" href="#Py_TPFLAGS_HAVE_CLASS" title="Py_TPFLAGS_HAVE_CLASS"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_CLASS</span></code></a> flag bit is set.</p>
+<dl class="member">
+<dt id="c.PyTypeObject.tp_methods">
+struct <a class="reference internal" href="structures.html#c.PyMethodDef" title="PyMethodDef">PyMethodDef</a>* <code class="descname">PyTypeObject.tp_methods</code><a class="headerlink" href="#c.PyTypeObject.tp_methods" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a static <em>NULL</em>-terminated array of <a class="reference internal" href="structures.html#c.PyMethodDef" title="PyMethodDef"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyMethodDef</span></code></a>
+structures, declaring regular methods of this type.</p>
+<p>For each entry in the array, an entry is added to the type’s dictionary (see
+<a class="reference internal" href="#c.PyTypeObject.tp_dict" title="PyTypeObject.tp_dict"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dict</span></code></a> below) containing a method descriptor.</p>
+<p>This field is not inherited by subtypes (methods are inherited through a
+different mechanism).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_members">
+struct <a class="reference internal" href="structures.html#c.PyMemberDef" title="PyMemberDef">PyMemberDef</a>* <code class="descname">PyTypeObject.tp_members</code><a class="headerlink" href="#c.PyTypeObject.tp_members" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a static <em>NULL</em>-terminated array of <a class="reference internal" href="structures.html#c.PyMemberDef" title="PyMemberDef"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyMemberDef</span></code></a>
+structures, declaring regular data members (fields or slots) of instances of
+this type.</p>
+<p>For each entry in the array, an entry is added to the type’s dictionary (see
+<a class="reference internal" href="#c.PyTypeObject.tp_dict" title="PyTypeObject.tp_dict"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dict</span></code></a> below) containing a member descriptor.</p>
+<p>This field is not inherited by subtypes (members are inherited through a
+different mechanism).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_getset">
+struct <a class="reference internal" href="structures.html#c.PyGetSetDef" title="PyGetSetDef">PyGetSetDef</a>* <code class="descname">PyTypeObject.tp_getset</code><a class="headerlink" href="#c.PyTypeObject.tp_getset" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a static <em>NULL</em>-terminated array of <a class="reference internal" href="structures.html#c.PyGetSetDef" title="PyGetSetDef"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyGetSetDef</span></code></a>
+structures, declaring computed attributes of instances of this type.</p>
+<p>For each entry in the array, an entry is added to the type’s dictionary (see
+<a class="reference internal" href="#c.PyTypeObject.tp_dict" title="PyTypeObject.tp_dict"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dict</span></code></a> below) containing a getset descriptor.</p>
+<p>This field is not inherited by subtypes (computed attributes are inherited
+through a different mechanism).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_base">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a>* <code class="descname">PyTypeObject.tp_base</code><a class="headerlink" href="#c.PyTypeObject.tp_base" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a base type from which type properties are inherited.  At
+this level, only single inheritance is supported; multiple inheritance require
+dynamically creating a type object by calling the metatype.</p>
+<p>This field is not inherited by subtypes (obviously), but it defaults to
+<code class="docutils literal notranslate"><span class="pre">&amp;PyBaseObject_Type</span></code> (which to Python programmers is known as the type
+<a class="reference internal" href="../library/functions.html#object" title="object"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a>).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_dict">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_dict</code><a class="headerlink" href="#c.PyTypeObject.tp_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type’s dictionary is stored here by <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_Ready()</span></code></a>.</p>
+<p>This field should normally be initialized to <em>NULL</em> before PyType_Ready is
+called; it may also be initialized to a dictionary containing initial attributes
+for the type.  Once <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_Ready()</span></code></a> has initialized the type, extra
+attributes for the type may be added to this dictionary only if they don’t
+correspond to overloaded operations (like <a class="reference internal" href="../reference/datamodel.html#object.__add__" title="object.__add__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__add__()</span></code></a>).</p>
+<p>This field is not inherited by subtypes (though the attributes defined in here
+are inherited through a different mechanism).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_descr_get">
+descrgetfunc <code class="descname">PyTypeObject.tp_descr_get</code><a class="headerlink" href="#c.PyTypeObject.tp_descr_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a “descriptor get” function.</p>
+<p>The function signature is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span> <span class="nf">tp_descr_get</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">type</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This field is inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_descr_set">
+descrsetfunc <code class="descname">PyTypeObject.tp_descr_set</code><a class="headerlink" href="#c.PyTypeObject.tp_descr_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a function for setting and deleting
+a descriptor’s value.</p>
+<p>The function signature is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">tp_descr_set</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">value</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The <em>value</em> argument is set to <em>NULL</em> to delete the value.
+This field is inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_dictoffset">
+long <code class="descname">PyTypeObject.tp_dictoffset</code><a class="headerlink" href="#c.PyTypeObject.tp_dictoffset" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the instances of this type have a dictionary containing instance variables,
+this field is non-zero and contains the offset in the instances of the type of
+the instance variable dictionary; this offset is used by
+<a class="reference internal" href="object.html#c.PyObject_GenericGetAttr" title="PyObject_GenericGetAttr"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GenericGetAttr()</span></code></a>.</p>
+<p>Do not confuse this field with <a class="reference internal" href="#c.PyTypeObject.tp_dict" title="PyTypeObject.tp_dict"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dict</span></code></a>; that is the dictionary for
+attributes of the type object itself.</p>
+<p>If the value of this field is greater than zero, it specifies the offset from
+the start of the instance structure.  If the value is less than zero, it
+specifies the offset from the <em>end</em> of the instance structure.  A negative
+offset is more expensive to use, and should only be used when the instance
+structure contains a variable-length part.  This is used for example to add an
+instance variable dictionary to subtypes of <a class="reference internal" href="../library/functions.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference internal" href="../library/functions.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>. Note
+that the <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_basicsize</span></code></a> field should account for the dictionary added to
+the end in that case, even though the dictionary is not included in the basic
+object layout.  On a system with a pointer size of 4 bytes,
+<a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dictoffset</span></code></a> should be set to <code class="docutils literal notranslate"><span class="pre">-4</span></code> to indicate that the dictionary is
+at the very end of the structure.</p>
+<p>The real dictionary offset in an instance can be computed from a negative
+<a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dictoffset</span></code></a> as follows:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">dictoffset</span> <span class="o">=</span> <span class="n">tp_basicsize</span> <span class="o">+</span> <span class="n">abs</span><span class="p">(</span><span class="n">ob_size</span><span class="p">)</span><span class="o">*</span><span class="n">tp_itemsize</span> <span class="o">+</span> <span class="n">tp_dictoffset</span>
+<span class="k">if</span> <span class="n">dictoffset</span> <span class="n">is</span> <span class="n">not</span> <span class="n">aligned</span> <span class="n">on</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">:</span>
+    <span class="n">round</span> <span class="n">up</span> <span class="n">to</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_basicsize</span></code></a>, <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_itemsize</span></code></a> and <a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dictoffset</span></code></a> are
+taken from the type object, and <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_size</span></code> is taken from the instance.  The
+absolute value is taken because long ints use the sign of <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_size</span></code> to
+store the sign of the number.  (There’s never a need to do this calculation
+yourself; it is done for you by <code class="xref c c-func docutils literal notranslate"><span class="pre">_PyObject_GetDictPtr()</span></code>.)</p>
+<p>This field is inherited by subtypes, but see the rules listed below. A subtype
+may override this offset; this means that the subtype instances store the
+dictionary at a difference offset than the base type.  Since the dictionary is
+always found via <a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dictoffset</span></code></a>, this should not be a problem.</p>
+<p>When a type defined by a class statement has no <code class="xref py py-attr docutils literal notranslate"><span class="pre">__slots__</span></code> declaration,
+and none of its base types has an instance variable dictionary, a dictionary
+slot is added to the instance layout and the <a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dictoffset</span></code></a> is set to
+that slot’s offset.</p>
+<p>When a type defined by a class statement has a <a class="reference internal" href="../reference/datamodel.html#__slots__" title="__slots__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__slots__</span></code></a> declaration,
+the type inherits its <a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_dictoffset</span></code></a> from its base type.</p>
+<p>(Adding a slot named <a class="reference internal" href="../library/stdtypes.html#object.__dict__" title="object.__dict__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__dict__</span></code></a> to the <a class="reference internal" href="../reference/datamodel.html#__slots__" title="__slots__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__slots__</span></code></a> declaration does
+not have the expected effect, it just causes confusion.  Maybe this should be
+added as a feature just like <code class="xref py py-attr docutils literal notranslate"><span class="pre">__weakref__</span></code> though.)</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_init">
+initproc <code class="descname">PyTypeObject.tp_init</code><a class="headerlink" href="#c.PyTypeObject.tp_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to an instance initialization function.</p>
+<p>This function corresponds to the <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a> method of classes.  Like
+<a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a>, it is possible to create an instance without calling
+<a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a>, and it is possible to reinitialize an instance by calling its
+<a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a> method again.</p>
+<p>The function signature is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">tp_init</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">kwds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The self argument is the instance to be initialized; the <em>args</em> and <em>kwds</em>
+arguments represent positional and keyword arguments of the call to
+<a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a>.</p>
+<p>The <a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_init</span></code></a> function, if not <em>NULL</em>, is called when an instance is
+created normally by calling its type, after the type’s <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_new</span></code></a> function
+has returned an instance of the type.  If the <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_new</span></code></a> function returns an
+instance of some other type that is not a subtype of the original type, no
+<a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_init</span></code></a> function is called; if <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_new</span></code></a> returns an instance of a
+subtype of the original type, the subtype’s <a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_init</span></code></a> is called.  (VERSION
+NOTE: described here is what is implemented in Python 2.2.1 and later.  In
+Python 2.2, the <a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_init</span></code></a> of the type of the object returned by
+<a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_new</span></code></a> was always called, if not <em>NULL</em>.)</p>
+<p>This field is inherited by subtypes.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_alloc">
+allocfunc <code class="descname">PyTypeObject.tp_alloc</code><a class="headerlink" href="#c.PyTypeObject.tp_alloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to an instance allocation function.</p>
+<p>The function signature is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_alloc</span><span class="p">(</span><span class="n">PyTypeObject</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">Py_ssize_t</span> <span class="n">nitems</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The purpose of this function is to separate memory allocation from memory
+initialization.  It should return a pointer to a block of memory of adequate
+length for the instance, suitably aligned, and initialized to zeros, but with
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_refcnt</span></code> set to <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_type</span></code> set to the type argument.  If
+the type’s <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_itemsize</span></code></a> is non-zero, the object’s <code class="xref py py-attr docutils literal notranslate"><span class="pre">ob_size</span></code> field
+should be initialized to <em>nitems</em> and the length of the allocated memory block
+should be <code class="docutils literal notranslate"><span class="pre">tp_basicsize</span> <span class="pre">+</span> <span class="pre">nitems*tp_itemsize</span></code>, rounded up to a multiple of
+<code class="docutils literal notranslate"><span class="pre">sizeof(void*)</span></code>; otherwise, <em>nitems</em> is not used and the length of the block
+should be <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_basicsize</span></code></a>.</p>
+<p>Do not use this function to do any other instance initialization, not even to
+allocate additional memory; that should be done by <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_new</span></code></a>.</p>
+<p>This field is inherited by static subtypes, but not by dynamic subtypes
+(subtypes created by a class statement); in the latter, this field is always set
+to <a class="reference internal" href="type.html#c.PyType_GenericAlloc" title="PyType_GenericAlloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_GenericAlloc()</span></code></a>, to force a standard heap allocation strategy.
+That is also the recommended value for statically defined types.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_new">
+newfunc <code class="descname">PyTypeObject.tp_new</code><a class="headerlink" href="#c.PyTypeObject.tp_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to an instance creation function.</p>
+<p>If this function is <em>NULL</em> for a particular type, that type cannot be called to
+create new instances; presumably there is some other way to create instances,
+like a factory function.</p>
+<p>The function signature is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_new</span><span class="p">(</span><span class="n">PyTypeObject</span> <span class="o">*</span><span class="n">subtype</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">kwds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The subtype argument is the type of the object being created; the <em>args</em> and
+<em>kwds</em> arguments represent positional and keyword arguments of the call to the
+type.  Note that subtype doesn’t have to equal the type whose <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_new</span></code></a>
+function is called; it may be a subtype of that type (but not an unrelated
+type).</p>
+<p>The <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_new</span></code></a> function should call <code class="docutils literal notranslate"><span class="pre">subtype-&gt;tp_alloc(subtype,</span> <span class="pre">nitems)</span></code>
+to allocate space for the object, and then do only as much further
+initialization as is absolutely necessary.  Initialization that can safely be
+ignored or repeated should be placed in the <a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_init</span></code></a> handler.  A good
+rule of thumb is that for immutable types, all initialization should take place
+in <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_new</span></code></a>, while for mutable types, most initialization should be
+deferred to <a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_init</span></code></a>.</p>
+<p>This field is inherited by subtypes, except it is not inherited by static types
+whose <a class="reference internal" href="#c.PyTypeObject.tp_base" title="PyTypeObject.tp_base"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_base</span></code></a> is <em>NULL</em> or <code class="docutils literal notranslate"><span class="pre">&amp;PyBaseObject_Type</span></code>.  The latter exception
+is a precaution so that old extension types don’t become callable simply by
+being linked with Python 2.2.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_free">
+destructor <code class="descname">PyTypeObject.tp_free</code><a class="headerlink" href="#c.PyTypeObject.tp_free" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to an instance deallocation function.</p>
+<p>The signature of this function has changed slightly: in Python 2.2 and 2.2.1,
+its signature is <code class="xref c c-type docutils literal notranslate"><span class="pre">destructor</span></code>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="n">tp_free</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In Python 2.3 and beyond, its signature is <code class="xref c c-type docutils literal notranslate"><span class="pre">freefunc</span></code>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="n">tp_free</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The only initializer that is compatible with both versions is <code class="docutils literal notranslate"><span class="pre">_PyObject_Del</span></code>,
+whose definition has suitably adapted in Python 2.3.</p>
+<p>This field is inherited by static subtypes, but not by dynamic subtypes
+(subtypes created by a class statement); in the latter, this field is set to a
+deallocator suitable to match <a class="reference internal" href="type.html#c.PyType_GenericAlloc" title="PyType_GenericAlloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_GenericAlloc()</span></code></a> and the value of the
+<a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> flag bit.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_is_gc">
+<a class="reference internal" href="gcsupport.html#c.inquiry" title="inquiry">inquiry</a> <code class="descname">PyTypeObject.tp_is_gc</code><a class="headerlink" href="#c.PyTypeObject.tp_is_gc" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional pointer to a function called by the garbage collector.</p>
+<p>The garbage collector needs to know whether a particular object is collectible
+or not.  Normally, it is sufficient to look at the object’s type’s
+<a class="reference internal" href="#c.PyTypeObject.tp_flags" title="PyTypeObject.tp_flags"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_flags</span></code></a> field, and check the <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> flag bit.  But
+some types have a mixture of statically and dynamically allocated instances, and
+the statically allocated instances are not collectible.  Such types should
+define this function; it should return <code class="docutils literal notranslate"><span class="pre">1</span></code> for a collectible instance, and
+<code class="docutils literal notranslate"><span class="pre">0</span></code> for a non-collectible instance. The signature is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">tp_is_gc</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(The only example of this are types themselves.  The metatype,
+<a class="reference internal" href="type.html#c.PyType_Type" title="PyType_Type"><code class="xref c c-data docutils literal notranslate"><span class="pre">PyType_Type</span></code></a>, defines this function to distinguish between statically
+and dynamically allocated types.)</p>
+<p>This field is inherited by subtypes.  (VERSION NOTE: in Python 2.2, it was not
+inherited.  It is inherited in 2.2.1 and later versions.)</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_bases">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_bases</code><a class="headerlink" href="#c.PyTypeObject.tp_bases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tuple of base types.</p>
+<p>This is set for types created by a class statement.  It should be <em>NULL</em> for
+statically defined types.</p>
+<p>This field is not inherited.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_mro">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_mro</code><a class="headerlink" href="#c.PyTypeObject.tp_mro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tuple containing the expanded set of base types, starting with the type itself
+and ending with <a class="reference internal" href="../library/functions.html#object" title="object"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a>, in Method Resolution Order.</p>
+<p>This field is not inherited; it is calculated fresh by <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_Ready()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_cache">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_cache</code><a class="headerlink" href="#c.PyTypeObject.tp_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unused.  Not inherited.  Internal use only.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_subclasses">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_subclasses</code><a class="headerlink" href="#c.PyTypeObject.tp_subclasses" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of weak references to subclasses.  Not inherited.  Internal use only.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_weaklist">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_weaklist</code><a class="headerlink" href="#c.PyTypeObject.tp_weaklist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Weak reference list head, for weak references to this type object.  Not
+inherited.  Internal use only.</p>
+</dd></dl>
+
+<p>The remaining fields are only defined if the feature test macro
+<code class="xref py py-const docutils literal notranslate"><span class="pre">COUNT_ALLOCS</span></code> is defined, and are for internal use only. They are
+documented here for completeness.  None of these fields are inherited by
+subtypes. See the <span class="target" id="index-3"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONSHOWALLOCCOUNT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHONSHOWALLOCCOUNT</span></code></a> environment variable.</p>
+<dl class="member">
+<dt id="c.PyTypeObject.tp_allocs">
+Py_ssize_t <code class="descname">PyTypeObject.tp_allocs</code><a class="headerlink" href="#c.PyTypeObject.tp_allocs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of allocations.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_frees">
+Py_ssize_t <code class="descname">PyTypeObject.tp_frees</code><a class="headerlink" href="#c.PyTypeObject.tp_frees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of frees.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_maxalloc">
+Py_ssize_t <code class="descname">PyTypeObject.tp_maxalloc</code><a class="headerlink" href="#c.PyTypeObject.tp_maxalloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum simultaneously allocated objects.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_next">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a>* <code class="descname">PyTypeObject.tp_next</code><a class="headerlink" href="#c.PyTypeObject.tp_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pointer to the next type object with a non-zero <a class="reference internal" href="#c.PyTypeObject.tp_allocs" title="PyTypeObject.tp_allocs"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_allocs</span></code></a> field.</p>
+</dd></dl>
+
+<p>Also, note that, in a garbage collected Python, tp_dealloc may be called from
+any Python thread, not just the thread which created the object (if the object
+becomes part of a refcount cycle, that cycle might be collected by a garbage
+collection on any thread).  This is not a problem for Python API calls, since
+the thread on which tp_dealloc is called will own the Global Interpreter Lock
+(GIL). However, if the object being destroyed in turn destroys objects from some
+other C or C++ library, care should be taken to ensure that destroying those
+objects on the thread which called tp_dealloc will not violate any assumptions
+of the library.</p>
+</div>
+<div class="section" id="number-object-structures">
+<span id="number-structs"></span><h1>Number Object Structures<a class="headerlink" href="#number-object-structures" title="Permalink to this headline">¶</a></h1>
+<dl class="type">
+<dt id="c.PyNumberMethods">
+<code class="descname">PyNumberMethods</code><a class="headerlink" href="#c.PyNumberMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>This structure holds pointers to the functions which an object uses to
+implement the number protocol.  Almost every function below is used by the
+function of similar name documented in the <a class="reference internal" href="number.html#number"><span class="std std-ref">Number Protocol</span></a> section.</p>
+<p>Here is the structure definition:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_add</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_subtract</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_multiply</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_divide</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_remainder</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_divmod</span><span class="p">;</span>
+     <span class="n">ternaryfunc</span> <span class="n">nb_power</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_negative</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_positive</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_absolute</span><span class="p">;</span>
+     <span class="n">inquiry</span> <span class="n">nb_nonzero</span><span class="p">;</span>       <span class="cm">/* Used by PyObject_IsTrue */</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_invert</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_lshift</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_rshift</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_and</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_xor</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_or</span><span class="p">;</span>
+     <span class="n">coercion</span> <span class="n">nb_coerce</span><span class="p">;</span>       <span class="cm">/* Used by the coerce() function */</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_int</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_long</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_float</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_oct</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_hex</span><span class="p">;</span>
+
+     <span class="cm">/* Added in release 2.0 */</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_add</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_subtract</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_multiply</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_divide</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_remainder</span><span class="p">;</span>
+     <span class="n">ternaryfunc</span> <span class="n">nb_inplace_power</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_lshift</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_rshift</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_and</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_xor</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_or</span><span class="p">;</span>
+
+     <span class="cm">/* Added in release 2.2 */</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_floor_divide</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_true_divide</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_floor_divide</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_true_divide</span><span class="p">;</span>
+
+     <span class="cm">/* Added in release 2.5 */</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_index</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">PyNumberMethods</span><span class="p">;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Binary and ternary functions may receive different kinds of arguments, depending
+on the flag bit <a class="reference internal" href="#Py_TPFLAGS_CHECKTYPES" title="Py_TPFLAGS_CHECKTYPES"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_CHECKTYPES</span></code></a>:</p>
+<ul>
+<li><p>If <a class="reference internal" href="#Py_TPFLAGS_CHECKTYPES" title="Py_TPFLAGS_CHECKTYPES"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_CHECKTYPES</span></code></a> is not set, the function arguments are
+guaranteed to be of the object’s type; the caller is responsible for calling
+the coercion method specified by the <code class="xref py py-attr docutils literal notranslate"><span class="pre">nb_coerce</span></code> member to convert the
+arguments:</p>
+<dl class="member">
+<dt id="c.PyNumberMethods.nb_coerce">
+coercion <code class="descname">PyNumberMethods.nb_coerce</code><a class="headerlink" href="#c.PyNumberMethods.nb_coerce" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by <a class="reference internal" href="number.html#c.PyNumber_CoerceEx" title="PyNumber_CoerceEx"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyNumber_CoerceEx()</span></code></a> and has the same
+signature.  The first argument is always a pointer to an object of the
+defined type.  If the conversion to a common “larger” type is possible, the
+function replaces the pointers with new references to the converted objects
+and returns <code class="docutils literal notranslate"><span class="pre">0</span></code>.  If the conversion is not possible, the function returns
+<code class="docutils literal notranslate"><span class="pre">1</span></code>.  If an error condition is set, it will return <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p>
+</dd></dl>
+
+</li>
+<li><p>If the <a class="reference internal" href="#Py_TPFLAGS_CHECKTYPES" title="Py_TPFLAGS_CHECKTYPES"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_CHECKTYPES</span></code></a> flag is set, binary and ternary
+functions must check the type of all their operands, and implement the
+necessary conversions (at least one of the operands is an instance of the
+defined type).  This is the recommended way; with Python 3 coercion will
+disappear completely.</p></li>
+</ul>
+<p>If the operation is not defined for the given operands, binary and ternary
+functions must return <code class="docutils literal notranslate"><span class="pre">Py_NotImplemented</span></code>, if another error occurred they must
+return <code class="docutils literal notranslate"><span class="pre">NULL</span></code> and set an exception.</p>
+</div>
+<div class="section" id="mapping-object-structures">
+<span id="mapping-structs"></span><h1>Mapping Object Structures<a class="headerlink" href="#mapping-object-structures" title="Permalink to this headline">¶</a></h1>
+<dl class="type">
+<dt id="c.PyMappingMethods">
+<code class="descname">PyMappingMethods</code><a class="headerlink" href="#c.PyMappingMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>This structure holds pointers to the functions which an object uses to
+implement the mapping protocol.  It has three members:</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyMappingMethods.mp_length">
+lenfunc <code class="descname">PyMappingMethods.mp_length</code><a class="headerlink" href="#c.PyMappingMethods.mp_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by <a class="reference internal" href="mapping.html#c.PyMapping_Length" title="PyMapping_Length"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMapping_Length()</span></code></a> and
+<a class="reference internal" href="object.html#c.PyObject_Size" title="PyObject_Size"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Size()</span></code></a>, and has the same signature.  This slot may be set to
+<em>NULL</em> if the object has no defined length.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyMappingMethods.mp_subscript">
+binaryfunc <code class="descname">PyMappingMethods.mp_subscript</code><a class="headerlink" href="#c.PyMappingMethods.mp_subscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by <a class="reference internal" href="object.html#c.PyObject_GetItem" title="PyObject_GetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GetItem()</span></code></a> and has the same
+signature.  This slot must be filled for the <a class="reference internal" href="mapping.html#c.PyMapping_Check" title="PyMapping_Check"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMapping_Check()</span></code></a>
+function to return <code class="docutils literal notranslate"><span class="pre">1</span></code>, it can be <em>NULL</em> otherwise.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyMappingMethods.mp_ass_subscript">
+objobjargproc <code class="descname">PyMappingMethods.mp_ass_subscript</code><a class="headerlink" href="#c.PyMappingMethods.mp_ass_subscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by <a class="reference internal" href="object.html#c.PyObject_SetItem" title="PyObject_SetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_SetItem()</span></code></a> and
+<a class="reference internal" href="object.html#c.PyObject_DelItem" title="PyObject_DelItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_DelItem()</span></code></a>.  It has the same signature as
+<a class="reference internal" href="object.html#c.PyObject_SetItem" title="PyObject_SetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_SetItem()</span></code></a>, but <em>v</em> can also be set to <em>NULL</em> to delete
+an item.  If this slot is <em>NULL</em>, the object does not support item
+assignment and deletion.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="sequence-object-structures">
+<span id="sequence-structs"></span><h1>Sequence Object Structures<a class="headerlink" href="#sequence-object-structures" title="Permalink to this headline">¶</a></h1>
+<dl class="type">
+<dt id="c.PySequenceMethods">
+<code class="descname">PySequenceMethods</code><a class="headerlink" href="#c.PySequenceMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>This structure holds pointers to the functions which an object uses to
+implement the sequence protocol.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_length">
+lenfunc <code class="descname">PySequenceMethods.sq_length</code><a class="headerlink" href="#c.PySequenceMethods.sq_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_Size" title="PySequence_Size"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySequence_Size()</span></code></a> and <a class="reference internal" href="object.html#c.PyObject_Size" title="PyObject_Size"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Size()</span></code></a>,
+and has the same signature.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_concat">
+binaryfunc <code class="descname">PySequenceMethods.sq_concat</code><a class="headerlink" href="#c.PySequenceMethods.sq_concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_Concat" title="PySequence_Concat"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySequence_Concat()</span></code></a> and has the same
+signature.  It is also used by the <code class="docutils literal notranslate"><span class="pre">+</span></code> operator, after trying the numeric
+addition via the <code class="xref c c-member docutils literal notranslate"><span class="pre">nb_add</span></code> slot.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_repeat">
+ssizeargfunc <code class="descname">PySequenceMethods.sq_repeat</code><a class="headerlink" href="#c.PySequenceMethods.sq_repeat" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_Repeat" title="PySequence_Repeat"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySequence_Repeat()</span></code></a> and has the same
+signature.  It is also used by the <code class="docutils literal notranslate"><span class="pre">*</span></code> operator, after trying numeric
+multiplication via the <code class="xref c c-member docutils literal notranslate"><span class="pre">nb_multiply</span></code>
+slot.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_item">
+ssizeargfunc <code class="descname">PySequenceMethods.sq_item</code><a class="headerlink" href="#c.PySequenceMethods.sq_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_GetItem" title="PySequence_GetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySequence_GetItem()</span></code></a> and has the same
+signature.  This slot must be filled for the <a class="reference internal" href="sequence.html#c.PySequence_Check" title="PySequence_Check"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySequence_Check()</span></code></a>
+function to return <code class="docutils literal notranslate"><span class="pre">1</span></code>, it can be <em>NULL</em> otherwise.</p>
+<p>Negative indexes are handled as follows: if the <code class="xref py py-attr docutils literal notranslate"><span class="pre">sq_length</span></code> slot is
+filled, it is called and the sequence length is used to compute a positive
+index which is passed to <code class="xref py py-attr docutils literal notranslate"><span class="pre">sq_item</span></code>.  If <code class="xref py py-attr docutils literal notranslate"><span class="pre">sq_length</span></code> is <em>NULL</em>,
+the index is passed as is to the function.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_ass_item">
+ssizeobjargproc <code class="descname">PySequenceMethods.sq_ass_item</code><a class="headerlink" href="#c.PySequenceMethods.sq_ass_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_SetItem" title="PySequence_SetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySequence_SetItem()</span></code></a> and has the same
+signature.  This slot may be left to <em>NULL</em> if the object does not support
+item assignment and deletion.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_contains">
+objobjproc <code class="descname">PySequenceMethods.sq_contains</code><a class="headerlink" href="#c.PySequenceMethods.sq_contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function may be used by <a class="reference internal" href="sequence.html#c.PySequence_Contains" title="PySequence_Contains"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySequence_Contains()</span></code></a> and has the same
+signature.  This slot may be left to <em>NULL</em>, in this case
+<a class="reference internal" href="sequence.html#c.PySequence_Contains" title="PySequence_Contains"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySequence_Contains()</span></code></a> simply traverses the sequence until it finds a
+match.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_inplace_concat">
+binaryfunc <code class="descname">PySequenceMethods.sq_inplace_concat</code><a class="headerlink" href="#c.PySequenceMethods.sq_inplace_concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_InPlaceConcat" title="PySequence_InPlaceConcat"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySequence_InPlaceConcat()</span></code></a> and has the same
+signature.  It should modify its first operand, and return it.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_inplace_repeat">
+ssizeargfunc <code class="descname">PySequenceMethods.sq_inplace_repeat</code><a class="headerlink" href="#c.PySequenceMethods.sq_inplace_repeat" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_InPlaceRepeat" title="PySequence_InPlaceRepeat"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySequence_InPlaceRepeat()</span></code></a> and has the same
+signature.  It should modify its first operand, and return it.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="buffer-object-structures">
+<span id="buffer-structs"></span><h1>Buffer Object Structures<a class="headerlink" href="#buffer-object-structures" title="Permalink to this headline">¶</a></h1>
+<p>The buffer interface exports a model where an object can expose its internal
+data as a set of chunks of data, where each chunk is specified as a
+pointer/length pair.  These chunks are called <em class="dfn">segments</em> and are presumed
+to be non-contiguous in memory.</p>
+<p>If an object does not export the buffer interface, then its <a class="reference internal" href="#c.PyTypeObject.tp_as_buffer" title="PyTypeObject.tp_as_buffer"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_buffer</span></code></a>
+member in the <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> structure should be <em>NULL</em>.  Otherwise, the
+<a class="reference internal" href="#c.PyTypeObject.tp_as_buffer" title="PyTypeObject.tp_as_buffer"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_as_buffer</span></code></a> will point to a <a class="reference internal" href="#c.PyBufferProcs" title="PyBufferProcs"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyBufferProcs</span></code></a> structure.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is very important that your <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> structure uses
+<a class="reference internal" href="#Py_TPFLAGS_DEFAULT" title="Py_TPFLAGS_DEFAULT"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_DEFAULT</span></code></a> for the value of the <a class="reference internal" href="#c.PyTypeObject.tp_flags" title="PyTypeObject.tp_flags"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_flags</span></code></a> member rather
+than <code class="docutils literal notranslate"><span class="pre">0</span></code>.  This tells the Python runtime that your <a class="reference internal" href="#c.PyBufferProcs" title="PyBufferProcs"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyBufferProcs</span></code></a>
+structure contains the <code class="xref py py-attr docutils literal notranslate"><span class="pre">bf_getcharbuffer</span></code> slot. Older versions of Python
+did not have this member, so a new Python interpreter using an old extension
+needs to be able to test for its presence before using it.</p>
+</div>
+<dl class="type">
+<dt id="c.PyBufferProcs">
+<code class="descname">PyBufferProcs</code><a class="headerlink" href="#c.PyBufferProcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structure used to hold the function pointers which define an implementation of
+the buffer protocol.</p>
+<p>The first slot is <code class="xref py py-attr docutils literal notranslate"><span class="pre">bf_getreadbuffer</span></code>, of type <a class="reference internal" href="#c.readbufferproc" title="readbufferproc"><code class="xref c c-type docutils literal notranslate"><span class="pre">readbufferproc</span></code></a>.
+If this slot is <em>NULL</em>, then the object does not support reading from the
+internal data.  This is non-sensical, so implementors should fill this in, but
+callers should test that the slot contains a non-<em>NULL</em> value.</p>
+<p>The next slot is <code class="xref py py-attr docutils literal notranslate"><span class="pre">bf_getwritebuffer</span></code> having type
+<a class="reference internal" href="#c.writebufferproc" title="writebufferproc"><code class="xref c c-type docutils literal notranslate"><span class="pre">writebufferproc</span></code></a>.  This slot may be <em>NULL</em> if the object does not
+allow writing into its returned buffers.</p>
+<p>The third slot is <code class="xref py py-attr docutils literal notranslate"><span class="pre">bf_getsegcount</span></code>, with type <a class="reference internal" href="#c.segcountproc" title="segcountproc"><code class="xref c c-type docutils literal notranslate"><span class="pre">segcountproc</span></code></a>.
+This slot must not be <em>NULL</em> and is used to inform the caller how many segments
+the object contains.  Simple objects such as <a class="reference internal" href="string.html#c.PyString_Type" title="PyString_Type"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyString_Type</span></code></a> and
+<a class="reference internal" href="buffer.html#c.PyBuffer_Type" title="PyBuffer_Type"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyBuffer_Type</span></code></a> objects contain a single segment.</p>
+<p id="index-4">The last slot is <code class="xref py py-attr docutils literal notranslate"><span class="pre">bf_getcharbuffer</span></code>, of type <a class="reference internal" href="#c.charbufferproc" title="charbufferproc"><code class="xref c c-type docutils literal notranslate"><span class="pre">charbufferproc</span></code></a>.
+This slot will only be present if the <a class="reference internal" href="#Py_TPFLAGS_HAVE_GETCHARBUFFER" title="Py_TPFLAGS_HAVE_GETCHARBUFFER"><code class="xref py py-const docutils literal notranslate"><span class="pre">Py_TPFLAGS_HAVE_GETCHARBUFFER</span></code></a>
+flag is present in the <a class="reference internal" href="#c.PyTypeObject.tp_flags" title="PyTypeObject.tp_flags"><code class="xref c c-member docutils literal notranslate"><span class="pre">tp_flags</span></code></a> field of the object’s
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a>. Before using this slot, the caller should test whether it
+is present by using the <a class="reference internal" href="type.html#c.PyType_HasFeature" title="PyType_HasFeature"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyType_HasFeature()</span></code></a> function.  If the flag is
+present, <code class="xref py py-attr docutils literal notranslate"><span class="pre">bf_getcharbuffer</span></code> may be <em>NULL</em>, indicating that the object’s
+contents cannot be used as <em>8-bit characters</em>. The slot function may also raise
+an error if the object’s contents cannot be interpreted as 8-bit characters.
+For example, if the object is an array which is configured to hold floating
+point values, an exception may be raised if a caller attempts to use
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">bf_getcharbuffer</span></code> to fetch a sequence of 8-bit characters. This notion of
+exporting the internal buffers as “text” is used to distinguish between objects
+that are binary in nature, and those which have character-based content.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The current policy seems to state that these characters may be multi-byte
+characters. This implies that a buffer size of <em>N</em> does not mean there are <em>N</em>
+characters present.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<code class="descname">Py_TPFLAGS_HAVE_GETCHARBUFFER</code></dt>
+<dd><p>Flag bit set in the type structure to indicate that the <code class="xref py py-attr docutils literal notranslate"><span class="pre">bf_getcharbuffer</span></code>
+slot is known.  This being set does not indicate that the object supports the
+buffer interface or that the <code class="xref py py-attr docutils literal notranslate"><span class="pre">bf_getcharbuffer</span></code> slot is non-<em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.readbufferproc">
+Py_ssize_t <code class="descname">(*readbufferproc)</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *self</em>, Py_ssize_t<em> segment</em>, void<em> **ptrptr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.readbufferproc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a pointer to a readable segment of the buffer in <code class="docutils literal notranslate"><span class="pre">*ptrptr</span></code>.  This
+function is allowed to raise an exception, in which case it must return <code class="docutils literal notranslate"><span class="pre">-1</span></code>.
+The <em>segment</em> which is specified must be zero or positive, and strictly less
+than the number of segments returned by the <code class="xref py py-attr docutils literal notranslate"><span class="pre">bf_getsegcount</span></code> slot
+function.  On success, it returns the length of the segment, and sets
+<code class="docutils literal notranslate"><span class="pre">*ptrptr</span></code> to a pointer to that memory.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.writebufferproc">
+Py_ssize_t <code class="descname">(*writebufferproc)</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *self</em>, Py_ssize_t<em> segment</em>, void<em> **ptrptr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.writebufferproc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a pointer to a writable memory buffer in <code class="docutils literal notranslate"><span class="pre">*ptrptr</span></code>, and the length of
+that segment as the function return value.  The memory buffer must correspond to
+buffer segment <em>segment</em>.  Must return <code class="docutils literal notranslate"><span class="pre">-1</span></code> and set an exception on error.
+<a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> should be raised if the object only supports read-only buffers,
+and <a class="reference internal" href="../library/exceptions.html#exceptions.SystemError" title="exceptions.SystemError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemError</span></code></a> should be raised when <em>segment</em> specifies a segment that
+doesn’t exist.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.segcountproc">
+Py_ssize_t <code class="descname">(*segcountproc)</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *self</em>, Py_ssize_t<em> *lenp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.segcountproc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of memory segments which comprise the buffer.  If <em>lenp</em> is
+not <em>NULL</em>, the implementation must report the sum of the sizes (in bytes) of
+all segments in <code class="docutils literal notranslate"><span class="pre">*lenp</span></code>. The function cannot fail.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.charbufferproc">
+Py_ssize_t <code class="descname">(*charbufferproc)</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *self</em>, Py_ssize_t<em> segment</em>, char<em> **ptrptr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.charbufferproc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the size of the segment <em>segment</em> that <em>ptrptr</em>  is set to.  <code class="docutils literal notranslate"><span class="pre">*ptrptr</span></code>
+is set to the memory buffer. Returns <code class="docutils literal notranslate"><span class="pre">-1</span></code> on error.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Type Objects</a></li>
+<li><a class="reference internal" href="#number-object-structures">Number Object Structures</a></li>
+<li><a class="reference internal" href="#mapping-object-structures">Mapping Object Structures</a></li>
+<li><a class="reference internal" href="#sequence-object-structures">Sequence Object Structures</a></li>
+<li><a class="reference internal" href="#buffer-object-structures">Buffer Object Structures</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="structures.html"
+                        title="previous chapter">Common Object Structures</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gcsupport.html"
+                        title="next chapter">Supporting Cyclic Garbage Collection</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/c-api/typeobj.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gcsupport.html" title="Supporting Cyclic Garbage Collection"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="structures.html" title="Common Object Structures"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="objimpl.html" >Object Implementation Support</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

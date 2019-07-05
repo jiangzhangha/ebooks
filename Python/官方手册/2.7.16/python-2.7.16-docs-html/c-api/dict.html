@@ -1,0 +1,399 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Dictionary Objects &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Class and Instance Objects" href="class.html" />
+    <link rel="prev" title="List Objects" href="list.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/c-api/dict.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="class.html" title="Class and Instance Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="list.html" title="List Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="dictionary-objects">
+<span id="dictobjects"></span><h1>Dictionary Objects<a class="headerlink" href="#dictionary-objects" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="index-0"></span><dl class="type">
+<dt id="c.PyDictObject">
+<code class="descname">PyDictObject</code><a class="headerlink" href="#c.PyDictObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This subtype of <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyObject</span></code></a> represents a Python dictionary object.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyDict_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a> <code class="descname">PyDict_Type</code><a class="headerlink" href="#c.PyDict_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This instance of <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> represents the Python dictionary
+type.  This is exposed to Python programs as <code class="docutils literal notranslate"><span class="pre">dict</span></code> and
+<code class="docutils literal notranslate"><span class="pre">types.DictType</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_Check">
+int <code class="descname">PyDict_Check</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>p</em> is a dict object or an instance of a subtype of the dict
+type.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.2: </span>Allowed subtypes to be accepted.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_CheckExact">
+int <code class="descname">PyDict_CheckExact</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>p</em> is a dict object, but not an instance of a subtype of
+the dict type.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_New">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyDict_New</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_New" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new empty dictionary, or <em>NULL</em> on failure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDictProxy_New">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyDictProxy_New</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *dict</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDictProxy_New" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a proxy object for a mapping which enforces read-only behavior.
+This is normally used to create a proxy to prevent modification of the
+dictionary for non-dynamic class types.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_Clear">
+void <code class="descname">PyDict_Clear</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_Clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empty an existing dictionary of all key-value pairs.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_Contains">
+int <code class="descname">PyDict_Contains</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *key</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_Contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if dictionary <em>p</em> contains <em>key</em>.  If an item in <em>p</em> is matches
+<em>key</em>, return <code class="docutils literal notranslate"><span class="pre">1</span></code>, otherwise return <code class="docutils literal notranslate"><span class="pre">0</span></code>.  On error, return <code class="docutils literal notranslate"><span class="pre">-1</span></code>.
+This is equivalent to the Python expression <code class="docutils literal notranslate"><span class="pre">key</span> <span class="pre">in</span> <span class="pre">p</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_Copy">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyDict_Copy</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_Copy" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new dictionary that contains the same key-value pairs as <em>p</em>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_SetItem">
+int <code class="descname">PyDict_SetItem</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *key</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *val</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_SetItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert <em>value</em> into the dictionary <em>p</em> with a key of <em>key</em>.  <em>key</em> must be
+<a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">hashable</span></a>; if it isn’t, <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> will be raised. Return
+<code class="docutils literal notranslate"><span class="pre">0</span></code> on success or <code class="docutils literal notranslate"><span class="pre">-1</span></code> on failure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_SetItemString">
+int <code class="descname">PyDict_SetItemString</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em>, const char<em> *key</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *val</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_SetItemString" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">Insert <em>value</em> into the dictionary <em>p</em> using <em>key</em> as a key. <em>key</em> should
+be a <code class="xref c c-type docutils literal notranslate"><span class="pre">char*</span></code>.  The key object is created using
+<code class="docutils literal notranslate"><span class="pre">PyString_FromString(key)</span></code>.  Return <code class="docutils literal notranslate"><span class="pre">0</span></code> on success or <code class="docutils literal notranslate"><span class="pre">-1</span></code> on
+failure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_DelItem">
+int <code class="descname">PyDict_DelItem</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *key</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_DelItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the entry in dictionary <em>p</em> with key <em>key</em>. <em>key</em> must be hashable;
+if it isn’t, <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> is raised.  Return <code class="docutils literal notranslate"><span class="pre">0</span></code> on success or <code class="docutils literal notranslate"><span class="pre">-1</span></code>
+on failure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_DelItemString">
+int <code class="descname">PyDict_DelItemString</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em>, char<em> *key</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_DelItemString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the entry in dictionary <em>p</em> which has a key specified by the string
+<em>key</em>.  Return <code class="docutils literal notranslate"><span class="pre">0</span></code> on success or <code class="docutils literal notranslate"><span class="pre">-1</span></code> on failure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_GetItem">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyDict_GetItem</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *key</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_GetItem" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Return the object from dictionary <em>p</em> which has a key <em>key</em>.  Return <em>NULL</em>
+if the key <em>key</em> is not present, but <em>without</em> setting an exception.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_GetItemString">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyDict_GetItemString</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em>, const char<em> *key</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_GetItemString" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>This is the same as <a class="reference internal" href="#c.PyDict_GetItem" title="PyDict_GetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyDict_GetItem()</span></code></a>, but <em>key</em> is specified as a
+<code class="xref c c-type docutils literal notranslate"><span class="pre">char*</span></code>, rather than a <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyObject*</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_Items">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyDict_Items</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_Items" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a <a class="reference internal" href="list.html#c.PyListObject" title="PyListObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyListObject</span></code></a> containing all the items from the
+dictionary, as in the dictionary method <a class="reference internal" href="../library/stdtypes.html#dict.items" title="dict.items"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dict.items()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_Keys">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyDict_Keys</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_Keys" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a <a class="reference internal" href="list.html#c.PyListObject" title="PyListObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyListObject</span></code></a> containing all the keys from the dictionary,
+as in the dictionary method <a class="reference internal" href="../library/stdtypes.html#dict.keys" title="dict.keys"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dict.keys()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_Values">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyDict_Values</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_Values" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a <a class="reference internal" href="list.html#c.PyListObject" title="PyListObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyListObject</span></code></a> containing all the values from the
+dictionary <em>p</em>, as in the dictionary method <a class="reference internal" href="../library/stdtypes.html#dict.values" title="dict.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dict.values()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_Size">
+Py_ssize_t <code class="descname">PyDict_Size</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_Size" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-3">Return the number of items in the dictionary.  This is equivalent to
+<code class="docutils literal notranslate"><span class="pre">len(p)</span></code> on a dictionary.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function returned an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span></code> type.  This might require changes
+in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_Next">
+int <code class="descname">PyDict_Next</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *p</em>, Py_ssize_t<em> *ppos</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> **pkey</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> **pvalue</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_Next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over all key-value pairs in the dictionary <em>p</em>.  The
+<code class="xref c c-type docutils literal notranslate"><span class="pre">Py_ssize_t</span></code> referred to by <em>ppos</em> must be initialized to <code class="docutils literal notranslate"><span class="pre">0</span></code>
+prior to the first call to this function to start the iteration; the
+function returns true for each pair in the dictionary, and false once all
+pairs have been reported.  The parameters <em>pkey</em> and <em>pvalue</em> should either
+point to <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyObject*</span></code></a> variables that will be filled in with each key
+and value, respectively, or may be <em>NULL</em>.  Any references returned through
+them are borrowed.  <em>ppos</em> should not be altered during iteration. Its
+value represents offsets within the internal dictionary structure, and
+since the structure is sparse, the offsets are not consecutive.</p>
+<p>For example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">value</span><span class="p">;</span>
+<span class="n">Py_ssize_t</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">while</span> <span class="p">(</span><span class="n">PyDict_Next</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">dict</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pos</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">))</span> <span class="p">{</span>
+    <span class="cm">/* do something interesting with the values... */</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The dictionary <em>p</em> should not be mutated during iteration.  It is safe
+(since Python 2.1) to modify the values of the keys as you iterate over the
+dictionary, but only so long as the set of keys does not change.  For
+example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">value</span><span class="p">;</span>
+<span class="n">Py_ssize_t</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">while</span> <span class="p">(</span><span class="n">PyDict_Next</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">dict</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pos</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">))</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">PyInt_AS_LONG</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">o</span> <span class="o">=</span> <span class="n">PyInt_FromLong</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">o</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">PyDict_SetItem</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">dict</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Py_DECREF</span><span class="p">(</span><span class="n">o</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">Py_DECREF</span><span class="p">(</span><span class="n">o</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>This function used an <code class="xref c c-type docutils literal notranslate"><span class="pre">int</span> <span class="pre">*</span></code> type for <em>ppos</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_Merge">
+int <code class="descname">PyDict_Merge</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *a</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *b</em>, int<em> override</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_Merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over mapping object <em>b</em> adding key-value pairs to dictionary <em>a</em>.
+<em>b</em> may be a dictionary, or any object supporting <a class="reference internal" href="mapping.html#c.PyMapping_Keys" title="PyMapping_Keys"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyMapping_Keys()</span></code></a>
+and <a class="reference internal" href="object.html#c.PyObject_GetItem" title="PyObject_GetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GetItem()</span></code></a>. If <em>override</em> is true, existing pairs in <em>a</em>
+will be replaced if a matching key is found in <em>b</em>, otherwise pairs will
+only be added if there is not a matching key in <em>a</em>. Return <code class="docutils literal notranslate"><span class="pre">0</span></code> on
+success or <code class="docutils literal notranslate"><span class="pre">-1</span></code> if an exception was raised.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_Update">
+int <code class="descname">PyDict_Update</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *a</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *b</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_Update" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the same as <code class="docutils literal notranslate"><span class="pre">PyDict_Merge(a,</span> <span class="pre">b,</span> <span class="pre">1)</span></code> in C, and is similar to
+<code class="docutils literal notranslate"><span class="pre">a.update(b)</span></code> in Python except that <a class="reference internal" href="#c.PyDict_Update" title="PyDict_Update"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyDict_Update()</span></code></a> doesn’t fall
+back to the iterating over a sequence of key value pairs if the second
+argument has no “keys” attribute.  Return <code class="docutils literal notranslate"><span class="pre">0</span></code> on success or <code class="docutils literal notranslate"><span class="pre">-1</span></code> if an
+exception was raised.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyDict_MergeFromSeq2">
+int <code class="descname">PyDict_MergeFromSeq2</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *a</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *seq2</em>, int<em> override</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyDict_MergeFromSeq2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update or merge into dictionary <em>a</em>, from the key-value pairs in <em>seq2</em>.
+<em>seq2</em> must be an iterable object producing iterable objects of length 2,
+viewed as key-value pairs.  In case of duplicate keys, the last wins if
+<em>override</em> is true, else the first wins. Return <code class="docutils literal notranslate"><span class="pre">0</span></code> on success or <code class="docutils literal notranslate"><span class="pre">-1</span></code>
+if an exception was raised. Equivalent Python (except for the return
+value):</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">def</span> <span class="n">PyDict_MergeFromSeq2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">seq2</span><span class="p">,</span> <span class="n">override</span><span class="p">)</span><span class="o">:</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="n">in</span> <span class="nl">seq2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">override</span> <span class="n">or</span> <span class="n">key</span> <span class="n">not</span> <span class="n">in</span> <span class="nl">a</span><span class="p">:</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="list.html"
+                        title="previous chapter">List Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="class.html"
+                        title="next chapter">Class and Instance Objects</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/c-api/dict.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="class.html" title="Class and Instance Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="list.html" title="List Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" >Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

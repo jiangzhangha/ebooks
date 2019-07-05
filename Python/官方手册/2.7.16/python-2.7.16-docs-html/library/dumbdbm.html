@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>11.12. dumbdbm — Portable DBM implementation &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="11.13. sqlite3 — DB-API 2.0 interface for SQLite databases" href="sqlite3.html" />
+    <link rel="prev" title="11.11. bsddb — Interface to Berkeley DB library" href="bsddb.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/dumbdbm.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sqlite3.html" title="11.13. sqlite3 — DB-API 2.0 interface for SQLite databases"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bsddb.html" title="11.11. bsddb — Interface to Berkeley DB library"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="persistence.html" accesskey="U">11. Data Persistence</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-dumbdbm">
+<span id="dumbdbm-portable-dbm-implementation"></span><h1>11.12. <a class="reference internal" href="#module-dumbdbm" title="dumbdbm: Portable implementation of the simple DBM interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">dumbdbm</span></code></a> — Portable DBM implementation<a class="headerlink" href="#module-dumbdbm" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#module-dumbdbm" title="dumbdbm: Portable implementation of the simple DBM interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">dumbdbm</span></code></a> module has been renamed to <code class="xref py py-mod docutils literal notranslate"><span class="pre">dbm.dumb</span></code> in Python 3.
+The <a class="reference internal" href="../glossary.html#term-2to3"><span class="xref std std-term">2to3</span></a> tool will automatically adapt imports when converting your
+sources to Python 3.</p>
+</div>
+<div class="admonition note" id="index-0">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#module-dumbdbm" title="dumbdbm: Portable implementation of the simple DBM interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">dumbdbm</span></code></a> module is intended as a last resort fallback for the
+<a class="reference internal" href="anydbm.html#module-anydbm" title="anydbm: Generic interface to DBM-style database modules."><code class="xref py py-mod docutils literal notranslate"><span class="pre">anydbm</span></code></a> module when no more robust module is available. The <a class="reference internal" href="#module-dumbdbm" title="dumbdbm: Portable implementation of the simple DBM interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">dumbdbm</span></code></a>
+module is not written for speed and is not nearly as heavily used as the other
+database modules.</p>
+</div>
+<p>The <a class="reference internal" href="#module-dumbdbm" title="dumbdbm: Portable implementation of the simple DBM interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">dumbdbm</span></code></a> module provides a persistent dictionary-like interface which
+is written entirely in Python.  Unlike other modules such as <a class="reference internal" href="gdbm.html#module-gdbm" title="gdbm: GNU's reinterpretation of dbm. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gdbm</span></code></a> and
+<a class="reference internal" href="bsddb.html#module-bsddb" title="bsddb: Interface to Berkeley DB database library"><code class="xref py py-mod docutils literal notranslate"><span class="pre">bsddb</span></code></a>, no external library is required.  As with other persistent
+mappings, the keys and values must always be strings.</p>
+<p>The module defines the following:</p>
+<dl class="exception">
+<dt id="dumbdbm.error">
+<em class="property">exception </em><code class="descclassname">dumbdbm.</code><code class="descname">error</code><a class="headerlink" href="#dumbdbm.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised on dumbdbm-specific errors, such as I/O errors.  <a class="reference internal" href="exceptions.html#exceptions.KeyError" title="exceptions.KeyError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> is
+raised for general mapping errors like specifying an incorrect key.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dumbdbm.open">
+<code class="descclassname">dumbdbm.</code><code class="descname">open</code><span class="sig-paren">(</span><em>filename</em><span class="optional">[</span>, <em>flag</em><span class="optional">[</span>, <em>mode</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#dumbdbm.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a dumbdbm database and return a dumbdbm object.  The <em>filename</em> argument is
+the basename of the database file (without any specific extensions).  When a
+dumbdbm database is created, files with <code class="file docutils literal notranslate"><span class="pre">.dat</span></code> and <code class="file docutils literal notranslate"><span class="pre">.dir</span></code> extensions
+are created.</p>
+<p>The optional <em>flag</em> argument is currently ignored; the database is always opened
+for update, and will be created if it does not exist.</p>
+<p>The optional <em>mode</em> argument is the Unix mode of the file, used only when the
+database has to be created.  It defaults to octal <code class="docutils literal notranslate"><span class="pre">0666</span></code> (and will be modified
+by the prevailing umask).</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.2: </span>The <em>mode</em> argument was ignored in earlier versions.</p>
+</div>
+</dd></dl>
+
+<p>In addition to the dictionary-like methods, <code class="docutils literal notranslate"><span class="pre">dumbdm</span></code> objects
+provide the following method:</p>
+<dl class="function">
+<dt id="dumbdbm.close">
+<code class="descclassname">dumbdbm.</code><code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dumbdbm.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the <code class="docutils literal notranslate"><span class="pre">dumbdm</span></code> database.</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="anydbm.html#module-anydbm" title="anydbm: Generic interface to DBM-style database modules."><code class="xref py py-mod docutils literal notranslate"><span class="pre">anydbm</span></code></a></dt><dd><p>Generic interface to <code class="docutils literal notranslate"><span class="pre">dbm</span></code>-style databases.</p>
+</dd>
+<dt>Module <a class="reference internal" href="dbm.html#module-dbm" title="dbm: The standard &quot;database&quot; interface, based on ndbm. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dbm</span></code></a></dt><dd><p>Similar interface to the DBM/NDBM library.</p>
+</dd>
+<dt>Module <a class="reference internal" href="gdbm.html#module-gdbm" title="gdbm: GNU's reinterpretation of dbm. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gdbm</span></code></a></dt><dd><p>Similar interface to the GNU GDBM library.</p>
+</dd>
+<dt>Module <a class="reference internal" href="shelve.html#module-shelve" title="shelve: Python object persistence."><code class="xref py py-mod docutils literal notranslate"><span class="pre">shelve</span></code></a></dt><dd><p>Persistence module which stores non-string data.</p>
+</dd>
+<dt>Module <a class="reference internal" href="whichdb.html#module-whichdb" title="whichdb: Guess which DBM-style module created a given database."><code class="xref py py-mod docutils literal notranslate"><span class="pre">whichdb</span></code></a></dt><dd><p>Utility module used to determine the type of an existing database.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="dumbdbm-objects">
+<span id="id1"></span><h2>11.12.1. Dumbdbm Objects<a class="headerlink" href="#dumbdbm-objects" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the methods provided by the <a class="reference internal" href="userdict.html#UserDict.DictMixin" title="UserDict.DictMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict.DictMixin</span></code></a> class,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">dumbdbm</span></code> objects provide the following methods.</p>
+<dl class="method">
+<dt id="dumbdbm.dumbdbm.sync">
+<code class="descclassname">dumbdbm.</code><code class="descname">sync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dumbdbm.dumbdbm.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Synchronize the on-disk directory and data files.  This method is called by the
+<a class="reference internal" href="#dumbdbm.dumbdbm.sync" title="dumbdbm.dumbdbm.sync"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sync()</span></code></a> method of <code class="xref py py-class docutils literal notranslate"><span class="pre">Shelve</span></code> objects.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">11.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dumbdbm</span></code> — Portable DBM implementation</a><ul>
+<li><a class="reference internal" href="#dumbdbm-objects">11.12.1. Dumbdbm Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bsddb.html"
+                        title="previous chapter">11.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">bsddb</span></code> — Interface to Berkeley DB library</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sqlite3.html"
+                        title="next chapter">11.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlite3</span></code> — DB-API 2.0 interface for SQLite databases</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/dumbdbm.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sqlite3.html" title="11.13. sqlite3 — DB-API 2.0 interface for SQLite databases"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bsddb.html" title="11.11. bsddb — Interface to Berkeley DB library"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="persistence.html" >11. Data Persistence</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

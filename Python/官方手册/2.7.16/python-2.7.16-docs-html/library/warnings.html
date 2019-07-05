@@ -1,0 +1,586 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>28.6. warnings — Warning control &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="28.7. contextlib — Utilities for with-statement contexts" href="contextlib.html" />
+    <link rel="prev" title="28.5. __main__ — Top-level script environment" href="__main__.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/warnings.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="contextlib.html" title="28.7. contextlib — Utilities for with-statement contexts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="__main__.html" title="28.5. __main__ — Top-level script environment"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" accesskey="U">28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="warnings-warning-control">
+<h1>28.6. <a class="reference internal" href="#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal notranslate"><span class="pre">warnings</span></code></a> — Warning control<a class="headerlink" href="#warnings-warning-control" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-warnings"><span id="index-0"></span></span><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.1.</span></p>
+</div>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/warnings.py">Lib/warnings.py</a></p>
+<hr class="docutils" />
+<p>Warning messages are typically issued in situations where it is useful to alert
+the user of some condition in a program, where that condition (normally) doesn’t
+warrant raising an exception and terminating the program.  For example, one
+might want to issue a warning when a program uses an obsolete module.</p>
+<p>Python programmers issue warnings by calling the <a class="reference internal" href="#warnings.warn" title="warnings.warn"><code class="xref py py-func docutils literal notranslate"><span class="pre">warn()</span></code></a> function defined
+in this module.  (C programmers use <a class="reference internal" href="../c-api/exceptions.html#c.PyErr_WarnEx" title="PyErr_WarnEx"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyErr_WarnEx()</span></code></a>; see
+<a class="reference internal" href="../c-api/exceptions.html#exceptionhandling"><span class="std std-ref">Exception Handling</span></a> for details).</p>
+<p>Warning messages are normally written to <code class="docutils literal notranslate"><span class="pre">sys.stderr</span></code>, but their disposition
+can be changed flexibly, from ignoring all warnings to turning them into
+exceptions.  The disposition of warnings can vary based on the warning category
+(see below), the text of the warning message, and the source location where it
+is issued.  Repetitions of a particular warning for the same source location are
+typically suppressed.</p>
+<p>There are two stages in warning control: first, each time a warning is issued, a
+determination is made whether a message should be issued or not; next, if a
+message is to be issued, it is formatted and printed using a user-settable hook.</p>
+<p>The determination whether to issue a warning message is controlled by the
+warning filter, which is a sequence of matching rules and actions. Rules can be
+added to the filter by calling <a class="reference internal" href="#warnings.filterwarnings" title="warnings.filterwarnings"><code class="xref py py-func docutils literal notranslate"><span class="pre">filterwarnings()</span></code></a> and reset to its default
+state by calling <a class="reference internal" href="#warnings.resetwarnings" title="warnings.resetwarnings"><code class="xref py py-func docutils literal notranslate"><span class="pre">resetwarnings()</span></code></a>.</p>
+<p>The printing of warning messages is done by calling <a class="reference internal" href="#warnings.showwarning" title="warnings.showwarning"><code class="xref py py-func docutils literal notranslate"><span class="pre">showwarning()</span></code></a>, which
+may be overridden; the default implementation of this function formats the
+message by calling <a class="reference internal" href="#warnings.formatwarning" title="warnings.formatwarning"><code class="xref py py-func docutils literal notranslate"><span class="pre">formatwarning()</span></code></a>, which is also available for use by
+custom implementations.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="logging.html#logging.captureWarnings" title="logging.captureWarnings"><code class="xref py py-func docutils literal notranslate"><span class="pre">logging.captureWarnings()</span></code></a> allows you to handle all warnings with
+the standard logging infrastructure.</p>
+</div>
+<div class="section" id="warning-categories">
+<span id="id1"></span><h2>28.6.1. Warning Categories<a class="headerlink" href="#warning-categories" title="Permalink to this headline">¶</a></h2>
+<p>There are a number of built-in exceptions that represent warning categories.
+This categorization is useful to be able to filter out groups of warnings.  The
+following warnings category classes are currently defined:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 58%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="exceptions.html#exceptions.Warning" title="exceptions.Warning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Warning</span></code></a></p></td>
+<td><p>This is the base class of all warning
+category classes.  It is a subclass of
+<a class="reference internal" href="exceptions.html#exceptions.Exception" title="exceptions.Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="exceptions.html#exceptions.UserWarning" title="exceptions.UserWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UserWarning</span></code></a></p></td>
+<td><p>The default category for <a class="reference internal" href="#warnings.warn" title="warnings.warn"><code class="xref py py-func docutils literal notranslate"><span class="pre">warn()</span></code></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="exceptions.html#exceptions.DeprecationWarning" title="exceptions.DeprecationWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">DeprecationWarning</span></code></a></p></td>
+<td><p>Base category for warnings about deprecated
+features (ignored by default).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="exceptions.html#exceptions.SyntaxWarning" title="exceptions.SyntaxWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SyntaxWarning</span></code></a></p></td>
+<td><p>Base category for warnings about dubious
+syntactic features.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="exceptions.html#exceptions.RuntimeWarning" title="exceptions.RuntimeWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeWarning</span></code></a></p></td>
+<td><p>Base category for warnings about dubious
+runtime features.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="exceptions.html#exceptions.FutureWarning" title="exceptions.FutureWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">FutureWarning</span></code></a></p></td>
+<td><p>Base category for warnings about constructs
+that will change semantically in the future.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="exceptions.html#exceptions.PendingDeprecationWarning" title="exceptions.PendingDeprecationWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">PendingDeprecationWarning</span></code></a></p></td>
+<td><p>Base category for warnings about features
+that will be deprecated in the future
+(ignored by default).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="exceptions.html#exceptions.ImportWarning" title="exceptions.ImportWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportWarning</span></code></a></p></td>
+<td><p>Base category for warnings triggered during
+the process of importing a module (ignored by
+default).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="exceptions.html#exceptions.UnicodeWarning" title="exceptions.UnicodeWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeWarning</span></code></a></p></td>
+<td><p>Base category for warnings related to
+Unicode.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="exceptions.html#exceptions.BytesWarning" title="exceptions.BytesWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BytesWarning</span></code></a></p></td>
+<td><p>Base category for warnings related to
+bytes and bytearray.</p></td>
+</tr>
+</tbody>
+</table>
+<p>While these are technically built-in exceptions, they are documented here,
+because conceptually they belong to the warnings mechanism.</p>
+<p>User code can define additional warning categories by subclassing one of the
+standard warning categories.  A warning category must always be a subclass of
+the <a class="reference internal" href="exceptions.html#exceptions.Warning" title="exceptions.Warning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Warning</span></code></a> class.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span><a class="reference internal" href="exceptions.html#exceptions.DeprecationWarning" title="exceptions.DeprecationWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">DeprecationWarning</span></code></a> is ignored by default.</p>
+</div>
+</div>
+<div class="section" id="the-warnings-filter">
+<span id="warning-filter"></span><h2>28.6.2. The Warnings Filter<a class="headerlink" href="#the-warnings-filter" title="Permalink to this headline">¶</a></h2>
+<p>The warnings filter controls whether warnings are ignored, displayed, or turned
+into errors (raising an exception).</p>
+<p>Conceptually, the warnings filter maintains an ordered list of filter
+specifications; any specific warning is matched against each filter
+specification in the list in turn until a match is found; the match determines
+the disposition of the match.  Each entry is a tuple of the form (<em>action</em>,
+<em>message</em>, <em>category</em>, <em>module</em>, <em>lineno</em>), where:</p>
+<ul>
+<li><p><em>action</em> is one of the following strings:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Disposition</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;error&quot;</span></code></p></td>
+<td><p>turn matching warnings into exceptions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;ignore&quot;</span></code></p></td>
+<td><p>never print matching warnings</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;always&quot;</span></code></p></td>
+<td><p>always print matching warnings</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code></p></td>
+<td><p>print the first occurrence of matching
+warnings for each location where the warning
+is issued</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;module&quot;</span></code></p></td>
+<td><p>print the first occurrence of matching
+warnings for each module where the warning
+is issued</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;once&quot;</span></code></p></td>
+<td><p>print only the first occurrence of matching
+warnings, regardless of location</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><em>message</em> is a string containing a regular expression that the start of
+the warning message must match.  The expression is compiled to always be
+case-insensitive.</p></li>
+<li><p><em>category</em> is a class (a subclass of <a class="reference internal" href="exceptions.html#exceptions.Warning" title="exceptions.Warning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Warning</span></code></a>) of which the warning
+category must be a subclass in order to match.</p></li>
+<li><p><em>module</em> is a string containing a regular expression that the module name must
+match.  The expression is compiled to be case-sensitive.</p></li>
+<li><p><em>lineno</em> is an integer that the line number where the warning occurred must
+match, or <code class="docutils literal notranslate"><span class="pre">0</span></code> to match all line numbers.</p></li>
+</ul>
+<p>Since the <a class="reference internal" href="exceptions.html#exceptions.Warning" title="exceptions.Warning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Warning</span></code></a> class is derived from the built-in <a class="reference internal" href="exceptions.html#exceptions.Exception" title="exceptions.Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a>
+class, to turn a warning into an error we simply raise <code class="docutils literal notranslate"><span class="pre">category(message)</span></code>.</p>
+<p>The warnings filter is initialized by <a class="reference internal" href="../using/cmdline.html#cmdoption-w"><code class="xref std std-option docutils literal notranslate"><span class="pre">-W</span></code></a> options passed to the Python
+interpreter command line.  The interpreter saves the arguments for all
+<a class="reference internal" href="../using/cmdline.html#cmdoption-w"><code class="xref std std-option docutils literal notranslate"><span class="pre">-W</span></code></a> options without interpretation in <code class="docutils literal notranslate"><span class="pre">sys.warnoptions</span></code>; the
+<a class="reference internal" href="#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal notranslate"><span class="pre">warnings</span></code></a> module parses these when it is first imported (invalid options
+are ignored, after printing a message to <code class="docutils literal notranslate"><span class="pre">sys.stderr</span></code>).</p>
+<div class="section" id="default-warning-filters">
+<h3>28.6.2.1. Default Warning Filters<a class="headerlink" href="#default-warning-filters" title="Permalink to this headline">¶</a></h3>
+<p>By default, Python installs several warning filters, which can be overridden by
+the command-line options passed to <a class="reference internal" href="../using/cmdline.html#cmdoption-w"><code class="xref std std-option docutils literal notranslate"><span class="pre">-W</span></code></a> and calls to
+<a class="reference internal" href="#warnings.filterwarnings" title="warnings.filterwarnings"><code class="xref py py-func docutils literal notranslate"><span class="pre">filterwarnings()</span></code></a>.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#exceptions.DeprecationWarning" title="exceptions.DeprecationWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">DeprecationWarning</span></code></a> and <a class="reference internal" href="exceptions.html#exceptions.PendingDeprecationWarning" title="exceptions.PendingDeprecationWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">PendingDeprecationWarning</span></code></a>, and
+<a class="reference internal" href="exceptions.html#exceptions.ImportWarning" title="exceptions.ImportWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportWarning</span></code></a> are ignored.</p></li>
+<li><p><a class="reference internal" href="exceptions.html#exceptions.BytesWarning" title="exceptions.BytesWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BytesWarning</span></code></a> is ignored unless the <a class="reference internal" href="../using/cmdline.html#cmdoption-b"><code class="xref std std-option docutils literal notranslate"><span class="pre">-b</span></code></a> option is given once or
+twice; in this case this warning is either printed (<code class="docutils literal notranslate"><span class="pre">-b</span></code>) or turned into an
+exception (<code class="docutils literal notranslate"><span class="pre">-bb</span></code>).</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="temporarily-suppressing-warnings">
+<span id="warning-suppress"></span><h2>28.6.3. Temporarily Suppressing Warnings<a class="headerlink" href="#temporarily-suppressing-warnings" title="Permalink to this headline">¶</a></h2>
+<p>If you are using code that you know will raise a warning, such as a deprecated
+function, but do not want to see the warning, then it is possible to suppress
+the warning using the <a class="reference internal" href="#warnings.catch_warnings" title="warnings.catch_warnings"><code class="xref py py-class docutils literal notranslate"><span class="pre">catch_warnings</span></code></a> context manager:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="k">def</span> <span class="nf">fxn</span><span class="p">():</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;deprecated&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+    <span class="n">fxn</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>While within the context manager all warnings will simply be ignored. This
+allows you to use known-deprecated code without having to see the warning while
+not suppressing the warning for other code that might not be aware of its use
+of deprecated code.  Note: this can only be guaranteed in a single-threaded
+application. If two or more threads use the <a class="reference internal" href="#warnings.catch_warnings" title="warnings.catch_warnings"><code class="xref py py-class docutils literal notranslate"><span class="pre">catch_warnings</span></code></a> context
+manager at the same time, the behavior is undefined.</p>
+</div>
+<div class="section" id="testing-warnings">
+<span id="warning-testing"></span><h2>28.6.4. Testing Warnings<a class="headerlink" href="#testing-warnings" title="Permalink to this headline">¶</a></h2>
+<p>To test warnings raised by code, use the <a class="reference internal" href="#warnings.catch_warnings" title="warnings.catch_warnings"><code class="xref py py-class docutils literal notranslate"><span class="pre">catch_warnings</span></code></a> context
+manager. With it you can temporarily mutate the warnings filter to facilitate
+your testing. For instance, do the following to capture all raised warnings to
+check:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="k">def</span> <span class="nf">fxn</span><span class="p">():</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;deprecated&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">(</span><span class="n">record</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
+    <span class="c1"># Cause all warnings to always be triggered.</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;always&quot;</span><span class="p">)</span>
+    <span class="c1"># Trigger a warning.</span>
+    <span class="n">fxn</span><span class="p">()</span>
+    <span class="c1"># Verify some things</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">category</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="s2">&quot;deprecated&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>One can also cause all warnings to be exceptions by using <code class="docutils literal notranslate"><span class="pre">error</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">always</span></code>. One thing to be aware of is that if a warning has already been
+raised because of a <code class="docutils literal notranslate"><span class="pre">once</span></code>/<code class="docutils literal notranslate"><span class="pre">default</span></code> rule, then no matter what filters are
+set the warning will not be seen again unless the warnings registry related to
+the warning has been cleared.</p>
+<p>Once the context manager exits, the warnings filter is restored to its state
+when the context was entered. This prevents tests from changing the warnings
+filter in unexpected ways between tests and leading to indeterminate test
+results. The <a class="reference internal" href="#warnings.showwarning" title="warnings.showwarning"><code class="xref py py-func docutils literal notranslate"><span class="pre">showwarning()</span></code></a> function in the module is also restored to
+its original value.  Note: this can only be guaranteed in a single-threaded
+application. If two or more threads use the <a class="reference internal" href="#warnings.catch_warnings" title="warnings.catch_warnings"><code class="xref py py-class docutils literal notranslate"><span class="pre">catch_warnings</span></code></a> context
+manager at the same time, the behavior is undefined.</p>
+<p>When testing multiple operations that raise the same kind of warning, it
+is important to test them in a manner that confirms each operation is raising
+a new warning (e.g. set warnings to be raised as exceptions and check the
+operations raise exceptions, check that the length of the warning list
+continues to increase after each operation, or else delete the previous
+entries from the warnings list before each new operation).</p>
+</div>
+<div class="section" id="updating-code-for-new-versions-of-python">
+<h2>28.6.5. Updating Code For New Versions of Python<a class="headerlink" href="#updating-code-for-new-versions-of-python" title="Permalink to this headline">¶</a></h2>
+<p>Warnings that are only of interest to the developer are ignored by default. As
+such you should make sure to test your code with typically ignored warnings
+made visible. You can do this from the command-line by passing <a class="reference internal" href="../using/cmdline.html#cmdoption-w"><code class="xref std std-option docutils literal notranslate"><span class="pre">-Wd</span></code></a>
+to the interpreter (this is shorthand for <code class="xref std std-option docutils literal notranslate"><span class="pre">-W</span> <span class="pre">default</span></code>).  This enables
+default handling for all warnings, including those that are ignored by default.
+To change what action is taken for encountered warnings you simply change what
+argument is passed to <a class="reference internal" href="../using/cmdline.html#cmdoption-w"><code class="xref std std-option docutils literal notranslate"><span class="pre">-W</span></code></a>, e.g. <code class="xref std std-option docutils literal notranslate"><span class="pre">-W</span> <span class="pre">error</span></code>. See the
+<a class="reference internal" href="../using/cmdline.html#cmdoption-w"><code class="xref std std-option docutils literal notranslate"><span class="pre">-W</span></code></a> flag for more details on what is possible.</p>
+<p>To programmatically do the same as <code class="xref std std-option docutils literal notranslate"><span class="pre">-Wd</span></code>, use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Make sure to execute this code as soon as possible. This prevents the
+registering of what warnings have been raised from unexpectedly influencing how
+future warnings are treated.</p>
+<p>Having certain warnings ignored by default is done to prevent a user from
+seeing warnings that are only of interest to the developer. As you do not
+necessarily have control over what interpreter a user uses to run their code,
+it is possible that a new version of Python will be released between your
+release cycles.  The new interpreter release could trigger new warnings in your
+code that were not there in an older interpreter, e.g.
+<a class="reference internal" href="exceptions.html#exceptions.DeprecationWarning" title="exceptions.DeprecationWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">DeprecationWarning</span></code></a> for a module that you are using. While you as a
+developer want to be notified that your code is using a deprecated module, to a
+user this information is essentially noise and provides no benefit to them.</p>
+</div>
+<div class="section" id="available-functions">
+<span id="warning-functions"></span><h2>28.6.6. Available Functions<a class="headerlink" href="#available-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="warnings.warn">
+<code class="descclassname">warnings.</code><code class="descname">warn</code><span class="sig-paren">(</span><em>message</em><span class="optional">[</span>, <em>category</em><span class="optional">[</span>, <em>stacklevel</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#warnings.warn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Issue a warning, or maybe ignore it or raise an exception.  The <em>category</em>
+argument, if given, must be a warning category class (see above); it defaults to
+<a class="reference internal" href="exceptions.html#exceptions.UserWarning" title="exceptions.UserWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UserWarning</span></code></a>.  Alternatively <em>message</em> can be a <a class="reference internal" href="exceptions.html#exceptions.Warning" title="exceptions.Warning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Warning</span></code></a> instance,
+in which case <em>category</em> will be ignored and <code class="docutils literal notranslate"><span class="pre">message.__class__</span></code> will be used.
+In this case the message text will be <code class="docutils literal notranslate"><span class="pre">str(message)</span></code>. This function raises an
+exception if the particular warning issued is changed into an error by the
+warnings filter see above.  The <em>stacklevel</em> argument can be used by wrapper
+functions written in Python, like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">deprecation</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This makes the warning refer to <code class="xref py py-func docutils literal notranslate"><span class="pre">deprecation()</span></code>’s caller, rather than to the
+source of <code class="xref py py-func docutils literal notranslate"><span class="pre">deprecation()</span></code> itself (since the latter would defeat the purpose
+of the warning message).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="warnings.warn_explicit">
+<code class="descclassname">warnings.</code><code class="descname">warn_explicit</code><span class="sig-paren">(</span><em>message</em>, <em>category</em>, <em>filename</em>, <em>lineno</em><span class="optional">[</span>, <em>module</em><span class="optional">[</span>, <em>registry</em><span class="optional">[</span>, <em>module_globals</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#warnings.warn_explicit" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a low-level interface to the functionality of <a class="reference internal" href="#warnings.warn" title="warnings.warn"><code class="xref py py-func docutils literal notranslate"><span class="pre">warn()</span></code></a>, passing in
+explicitly the message, category, filename and line number, and optionally the
+module name and the registry (which should be the <code class="docutils literal notranslate"><span class="pre">__warningregistry__</span></code>
+dictionary of the module).  The module name defaults to the filename with
+<code class="docutils literal notranslate"><span class="pre">.py</span></code> stripped; if no registry is passed, the warning is never suppressed.
+<em>message</em> must be a string and <em>category</em> a subclass of <a class="reference internal" href="exceptions.html#exceptions.Warning" title="exceptions.Warning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Warning</span></code></a> or
+<em>message</em> may be a <a class="reference internal" href="exceptions.html#exceptions.Warning" title="exceptions.Warning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Warning</span></code></a> instance, in which case <em>category</em> will be
+ignored.</p>
+<p><em>module_globals</em>, if supplied, should be the global namespace in use by the code
+for which the warning is issued.  (This argument is used to support displaying
+source for modules found in zipfiles or other non-filesystem import
+sources).</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>Added the <em>module_globals</em> parameter.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="warnings.warnpy3k">
+<code class="descclassname">warnings.</code><code class="descname">warnpy3k</code><span class="sig-paren">(</span><em>message</em><span class="optional">[</span>, <em>category</em><span class="optional">[</span>, <em>stacklevel</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#warnings.warnpy3k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Issue a warning related to Python 3.x deprecation. Warnings are only shown
+when Python is started with the -3 option. Like <a class="reference internal" href="#warnings.warn" title="warnings.warn"><code class="xref py py-func docutils literal notranslate"><span class="pre">warn()</span></code></a> <em>message</em> must
+be a string and <em>category</em> a subclass of <a class="reference internal" href="exceptions.html#exceptions.Warning" title="exceptions.Warning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Warning</span></code></a>. <a class="reference internal" href="#warnings.warnpy3k" title="warnings.warnpy3k"><code class="xref py py-func docutils literal notranslate"><span class="pre">warnpy3k()</span></code></a>
+is using <a class="reference internal" href="exceptions.html#exceptions.DeprecationWarning" title="exceptions.DeprecationWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">DeprecationWarning</span></code></a> as default warning class.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="warnings.showwarning">
+<code class="descclassname">warnings.</code><code class="descname">showwarning</code><span class="sig-paren">(</span><em>message</em>, <em>category</em>, <em>filename</em>, <em>lineno</em><span class="optional">[</span>, <em>file</em><span class="optional">[</span>, <em>line</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#warnings.showwarning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a warning to a file.  The default implementation calls
+<code class="docutils literal notranslate"><span class="pre">formatwarning(message,</span> <span class="pre">category,</span> <span class="pre">filename,</span> <span class="pre">lineno,</span> <span class="pre">line)</span></code> and writes the
+resulting string to <em>file</em>, which defaults to <code class="docutils literal notranslate"><span class="pre">sys.stderr</span></code>.  You may replace
+this function with an alternative implementation by assigning to
+<code class="docutils literal notranslate"><span class="pre">warnings.showwarning</span></code>.
+<em>line</em> is a line of source code to be included in the warning
+message; if <em>line</em> is not supplied, <a class="reference internal" href="#warnings.showwarning" title="warnings.showwarning"><code class="xref py py-func docutils literal notranslate"><span class="pre">showwarning()</span></code></a> will
+try to read the line specified by <em>filename</em> and <em>lineno</em>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span>The <em>line</em> argument is required to be supported.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="warnings.formatwarning">
+<code class="descclassname">warnings.</code><code class="descname">formatwarning</code><span class="sig-paren">(</span><em>message</em>, <em>category</em>, <em>filename</em>, <em>lineno</em><span class="optional">[</span>, <em>line</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#warnings.formatwarning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format a warning the standard way.  This returns a string which may contain
+embedded newlines and ends in a newline.  <em>line</em> is a line of source code to
+be included in the warning message; if <em>line</em> is not supplied,
+<a class="reference internal" href="#warnings.formatwarning" title="warnings.formatwarning"><code class="xref py py-func docutils literal notranslate"><span class="pre">formatwarning()</span></code></a> will try to read the line specified by <em>filename</em> and
+<em>lineno</em>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Added the <em>line</em> argument.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="warnings.filterwarnings">
+<code class="descclassname">warnings.</code><code class="descname">filterwarnings</code><span class="sig-paren">(</span><em>action</em><span class="optional">[</span>, <em>message</em><span class="optional">[</span>, <em>category</em><span class="optional">[</span>, <em>module</em><span class="optional">[</span>, <em>lineno</em><span class="optional">[</span>, <em>append</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#warnings.filterwarnings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert an entry into the list of <a class="reference internal" href="#warning-filter"><span class="std std-ref">warnings filter specifications</span></a>.  The entry is inserted at the front by default; if
+<em>append</em> is true, it is inserted at the end.  This checks the types of the
+arguments, compiles the <em>message</em> and <em>module</em> regular expressions, and
+inserts them as a tuple in the list of warnings filters.  Entries closer to
+the front of the list override entries later in the list, if both match a
+particular warning.  Omitted arguments default to a value that matches
+everything.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="warnings.simplefilter">
+<code class="descclassname">warnings.</code><code class="descname">simplefilter</code><span class="sig-paren">(</span><em>action</em><span class="optional">[</span>, <em>category</em><span class="optional">[</span>, <em>lineno</em><span class="optional">[</span>, <em>append</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#warnings.simplefilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a simple entry into the list of <a class="reference internal" href="#warning-filter"><span class="std std-ref">warnings filter specifications</span></a>.  The meaning of the function parameters is as for
+<a class="reference internal" href="#warnings.filterwarnings" title="warnings.filterwarnings"><code class="xref py py-func docutils literal notranslate"><span class="pre">filterwarnings()</span></code></a>, but regular expressions are not needed as the filter
+inserted always matches any message in any module as long as the category and
+line number match.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="warnings.resetwarnings">
+<code class="descclassname">warnings.</code><code class="descname">resetwarnings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#warnings.resetwarnings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the warnings filter.  This discards the effect of all previous calls to
+<a class="reference internal" href="#warnings.filterwarnings" title="warnings.filterwarnings"><code class="xref py py-func docutils literal notranslate"><span class="pre">filterwarnings()</span></code></a>, including that of the <a class="reference internal" href="../using/cmdline.html#cmdoption-w"><code class="xref std std-option docutils literal notranslate"><span class="pre">-W</span></code></a> command line options
+and calls to <a class="reference internal" href="#warnings.simplefilter" title="warnings.simplefilter"><code class="xref py py-func docutils literal notranslate"><span class="pre">simplefilter()</span></code></a>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="available-context-managers">
+<h2>28.6.7. Available Context Managers<a class="headerlink" href="#available-context-managers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="warnings.catch_warnings">
+<em class="property">class </em><code class="descclassname">warnings.</code><code class="descname">catch_warnings</code><span class="sig-paren">(</span><span class="optional">[</span><em>*</em>, <em>record=False</em>, <em>module=None</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#warnings.catch_warnings" title="Permalink to this definition">¶</a></dt>
+<dd><p>A context manager that copies and, upon exit, restores the warnings filter
+and the <a class="reference internal" href="#warnings.showwarning" title="warnings.showwarning"><code class="xref py py-func docutils literal notranslate"><span class="pre">showwarning()</span></code></a> function.
+If the <em>record</em> argument is <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code></a> (the default) the context manager
+returns <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-class docutils literal notranslate"><span class="pre">None</span></code></a> on entry. If <em>record</em> is <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code></a>, a list is
+returned that is progressively populated with objects as seen by a custom
+<a class="reference internal" href="#warnings.showwarning" title="warnings.showwarning"><code class="xref py py-func docutils literal notranslate"><span class="pre">showwarning()</span></code></a> function (which also suppresses output to <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>).
+Each object in the list has attributes with the same names as the arguments to
+<a class="reference internal" href="#warnings.showwarning" title="warnings.showwarning"><code class="xref py py-func docutils literal notranslate"><span class="pre">showwarning()</span></code></a>.</p>
+<p>The <em>module</em> argument takes a module that will be used instead of the
+module returned when you import <a class="reference internal" href="#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal notranslate"><span class="pre">warnings</span></code></a> whose filter will be
+protected. This argument exists primarily for testing the <a class="reference internal" href="#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal notranslate"><span class="pre">warnings</span></code></a>
+module itself.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#warnings.catch_warnings" title="warnings.catch_warnings"><code class="xref py py-class docutils literal notranslate"><span class="pre">catch_warnings</span></code></a> manager works by replacing and
+then later restoring the module’s
+<a class="reference internal" href="#warnings.showwarning" title="warnings.showwarning"><code class="xref py py-func docutils literal notranslate"><span class="pre">showwarning()</span></code></a> function and internal list of filter
+specifications.  This means the context manager is modifying
+global state and therefore is not thread-safe.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In Python 3, the arguments to the constructor for
+<a class="reference internal" href="#warnings.catch_warnings" title="warnings.catch_warnings"><code class="xref py py-class docutils literal notranslate"><span class="pre">catch_warnings</span></code></a> are keyword-only arguments.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">28.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">warnings</span></code> — Warning control</a><ul>
+<li><a class="reference internal" href="#warning-categories">28.6.1. Warning Categories</a></li>
+<li><a class="reference internal" href="#the-warnings-filter">28.6.2. The Warnings Filter</a><ul>
+<li><a class="reference internal" href="#default-warning-filters">28.6.2.1. Default Warning Filters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#temporarily-suppressing-warnings">28.6.3. Temporarily Suppressing Warnings</a></li>
+<li><a class="reference internal" href="#testing-warnings">28.6.4. Testing Warnings</a></li>
+<li><a class="reference internal" href="#updating-code-for-new-versions-of-python">28.6.5. Updating Code For New Versions of Python</a></li>
+<li><a class="reference internal" href="#available-functions">28.6.6. Available Functions</a></li>
+<li><a class="reference internal" href="#available-context-managers">28.6.7. Available Context Managers</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="__main__.html"
+                        title="previous chapter">28.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code> — Top-level script environment</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="contextlib.html"
+                        title="next chapter">28.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">contextlib</span></code> — Utilities for <code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code>-statement contexts</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/warnings.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="contextlib.html" title="28.7. contextlib — Utilities for with-statement contexts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="__main__.html" title="28.5. __main__ — Top-level script environment"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" >28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

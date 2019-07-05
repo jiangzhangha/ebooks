@@ -1,0 +1,374 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>18.5. mhlib — Access to MH mailboxes &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="18.6. mimetools — Tools for parsing MIME messages" href="mimetools.html" />
+    <link rel="prev" title="18.4. mailbox — Manipulate mailboxes in various formats" href="mailbox.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/mhlib.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mimetools.html" title="18.6. mimetools — Tools for parsing MIME messages"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mailbox.html" title="18.4. mailbox — Manipulate mailboxes in various formats"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" accesskey="U">18. Internet Data Handling</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-mhlib">
+<span id="mhlib-access-to-mh-mailboxes"></span><h1>18.5. <a class="reference internal" href="#module-mhlib" title="mhlib: Manipulate MH mailboxes from Python. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mhlib</span></code></a> — Access to MH mailboxes<a class="headerlink" href="#module-mhlib" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-mhlib" title="mhlib: Manipulate MH mailboxes from Python. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mhlib</span></code></a> module has been removed in Python 3. Use the
+<a class="reference internal" href="mailbox.html#module-mailbox" title="mailbox: Manipulate mailboxes in various formats"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mailbox</span></code></a> instead.</p>
+</div>
+<p>The <a class="reference internal" href="#module-mhlib" title="mhlib: Manipulate MH mailboxes from Python. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mhlib</span></code></a> module provides a Python interface to MH folders and their
+contents.</p>
+<p>The module contains three basic classes, <a class="reference internal" href="#mhlib.MH" title="mhlib.MH"><code class="xref py py-class docutils literal notranslate"><span class="pre">MH</span></code></a>, which represents a
+particular collection of folders, <a class="reference internal" href="#mhlib.Folder" title="mhlib.Folder"><code class="xref py py-class docutils literal notranslate"><span class="pre">Folder</span></code></a>, which represents a single
+folder, and <a class="reference internal" href="#mhlib.Message" title="mhlib.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a>, which represents a single message.</p>
+<dl class="class">
+<dt id="mhlib.MH">
+<em class="property">class </em><code class="descclassname">mhlib.</code><code class="descname">MH</code><span class="sig-paren">(</span><span class="optional">[</span><em>path</em><span class="optional">[</span>, <em>profile</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#mhlib.MH" title="mhlib.MH"><code class="xref py py-class docutils literal notranslate"><span class="pre">MH</span></code></a> represents a collection of MH folders.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="mhlib.Folder">
+<em class="property">class </em><code class="descclassname">mhlib.</code><code class="descname">Folder</code><span class="sig-paren">(</span><em>mh</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#mhlib.Folder" title="mhlib.Folder"><code class="xref py py-class docutils literal notranslate"><span class="pre">Folder</span></code></a> class represents a single folder and its messages.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="mhlib.Message">
+<em class="property">class </em><code class="descclassname">mhlib.</code><code class="descname">Message</code><span class="sig-paren">(</span><em>folder</em>, <em>number</em><span class="optional">[</span>, <em>name</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Message" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#mhlib.Message" title="mhlib.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a> objects represent individual messages in a folder.  The Message
+class is derived from <a class="reference internal" href="mimetools.html#mimetools.Message" title="mimetools.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">mimetools.Message</span></code></a>.</p>
+</dd></dl>
+
+<div class="section" id="mh-objects">
+<span id="id1"></span><h2>18.5.1. MH Objects<a class="headerlink" href="#mh-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#mhlib.MH" title="mhlib.MH"><code class="xref py py-class docutils literal notranslate"><span class="pre">MH</span></code></a> instances have the following methods:</p>
+<dl class="method">
+<dt id="mhlib.MH.error">
+<code class="descclassname">MH.</code><code class="descname">error</code><span class="sig-paren">(</span><em>format</em><span class="optional">[</span>, <em>...</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print an error message – can be overridden.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.MH.getprofile">
+<code class="descclassname">MH.</code><code class="descname">getprofile</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.getprofile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a profile entry (<code class="docutils literal notranslate"><span class="pre">None</span></code> if not set).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.MH.getpath">
+<code class="descclassname">MH.</code><code class="descname">getpath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.getpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the mailbox pathname.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.MH.getcontext">
+<code class="descclassname">MH.</code><code class="descname">getcontext</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.getcontext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current folder name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.MH.setcontext">
+<code class="descclassname">MH.</code><code class="descname">setcontext</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.setcontext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the current folder name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.MH.listfolders">
+<code class="descclassname">MH.</code><code class="descname">listfolders</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.listfolders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of top-level folders.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.MH.listallfolders">
+<code class="descclassname">MH.</code><code class="descname">listallfolders</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.listallfolders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all folders.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.MH.listsubfolders">
+<code class="descclassname">MH.</code><code class="descname">listsubfolders</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.listsubfolders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of direct subfolders of the given folder.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.MH.listallsubfolders">
+<code class="descclassname">MH.</code><code class="descname">listallsubfolders</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.listallsubfolders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all subfolders of the given folder.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.MH.makefolder">
+<code class="descclassname">MH.</code><code class="descname">makefolder</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.makefolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new folder.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.MH.deletefolder">
+<code class="descclassname">MH.</code><code class="descname">deletefolder</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.deletefolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a folder – must have no subfolders.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.MH.openfolder">
+<code class="descclassname">MH.</code><code class="descname">openfolder</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.MH.openfolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new open folder object.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="folder-objects">
+<span id="mh-folder-objects"></span><h2>18.5.2. Folder Objects<a class="headerlink" href="#folder-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#mhlib.Folder" title="mhlib.Folder"><code class="xref py py-class docutils literal notranslate"><span class="pre">Folder</span></code></a> instances represent open folders and have the following methods:</p>
+<dl class="method">
+<dt id="mhlib.Folder.error">
+<code class="descclassname">Folder.</code><code class="descname">error</code><span class="sig-paren">(</span><em>format</em><span class="optional">[</span>, <em>...</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print an error message – can be overridden.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.getfullname">
+<code class="descclassname">Folder.</code><code class="descname">getfullname</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.getfullname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the folder’s full pathname.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.getsequencesfilename">
+<code class="descclassname">Folder.</code><code class="descname">getsequencesfilename</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.getsequencesfilename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the full pathname of the folder’s sequences file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.getmessagefilename">
+<code class="descclassname">Folder.</code><code class="descname">getmessagefilename</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.getmessagefilename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the full pathname of message <em>n</em> of the folder.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.listmessages">
+<code class="descclassname">Folder.</code><code class="descname">listmessages</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.listmessages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of messages in the folder (as numbers).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.getcurrent">
+<code class="descclassname">Folder.</code><code class="descname">getcurrent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.getcurrent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current message number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.setcurrent">
+<code class="descclassname">Folder.</code><code class="descname">setcurrent</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.setcurrent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the current message number to <em>n</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.parsesequence">
+<code class="descclassname">Folder.</code><code class="descname">parsesequence</code><span class="sig-paren">(</span><em>seq</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.parsesequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse msgs syntax into list of messages.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.getlast">
+<code class="descclassname">Folder.</code><code class="descname">getlast</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.getlast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get last message, or <code class="docutils literal notranslate"><span class="pre">0</span></code> if no messages are in the folder.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.setlast">
+<code class="descclassname">Folder.</code><code class="descname">setlast</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.setlast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set last message (internal use only).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.getsequences">
+<code class="descclassname">Folder.</code><code class="descname">getsequences</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.getsequences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return dictionary of sequences in folder.  The sequence names are used  as keys,
+and the values are the lists of message numbers in the sequences.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.putsequences">
+<code class="descclassname">Folder.</code><code class="descname">putsequences</code><span class="sig-paren">(</span><em>dict</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.putsequences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return dictionary of sequences in folder name: list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.removemessages">
+<code class="descclassname">Folder.</code><code class="descname">removemessages</code><span class="sig-paren">(</span><em>list</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.removemessages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove messages in list from folder.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.refilemessages">
+<code class="descclassname">Folder.</code><code class="descname">refilemessages</code><span class="sig-paren">(</span><em>list</em>, <em>tofolder</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.refilemessages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move messages in list to other folder.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.movemessage">
+<code class="descclassname">Folder.</code><code class="descname">movemessage</code><span class="sig-paren">(</span><em>n</em>, <em>tofolder</em>, <em>ton</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.movemessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move one message to a given destination in another folder.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mhlib.Folder.copymessage">
+<code class="descclassname">Folder.</code><code class="descname">copymessage</code><span class="sig-paren">(</span><em>n</em>, <em>tofolder</em>, <em>ton</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Folder.copymessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy one message to a given destination in another folder.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="message-objects">
+<span id="mh-message-objects"></span><h2>18.5.3. Message Objects<a class="headerlink" href="#message-objects" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#mhlib.Message" title="mhlib.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a> class adds one method to those of
+<a class="reference internal" href="mimetools.html#mimetools.Message" title="mimetools.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">mimetools.Message</span></code></a>:</p>
+<dl class="method">
+<dt id="mhlib.Message.openmessage">
+<code class="descclassname">Message.</code><code class="descname">openmessage</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#mhlib.Message.openmessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new open message object (costs a file descriptor).</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mhlib</span></code> — Access to MH mailboxes</a><ul>
+<li><a class="reference internal" href="#mh-objects">18.5.1. MH Objects</a></li>
+<li><a class="reference internal" href="#folder-objects">18.5.2. Folder Objects</a></li>
+<li><a class="reference internal" href="#message-objects">18.5.3. Message Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mailbox.html"
+                        title="previous chapter">18.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mailbox</span></code> — Manipulate mailboxes in various formats</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mimetools.html"
+                        title="next chapter">18.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mimetools</span></code> — Tools for parsing MIME messages</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/mhlib.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mimetools.html" title="18.6. mimetools — Tools for parsing MIME messages"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mailbox.html" title="18.4. mailbox — Manipulate mailboxes in various formats"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >18. Internet Data Handling</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

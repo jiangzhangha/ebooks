@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Plain Integer Objects &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Boolean Objects" href="bool.html" />
+    <link rel="prev" title="The None Object" href="none.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/c-api/int.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bool.html" title="Boolean Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="none.html" title="The None Object"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="plain-integer-objects">
+<span id="intobjects"></span><h1>Plain Integer Objects<a class="headerlink" href="#plain-integer-objects" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="index-0"></span><dl class="type">
+<dt id="c.PyIntObject">
+<code class="descname">PyIntObject</code><a class="headerlink" href="#c.PyIntObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This subtype of <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyObject</span></code></a> represents a Python integer object.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyInt_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a> <code class="descname">PyInt_Type</code><a class="headerlink" href="#c.PyInt_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This instance of <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> represents the Python plain integer type.
+This is the same object as <code class="docutils literal notranslate"><span class="pre">int</span></code> and <code class="docutils literal notranslate"><span class="pre">types.IntType</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_Check">
+int <code class="descname">PyInt_Check</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>o</em> is of type <a class="reference internal" href="#c.PyInt_Type" title="PyInt_Type"><code class="xref c c-data docutils literal notranslate"><span class="pre">PyInt_Type</span></code></a> or a subtype of
+<a class="reference internal" href="#c.PyInt_Type" title="PyInt_Type"><code class="xref c c-data docutils literal notranslate"><span class="pre">PyInt_Type</span></code></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.2: </span>Allowed subtypes to be accepted.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_CheckExact">
+int <code class="descname">PyInt_CheckExact</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>o</em> is of type <a class="reference internal" href="#c.PyInt_Type" title="PyInt_Type"><code class="xref c c-data docutils literal notranslate"><span class="pre">PyInt_Type</span></code></a>, but not a subtype of
+<a class="reference internal" href="#c.PyInt_Type" title="PyInt_Type"><code class="xref c c-data docutils literal notranslate"><span class="pre">PyInt_Type</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_FromString">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyInt_FromString</code><span class="sig-paren">(</span>char<em> *str</em>, char<em> **pend</em>, int<em> base</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_FromString" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new <a class="reference internal" href="#c.PyIntObject" title="PyIntObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyIntObject</span></code></a> or <a class="reference internal" href="long.html#c.PyLongObject" title="PyLongObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyLongObject</span></code></a> based on the string
+value in <em>str</em>, which is interpreted according to the radix in <em>base</em>.  If
+<em>pend</em> is non-<em>NULL</em>, <code class="docutils literal notranslate"><span class="pre">*pend</span></code> will point to the first character in <em>str</em> which
+follows the representation of the number.  If <em>base</em> is <code class="docutils literal notranslate"><span class="pre">0</span></code>, the radix will be
+determined based on the leading characters of <em>str</em>: if <em>str</em> starts with
+<code class="docutils literal notranslate"><span class="pre">'0x'</span></code> or <code class="docutils literal notranslate"><span class="pre">'0X'</span></code>, radix 16 will be used; if <em>str</em> starts with <code class="docutils literal notranslate"><span class="pre">'0'</span></code>, radix
+8 will be used; otherwise radix 10 will be used.  If <em>base</em> is not <code class="docutils literal notranslate"><span class="pre">0</span></code>, it
+must be between <code class="docutils literal notranslate"><span class="pre">2</span></code> and <code class="docutils literal notranslate"><span class="pre">36</span></code>, inclusive.  Leading spaces are ignored.  If
+there are no digits, <a class="reference internal" href="../library/exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> will be raised.  If the string represents
+a number too large to be contained within the machine’s <code class="xref c c-type docutils literal notranslate"><span class="pre">long</span> <span class="pre">int</span></code> type
+and overflow warnings are being suppressed, a <a class="reference internal" href="long.html#c.PyLongObject" title="PyLongObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyLongObject</span></code></a> will be
+returned.  If overflow warnings are not being suppressed, <em>NULL</em> will be
+returned in this case.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_FromLong">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyInt_FromLong</code><span class="sig-paren">(</span>long<em> ival</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_FromLong" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a new integer object with a value of <em>ival</em>.</p>
+<p>The current implementation keeps an array of integer objects for all integers
+between <code class="docutils literal notranslate"><span class="pre">-5</span></code> and <code class="docutils literal notranslate"><span class="pre">256</span></code>, when you create an int in that range you actually
+just get back a reference to the existing object. So it should be possible to
+change the value of <code class="docutils literal notranslate"><span class="pre">1</span></code>.  I suspect the behaviour of Python in this case is
+undefined. :-)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_FromSsize_t">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyInt_FromSsize_t</code><span class="sig-paren">(</span>Py_ssize_t<em> ival</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_FromSsize_t" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a new integer object with a value of <em>ival</em>. If the value is larger
+than <code class="docutils literal notranslate"><span class="pre">LONG_MAX</span></code> or smaller than <code class="docutils literal notranslate"><span class="pre">LONG_MIN</span></code>, a long integer object is
+returned.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_FromSize_t">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyInt_FromSize_t</code><span class="sig-paren">(</span>size_t<em> ival</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_FromSize_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new integer object with a value of <em>ival</em>. If the value exceeds
+<code class="docutils literal notranslate"><span class="pre">LONG_MAX</span></code>, a long integer object is returned.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_AsLong">
+long <code class="descname">PyInt_AsLong</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *io</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_AsLong" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will first attempt to cast the object to a <a class="reference internal" href="#c.PyIntObject" title="PyIntObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyIntObject</span></code></a>, if it is not
+already one, and then return its value. If there is an error, <code class="docutils literal notranslate"><span class="pre">-1</span></code> is
+returned, and the caller should check <code class="docutils literal notranslate"><span class="pre">PyErr_Occurred()</span></code> to find out whether
+there was an error, or whether the value just happened to be <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_AS_LONG">
+long <code class="descname">PyInt_AS_LONG</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *io</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_AS_LONG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of the object <em>io</em>.  No error checking is performed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_AsUnsignedLongMask">
+unsigned long <code class="descname">PyInt_AsUnsignedLongMask</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *io</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_AsUnsignedLongMask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will first attempt to cast the object to a <a class="reference internal" href="#c.PyIntObject" title="PyIntObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyIntObject</span></code></a> or
+<a class="reference internal" href="long.html#c.PyLongObject" title="PyLongObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyLongObject</span></code></a>, if it is not already one, and then return its value as
+unsigned long.  This function does not check for overflow.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_AsUnsignedLongLongMask">
+unsigned PY_LONG_LONG <code class="descname">PyInt_AsUnsignedLongLongMask</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *io</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_AsUnsignedLongLongMask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will first attempt to cast the object to a <a class="reference internal" href="#c.PyIntObject" title="PyIntObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyIntObject</span></code></a> or
+<a class="reference internal" href="long.html#c.PyLongObject" title="PyLongObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyLongObject</span></code></a>, if it is not already one, and then return its value as
+unsigned long long, without checking for overflow.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_AsSsize_t">
+Py_ssize_t <code class="descname">PyInt_AsSsize_t</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em> *io</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_AsSsize_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will first attempt to cast the object to a <a class="reference internal" href="#c.PyIntObject" title="PyIntObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyIntObject</span></code></a> or
+<a class="reference internal" href="long.html#c.PyLongObject" title="PyLongObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyLongObject</span></code></a>, if it is not already one, and then return its value as
+<code class="xref c c-type docutils literal notranslate"><span class="pre">Py_ssize_t</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_GetMax">
+long <code class="descname">PyInt_GetMax</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_GetMax" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">Return the system’s idea of the largest integer it can handle
+(<code class="xref py py-const docutils literal notranslate"><span class="pre">LONG_MAX</span></code>, as defined in the system header files).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInt_ClearFreeList">
+int <code class="descname">PyInt_ClearFreeList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInt_ClearFreeList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the integer free list. Return the number of items that could not
+be freed.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="none.html"
+                        title="previous chapter">The <code class="docutils literal notranslate"><span class="pre">None</span></code> Object</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bool.html"
+                        title="next chapter">Boolean Objects</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/c-api/int.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bool.html" title="Boolean Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="none.html" title="The None Object"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API Reference Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" >Concrete Objects Layer</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

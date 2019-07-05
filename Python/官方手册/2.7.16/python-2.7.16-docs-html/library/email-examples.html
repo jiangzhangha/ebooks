@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>18.1.11. email: Examples &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="18.2. json — JSON encoder and decoder" href="json.html" />
+    <link rel="prev" title="18.1.10. email.iterators: Iterators" href="email.iterators.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/email-examples.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="json.html" title="18.2. json — JSON encoder and decoder"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="email.iterators.html" title="18.1.10. email.iterators: Iterators"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >18. Internet Data Handling</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="email.html" accesskey="U">18.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> — An email and MIME handling package</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="email-examples">
+<span id="id1"></span><h1>18.1.11. <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code></a>: Examples<a class="headerlink" href="#email-examples" title="Permalink to this headline">¶</a></h1>
+<p>Here are a few examples of how to use the <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code></a> package to read, write,
+and send simple email messages, as well as more complex MIME messages.</p>
+<p>First, let’s see how to create and send a simple text message:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import smtplib for the actual sending function</span>
+<span class="kn">import</span> <span class="nn">smtplib</span>
+
+<span class="c1"># Import the email modules we&#39;ll need</span>
+<span class="kn">from</span> <span class="nn">email.mime.text</span> <span class="k">import</span> <span class="n">MIMEText</span>
+
+<span class="c1"># Open a plain text file for reading.  For this example, assume that</span>
+<span class="c1"># the text file contains only ASCII characters.</span>
+<span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">textfile</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+<span class="c1"># Create a text/plain message</span>
+<span class="n">msg</span> <span class="o">=</span> <span class="n">MIMEText</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># me == the sender&#39;s email address</span>
+<span class="c1"># you == the recipient&#39;s email address</span>
+<span class="n">msg</span><span class="p">[</span><span class="s1">&#39;Subject&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;The contents of </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">textfile</span>
+<span class="n">msg</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">me</span>
+<span class="n">msg</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">you</span>
+
+<span class="c1"># Send the message via our own SMTP server, but don&#39;t include the</span>
+<span class="c1"># envelope header.</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">me</span><span class="p">,</span> <span class="p">[</span><span class="n">you</span><span class="p">],</span> <span class="n">msg</span><span class="o">.</span><span class="n">as_string</span><span class="p">())</span>
+<span class="n">s</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>And parsing RFC822 headers can easily be done by the parse(filename) or
+parsestr(message_as_string) methods of the Parser() class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import the email modules we&#39;ll need</span>
+<span class="kn">from</span> <span class="nn">email.parser</span> <span class="k">import</span> <span class="n">Parser</span>
+
+<span class="c1">#  If the e-mail headers are in a file, uncomment this line:</span>
+<span class="c1">#headers = Parser().parse(open(messagefile, &#39;r&#39;))</span>
+
+<span class="c1">#  Or for parsing headers in a string, use:</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">()</span><span class="o">.</span><span class="n">parsestr</span><span class="p">(</span><span class="s1">&#39;From: &lt;user@example.com&gt;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;To: &lt;someone_else@example.com&gt;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;Subject: Test message</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;Body would go here</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1">#  Now the header items can be accessed as a dictionary:</span>
+<span class="nb">print</span> <span class="s1">&#39;To: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">headers</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">]</span>
+<span class="nb">print</span> <span class="s1">&#39;From: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">headers</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">]</span>
+<span class="nb">print</span> <span class="s1">&#39;Subject: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">headers</span><span class="p">[</span><span class="s1">&#39;subject&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Here’s an example of how to send a MIME message containing a bunch of family
+pictures that may be residing in a directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import smtplib for the actual sending function</span>
+<span class="kn">import</span> <span class="nn">smtplib</span>
+
+<span class="c1"># Here are the email package modules we&#39;ll need</span>
+<span class="kn">from</span> <span class="nn">email.mime.image</span> <span class="k">import</span> <span class="n">MIMEImage</span>
+<span class="kn">from</span> <span class="nn">email.mime.multipart</span> <span class="k">import</span> <span class="n">MIMEMultipart</span>
+
+<span class="n">COMMASPACE</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span>
+
+<span class="c1"># Create the container (outer) email message.</span>
+<span class="n">msg</span> <span class="o">=</span> <span class="n">MIMEMultipart</span><span class="p">()</span>
+<span class="n">msg</span><span class="p">[</span><span class="s1">&#39;Subject&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Our family reunion&#39;</span>
+<span class="c1"># me == the sender&#39;s email address</span>
+<span class="c1"># family = the list of all recipients&#39; email addresses</span>
+<span class="n">msg</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">me</span>
+<span class="n">msg</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">COMMASPACE</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">family</span><span class="p">)</span>
+<span class="n">msg</span><span class="o">.</span><span class="n">preamble</span> <span class="o">=</span> <span class="s1">&#39;Our family reunion&#39;</span>
+
+<span class="c1"># Assume we know that the image files are all in PNG format</span>
+<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">pngfiles</span><span class="p">:</span>
+    <span class="c1"># Open the files in binary mode.  Let the MIMEImage class automatically</span>
+    <span class="c1"># guess the specific image type.</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">MIMEImage</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+<span class="c1"># Send the email via our own SMTP server.</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">me</span><span class="p">,</span> <span class="n">family</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">as_string</span><span class="p">())</span>
+<span class="n">s</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here’s an example of how to send the entire contents of a directory as an email
+message: <a class="footnote-reference brackets" href="#id4" id="id2">1</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;Send the contents of a directory as a MIME message.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">smtplib</span>
+<span class="c1"># For guessing MIME type based on file name extension</span>
+<span class="kn">import</span> <span class="nn">mimetypes</span>
+
+<span class="kn">from</span> <span class="nn">optparse</span> <span class="k">import</span> <span class="n">OptionParser</span>
+
+<span class="kn">from</span> <span class="nn">email</span> <span class="k">import</span> <span class="n">encoders</span>
+<span class="kn">from</span> <span class="nn">email.message</span> <span class="k">import</span> <span class="n">Message</span>
+<span class="kn">from</span> <span class="nn">email.mime.audio</span> <span class="k">import</span> <span class="n">MIMEAudio</span>
+<span class="kn">from</span> <span class="nn">email.mime.base</span> <span class="k">import</span> <span class="n">MIMEBase</span>
+<span class="kn">from</span> <span class="nn">email.mime.image</span> <span class="k">import</span> <span class="n">MIMEImage</span>
+<span class="kn">from</span> <span class="nn">email.mime.multipart</span> <span class="k">import</span> <span class="n">MIMEMultipart</span>
+<span class="kn">from</span> <span class="nn">email.mime.text</span> <span class="k">import</span> <span class="n">MIMEText</span>
+
+<span class="n">COMMASPACE</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">Send the contents of a directory as a MIME message.</span>
+
+<span class="s2">Usage: %prog [options]</span>
+
+<span class="s2">Unless the -o option is given, the email is sent by forwarding to your local</span>
+<span class="s2">SMTP server, which then does the normal delivery process.  Your local machine</span>
+<span class="s2">must be running an SMTP server.</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--directory&#39;</span><span class="p">,</span>
+                      <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Mail the contents of the specified directory,</span>
+<span class="s2">                      otherwise use the current directory.  Only the regular</span>
+<span class="s2">                      files in the directory are sent, and we don&#39;t recurse to</span>
+<span class="s2">                      subdirectories.&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="s1">&#39;--output&#39;</span><span class="p">,</span>
+                      <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;FILE&#39;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Print the composed message to FILE instead of</span>
+<span class="s2">                      sending the message to the SMTP server.&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="s1">&#39;--sender&#39;</span><span class="p">,</span>
+                      <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;SENDER&#39;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The value of the From: header (required)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="s1">&#39;--recipient&#39;</span><span class="p">,</span>
+                      <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;RECIPIENT&#39;</span><span class="p">,</span>
+                      <span class="n">default</span><span class="o">=</span><span class="p">[],</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;recipients&#39;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;A To: header value (at least one required)&#39;</span><span class="p">)</span>
+    <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">sender</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">recipients</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">directory</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">directory</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">directory</span><span class="p">:</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
+    <span class="c1"># Create the enclosing (outer) message</span>
+    <span class="n">outer</span> <span class="o">=</span> <span class="n">MIMEMultipart</span><span class="p">()</span>
+    <span class="n">outer</span><span class="p">[</span><span class="s1">&#39;Subject&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Contents of directory </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+    <span class="n">outer</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">COMMASPACE</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">recipients</span><span class="p">)</span>
+    <span class="n">outer</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">sender</span>
+    <span class="n">outer</span><span class="o">.</span><span class="n">preamble</span> <span class="o">=</span> <span class="s1">&#39;You will not see this in a MIME-aware mail reader.</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="c1"># Guess the content type based on the file&#39;s extension.  Encoding</span>
+        <span class="c1"># will be ignored, although we should check for simple things like</span>
+        <span class="c1"># gzip&#39;d or compressed files.</span>
+        <span class="n">ctype</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_type</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ctype</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">encoding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># No guess could be made, or the file is encoded (compressed), so</span>
+            <span class="c1"># use a generic bag-of-bits type.</span>
+            <span class="n">ctype</span> <span class="o">=</span> <span class="s1">&#39;application/octet-stream&#39;</span>
+        <span class="n">maintype</span><span class="p">,</span> <span class="n">subtype</span> <span class="o">=</span> <span class="n">ctype</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">maintype</span> <span class="o">==</span> <span class="s1">&#39;text&#39;</span><span class="p">:</span>
+            <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="c1"># Note: we should handle calculating the charset</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">MIMEText</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">_subtype</span><span class="o">=</span><span class="n">subtype</span><span class="p">)</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">maintype</span> <span class="o">==</span> <span class="s1">&#39;image&#39;</span><span class="p">:</span>
+            <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">MIMEImage</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">_subtype</span><span class="o">=</span><span class="n">subtype</span><span class="p">)</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">maintype</span> <span class="o">==</span> <span class="s1">&#39;audio&#39;</span><span class="p">:</span>
+            <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">MIMEAudio</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">_subtype</span><span class="o">=</span><span class="n">subtype</span><span class="p">)</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">MIMEBase</span><span class="p">(</span><span class="n">maintype</span><span class="p">,</span> <span class="n">subtype</span><span class="p">)</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">set_payload</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="c1"># Encode the payload using Base64</span>
+            <span class="n">encoders</span><span class="o">.</span><span class="n">encode_base64</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="c1"># Set the filename parameter</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Content-Disposition&#39;</span><span class="p">,</span> <span class="s1">&#39;attachment&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">outer</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="c1"># Now send or store the message</span>
+    <span class="n">composed</span> <span class="o">=</span> <span class="n">outer</span><span class="o">.</span><span class="n">as_string</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">output</span><span class="p">:</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">composed</span><span class="p">)</span>
+        <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">recipients</span><span class="p">,</span> <span class="n">composed</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here’s an example of how to unpack a MIME message like the one
+above, into a directory of files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;Unpack a MIME message into a directory of files.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">email</span>
+<span class="kn">import</span> <span class="nn">errno</span>
+<span class="kn">import</span> <span class="nn">mimetypes</span>
+
+<span class="kn">from</span> <span class="nn">optparse</span> <span class="k">import</span> <span class="n">OptionParser</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">Unpack a MIME message into a directory of files.</span>
+
+<span class="s2">Usage: %prog [options] msgfile</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--directory&#39;</span><span class="p">,</span>
+                      <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Unpack the MIME message into the named</span>
+<span class="s2">                      directory, which will be created if it doesn&#39;t already</span>
+<span class="s2">                      exist.&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">directory</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">msgfile</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Ignore directory exists error</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EEXIST</span><span class="p">:</span>
+            <span class="k">raise</span>
+
+    <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">msgfile</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">email</span><span class="o">.</span><span class="n">message_from_file</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+    <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">walk</span><span class="p">():</span>
+        <span class="c1"># multipart/* are just containers</span>
+        <span class="k">if</span> <span class="n">part</span><span class="o">.</span><span class="n">get_content_maintype</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;multipart&#39;</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c1"># Applications should really sanitize the given filename so that an</span>
+        <span class="c1"># email message can&#39;t be used to overwrite important files</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">part</span><span class="o">.</span><span class="n">get_filename</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">ext</span> <span class="o">=</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_extension</span><span class="p">(</span><span class="n">part</span><span class="o">.</span><span class="n">get_content_type</span><span class="p">())</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ext</span><span class="p">:</span>
+                <span class="c1"># Use a generic bag-of-bits extension</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="s1">&#39;.bin&#39;</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;part-</span><span class="si">%03d%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">filename</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+        <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">part</span><span class="o">.</span><span class="n">get_payload</span><span class="p">(</span><span class="n">decode</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here’s an example of how to create an HTML message with an alternative plain
+text version: <a class="footnote-reference brackets" href="#id5" id="id3">2</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">smtplib</span>
+
+<span class="kn">from</span> <span class="nn">email.mime.multipart</span> <span class="k">import</span> <span class="n">MIMEMultipart</span>
+<span class="kn">from</span> <span class="nn">email.mime.text</span> <span class="k">import</span> <span class="n">MIMEText</span>
+
+<span class="c1"># me == my email address</span>
+<span class="c1"># you == recipient&#39;s email address</span>
+<span class="n">me</span> <span class="o">=</span> <span class="s2">&quot;my@email.com&quot;</span>
+<span class="n">you</span> <span class="o">=</span> <span class="s2">&quot;your@email.com&quot;</span>
+
+<span class="c1"># Create message container - the correct MIME type is multipart/alternative.</span>
+<span class="n">msg</span> <span class="o">=</span> <span class="n">MIMEMultipart</span><span class="p">(</span><span class="s1">&#39;alternative&#39;</span><span class="p">)</span>
+<span class="n">msg</span><span class="p">[</span><span class="s1">&#39;Subject&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Link&quot;</span>
+<span class="n">msg</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">me</span>
+<span class="n">msg</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">you</span>
+
+<span class="c1"># Create the body of the message (a plain-text and an HTML version).</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Hi!</span><span class="se">\n</span><span class="s2">How are you?</span><span class="se">\n</span><span class="s2">Here is the link you wanted:</span><span class="se">\n</span><span class="s2">https://www.python.org&quot;</span>
+<span class="n">html</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">&lt;html&gt;</span>
+<span class="s2">  &lt;head&gt;&lt;/head&gt;</span>
+<span class="s2">  &lt;body&gt;</span>
+<span class="s2">    &lt;p&gt;Hi!&lt;br&gt;</span>
+<span class="s2">       How are you?&lt;br&gt;</span>
+<span class="s2">       Here is the &lt;a href=&quot;https://www.python.org&quot;&gt;link&lt;/a&gt; you wanted.</span>
+<span class="s2">    &lt;/p&gt;</span>
+<span class="s2">  &lt;/body&gt;</span>
+<span class="s2">&lt;/html&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># Record the MIME types of both parts - text/plain and text/html.</span>
+<span class="n">part1</span> <span class="o">=</span> <span class="n">MIMEText</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;plain&#39;</span><span class="p">)</span>
+<span class="n">part2</span> <span class="o">=</span> <span class="n">MIMEText</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">)</span>
+
+<span class="c1"># Attach parts into message container.</span>
+<span class="c1"># According to RFC 2046, the last part of a multipart message, in this case</span>
+<span class="c1"># the HTML message, is best and preferred.</span>
+<span class="n">msg</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">part1</span><span class="p">)</span>
+<span class="n">msg</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">part2</span><span class="p">)</span>
+
+<span class="c1"># Send the message via local SMTP server.</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">)</span>
+<span class="c1"># sendmail function takes 3 arguments: sender&#39;s address, recipient&#39;s address</span>
+<span class="c1"># and message to send - here it is sent as one string.</span>
+<span class="n">s</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">me</span><span class="p">,</span> <span class="n">you</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">as_string</span><span class="p">())</span>
+<span class="n">s</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Footnotes</p>
+<dl class="footnote brackets">
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id2">1</a></span></dt>
+<dd><p>Thanks to Matthew Dixon Cowles for the original inspiration and examples.</p>
+</dd>
+<dt class="label" id="id5"><span class="brackets"><a class="fn-backref" href="#id3">2</a></span></dt>
+<dd><p>Contributed by Martin Matejek.</p>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="email.iterators.html"
+                        title="previous chapter">18.1.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email.iterators</span></code>: Iterators</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="json.html"
+                        title="next chapter">18.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> — JSON encoder and decoder</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/email-examples.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="json.html" title="18.2. json — JSON encoder and decoder"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="email.iterators.html" title="18.1.10. email.iterators: Iterators"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >18. Internet Data Handling</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="email.html" >18.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> — An email and MIME handling package</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

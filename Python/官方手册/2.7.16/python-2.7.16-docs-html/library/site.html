@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>28.14. site — Site-specific configuration hook &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="28.15. user — User-specific configuration hook" href="user.html" />
+    <link rel="prev" title="28.13. inspect — Inspect live objects" href="inspect.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/site.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="user.html" title="28.15. user — User-specific configuration hook"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="inspect.html" title="28.13. inspect — Inspect live objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" accesskey="U">28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-site">
+<span id="site-site-specific-configuration-hook"></span><h1>28.14. <a class="reference internal" href="#module-site" title="site: Module responsible for site-specific configuration."><code class="xref py py-mod docutils literal notranslate"><span class="pre">site</span></code></a> — Site-specific configuration hook<a class="headerlink" href="#module-site" title="Permalink to this headline">¶</a></h1>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/site.py">Lib/site.py</a></p>
+<hr class="docutils" />
+<p><strong>This module is automatically imported during initialization.</strong> The automatic
+import can be suppressed using the interpreter’s <a class="reference internal" href="../using/cmdline.html#id2"><code class="xref std std-option docutils literal notranslate"><span class="pre">-S</span></code></a> option.</p>
+<p id="index-0">Importing this module will append site-specific paths to the module search path
+and add a few builtins.</p>
+<p id="index-1">It starts by constructing up to four directories from a head and a tail part.
+For the head part, it uses <code class="docutils literal notranslate"><span class="pre">sys.prefix</span></code> and <code class="docutils literal notranslate"><span class="pre">sys.exec_prefix</span></code>; empty heads
+are skipped.  For the tail part, it uses the empty string and then
+<code class="file docutils literal notranslate"><span class="pre">lib/site-packages</span></code> (on Windows) or
+<code class="file docutils literal notranslate"><span class="pre">lib/python</span><em><span class="pre">X.Y</span></em><span class="pre">/site-packages</span></code> and then <code class="file docutils literal notranslate"><span class="pre">lib/site-python</span></code> (on
+Unix and Macintosh).  For each of the distinct head-tail combinations, it sees
+if it refers to an existing directory, and if so, adds it to <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> and
+also inspects the newly added path for configuration files.</p>
+<p>A path configuration file is a file whose name has the form <code class="file docutils literal notranslate"><em><span class="pre">name</span></em><span class="pre">.pth</span></code>
+and exists in one of the four directories mentioned above; its contents are
+additional items (one per line) to be added to <code class="docutils literal notranslate"><span class="pre">sys.path</span></code>.  Non-existing items
+are never added to <code class="docutils literal notranslate"><span class="pre">sys.path</span></code>, and no check is made that the item refers to a
+directory rather than a file.  No item is added to <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> more than
+once.  Blank lines and lines beginning with <code class="docutils literal notranslate"><span class="pre">#</span></code> are skipped.  Lines starting
+with <code class="docutils literal notranslate"><span class="pre">import</span></code> (followed by space or tab) are executed.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>A space or tab is now required after the import keyword.</p>
+</div>
+<p id="index-2">For example, suppose <code class="docutils literal notranslate"><span class="pre">sys.prefix</span></code> and <code class="docutils literal notranslate"><span class="pre">sys.exec_prefix</span></code> are set to
+<code class="file docutils literal notranslate"><span class="pre">/usr/local</span></code>.  The Python X.Y library is then installed in
+<code class="file docutils literal notranslate"><span class="pre">/usr/local/lib/python</span><em><span class="pre">X.Y</span></em></code>.  Suppose this has
+a subdirectory <code class="file docutils literal notranslate"><span class="pre">/usr/local/lib/python</span><em><span class="pre">X.Y</span></em><span class="pre">/site-packages</span></code> with three
+subsubdirectories, <code class="file docutils literal notranslate"><span class="pre">foo</span></code>, <code class="file docutils literal notranslate"><span class="pre">bar</span></code> and <code class="file docutils literal notranslate"><span class="pre">spam</span></code>, and two path
+configuration files, <code class="file docutils literal notranslate"><span class="pre">foo.pth</span></code> and <code class="file docutils literal notranslate"><span class="pre">bar.pth</span></code>.  Assume
+<code class="file docutils literal notranslate"><span class="pre">foo.pth</span></code> contains the following:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># foo package configuration
+
+foo
+bar
+bletch
+</pre></div>
+</div>
+<p>and <code class="file docutils literal notranslate"><span class="pre">bar.pth</span></code> contains:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># bar package configuration
+
+bar
+</pre></div>
+</div>
+<p>Then the following version-specific directories are added to
+<code class="docutils literal notranslate"><span class="pre">sys.path</span></code>, in this order:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/pythonX.Y/site-packages/bar
+/usr/local/lib/pythonX.Y/site-packages/foo
+</pre></div>
+</div>
+<p>Note that <code class="file docutils literal notranslate"><span class="pre">bletch</span></code> is omitted because it doesn’t exist; the <code class="file docutils literal notranslate"><span class="pre">bar</span></code>
+directory precedes the <code class="file docutils literal notranslate"><span class="pre">foo</span></code> directory because <code class="file docutils literal notranslate"><span class="pre">bar.pth</span></code> comes
+alphabetically before <code class="file docutils literal notranslate"><span class="pre">foo.pth</span></code>; and <code class="file docutils literal notranslate"><span class="pre">spam</span></code> is omitted because it is
+not mentioned in either path configuration file.</p>
+<p id="index-3">After these path manipulations, an attempt is made to import a module named
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">sitecustomize</span></code>, which can perform arbitrary site-specific customizations.
+It is typically created by a system administrator in the site-packages
+directory.  If this import fails with an <a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportError</span></code></a> exception, it is
+silently ignored.  If Python is started without output streams available, as
+with <code class="file docutils literal notranslate"><span class="pre">pythonw.exe</span></code> on Windows (which is used by default to start IDLE),
+attempted output from <code class="xref py py-mod docutils literal notranslate"><span class="pre">sitecustomize</span></code> is ignored. Any exception other
+than <a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportError</span></code></a> causes a silent and perhaps mysterious failure of the
+process.</p>
+<p id="index-4">After this, an attempt is made to import a module named <code class="xref py py-mod docutils literal notranslate"><span class="pre">usercustomize</span></code>,
+which can perform arbitrary user-specific customizations, if
+<a class="reference internal" href="#site.ENABLE_USER_SITE" title="site.ENABLE_USER_SITE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ENABLE_USER_SITE</span></code></a> is true.  This file is intended to be created in the
+user site-packages directory (see below), which is part of <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> unless
+disabled by <a class="reference internal" href="../using/cmdline.html#cmdoption-s"><code class="xref std std-option docutils literal notranslate"><span class="pre">-s</span></code></a>.  An <a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportError</span></code></a> will be silently ignored.</p>
+<p>Note that for some non-Unix systems, <code class="docutils literal notranslate"><span class="pre">sys.prefix</span></code> and <code class="docutils literal notranslate"><span class="pre">sys.exec_prefix</span></code> are
+empty, and the path manipulations are skipped; however the import of
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">sitecustomize</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">usercustomize</span></code> is still attempted.</p>
+<dl class="data">
+<dt id="site.PREFIXES">
+<code class="descclassname">site.</code><code class="descname">PREFIXES</code><a class="headerlink" href="#site.PREFIXES" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of prefixes for site-packages directories.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="site.ENABLE_USER_SITE">
+<code class="descclassname">site.</code><code class="descname">ENABLE_USER_SITE</code><a class="headerlink" href="#site.ENABLE_USER_SITE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag showing the status of the user site-packages directory.  <code class="docutils literal notranslate"><span class="pre">True</span></code> means
+that it is enabled and was added to <code class="docutils literal notranslate"><span class="pre">sys.path</span></code>.  <code class="docutils literal notranslate"><span class="pre">False</span></code> means that it
+was disabled by user request (with <a class="reference internal" href="../using/cmdline.html#cmdoption-s"><code class="xref std std-option docutils literal notranslate"><span class="pre">-s</span></code></a> or
+<span class="target" id="index-5"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONNOUSERSITE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHONNOUSERSITE</span></code></a>).  <code class="docutils literal notranslate"><span class="pre">None</span></code> means it was disabled for security
+reasons (mismatch between user or group id and effective id) or by an
+administrator.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="site.USER_SITE">
+<code class="descclassname">site.</code><code class="descname">USER_SITE</code><a class="headerlink" href="#site.USER_SITE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to the user site-packages for the running Python.  Can be <code class="docutils literal notranslate"><span class="pre">None</span></code> if
+<a class="reference internal" href="#site.getusersitepackages" title="site.getusersitepackages"><code class="xref py py-func docutils literal notranslate"><span class="pre">getusersitepackages()</span></code></a> hasn’t been called yet.  Default value is
+<code class="file docutils literal notranslate"><span class="pre">~/.local/lib/python</span><em><span class="pre">X.Y</span></em><span class="pre">/site-packages</span></code> for UNIX and non-framework Mac
+OS X builds, <code class="file docutils literal notranslate"><span class="pre">~/Library/Python/</span><em><span class="pre">X.Y</span></em><span class="pre">/lib/python/site-packages</span></code> for Mac
+framework builds, and <code class="file docutils literal notranslate"><em><span class="pre">%APPDATA%</span></em><span class="pre">\Python\Python</span><em><span class="pre">XY</span></em><span class="pre">\site-packages</span></code>
+on Windows.  This directory is a site directory, which means that
+<code class="file docutils literal notranslate"><span class="pre">.pth</span></code> files in it will be processed.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="site.USER_BASE">
+<code class="descclassname">site.</code><code class="descname">USER_BASE</code><a class="headerlink" href="#site.USER_BASE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to the base directory for the user site-packages.  Can be <code class="docutils literal notranslate"><span class="pre">None</span></code> if
+<a class="reference internal" href="#site.getuserbase" title="site.getuserbase"><code class="xref py py-func docutils literal notranslate"><span class="pre">getuserbase()</span></code></a> hasn’t been called yet.  Default value is
+<code class="file docutils literal notranslate"><span class="pre">~/.local</span></code> for UNIX and Mac OS X non-framework builds,
+<code class="file docutils literal notranslate"><span class="pre">~/Library/Python/</span><em><span class="pre">X.Y</span></em></code> for Mac framework builds, and
+<code class="file docutils literal notranslate"><em><span class="pre">%APPDATA%</span></em><span class="pre">\Python</span></code> for Windows.  This value is used by Distutils to
+compute the installation directories for scripts, data files, Python modules,
+etc. for the <a class="reference internal" href="../install/index.html#inst-alt-install-user"><span class="std std-ref">user installation scheme</span></a>.  See
+also <span class="target" id="index-6"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONUSERBASE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHONUSERBASE</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="site.addsitedir">
+<code class="descclassname">site.</code><code class="descname">addsitedir</code><span class="sig-paren">(</span><em>sitedir</em>, <em>known_paths=None</em><span class="sig-paren">)</span><a class="headerlink" href="#site.addsitedir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a directory to sys.path and process its <code class="file docutils literal notranslate"><span class="pre">.pth</span></code> files.  Typically
+used in <code class="xref py py-mod docutils literal notranslate"><span class="pre">sitecustomize</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">usercustomize</span></code> (see above).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="site.getsitepackages">
+<code class="descclassname">site.</code><code class="descname">getsitepackages</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#site.getsitepackages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list containing all global site-packages directories (and possibly
+site-python).</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.7.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="site.getuserbase">
+<code class="descclassname">site.</code><code class="descname">getuserbase</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#site.getuserbase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path of the user base directory, <a class="reference internal" href="#site.USER_BASE" title="site.USER_BASE"><code class="xref py py-data docutils literal notranslate"><span class="pre">USER_BASE</span></code></a>.  If it is not
+initialized yet, this function will also set it, respecting
+<span class="target" id="index-7"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONUSERBASE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHONUSERBASE</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.7.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="site.getusersitepackages">
+<code class="descclassname">site.</code><code class="descname">getusersitepackages</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#site.getusersitepackages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path of the user-specific site-packages directory,
+<a class="reference internal" href="#site.USER_SITE" title="site.USER_SITE"><code class="xref py py-data docutils literal notranslate"><span class="pre">USER_SITE</span></code></a>.  If it is not initialized yet, this function will also set
+it, respecting <span class="target" id="index-8"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONNOUSERSITE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHONNOUSERSITE</span></code></a> and <a class="reference internal" href="#site.USER_BASE" title="site.USER_BASE"><code class="xref py py-data docutils literal notranslate"><span class="pre">USER_BASE</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.7.</span></p>
+</div>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-site" title="site: Module responsible for site-specific configuration."><code class="xref py py-mod docutils literal notranslate"><span class="pre">site</span></code></a> module also provides a way to get the user directories from the
+command line:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ python -m site --user-site
+/home/user/.local/lib/python2.7/site-packages
+</pre></div>
+</div>
+<p>If it is called without arguments, it will print the contents of
+<a class="reference internal" href="sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.path</span></code></a> on the standard output, followed by the value of
+<a class="reference internal" href="#site.USER_BASE" title="site.USER_BASE"><code class="xref py py-data docutils literal notranslate"><span class="pre">USER_BASE</span></code></a> and whether the directory exists, then the same thing for
+<a class="reference internal" href="#site.USER_SITE" title="site.USER_SITE"><code class="xref py py-data docutils literal notranslate"><span class="pre">USER_SITE</span></code></a>, and finally the value of <a class="reference internal" href="#site.ENABLE_USER_SITE" title="site.ENABLE_USER_SITE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ENABLE_USER_SITE</span></code></a>.</p>
+<dl class="cmdoption">
+<dt id="cmdoption-site-user-base">
+<code class="descname">--user-base</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-site-user-base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the path to the user base directory.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-site-user-site">
+<code class="descname">--user-site</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-site-user-site" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the path to the user site-packages directory.</p>
+</dd></dl>
+
+<p>If both options are given, user base and user site will be printed (always in
+this order), separated by <a class="reference internal" href="os.html#os.pathsep" title="os.pathsep"><code class="xref py py-data docutils literal notranslate"><span class="pre">os.pathsep</span></code></a>.</p>
+<p>If any option is given, the script will exit with one of these values: <code class="docutils literal notranslate"><span class="pre">0</span></code> if
+the user site-packages directory is enabled, <code class="docutils literal notranslate"><span class="pre">1</span></code> if it was disabled by the
+user, <code class="docutils literal notranslate"><span class="pre">2</span></code> if it is disabled for security reasons or by an administrator, and a
+value greater than 2 if there is an error.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><span class="target" id="index-9"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0370"><strong>PEP 370</strong></a> – Per user site-packages directory</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="inspect.html"
+                        title="previous chapter">28.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">inspect</span></code> — Inspect live objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="user.html"
+                        title="next chapter">28.15. <code class="xref py py-mod docutils literal notranslate"><span class="pre">user</span></code> — User-specific configuration hook</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/site.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="user.html" title="28.15. user — User-specific configuration hook"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="inspect.html" title="28.13. inspect — Inspect live objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" >28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

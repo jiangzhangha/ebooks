@@ -1,0 +1,961 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>16.2. threading — Higher-level threading interface &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="16.3. thread — Multiple threads of control" href="thread.html" />
+    <link rel="prev" title="16.1. select — Waiting for I/O completion" href="select.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/threading.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="thread.html" title="16.3. thread — Multiple threads of control"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="select.html" title="16.1. select — Waiting for I/O completion"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="someos.html" accesskey="U">16. Optional Operating System Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-threading">
+<span id="threading-higher-level-threading-interface"></span><h1>16.2. <a class="reference internal" href="#module-threading" title="threading: Higher-level threading interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">threading</span></code></a> — Higher-level threading interface<a class="headerlink" href="#module-threading" title="Permalink to this headline">¶</a></h1>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Lib/threading.py">Lib/threading.py</a></p>
+<hr class="docutils" />
+<p>This module constructs higher-level threading interfaces on top of the  lower
+level <a class="reference internal" href="thread.html#module-thread" title="thread: Create multiple threads of control within one interpreter."><code class="xref py py-mod docutils literal notranslate"><span class="pre">thread</span></code></a> module.
+See also the <a class="reference internal" href="mutex.html#module-mutex" title="mutex: Lock and queue for mutual exclusion. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mutex</span></code></a> and <a class="reference internal" href="queue.html#module-Queue" title="Queue: A synchronized queue class."><code class="xref py py-mod docutils literal notranslate"><span class="pre">Queue</span></code></a> modules.</p>
+<p>The <a class="reference internal" href="dummy_threading.html#module-dummy_threading" title="dummy_threading: Drop-in replacement for the threading module."><code class="xref py py-mod docutils literal notranslate"><span class="pre">dummy_threading</span></code></a> module is provided for situations where
+<a class="reference internal" href="#module-threading" title="threading: Higher-level threading interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">threading</span></code></a> cannot be used because <a class="reference internal" href="thread.html#module-thread" title="thread: Create multiple threads of control within one interpreter."><code class="xref py py-mod docutils literal notranslate"><span class="pre">thread</span></code></a> is missing.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Starting with Python 2.6, this module provides <span class="target" id="index-0"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0008"><strong>PEP 8</strong></a> compliant aliases and
+properties to replace the <code class="docutils literal notranslate"><span class="pre">camelCase</span></code> names that were inspired by Java’s
+threading API. This updated API is compatible with that of the
+<a class="reference internal" href="multiprocessing.html#module-multiprocessing" title="multiprocessing: Process-based &quot;threading&quot; interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">multiprocessing</span></code></a> module. However, no schedule has been set for the
+deprecation of the <code class="docutils literal notranslate"><span class="pre">camelCase</span></code> names and they remain fully supported in
+both Python 2.x and 3.x.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Starting with Python 2.5, several Thread methods raise <a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a>
+instead of <a class="reference internal" href="exceptions.html#exceptions.AssertionError" title="exceptions.AssertionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AssertionError</span></code></a> if called erroneously.</p>
+</div>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> In CPython, due to the <a class="reference internal" href="../glossary.html#term-global-interpreter-lock"><span class="xref std std-term">Global Interpreter Lock</span></a>, only one thread
+can execute Python code at once (even though certain performance-oriented
+libraries might overcome this limitation).
+If you want your application to make better use of the computational
+resources of multi-core machines, you are advised to use
+<a class="reference internal" href="multiprocessing.html#module-multiprocessing" title="multiprocessing: Process-based &quot;threading&quot; interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">multiprocessing</span></code></a>. However, threading is still an appropriate model
+if you want to run multiple I/O-bound tasks simultaneously.</p>
+</div>
+<p>This module defines the following functions and objects:</p>
+<dl class="function">
+<dt id="threading.active_count">
+<code class="descclassname">threading.</code><code class="descname">active_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.active_count" title="Permalink to this definition">¶</a></dt>
+<dt id="threading.activeCount">
+<code class="descclassname">threading.</code><code class="descname">activeCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.activeCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of <a class="reference internal" href="#threading.Thread" title="threading.Thread"><code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></a> objects currently alive.  The returned
+count is equal to the length of the list returned by <a class="reference internal" href="#threading.enumerate" title="threading.enumerate"><code class="xref py py-func docutils literal notranslate"><span class="pre">enumerate()</span></code></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Added <code class="docutils literal notranslate"><span class="pre">active_count()</span></code> spelling.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">threading.</code><code class="descname">Condition</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>A factory function that returns a new condition variable object. A condition
+variable allows one or more threads to wait until they are notified by another
+thread.</p>
+<p>See <a class="reference internal" href="#condition-objects"><span class="std std-ref">Condition Objects</span></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="threading.current_thread">
+<code class="descclassname">threading.</code><code class="descname">current_thread</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.current_thread" title="Permalink to this definition">¶</a></dt>
+<dt id="threading.currentThread">
+<code class="descclassname">threading.</code><code class="descname">currentThread</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.currentThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current <a class="reference internal" href="#threading.Thread" title="threading.Thread"><code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></a> object, corresponding to the caller’s thread
+of control.  If the caller’s thread of control was not created through the
+<a class="reference internal" href="#module-threading" title="threading: Higher-level threading interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">threading</span></code></a> module, a dummy thread object with limited functionality is
+returned.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Added <code class="docutils literal notranslate"><span class="pre">current_thread()</span></code> spelling.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="threading.enumerate">
+<code class="descclassname">threading.</code><code class="descname">enumerate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.enumerate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all <a class="reference internal" href="#threading.Thread" title="threading.Thread"><code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></a> objects currently alive.  The list
+includes daemonic threads, dummy thread objects created by
+<a class="reference internal" href="#threading.current_thread" title="threading.current_thread"><code class="xref py py-func docutils literal notranslate"><span class="pre">current_thread()</span></code></a>, and the main thread.  It excludes terminated threads
+and threads that have not yet been started.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">threading.</code><code class="descname">Event</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>A factory function that returns a new event object.  An event manages a flag
+that can be set to true with the <a class="reference internal" href="#threading.Event.set" title="threading.Event.set"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set()</span></code></a> method and reset to false
+with the <code class="xref py py-meth docutils literal notranslate"><span class="pre">clear()</span></code> method.  The <code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code> method blocks until the flag
+is true.</p>
+<p>See <a class="reference internal" href="#event-objects"><span class="std std-ref">Event Objects</span></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="threading.local">
+<em class="property">class </em><code class="descclassname">threading.</code><code class="descname">local</code><a class="headerlink" href="#threading.local" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class that represents thread-local data.  Thread-local data are data whose
+values are thread specific.  To manage thread-local data, just create an
+instance of <a class="reference internal" href="#threading.local" title="threading.local"><code class="xref py py-class docutils literal notranslate"><span class="pre">local</span></code></a> (or a subclass) and store attributes on it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mydata</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+<span class="n">mydata</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>The instance’s values will be different for separate threads.</p>
+<p>For more details and extensive examples, see the documentation string of the
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">_threading_local</span></code> module.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="threading.Lock">
+<code class="descclassname">threading.</code><code class="descname">Lock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Lock" title="Permalink to this definition">¶</a></dt>
+<dd><p>A factory function that returns a new primitive lock object.  Once a thread has
+acquired it, subsequent attempts to acquire it block, until it is released; any
+thread may release it.</p>
+<p>See <a class="reference internal" href="#lock-objects"><span class="std std-ref">Lock Objects</span></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="threading.RLock">
+<code class="descclassname">threading.</code><code class="descname">RLock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.RLock" title="Permalink to this definition">¶</a></dt>
+<dd><p>A factory function that returns a new reentrant lock object. A reentrant lock
+must be released by the thread that acquired it. Once a thread has acquired a
+reentrant lock, the same thread may acquire it again without blocking; the
+thread must release it once for each time it has acquired it.</p>
+<p>See <a class="reference internal" href="#rlock-objects"><span class="std std-ref">RLock Objects</span></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">threading.</code><code class="descname">Semaphore</code><span class="sig-paren">(</span><span class="optional">[</span><em>value</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><p>A factory function that returns a new semaphore object.  A semaphore manages a
+counter representing the number of <code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> calls minus the number of
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> calls, plus an initial value. The <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> method blocks
+if necessary until it can return without making the counter negative.  If not
+given, <em>value</em> defaults to 1.</p>
+<p>See <a class="reference internal" href="#semaphore-objects"><span class="std std-ref">Semaphore Objects</span></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="threading.BoundedSemaphore">
+<code class="descclassname">threading.</code><code class="descname">BoundedSemaphore</code><span class="sig-paren">(</span><span class="optional">[</span><em>value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.BoundedSemaphore" title="Permalink to this definition">¶</a></dt>
+<dd><p>A factory function that returns a new bounded semaphore object.  A bounded
+semaphore checks to make sure its current value doesn’t exceed its initial
+value.  If it does, <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> is raised. In most situations semaphores
+are used to guard resources with limited capacity.  If the semaphore is released
+too many times it’s a sign of a bug.  If not given, <em>value</em> defaults to 1.</p>
+</dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="descclassname">threading.</code><code class="descname">Thread</code></dt>
+<dd><p>A class that represents a thread of control.  This class can be safely
+subclassed in a limited fashion.</p>
+<p>See <a class="reference internal" href="#thread-objects"><span class="std std-ref">Thread Objects</span></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="descclassname">threading.</code><code class="descname">Timer</code></dt>
+<dd><p>A thread that executes a function after a specified interval has passed.</p>
+<p>See <a class="reference internal" href="#timer-objects"><span class="std std-ref">Timer Objects</span></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="threading.settrace">
+<code class="descclassname">threading.</code><code class="descname">settrace</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#threading.settrace" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">Set a trace function for all threads started from the <a class="reference internal" href="#module-threading" title="threading: Higher-level threading interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">threading</span></code></a> module.
+The <em>func</em> will be passed to  <a class="reference internal" href="sys.html#sys.settrace" title="sys.settrace"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.settrace()</span></code></a> for each thread, before its
+<a class="reference internal" href="#threading.Thread.run" title="threading.Thread.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> method is called.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="threading.setprofile">
+<code class="descclassname">threading.</code><code class="descname">setprofile</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#threading.setprofile" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">Set a profile function for all threads started from the <a class="reference internal" href="#module-threading" title="threading: Higher-level threading interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">threading</span></code></a> module.
+The <em>func</em> will be passed to  <a class="reference internal" href="sys.html#sys.setprofile" title="sys.setprofile"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.setprofile()</span></code></a> for each thread, before its
+<a class="reference internal" href="#threading.Thread.run" title="threading.Thread.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> method is called.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="threading.stack_size">
+<code class="descclassname">threading.</code><code class="descname">stack_size</code><span class="sig-paren">(</span><span class="optional">[</span><em>size</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.stack_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the thread stack size used when creating new threads.  The optional
+<em>size</em> argument specifies the stack size to be used for subsequently created
+threads, and must be 0 (use platform or configured default) or a positive
+integer value of at least 32,768 (32 KiB). If <em>size</em> is not specified,
+0 is used.  If changing the thread stack size is
+unsupported, a <a class="reference internal" href="#threading.ThreadError" title="threading.ThreadError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ThreadError</span></code></a> is raised.  If the specified stack size is
+invalid, a <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> is raised and the stack size is unmodified.  32kB
+is currently the minimum supported stack size value to guarantee sufficient
+stack space for the interpreter itself.  Note that some platforms may have
+particular restrictions on values for the stack size, such as requiring a
+minimum stack size &gt; 32kB or requiring allocation in multiples of the system
+memory page size - platform documentation should be referred to for more
+information (4kB pages are common; using multiples of 4096 for the stack size is
+the suggested approach in the absence of more specific information).
+Availability: Windows, systems with POSIX threads.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="threading.ThreadError">
+<em class="property">exception </em><code class="descclassname">threading.</code><code class="descname">ThreadError</code><a class="headerlink" href="#threading.ThreadError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised for various threading-related errors as described below.  Note that
+many interfaces use <a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> instead of <a class="reference internal" href="#threading.ThreadError" title="threading.ThreadError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ThreadError</span></code></a>.</p>
+</dd></dl>
+
+<p>Detailed interfaces for the objects are documented below.</p>
+<p>The design of this module is loosely based on Java’s threading model. However,
+where Java makes locks and condition variables basic behavior of every object,
+they are separate objects in Python.  Python’s <a class="reference internal" href="#threading.Thread" title="threading.Thread"><code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></a> class supports a
+subset of the behavior of Java’s Thread class; currently, there are no
+priorities, no thread groups, and threads cannot be destroyed, stopped,
+suspended, resumed, or interrupted.  The static methods of Java’s Thread class,
+when implemented, are mapped to module-level functions.</p>
+<p>All of the methods described below are executed atomically.</p>
+<div class="section" id="thread-objects">
+<span id="id1"></span><h2>16.2.1. Thread Objects<a class="headerlink" href="#thread-objects" title="Permalink to this headline">¶</a></h2>
+<p>This class represents an activity that is run in a separate thread of control.
+There are two ways to specify the activity: by passing a callable object to the
+constructor, or by overriding the <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code> method in a subclass.  No other
+methods (except for the constructor) should be overridden in a subclass.  In
+other words,  <em>only</em>  override the <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code> methods of
+this class.</p>
+<p>Once a thread object is created, its activity must be started by calling the
+thread’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code> method.  This invokes the <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code> method in a
+separate thread of control.</p>
+<p>Once the thread’s activity is started, the thread is considered ‘alive’. It
+stops being alive when its <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code> method terminates – either normally, or
+by raising an unhandled exception.  The <code class="xref py py-meth docutils literal notranslate"><span class="pre">is_alive()</span></code> method tests whether the
+thread is alive.</p>
+<p>Other threads can call a thread’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">join()</span></code> method.  This blocks the calling
+thread until the thread whose <code class="xref py py-meth docutils literal notranslate"><span class="pre">join()</span></code> method is called is terminated.</p>
+<p>A thread has a name.  The name can be passed to the constructor, and read or
+changed through the <code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code> attribute.</p>
+<p>A thread can be flagged as a “daemon thread”.  The significance of this flag is
+that the entire Python program exits when only daemon threads are left.  The
+initial value is inherited from the creating thread.  The flag can be set
+through the <code class="xref py py-attr docutils literal notranslate"><span class="pre">daemon</span></code> property.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Daemon threads are abruptly stopped at shutdown.  Their resources (such
+as open files, database transactions, etc.) may not be released properly.
+If you want your threads to stop gracefully, make them non-daemonic and
+use a suitable signalling mechanism such as an <a class="reference internal" href="#threading.Event" title="threading.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a>.</p>
+</div>
+<p>There is a “main thread” object; this corresponds to the initial thread of
+control in the Python program.  It is not a daemon thread.</p>
+<p>There is the possibility that “dummy thread objects” are created. These are
+thread objects corresponding to “alien threads”, which are threads of control
+started outside the threading module, such as directly from C code.  Dummy
+thread objects have limited functionality; they are always considered alive and
+daemonic, and cannot be <code class="xref py py-meth docutils literal notranslate"><span class="pre">join()</span></code>ed.  They are never deleted, since it is
+impossible to detect the termination of alien threads.</p>
+<dl class="class">
+<dt id="threading.Thread">
+<em class="property">class </em><code class="descclassname">threading.</code><code class="descname">Thread</code><span class="sig-paren">(</span><em>group=None</em>, <em>target=None</em>, <em>name=None</em>, <em>args=()</em>, <em>kwargs={}</em><span class="sig-paren">)</span><a class="headerlink" href="#threading.Thread" title="Permalink to this definition">¶</a></dt>
+<dd><p>This constructor should always be called with keyword arguments.  Arguments
+are:</p>
+<p><em>group</em> should be <code class="docutils literal notranslate"><span class="pre">None</span></code>; reserved for future extension when a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ThreadGroup</span></code> class is implemented.</p>
+<p><em>target</em> is the callable object to be invoked by the <a class="reference internal" href="#threading.Thread.run" title="threading.Thread.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> method.
+Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, meaning nothing is called.</p>
+<p><em>name</em> is the thread name.  By default, a unique name is constructed of the
+form “Thread-<em>N</em>” where <em>N</em> is a small decimal number.</p>
+<p><em>args</em> is the argument tuple for the target invocation.  Defaults to <code class="docutils literal notranslate"><span class="pre">()</span></code>.</p>
+<p><em>kwargs</em> is a dictionary of keyword arguments for the target invocation.
+Defaults to <code class="docutils literal notranslate"><span class="pre">{}</span></code>.</p>
+<p>If the subclass overrides the constructor, it must make sure to invoke the
+base class constructor (<code class="docutils literal notranslate"><span class="pre">Thread.__init__()</span></code>) before doing anything else to
+the thread.</p>
+<dl class="method">
+<dt id="threading.Thread.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Thread.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the thread’s activity.</p>
+<p>It must be called at most once per thread object.  It arranges for the
+object’s <a class="reference internal" href="#threading.Thread.run" title="threading.Thread.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> method to be invoked in a separate thread of control.</p>
+<p>This method will raise a <a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> if called more than once
+on the same thread object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Thread.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Thread.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass.  The standard <a class="reference internal" href="#threading.Thread.run" title="threading.Thread.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a>
+method invokes the callable object passed to the object’s constructor as
+the <em>target</em> argument, if any, with sequential and keyword arguments taken
+from the <em>args</em> and <em>kwargs</em> arguments, respectively.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Thread.join">
+<code class="descname">join</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Thread.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until the thread terminates. This blocks the calling thread until the
+thread whose <a class="reference internal" href="#threading.Thread.join" title="threading.Thread.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">join()</span></code></a> method is called terminates – either normally
+or through an unhandled exception – or until the optional timeout occurs.</p>
+<p>When the <em>timeout</em> argument is present and not <code class="docutils literal notranslate"><span class="pre">None</span></code>, it should be a
+floating point number specifying a timeout for the operation in seconds
+(or fractions thereof). As <a class="reference internal" href="#threading.Thread.join" title="threading.Thread.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">join()</span></code></a> always returns <code class="docutils literal notranslate"><span class="pre">None</span></code>, you must
+call <a class="reference internal" href="#threading.Thread.isAlive" title="threading.Thread.isAlive"><code class="xref py py-meth docutils literal notranslate"><span class="pre">isAlive()</span></code></a> after <a class="reference internal" href="#threading.Thread.join" title="threading.Thread.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">join()</span></code></a> to decide whether a timeout
+happened – if the thread is still alive, the <a class="reference internal" href="#threading.Thread.join" title="threading.Thread.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">join()</span></code></a> call timed out.</p>
+<p>When the <em>timeout</em> argument is not present or <code class="docutils literal notranslate"><span class="pre">None</span></code>, the operation will
+block until the thread terminates.</p>
+<p>A thread can be <a class="reference internal" href="#threading.Thread.join" title="threading.Thread.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">join()</span></code></a>ed many times.</p>
+<p><a class="reference internal" href="#threading.Thread.join" title="threading.Thread.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">join()</span></code></a> raises a <a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> if an attempt is made to join
+the current thread as that would cause a deadlock. It is also an error to
+<a class="reference internal" href="#threading.Thread.join" title="threading.Thread.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">join()</span></code></a> a thread before it has been started and attempts to do so
+raises the same exception.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="threading.Thread.name">
+<code class="descname">name</code><a class="headerlink" href="#threading.Thread.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string used for identification purposes only. It has no semantics.
+Multiple threads may be given the same name.  The initial name is set by
+the constructor.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Thread.getName">
+<code class="descname">getName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Thread.getName" title="Permalink to this definition">¶</a></dt>
+<dt id="threading.Thread.setName">
+<code class="descname">setName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Thread.setName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-2.6 API for <a class="reference internal" href="#threading.Thread.name" title="threading.Thread.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="threading.Thread.ident">
+<code class="descname">ident</code><a class="headerlink" href="#threading.Thread.ident" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ‘thread identifier’ of this thread or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the thread has not
+been started.  This is a nonzero integer.  See the
+<a class="reference internal" href="thread.html#thread.get_ident" title="thread.get_ident"><code class="xref py py-func docutils literal notranslate"><span class="pre">thread.get_ident()</span></code></a> function.  Thread identifiers may be recycled
+when a thread exits and another thread is created.  The identifier is
+available even after the thread has exited.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Thread.is_alive">
+<code class="descname">is_alive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Thread.is_alive" title="Permalink to this definition">¶</a></dt>
+<dt id="threading.Thread.isAlive">
+<code class="descname">isAlive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Thread.isAlive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the thread is alive.</p>
+<p>This method returns <code class="docutils literal notranslate"><span class="pre">True</span></code> just before the <a class="reference internal" href="#threading.Thread.run" title="threading.Thread.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> method starts
+until just after the <a class="reference internal" href="#threading.Thread.run" title="threading.Thread.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> method terminates.  The module function
+<a class="reference internal" href="#threading.enumerate" title="threading.enumerate"><code class="xref py py-func docutils literal notranslate"><span class="pre">enumerate()</span></code></a> returns a list of all alive threads.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Added <code class="docutils literal notranslate"><span class="pre">is_alive()</span></code> spelling.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="threading.Thread.daemon">
+<code class="descname">daemon</code><a class="headerlink" href="#threading.Thread.daemon" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean value indicating whether this thread is a daemon thread (True)
+or not (False).  This must be set before <a class="reference internal" href="#threading.Thread.start" title="threading.Thread.start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code></a> is called,
+otherwise <a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> is raised.  Its initial value is inherited
+from the creating thread; the main thread is not a daemon thread and
+therefore all threads created in the main thread default to <a class="reference internal" href="#threading.Thread.daemon" title="threading.Thread.daemon"><code class="xref py py-attr docutils literal notranslate"><span class="pre">daemon</span></code></a>
+= <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>The entire Python program exits when no alive non-daemon threads are left.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Thread.isDaemon">
+<code class="descname">isDaemon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Thread.isDaemon" title="Permalink to this definition">¶</a></dt>
+<dt id="threading.Thread.setDaemon">
+<code class="descname">setDaemon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Thread.setDaemon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-2.6 API for <a class="reference internal" href="#threading.Thread.daemon" title="threading.Thread.daemon"><code class="xref py py-attr docutils literal notranslate"><span class="pre">daemon</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="lock-objects">
+<span id="id2"></span><h2>16.2.2. Lock Objects<a class="headerlink" href="#lock-objects" title="Permalink to this headline">¶</a></h2>
+<p>A primitive lock is a synchronization primitive that is not owned by a
+particular thread when locked.  In Python, it is currently the lowest level
+synchronization primitive available, implemented directly by the <a class="reference internal" href="thread.html#module-thread" title="thread: Create multiple threads of control within one interpreter."><code class="xref py py-mod docutils literal notranslate"><span class="pre">thread</span></code></a>
+extension module.</p>
+<p>A primitive lock is in one of two states, “locked” or “unlocked”. It is created
+in the unlocked state.  It has two basic methods, <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code>.  When the state is unlocked, <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> changes the state
+to locked and returns immediately.  When the state is locked, <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code>
+blocks until a call to <code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> in another thread changes it to unlocked,
+then the <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> call resets it to locked and returns.  The
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> method should only be called in the locked state; it changes the
+state to unlocked and returns immediately. If an attempt is made to release an
+unlocked lock, a <a class="reference internal" href="#threading.ThreadError" title="threading.ThreadError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ThreadError</span></code></a> will be raised.</p>
+<p>When more than one thread is blocked in <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> waiting for the state to
+turn to unlocked, only one thread proceeds when a <code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> call resets
+the state to unlocked; which one of the waiting threads proceeds is not defined,
+and may vary across implementations.</p>
+<p>All methods are executed atomically.</p>
+<dl class="method">
+<dt id="threading.Lock.acquire">
+<code class="descclassname">Lock.</code><code class="descname">acquire</code><span class="sig-paren">(</span><span class="optional">[</span><em>blocking</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Lock.acquire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire a lock, blocking or non-blocking.</p>
+<p>When invoked with the <em>blocking</em> argument set to <code class="docutils literal notranslate"><span class="pre">True</span></code> (the default),
+block until the lock is unlocked, then set it to locked and return <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<p>When invoked with the <em>blocking</em> argument set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, do not block.
+If a call with <em>blocking</em> set to <code class="docutils literal notranslate"><span class="pre">True</span></code> would block, return <code class="docutils literal notranslate"><span class="pre">False</span></code>
+immediately; otherwise, set the lock to locked and return <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Lock.release">
+<code class="descclassname">Lock.</code><code class="descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Lock.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release a lock.</p>
+<p>When the lock is locked, reset it to unlocked, and return.  If any other threads
+are blocked waiting for the lock to become unlocked, allow exactly one of them
+to proceed.</p>
+<p>When invoked on an unlocked lock, a <a class="reference internal" href="#threading.ThreadError" title="threading.ThreadError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ThreadError</span></code></a> is raised.</p>
+<p>There is no return value.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="rlock-objects">
+<span id="id3"></span><h2>16.2.3. RLock Objects<a class="headerlink" href="#rlock-objects" title="Permalink to this headline">¶</a></h2>
+<p>A reentrant lock is a synchronization primitive that may be acquired multiple
+times by the same thread.  Internally, it uses the concepts of “owning thread”
+and “recursion level” in addition to the locked/unlocked state used by primitive
+locks.  In the locked state, some thread owns the lock; in the unlocked state,
+no thread owns it.</p>
+<p>To lock the lock, a thread calls its <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> method; this returns once
+the thread owns the lock.  To unlock the lock, a thread calls its
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> method. <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code>/<code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> call pairs may be
+nested; only the final <code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> (the <code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> of the outermost
+pair) resets the lock to unlocked and allows another thread blocked in
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> to proceed.</p>
+<dl class="method">
+<dt id="threading.RLock.acquire">
+<code class="descclassname">RLock.</code><code class="descname">acquire</code><span class="sig-paren">(</span><span class="optional">[</span><em>blocking=1</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.RLock.acquire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire a lock, blocking or non-blocking.</p>
+<p>When invoked without arguments: if this thread already owns the lock, increment
+the recursion level by one, and return immediately.  Otherwise, if another
+thread owns the lock, block until the lock is unlocked.  Once the lock is
+unlocked (not owned by any thread), then grab ownership, set the recursion level
+to one, and return.  If more than one thread is blocked waiting until the lock
+is unlocked, only one at a time will be able to grab ownership of the lock.
+There is no return value in this case.</p>
+<p>When invoked with the <em>blocking</em> argument set to true, do the same thing as when
+called without arguments, and return true.</p>
+<p>When invoked with the <em>blocking</em> argument set to false, do not block.  If a call
+without an argument would block, return false immediately; otherwise, do the
+same thing as when called without arguments, and return true.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.RLock.release">
+<code class="descclassname">RLock.</code><code class="descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.RLock.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release a lock, decrementing the recursion level.  If after the decrement it is
+zero, reset the lock to unlocked (not owned by any thread), and if any other
+threads are blocked waiting for the lock to become unlocked, allow exactly one
+of them to proceed.  If after the decrement the recursion level is still
+nonzero, the lock remains locked and owned by the calling thread.</p>
+<p>Only call this method when the calling thread owns the lock. A
+<a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> is raised if this method is called when the lock is
+unlocked.</p>
+<p>There is no return value.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="condition-objects">
+<span id="id4"></span><h2>16.2.4. Condition Objects<a class="headerlink" href="#condition-objects" title="Permalink to this headline">¶</a></h2>
+<p>A condition variable is always associated with some kind of lock; this can be
+passed in or one will be created by default.  (Passing one in is useful when
+several condition variables must share the same lock.)</p>
+<p>A condition variable has <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> methods that call
+the corresponding methods of the associated lock. It also has a <code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code>
+method, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">notify()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">notifyAll()</span></code> methods.  These three must only
+be called when the calling thread has acquired the lock, otherwise a
+<a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> is raised.</p>
+<p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code> method releases the lock, and then blocks until it is awakened
+by a <code class="xref py py-meth docutils literal notranslate"><span class="pre">notify()</span></code> or <code class="xref py py-meth docutils literal notranslate"><span class="pre">notifyAll()</span></code> call for the same condition variable in
+another thread.  Once awakened, it re-acquires the lock and returns.  It is also
+possible to specify a timeout.</p>
+<p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">notify()</span></code> method wakes up one of the threads waiting for the condition
+variable, if any are waiting.  The <code class="xref py py-meth docutils literal notranslate"><span class="pre">notifyAll()</span></code> method wakes up all threads
+waiting for the condition variable.</p>
+<p>Note: the <code class="xref py py-meth docutils literal notranslate"><span class="pre">notify()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">notifyAll()</span></code> methods don’t release the lock;
+this means that the thread or threads awakened will not return from their
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code> call immediately, but only when the thread that called
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">notify()</span></code> or <code class="xref py py-meth docutils literal notranslate"><span class="pre">notifyAll()</span></code> finally relinquishes ownership of the lock.</p>
+<p>Tip: the typical programming style using condition variables uses the lock to
+synchronize access to some shared state; threads that are interested in a
+particular change of state call <code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code> repeatedly until they see the
+desired state, while threads that modify the state call <code class="xref py py-meth docutils literal notranslate"><span class="pre">notify()</span></code> or
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">notifyAll()</span></code> when they change the state in such a way that it could
+possibly be a desired state for one of the waiters.  For example, the following
+code is a generic producer-consumer situation with unlimited buffer capacity:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Consume one item</span>
+<span class="n">cv</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+<span class="k">while</span> <span class="ow">not</span> <span class="n">an_item_is_available</span><span class="p">():</span>
+    <span class="n">cv</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="n">get_an_available_item</span><span class="p">()</span>
+<span class="n">cv</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+<span class="c1"># Produce one item</span>
+<span class="n">cv</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+<span class="n">make_an_item_available</span><span class="p">()</span>
+<span class="n">cv</span><span class="o">.</span><span class="n">notify</span><span class="p">()</span>
+<span class="n">cv</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To choose between <code class="xref py py-meth docutils literal notranslate"><span class="pre">notify()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">notifyAll()</span></code>, consider whether one
+state change can be interesting for only one or several waiting threads.  E.g.
+in a typical producer-consumer situation, adding one item to the buffer only
+needs to wake up one consumer thread.</p>
+<dl class="class">
+<dt id="threading.Condition">
+<em class="property">class </em><code class="descclassname">threading.</code><code class="descname">Condition</code><span class="sig-paren">(</span><span class="optional">[</span><em>lock</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Condition" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the <em>lock</em> argument is given and not <code class="docutils literal notranslate"><span class="pre">None</span></code>, it must be a <a class="reference internal" href="#threading.Lock" title="threading.Lock"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lock</span></code></a>
+or <a class="reference internal" href="#threading.RLock" title="threading.RLock"><code class="xref py py-class docutils literal notranslate"><span class="pre">RLock</span></code></a> object, and it is used as the underlying lock.  Otherwise,
+a new <a class="reference internal" href="#threading.RLock" title="threading.RLock"><code class="xref py py-class docutils literal notranslate"><span class="pre">RLock</span></code></a> object is created and used as the underlying lock.</p>
+<dl class="method">
+<dt id="threading.Condition.acquire">
+<code class="descname">acquire</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#threading.Condition.acquire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire the underlying lock. This method calls the corresponding method on
+the underlying lock; the return value is whatever that method returns.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Condition.release">
+<code class="descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Condition.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release the underlying lock. This method calls the corresponding method on
+the underlying lock; there is no return value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Condition.wait">
+<code class="descname">wait</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Condition.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until notified or until a timeout occurs. If the calling thread has not
+acquired the lock when this method is called, a <a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> is raised.</p>
+<p>This method releases the underlying lock, and then blocks until it is
+awakened by a <a class="reference internal" href="#threading.Condition.notify" title="threading.Condition.notify"><code class="xref py py-meth docutils literal notranslate"><span class="pre">notify()</span></code></a> or <a class="reference internal" href="#threading.Condition.notifyAll" title="threading.Condition.notifyAll"><code class="xref py py-meth docutils literal notranslate"><span class="pre">notifyAll()</span></code></a> call for the same
+condition variable in another thread, or until the optional timeout
+occurs.  Once awakened or timed out, it re-acquires the lock and returns.</p>
+<p>When the <em>timeout</em> argument is present and not <code class="docutils literal notranslate"><span class="pre">None</span></code>, it should be a
+floating point number specifying a timeout for the operation in seconds
+(or fractions thereof).</p>
+<p>When the underlying lock is an <a class="reference internal" href="#threading.RLock" title="threading.RLock"><code class="xref py py-class docutils literal notranslate"><span class="pre">RLock</span></code></a>, it is not released using
+its <a class="reference internal" href="#threading.Condition.release" title="threading.Condition.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a> method, since this may not actually unlock the lock
+when it was acquired multiple times recursively.  Instead, an internal
+interface of the <a class="reference internal" href="#threading.RLock" title="threading.RLock"><code class="xref py py-class docutils literal notranslate"><span class="pre">RLock</span></code></a> class is used, which really unlocks it
+even when it has been recursively acquired several times. Another internal
+interface is then used to restore the recursion level when the lock is
+reacquired.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Condition.notify">
+<code class="descname">notify</code><span class="sig-paren">(</span><em>n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#threading.Condition.notify" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default, wake up one thread waiting on this condition, if any.  If the
+calling thread has not acquired the lock when this method is called, a
+<a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> is raised.</p>
+<p>This method wakes up at most <em>n</em> of the threads waiting for the condition
+variable; it is a no-op if no threads are waiting.</p>
+<p>The current implementation wakes up exactly <em>n</em> threads, if at least <em>n</em>
+threads are waiting.  However, it’s not safe to rely on this behavior.
+A future, optimized implementation may occasionally wake up more than
+<em>n</em> threads.</p>
+<p>Note: an awakened thread does not actually return from its <a class="reference internal" href="#threading.Condition.wait" title="threading.Condition.wait"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code></a>
+call until it can reacquire the lock.  Since <a class="reference internal" href="#threading.Condition.notify" title="threading.Condition.notify"><code class="xref py py-meth docutils literal notranslate"><span class="pre">notify()</span></code></a> does not
+release the lock, its caller should.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Condition.notify_all">
+<code class="descname">notify_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Condition.notify_all" title="Permalink to this definition">¶</a></dt>
+<dt id="threading.Condition.notifyAll">
+<code class="descname">notifyAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Condition.notifyAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wake up all threads waiting on this condition.  This method acts like
+<a class="reference internal" href="#threading.Condition.notify" title="threading.Condition.notify"><code class="xref py py-meth docutils literal notranslate"><span class="pre">notify()</span></code></a>, but wakes up all waiting threads instead of one. If the
+calling thread has not acquired the lock when this method is called, a
+<a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> is raised.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Added <code class="docutils literal notranslate"><span class="pre">notify_all()</span></code> spelling.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="semaphore-objects">
+<span id="id5"></span><h2>16.2.5. Semaphore Objects<a class="headerlink" href="#semaphore-objects" title="Permalink to this headline">¶</a></h2>
+<p>This is one of the oldest synchronization primitives in the history of computer
+science, invented by the early Dutch computer scientist Edsger W. Dijkstra (he
+used <code class="xref py py-meth docutils literal notranslate"><span class="pre">P()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">V()</span></code> instead of <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code>).</p>
+<p>A semaphore manages an internal counter which is decremented by each
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> call and incremented by each <code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> call.  The counter
+can never go below zero; when <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> finds that it is zero, it blocks,
+waiting until some other thread calls <code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code>.</p>
+<dl class="class">
+<dt id="threading.Semaphore">
+<em class="property">class </em><code class="descclassname">threading.</code><code class="descname">Semaphore</code><span class="sig-paren">(</span><span class="optional">[</span><em>value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Semaphore" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional argument gives the initial <em>value</em> for the internal counter; it
+defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>. If the <em>value</em> given is less than 0, <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> is
+raised.</p>
+<dl class="method">
+<dt id="threading.Semaphore.acquire">
+<code class="descname">acquire</code><span class="sig-paren">(</span><span class="optional">[</span><em>blocking</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Semaphore.acquire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire a semaphore.</p>
+<p>When invoked without arguments: if the internal counter is larger than
+zero on entry, decrement it by one and return immediately.  If it is zero
+on entry, block, waiting until some other thread has called
+<a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a> to make it larger than zero.  This is done with proper
+interlocking so that if multiple <a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code></a> calls are blocked,
+<a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a> will wake exactly one of them up.  The implementation may
+pick one at random, so the order in which blocked threads are awakened
+should not be relied on.  There is no return value in this case.</p>
+<p>When invoked with <em>blocking</em> set to true, do the same thing as when called
+without arguments, and return true.</p>
+<p>When invoked with <em>blocking</em> set to false, do not block.  If a call
+without an argument would block, return false immediately; otherwise, do
+the same thing as when called without arguments, and return true.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Semaphore.release">
+<code class="descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Semaphore.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release a semaphore, incrementing the internal counter by one.  When it
+was zero on entry and another thread is waiting for it to become larger
+than zero again, wake up that thread.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="semaphore-example">
+<span id="semaphore-examples"></span><h3>16.2.5.1. <a class="reference internal" href="#threading.Semaphore" title="threading.Semaphore"><code class="xref py py-class docutils literal notranslate"><span class="pre">Semaphore</span></code></a> Example<a class="headerlink" href="#semaphore-example" title="Permalink to this headline">¶</a></h3>
+<p>Semaphores are often used to guard resources with limited capacity, for example,
+a database server.  In any situation where the size of the resource is fixed,
+you should use a bounded semaphore.  Before spawning any worker threads, your
+main thread would initialize the semaphore:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">maxconnections</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="o">...</span>
+<span class="n">pool_sema</span> <span class="o">=</span> <span class="n">BoundedSemaphore</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">maxconnections</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once spawned, worker threads call the semaphore’s acquire and release methods
+when they need to connect to the server:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pool_sema</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">connectdb</span><span class="p">()</span>
+<span class="o">...</span> <span class="n">use</span> <span class="n">connection</span> <span class="o">...</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">pool_sema</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The use of a bounded semaphore reduces the chance that a programming error which
+causes the semaphore to be released more than it’s acquired will go undetected.</p>
+</div>
+</div>
+<div class="section" id="event-objects">
+<span id="id6"></span><h2>16.2.6. Event Objects<a class="headerlink" href="#event-objects" title="Permalink to this headline">¶</a></h2>
+<p>This is one of the simplest mechanisms for communication between threads: one
+thread signals an event and other threads wait for it.</p>
+<p>An event object manages an internal flag that can be set to true with the
+<a class="reference internal" href="#threading.Event.set" title="threading.Event.set"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set()</span></code></a> method and reset to false with the <a class="reference internal" href="#threading.Event.clear" title="threading.Event.clear"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clear()</span></code></a>
+method.  The <a class="reference internal" href="#threading.Event.wait" title="threading.Event.wait"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code></a> method blocks until the flag is true.</p>
+<dl class="class">
+<dt id="threading.Event">
+<em class="property">class </em><code class="descclassname">threading.</code><code class="descname">Event</code><a class="headerlink" href="#threading.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>The internal flag is initially false.</p>
+<dl class="method">
+<dt id="threading.Event.is_set">
+<code class="descname">is_set</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Event.is_set" title="Permalink to this definition">¶</a></dt>
+<dt id="threading.Event.isSet">
+<code class="descname">isSet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Event.isSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if and only if the internal flag is true.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>Added <code class="docutils literal notranslate"><span class="pre">is_set()</span></code> spelling.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Event.set">
+<code class="descname">set</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Event.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the internal flag to true. All threads waiting for it to become true
+are awakened. Threads that call <a class="reference internal" href="#threading.Event.wait" title="threading.Event.wait"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code></a> once the flag is true will
+not block at all.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Event.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Event.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the internal flag to false. Subsequently, threads calling
+<a class="reference internal" href="#threading.Event.wait" title="threading.Event.wait"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code></a> will block until <a class="reference internal" href="#threading.Event.set" title="threading.Event.set"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set()</span></code></a> is called to set the internal
+flag to true again.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="threading.Event.wait">
+<code class="descname">wait</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Event.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Block until the internal flag is true.  If the internal flag is true on
+entry, return immediately.  Otherwise, block until another thread calls
+<a class="reference internal" href="#threading.Event.set" title="threading.Event.set"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set()</span></code></a> to set the flag to true, or until the optional timeout
+occurs.</p>
+<p>When the timeout argument is present and not <code class="docutils literal notranslate"><span class="pre">None</span></code>, it should be a
+floating point number specifying a timeout for the operation in seconds
+(or fractions thereof).</p>
+<p>This method returns the internal flag on exit, so it will always return
+<code class="docutils literal notranslate"><span class="pre">True</span></code> except if a timeout is given and the operation times out.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span>Previously, the method always returned <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="timer-objects">
+<span id="id7"></span><h2>16.2.7. Timer Objects<a class="headerlink" href="#timer-objects" title="Permalink to this headline">¶</a></h2>
+<p>This class represents an action that should be run only after a certain amount
+of time has passed — a timer.  <a class="reference internal" href="#threading.Timer" title="threading.Timer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Timer</span></code></a> is a subclass of <a class="reference internal" href="#threading.Thread" title="threading.Thread"><code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></a>
+and as such also functions as an example of creating custom threads.</p>
+<p>Timers are started, as with threads, by calling their <code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code>
+method.  The timer can be stopped (before its action has begun) by calling the
+<a class="reference internal" href="#threading.Timer.cancel" title="threading.Timer.cancel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cancel()</span></code></a> method.  The interval the timer will wait before
+executing its action may not be exactly the same as the interval specified by
+the user.</p>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+    <span class="nb">print</span> <span class="s2">&quot;hello, world&quot;</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="mf">30.0</span><span class="p">,</span> <span class="n">hello</span><span class="p">)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>  <span class="c1"># after 30 seconds, &quot;hello, world&quot; will be printed</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="threading.Timer">
+<em class="property">class </em><code class="descclassname">threading.</code><code class="descname">Timer</code><span class="sig-paren">(</span><em>interval</em>, <em>function</em>, <em>args=[]</em>, <em>kwargs={}</em><span class="sig-paren">)</span><a class="headerlink" href="#threading.Timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a timer that will run <em>function</em> with arguments <em>args</em> and  keyword
+arguments <em>kwargs</em>, after <em>interval</em> seconds have passed.</p>
+<dl class="method">
+<dt id="threading.Timer.cancel">
+<code class="descname">cancel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#threading.Timer.cancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the timer, and cancel the execution of the timer’s action.  This will
+only work if the timer is still in its waiting stage.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="using-locks-conditions-and-semaphores-in-the-with-statement">
+<span id="with-locks"></span><h2>16.2.8. Using locks, conditions, and semaphores in the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement<a class="headerlink" href="#using-locks-conditions-and-semaphores-in-the-with-statement" title="Permalink to this headline">¶</a></h2>
+<p>All of the objects provided by this module that have <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> methods can be used as context managers for a <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a>
+statement.  The <code class="xref py py-meth docutils literal notranslate"><span class="pre">acquire()</span></code> method will be called when the block is entered,
+and <code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code> will be called when the block is exited.</p>
+<p>Currently, <a class="reference internal" href="#threading.Lock" title="threading.Lock"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lock</span></code></a>, <a class="reference internal" href="#threading.RLock" title="threading.RLock"><code class="xref py py-class docutils literal notranslate"><span class="pre">RLock</span></code></a>, <a class="reference internal" href="#threading.Condition" title="threading.Condition"><code class="xref py py-class docutils literal notranslate"><span class="pre">Condition</span></code></a>,
+<a class="reference internal" href="#threading.Semaphore" title="threading.Semaphore"><code class="xref py py-class docutils literal notranslate"><span class="pre">Semaphore</span></code></a>, and <a class="reference internal" href="#threading.BoundedSemaphore" title="threading.BoundedSemaphore"><code class="xref py py-class docutils literal notranslate"><span class="pre">BoundedSemaphore</span></code></a> objects may be used as
+<a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement context managers.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="n">some_rlock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">some_rlock</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="s2">&quot;some_rlock is locked while this executes&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="importing-in-threaded-code">
+<span id="threaded-imports"></span><h2>16.2.9. Importing in threaded code<a class="headerlink" href="#importing-in-threaded-code" title="Permalink to this headline">¶</a></h2>
+<p>While the import machinery is thread-safe, there are two key restrictions on
+threaded imports due to inherent limitations in the way that thread-safety is
+provided:</p>
+<ul class="simple">
+<li><p>Firstly, other than in the main module, an import should not have the
+side effect of spawning a new thread and then waiting for that thread in
+any way. Failing to abide by this restriction can lead to a deadlock if
+the spawned thread directly or indirectly attempts to import a module.</p></li>
+<li><p>Secondly, all import attempts must be completed before the interpreter
+starts shutting itself down. This can be most easily achieved by only
+performing imports from non-daemon threads created through the threading
+module. Daemon threads and threads created directly with the thread
+module will require some other form of synchronization to ensure they do
+not attempt imports after system shutdown has commenced. Failure to
+abide by this restriction will lead to intermittent exceptions and
+crashes during interpreter shutdown (as the late imports attempt to
+access machinery which is no longer in a valid state).</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">16.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">threading</span></code> — Higher-level threading interface</a><ul>
+<li><a class="reference internal" href="#thread-objects">16.2.1. Thread Objects</a></li>
+<li><a class="reference internal" href="#lock-objects">16.2.2. Lock Objects</a></li>
+<li><a class="reference internal" href="#rlock-objects">16.2.3. RLock Objects</a></li>
+<li><a class="reference internal" href="#condition-objects">16.2.4. Condition Objects</a></li>
+<li><a class="reference internal" href="#semaphore-objects">16.2.5. Semaphore Objects</a><ul>
+<li><a class="reference internal" href="#semaphore-example">16.2.5.1. <code class="xref py py-class docutils literal notranslate"><span class="pre">Semaphore</span></code> Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#event-objects">16.2.6. Event Objects</a></li>
+<li><a class="reference internal" href="#timer-objects">16.2.7. Timer Objects</a></li>
+<li><a class="reference internal" href="#using-locks-conditions-and-semaphores-in-the-with-statement">16.2.8. Using locks, conditions, and semaphores in the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code> statement</a></li>
+<li><a class="reference internal" href="#importing-in-threaded-code">16.2.9. Importing in threaded code</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="select.html"
+                        title="previous chapter">16.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">select</span></code> — Waiting for I/O completion</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="thread.html"
+                        title="next chapter">16.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">thread</span></code> — Multiple threads of control</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/threading.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="thread.html" title="16.3. thread — Multiple threads of control"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="select.html" title="16.1. select — Waiting for I/O completion"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="someos.html" >16. Optional Operating System Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

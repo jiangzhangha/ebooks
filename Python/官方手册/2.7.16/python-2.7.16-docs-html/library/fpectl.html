@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>28.16. fpectl — Floating point exception control &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="29. Custom Python Interpreters" href="custominterp.html" />
+    <link rel="prev" title="28.15. user — User-specific configuration hook" href="user.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/fpectl.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="custominterp.html" title="29. Custom Python Interpreters"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="user.html" title="28.15. user — User-specific configuration hook"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" accesskey="U">28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fpectl">
+<span id="fpectl-floating-point-exception-control"></span><h1>28.16. <a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpectl</span></code></a> — Floating point exception control<a class="headerlink" href="#module-fpectl" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpectl</span></code></a> module is not built by default, and its usage is discouraged
+and may be dangerous except in the hands of experts.  See also the section
+<a class="reference internal" href="#fpectl-limitations"><span class="std std-ref">Limitations and other considerations</span></a> on limitations for more details.</p>
+</div>
+<p id="index-0">Most computers carry out floating point operations in conformance with the
+so-called IEEE-754 standard. On any real computer, some floating point
+operations produce results that cannot be expressed as a normal floating point
+value. For example, try</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="go">inf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="go">nan</span>
+</pre></div>
+</div>
+<p>(The example above will work on many platforms. DEC Alpha may be one exception.)
+“Inf” is a special, non-numeric value in IEEE-754 that stands for “infinity”,
+and “nan” means “not a number.” Note that, other than the non-numeric results,
+nothing special happened when you asked Python to carry out those calculations.
+That is in fact the default behaviour prescribed in the IEEE-754 standard, and
+if it works for you, stop reading now.</p>
+<p>In some circumstances, it would be better to raise an exception and stop
+processing at the point where the faulty operation was attempted. The
+<a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpectl</span></code></a> module is for use in that situation. It provides control over
+floating point units from several hardware manufacturers, allowing the user to
+turn on the generation of <code class="xref py py-const docutils literal notranslate"><span class="pre">SIGFPE</span></code> whenever any of the IEEE-754
+exceptions Division by Zero, Overflow, or Invalid Operation occurs. In tandem
+with a pair of wrapper macros that are inserted into the C code comprising your
+python system, <code class="xref py py-const docutils literal notranslate"><span class="pre">SIGFPE</span></code> is trapped and converted into the Python
+<a class="reference internal" href="#fpectl.FloatingPointError" title="fpectl.FloatingPointError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">FloatingPointError</span></code></a> exception.</p>
+<p>The <a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpectl</span></code></a> module defines the following functions and may raise the given
+exception:</p>
+<dl class="function">
+<dt id="fpectl.turnon_sigfpe">
+<code class="descclassname">fpectl.</code><code class="descname">turnon_sigfpe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpectl.turnon_sigfpe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn on the generation of <code class="xref py py-const docutils literal notranslate"><span class="pre">SIGFPE</span></code>, and set up an appropriate signal
+handler.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fpectl.turnoff_sigfpe">
+<code class="descclassname">fpectl.</code><code class="descname">turnoff_sigfpe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpectl.turnoff_sigfpe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset default handling of floating point exceptions.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="fpectl.FloatingPointError">
+<em class="property">exception </em><code class="descclassname">fpectl.</code><code class="descname">FloatingPointError</code><a class="headerlink" href="#fpectl.FloatingPointError" title="Permalink to this definition">¶</a></dt>
+<dd><p>After <a class="reference internal" href="#fpectl.turnon_sigfpe" title="fpectl.turnon_sigfpe"><code class="xref py py-func docutils literal notranslate"><span class="pre">turnon_sigfpe()</span></code></a> has been executed, a floating point operation that
+raises one of the IEEE-754 exceptions Division by Zero, Overflow, or Invalid
+operation will in turn raise this standard Python exception.</p>
+</dd></dl>
+
+<div class="section" id="example">
+<span id="fpectl-example"></span><h2>28.16.1. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>The following example demonstrates how to start up and test operation of the
+<a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpectl</span></code></a> module.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">fpectl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">fpetest</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fpectl</span><span class="o">.</span><span class="n">turnon_sigfpe</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fpetest</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+<span class="go">overflow        PASS</span>
+<span class="go">FloatingPointError: Overflow</span>
+
+<span class="go">div by 0        PASS</span>
+<span class="go">FloatingPointError: Division by zero</span>
+<span class="go">  [ more output from test elided ]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">FloatingPointError</span>: <span class="n">in math_1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="limitations-and-other-considerations">
+<span id="fpectl-limitations"></span><h2>28.16.2. Limitations and other considerations<a class="headerlink" href="#limitations-and-other-considerations" title="Permalink to this headline">¶</a></h2>
+<p>Setting up a given processor to trap IEEE-754 floating point errors currently
+requires custom code on a per-architecture basis. You may have to modify
+<a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpectl</span></code></a> to control your particular hardware.</p>
+<p>Conversion of an IEEE-754 exception to a Python exception requires that the
+wrapper macros <code class="docutils literal notranslate"><span class="pre">PyFPE_START_PROTECT</span></code> and <code class="docutils literal notranslate"><span class="pre">PyFPE_END_PROTECT</span></code> be inserted
+into your code in an appropriate fashion.  Python itself has been modified to
+support the <a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpectl</span></code></a> module, but many other codes of interest to numerical
+analysts have not.</p>
+<p>The <a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpectl</span></code></a> module is not thread-safe.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Some files in the source distribution may be interesting in learning more about
+how this module operates. The include file <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Include/pyfpe.h">Include/pyfpe.h</a> discusses the
+implementation of this module at some length. <a class="reference external" href="https://github.com/python/cpython/tree/2.7/Modules/fpetestmodule.c">Modules/fpetestmodule.c</a>
+gives several examples of use. Many additional examples can be found in
+<a class="reference external" href="https://github.com/python/cpython/tree/2.7/Objects/floatobject.c">Objects/floatobject.c</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">28.16. <code class="xref py py-mod docutils literal notranslate"><span class="pre">fpectl</span></code> — Floating point exception control</a><ul>
+<li><a class="reference internal" href="#example">28.16.1. Example</a></li>
+<li><a class="reference internal" href="#limitations-and-other-considerations">28.16.2. Limitations and other considerations</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="user.html"
+                        title="previous chapter">28.15. <code class="xref py py-mod docutils literal notranslate"><span class="pre">user</span></code> — User-specific configuration hook</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="custominterp.html"
+                        title="next chapter">29. Custom Python Interpreters</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/fpectl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="custominterp.html" title="29. Custom Python Interpreters"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="user.html" title="28.15. user — User-specific configuration hook"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" >28. Python Runtime Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

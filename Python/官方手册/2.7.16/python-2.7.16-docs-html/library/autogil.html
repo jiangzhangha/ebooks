@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>37.7. autoGIL — Global Interpreter Lock handling in event loops &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="37.8. Mac OS Toolbox Modules" href="carbon.html" />
+    <link rel="prev" title="37.6. FrameWork — Interactive application framework" href="framework.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/autogil.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="carbon.html" title="37.8. Mac OS Toolbox Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="framework.html" title="37.6. FrameWork — Interactive application framework"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="mac.html" accesskey="U">37. Mac OS X specific services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-autoGIL">
+<span id="autogil-global-interpreter-lock-handling-in-event-loops"></span><h1>37.7. <a class="reference internal" href="#module-autoGIL" title="autoGIL: Global Interpreter Lock handling in event loops. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">autoGIL</span></code></a> — Global Interpreter Lock handling in event loops<a class="headerlink" href="#module-autoGIL" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-autoGIL" title="autoGIL: Global Interpreter Lock handling in event loops. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">autoGIL</span></code></a> module provides a function <a class="reference internal" href="#autoGIL.installAutoGIL" title="autoGIL.installAutoGIL"><code class="xref py py-func docutils literal notranslate"><span class="pre">installAutoGIL()</span></code></a> that
+automatically locks and unlocks Python’s <a class="reference internal" href="../glossary.html#term-global-interpreter-lock"><span class="xref std std-term">Global Interpreter Lock</span></a> when
+running an event loop.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module has been removed in Python 3.x.</p>
+</div>
+<dl class="exception">
+<dt id="autoGIL.AutoGILError">
+<em class="property">exception </em><code class="descclassname">autoGIL.</code><code class="descname">AutoGILError</code><a class="headerlink" href="#autoGIL.AutoGILError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised if the observer callback cannot be installed, for example because the
+current thread does not have a run loop.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="autoGIL.installAutoGIL">
+<code class="descclassname">autoGIL.</code><code class="descname">installAutoGIL</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#autoGIL.installAutoGIL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Install an observer callback in the event loop (CFRunLoop) for the current
+thread, that will lock and unlock the Global Interpreter Lock (GIL) at
+appropriate times, allowing other Python threads to run while the event loop is
+idle.</p>
+<p>Availability: OSX 10.1 or later.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="framework.html"
+                        title="previous chapter">37.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">FrameWork</span></code> — Interactive application framework</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="carbon.html"
+                        title="next chapter">37.8. Mac OS Toolbox Modules</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/autogil.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="carbon.html" title="37.8. Mac OS Toolbox Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="framework.html" title="37.6. FrameWork — Interactive application framework"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="mac.html" >37. Mac OS X specific services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

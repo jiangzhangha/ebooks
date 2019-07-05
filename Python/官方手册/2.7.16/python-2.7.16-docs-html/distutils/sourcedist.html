@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>4. Creating a Source Distribution &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="5. Creating Built Distributions" href="builtdist.html" />
+    <link rel="prev" title="3. Writing the Setup Configuration File" href="configfile.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/distutils/sourcedist.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="builtdist.html" title="5. Creating Built Distributions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="configfile.html" title="3. Writing the Setup Configuration File"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Distributing Python Modules (Legacy version)</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="creating-a-source-distribution">
+<span id="source-dist"></span><h1>4. Creating a Source Distribution<a class="headerlink" href="#creating-a-source-distribution" title="Permalink to this headline">¶</a></h1>
+<p>As shown in section <a class="reference internal" href="introduction.html#distutils-simple-example"><span class="std std-ref">A Simple Example</span></a>, you use the <strong class="command">sdist</strong> command
+to create a source distribution.  In the simplest case,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">sdist</span>
+</pre></div>
+</div>
+<p>(assuming you haven’t specified any <strong class="command">sdist</strong> options in the setup script
+or config file), <strong class="command">sdist</strong> creates the archive of the default format for
+the current platform.  The default format is a gzip’ed tar file
+(<code class="file docutils literal notranslate"><span class="pre">.tar.gz</span></code>) on Unix, and ZIP file on Windows.</p>
+<p>You can specify as many formats as you like using the <code class="xref std std-option docutils literal notranslate"><span class="pre">--formats</span></code>
+option, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">sdist</span> <span class="o">--</span><span class="n">formats</span><span class="o">=</span><span class="n">gztar</span><span class="p">,</span><span class="nb">zip</span>
+</pre></div>
+</div>
+<p>to create a gzipped tarball and a zip file.  The available formats are:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 56%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Format</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">zip</span></code></p></td>
+<td><p>zip file (<code class="file docutils literal notranslate"><span class="pre">.zip</span></code>)</p></td>
+<td><p>(1),(3)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gztar</span></code></p></td>
+<td><p>gzip’ed tar file
+(<code class="file docutils literal notranslate"><span class="pre">.tar.gz</span></code>)</p></td>
+<td><p>(2)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bztar</span></code></p></td>
+<td><p>bzip2’ed tar file
+(<code class="file docutils literal notranslate"><span class="pre">.tar.bz2</span></code>)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ztar</span></code></p></td>
+<td><p>compressed tar file
+(<code class="file docutils literal notranslate"><span class="pre">.tar.Z</span></code>)</p></td>
+<td><p>(4)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tar</span></code></p></td>
+<td><p>tar file (<code class="file docutils literal notranslate"><span class="pre">.tar</span></code>)</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Notes:</p>
+<ol class="arabic simple">
+<li><p>default on Windows</p></li>
+<li><p>default on Unix</p></li>
+<li><p>requires either external <strong class="program">zip</strong> utility or <a class="reference internal" href="../library/zipfile.html#module-zipfile" title="zipfile: Read and write ZIP-format archive files."><code class="xref py py-mod docutils literal notranslate"><span class="pre">zipfile</span></code></a> module (part
+of the standard Python library since Python 1.6)</p></li>
+<li><p>requires the <strong class="program">compress</strong> program.</p></li>
+</ol>
+<p>When using any <code class="docutils literal notranslate"><span class="pre">tar</span></code> format (<code class="docutils literal notranslate"><span class="pre">gztar</span></code>, <code class="docutils literal notranslate"><span class="pre">bztar</span></code>, <code class="docutils literal notranslate"><span class="pre">ztar</span></code> or
+<code class="docutils literal notranslate"><span class="pre">tar</span></code>) under Unix, you can specify the <code class="docutils literal notranslate"><span class="pre">owner</span></code> and <code class="docutils literal notranslate"><span class="pre">group</span></code> names
+that will be set for each member of the archive.</p>
+<p>For example, if you want all files of the archive to be owned by root:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">sdist</span> <span class="o">--</span><span class="n">owner</span><span class="o">=</span><span class="n">root</span> <span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">root</span>
+</pre></div>
+</div>
+<div class="section" id="specifying-the-files-to-distribute">
+<span id="manifest"></span><h2>4.1. Specifying the files to distribute<a class="headerlink" href="#specifying-the-files-to-distribute" title="Permalink to this headline">¶</a></h2>
+<p>If you don’t supply an explicit list of files (or instructions on how to
+generate one), the <strong class="command">sdist</strong> command puts a minimal default set into the
+source distribution:</p>
+<ul class="simple">
+<li><p>all Python source files implied by the <code class="docutils literal notranslate"><span class="pre">py_modules</span></code> and
+<code class="docutils literal notranslate"><span class="pre">packages</span></code> options</p></li>
+<li><p>all C source files mentioned in the <code class="docutils literal notranslate"><span class="pre">ext_modules</span></code> or
+<code class="docutils literal notranslate"><span class="pre">libraries</span></code> options</p>
+</li>
+<li><p>scripts identified by the <code class="docutils literal notranslate"><span class="pre">scripts</span></code> option
+See <a class="reference internal" href="setupscript.html#distutils-installing-scripts"><span class="std std-ref">Installing Scripts</span></a>.</p></li>
+<li><p>anything that looks like a test script: <code class="file docutils literal notranslate"><span class="pre">test/test*.py</span></code> (currently, the
+Distutils don’t do anything with test scripts except include them in source
+distributions, but in the future there will be a standard for testing Python
+module distributions)</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">README.txt</span></code> (or <code class="file docutils literal notranslate"><span class="pre">README</span></code>), <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code> (or whatever  you
+called your setup script), and <code class="file docutils literal notranslate"><span class="pre">setup.cfg</span></code></p></li>
+<li><p>all files that matches the <code class="docutils literal notranslate"><span class="pre">package_data</span></code> metadata.
+See <a class="reference internal" href="setupscript.html#distutils-installing-package-data"><span class="std std-ref">Installing Package Data</span></a>.</p></li>
+<li><p>all files that matches the <code class="docutils literal notranslate"><span class="pre">data_files</span></code> metadata.
+See <a class="reference internal" href="setupscript.html#distutils-additional-files"><span class="std std-ref">Installing Additional Files</span></a>.</p></li>
+</ul>
+<p>Sometimes this is enough, but usually you will want to specify additional files
+to distribute.  The typical way to do this is to write a <em>manifest template</em>,
+called <code class="file docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> by default.  The manifest template is just a list of
+instructions for how to generate your manifest file, <code class="file docutils literal notranslate"><span class="pre">MANIFEST</span></code>, which is
+the exact list of files to include in your source distribution.  The
+<strong class="command">sdist</strong> command processes this template and generates a manifest based
+on its instructions and what it finds in the filesystem.</p>
+<p>If you prefer to roll your own manifest file, the format is simple: one filename
+per line, regular files (or symlinks to them) only.  If you do supply your own
+<code class="file docutils literal notranslate"><span class="pre">MANIFEST</span></code>, you must specify everything: the default set of files
+described above does not apply in this case.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7: </span>An existing generated <code class="file docutils literal notranslate"><span class="pre">MANIFEST</span></code> will be regenerated without
+<strong class="command">sdist</strong> comparing its modification time to the one of
+<code class="file docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> or <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7.1: </span><code class="file docutils literal notranslate"><span class="pre">MANIFEST</span></code> files start with a comment indicating they are generated.
+Files without this comment are not overwritten or removed.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.7.3: </span><strong class="command">sdist</strong> will read a <code class="file docutils literal notranslate"><span class="pre">MANIFEST</span></code> file if no <code class="file docutils literal notranslate"><span class="pre">MANIFEST.in</span></code>
+exists, like it did before 2.7.</p>
+</div>
+<p>See <a class="reference internal" href="#manifest-template"><span class="std std-ref">The MANIFEST.in template</span></a> section for a syntax reference.</p>
+</div>
+<div class="section" id="manifest-related-options">
+<span id="manifest-options"></span><h2>4.2. Manifest-related options<a class="headerlink" href="#manifest-related-options" title="Permalink to this headline">¶</a></h2>
+<p>The normal course of operations for the <strong class="command">sdist</strong> command is as follows:</p>
+<ul class="simple">
+<li><p>if the manifest file (<code class="file docutils literal notranslate"><span class="pre">MANIFEST</span></code> by default) exists and the first line
+does not have a comment indicating it is generated from <code class="file docutils literal notranslate"><span class="pre">MANIFEST.in</span></code>,
+then it is used as is, unaltered</p></li>
+<li><p>if the manifest file doesn’t exist or has been previously automatically
+generated, read <code class="file docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> and create the manifest</p></li>
+<li><p>if neither <code class="file docutils literal notranslate"><span class="pre">MANIFEST</span></code> nor <code class="file docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> exist, create a manifest
+with just the default file set</p></li>
+<li><p>use the list of files now in <code class="file docutils literal notranslate"><span class="pre">MANIFEST</span></code> (either just generated or read
+in) to create the source distribution archive(s)</p></li>
+</ul>
+<p>There are a couple of options that modify this behaviour.  First, use the
+<code class="xref std std-option docutils literal notranslate"><span class="pre">--no-defaults</span></code> and <code class="xref std std-option docutils literal notranslate"><span class="pre">--no-prune</span></code> to disable the standard
+“include” and “exclude” sets.</p>
+<p>Second, you might just want to (re)generate the manifest, but not create a
+source distribution:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">sdist</span> <span class="o">--</span><span class="n">manifest</span><span class="o">-</span><span class="n">only</span>
+</pre></div>
+</div>
+<p><code class="xref std std-option docutils literal notranslate"><span class="pre">-o</span></code> is a shortcut for <code class="xref std std-option docutils literal notranslate"><span class="pre">--manifest-only</span></code>.</p>
+</div>
+<div class="section" id="the-manifest-in-template">
+<span id="manifest-template"></span><h2>4.3. The MANIFEST.in template<a class="headerlink" href="#the-manifest-in-template" title="Permalink to this headline">¶</a></h2>
+<p>A <code class="file docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> file can be added in a project to define the list of
+files to include in the distribution built by the <strong class="command">sdist</strong> command.</p>
+<p>When <strong class="command">sdist</strong> is run, it will look for the <code class="file docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> file
+and interpret it to generate the <code class="file docutils literal notranslate"><span class="pre">MANIFEST</span></code> file that contains the
+list of files that will be included in the package.</p>
+<p>This mechanism can be used when the default list of files is not enough.
+(See <a class="reference internal" href="#manifest"><span class="std std-ref">Specifying the files to distribute</span></a>).</p>
+<div class="section" id="principle">
+<h3>4.3.1. Principle<a class="headerlink" href="#principle" title="Permalink to this headline">¶</a></h3>
+<p>The manifest template has one command per line, where each command specifies a
+set of files to include or exclude from the source distribution.  For an
+example, let’s look at the Distutils’ own manifest template:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>include *.txt
+recursive-include examples *.txt *.py
+prune examples/sample?/build
+</pre></div>
+</div>
+<p>The meanings should be fairly clear: include all files in the distribution root
+matching <code class="file docutils literal notranslate"><span class="pre">*.txt</span></code>, all files anywhere under the <code class="file docutils literal notranslate"><span class="pre">examples</span></code> directory
+matching <code class="file docutils literal notranslate"><span class="pre">*.txt</span></code> or <code class="file docutils literal notranslate"><span class="pre">*.py</span></code>, and exclude all directories matching
+<code class="file docutils literal notranslate"><span class="pre">examples/sample?/build</span></code>.  All of this is done <em>after</em> the standard
+include set, so you can exclude files from the standard set with explicit
+instructions in the manifest template.  (Or, you can use the
+<code class="xref std std-option docutils literal notranslate"><span class="pre">--no-defaults</span></code> option to disable the standard set entirely.)</p>
+<p>The order of commands in the manifest template matters: initially, we have the
+list of default files as described above, and each command in the template adds
+to or removes from that list of files.  Once we have fully processed the
+manifest template, we remove files that should not be included in the source
+distribution:</p>
+<ul class="simple">
+<li><p>all files in the Distutils “build” tree (default <code class="file docutils literal notranslate"><span class="pre">build/</span></code>)</p></li>
+<li><p>all files in directories named <code class="file docutils literal notranslate"><span class="pre">RCS</span></code>, <code class="file docutils literal notranslate"><span class="pre">CVS</span></code>, <code class="file docutils literal notranslate"><span class="pre">.svn</span></code>,
+<code class="file docutils literal notranslate"><span class="pre">.hg</span></code>, <code class="file docutils literal notranslate"><span class="pre">.git</span></code>, <code class="file docutils literal notranslate"><span class="pre">.bzr</span></code> or <code class="file docutils literal notranslate"><span class="pre">_darcs</span></code></p></li>
+</ul>
+<p>Now we have our complete list of files, which is written to the manifest for
+future reference, and then used to build the source distribution archive(s).</p>
+<p>You can disable the default set of included files with the
+<code class="xref std std-option docutils literal notranslate"><span class="pre">--no-defaults</span></code> option, and you can disable the standard exclude set
+with <code class="xref std std-option docutils literal notranslate"><span class="pre">--no-prune</span></code>.</p>
+<p>Following the Distutils’ own manifest template, let’s trace how the
+<strong class="command">sdist</strong> command builds the list of files to include in the Distutils
+source distribution:</p>
+<ol class="arabic simple">
+<li><p>include all Python source files in the <code class="file docutils literal notranslate"><span class="pre">distutils</span></code> and
+<code class="file docutils literal notranslate"><span class="pre">distutils/command</span></code> subdirectories (because packages corresponding to
+those two directories were mentioned in the <code class="docutils literal notranslate"><span class="pre">packages</span></code> option in the
+setup script—see section <a class="reference internal" href="setupscript.html#setup-script"><span class="std std-ref">Writing the Setup Script</span></a>)</p></li>
+<li><p>include <code class="file docutils literal notranslate"><span class="pre">README.txt</span></code>, <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code>, and <code class="file docutils literal notranslate"><span class="pre">setup.cfg</span></code> (standard
+files)</p></li>
+<li><p>include <code class="file docutils literal notranslate"><span class="pre">test/test*.py</span></code> (standard files)</p></li>
+<li><p>include <code class="file docutils literal notranslate"><span class="pre">*.txt</span></code> in the distribution root (this will find
+<code class="file docutils literal notranslate"><span class="pre">README.txt</span></code> a second time, but such redundancies are weeded out later)</p></li>
+<li><p>include anything matching <code class="file docutils literal notranslate"><span class="pre">*.txt</span></code> or <code class="file docutils literal notranslate"><span class="pre">*.py</span></code> in the sub-tree
+under <code class="file docutils literal notranslate"><span class="pre">examples</span></code>,</p></li>
+<li><p>exclude all files in the sub-trees starting at directories matching
+<code class="file docutils literal notranslate"><span class="pre">examples/sample?/build</span></code>—this may exclude files included by the
+previous two steps, so it’s important that the <code class="docutils literal notranslate"><span class="pre">prune</span></code> command in the manifest
+template comes after the <code class="docutils literal notranslate"><span class="pre">recursive-include</span></code> command</p></li>
+<li><p>exclude the entire <code class="file docutils literal notranslate"><span class="pre">build</span></code> tree, and any <code class="file docutils literal notranslate"><span class="pre">RCS</span></code>, <code class="file docutils literal notranslate"><span class="pre">CVS</span></code>,
+<code class="file docutils literal notranslate"><span class="pre">.svn</span></code>, <code class="file docutils literal notranslate"><span class="pre">.hg</span></code>, <code class="file docutils literal notranslate"><span class="pre">.git</span></code>, <code class="file docutils literal notranslate"><span class="pre">.bzr</span></code> and <code class="file docutils literal notranslate"><span class="pre">_darcs</span></code>
+directories</p></li>
+</ol>
+<p>Just like in the setup script, file and directory names in the manifest template
+should always be slash-separated; the Distutils will take care of converting
+them to the standard representation on your platform. That way, the manifest
+template is portable across operating systems.</p>
+</div>
+<div class="section" id="commands">
+<h3>4.3.2. Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h3>
+<p>The manifest template commands are:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 48%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong class="command">include pat1 pat2 ...</strong></p></td>
+<td><p>include all files matching any of the listed
+patterns</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong class="command">exclude pat1 pat2 ...</strong></p></td>
+<td><p>exclude all files matching any of the listed
+patterns</p></td>
+</tr>
+<tr class="row-even"><td><p><strong class="command">recursive-include dir pat1 pat2
+...</strong></p></td>
+<td><p>include all files under <em>dir</em> matching any of
+the listed patterns</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong class="command">recursive-exclude dir pat1 pat2
+...</strong></p></td>
+<td><p>exclude all files under <em>dir</em> matching any of
+the listed patterns</p></td>
+</tr>
+<tr class="row-even"><td><p><strong class="command">global-include pat1 pat2 ...</strong></p></td>
+<td><p>include all files anywhere in the source tree
+matching — &amp; any of the listed patterns</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong class="command">global-exclude pat1 pat2 ...</strong></p></td>
+<td><p>exclude all files anywhere in the source tree
+matching — &amp; any of the listed patterns</p></td>
+</tr>
+<tr class="row-even"><td><p><strong class="command">prune dir</strong></p></td>
+<td><p>exclude all files under <em>dir</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong class="command">graft dir</strong></p></td>
+<td><p>include all files under <em>dir</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>The patterns here are Unix-style “glob” patterns: <code class="docutils literal notranslate"><span class="pre">*</span></code> matches any sequence of
+regular filename characters, <code class="docutils literal notranslate"><span class="pre">?</span></code> matches any single regular filename
+character, and <code class="docutils literal notranslate"><span class="pre">[range]</span></code> matches any of the characters in <em>range</em> (e.g.,
+<code class="docutils literal notranslate"><span class="pre">a-z</span></code>, <code class="docutils literal notranslate"><span class="pre">a-zA-Z</span></code>, <code class="docutils literal notranslate"><span class="pre">a-f0-9_.</span></code>).  The definition of “regular filename
+character” is platform-specific: on Unix it is anything except slash; on Windows
+anything except backslash or colon.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. Creating a Source Distribution</a><ul>
+<li><a class="reference internal" href="#specifying-the-files-to-distribute">4.1. Specifying the files to distribute</a></li>
+<li><a class="reference internal" href="#manifest-related-options">4.2. Manifest-related options</a></li>
+<li><a class="reference internal" href="#the-manifest-in-template">4.3. The MANIFEST.in template</a><ul>
+<li><a class="reference internal" href="#principle">4.3.1. Principle</a></li>
+<li><a class="reference internal" href="#commands">4.3.2. Commands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="configfile.html"
+                        title="previous chapter">3. Writing the Setup Configuration File</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="builtdist.html"
+                        title="next chapter">5. Creating Built Distributions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/distutils/sourcedist.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="builtdist.html" title="5. Creating Built Distributions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="configfile.html" title="3. Writing the Setup Configuration File"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Distributing Python Modules (Legacy version)</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>37.1. ic — Access to the Mac OS X Internet Config &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="37.2. MacOS — Access to Mac OS interpreter features" href="macos.html" />
+    <link rel="prev" title="37. Mac OS X specific services" href="mac.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/ic.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="macos.html" title="37.2. MacOS — Access to Mac OS interpreter features"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mac.html" title="37. Mac OS X specific services"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="mac.html" accesskey="U">37. Mac OS X specific services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-ic">
+<span id="ic-access-to-the-mac-os-x-internet-config"></span><h1>37.1. <a class="reference internal" href="#module-ic" title="ic: Access to the Mac OS X Internet Config. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ic</span></code></a> — Access to the Mac OS X Internet Config<a class="headerlink" href="#module-ic" title="Permalink to this headline">¶</a></h1>
+<p>This module provides access to various internet-related preferences set through
+<strong class="program">System Preferences</strong> or the <strong class="program">Finder</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module has been removed in Python 3.x.</p>
+</div>
+<p id="index-0">There is a low-level companion module <code class="xref py py-mod docutils literal notranslate"><span class="pre">icglue</span></code> which provides the basic
+Internet Config access functionality.  This low-level module is not documented,
+but the docstrings of the routines document the parameters and the routine names
+are the same as for the Pascal or C API to Internet Config, so the standard IC
+programmers’ documentation can be used if this module is needed.</p>
+<p>The <a class="reference internal" href="#module-ic" title="ic: Access to the Mac OS X Internet Config. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ic</span></code></a> module defines the <a class="reference internal" href="#ic.error" title="ic.error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">error</span></code></a> exception and symbolic names for
+all error codes Internet Config can produce; see the source for details.</p>
+<dl class="exception">
+<dt id="ic.error">
+<em class="property">exception </em><code class="descclassname">ic.</code><code class="descname">error</code><a class="headerlink" href="#ic.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised on errors in the <a class="reference internal" href="#module-ic" title="ic: Access to the Mac OS X Internet Config. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ic</span></code></a> module.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-ic" title="ic: Access to the Mac OS X Internet Config. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ic</span></code></a> module defines the following class and function:</p>
+<dl class="class">
+<dt id="ic.IC">
+<em class="property">class </em><code class="descclassname">ic.</code><code class="descname">IC</code><span class="sig-paren">(</span><span class="optional">[</span><em>signature</em><span class="optional">[</span>, <em>ic</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ic.IC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an Internet Config object. The signature is a 4-character creator code of
+the current application (default <code class="docutils literal notranslate"><span class="pre">'Pyth'</span></code>) which may influence some of ICs
+settings. The optional <em>ic</em> argument is a low-level <code class="docutils literal notranslate"><span class="pre">icglue.icinstance</span></code>
+created beforehand, this may be useful if you want to get preferences from a
+different config file, etc.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ic.launchurl">
+<code class="descclassname">ic.</code><code class="descname">launchurl</code><span class="sig-paren">(</span><em>url</em><span class="optional">[</span>, <em>hint</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ic.launchurl" title="Permalink to this definition">¶</a></dt>
+<dt id="ic.parseurl">
+<code class="descclassname">ic.</code><code class="descname">parseurl</code><span class="sig-paren">(</span><em>data</em><span class="optional">[</span>, <em>start</em><span class="optional">[</span>, <em>end</em><span class="optional">[</span>, <em>hint</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ic.parseurl" title="Permalink to this definition">¶</a></dt>
+<dt id="ic.mapfile">
+<code class="descclassname">ic.</code><code class="descname">mapfile</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#ic.mapfile" title="Permalink to this definition">¶</a></dt>
+<dt id="ic.maptypecreator">
+<code class="descclassname">ic.</code><code class="descname">maptypecreator</code><span class="sig-paren">(</span><em>type</em>, <em>creator</em><span class="optional">[</span>, <em>filename</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ic.maptypecreator" title="Permalink to this definition">¶</a></dt>
+<dt id="ic.settypecreator">
+<code class="descclassname">ic.</code><code class="descname">settypecreator</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#ic.settypecreator" title="Permalink to this definition">¶</a></dt>
+<dd><p>These functions are “shortcuts” to the methods of the same name, described
+below.</p>
+</dd></dl>
+
+<div class="section" id="ic-objects">
+<h2>37.1.1. IC Objects<a class="headerlink" href="#ic-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#ic.IC" title="ic.IC"><code class="xref py py-class docutils literal notranslate"><span class="pre">IC</span></code></a> objects have a mapping interface, hence to obtain the mail address
+you simply get <code class="docutils literal notranslate"><span class="pre">ic['MailAddress']</span></code>. Assignment also works, and changes the
+option in the configuration file.</p>
+<p>The module knows about various datatypes, and converts the internal IC
+representation to a “logical” Python data structure. Running the <a class="reference internal" href="#module-ic" title="ic: Access to the Mac OS X Internet Config. (deprecated) (Mac)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ic</span></code></a>
+module standalone will run a test program that lists all keys and values in your
+IC database, this will have to serve as documentation.</p>
+<p>If the module does not know how to represent the data it returns an instance of
+the <code class="docutils literal notranslate"><span class="pre">ICOpaqueData</span></code> type, with the raw data in its <code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code> attribute.
+Objects of this type are also acceptable values for assignment.</p>
+<p>Besides the dictionary interface, <a class="reference internal" href="#ic.IC" title="ic.IC"><code class="xref py py-class docutils literal notranslate"><span class="pre">IC</span></code></a> objects have the following
+methods:</p>
+<dl class="method">
+<dt id="ic.IC.launchurl">
+<code class="descclassname">IC.</code><code class="descname">launchurl</code><span class="sig-paren">(</span><em>url</em><span class="optional">[</span>, <em>hint</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ic.IC.launchurl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the given URL, launch the correct application and pass it the URL. The
+optional <em>hint</em> can be a scheme name such as <code class="docutils literal notranslate"><span class="pre">'mailto:'</span></code>, in which case
+incomplete URLs are completed with this scheme.  If <em>hint</em> is not provided,
+incomplete URLs are invalid.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ic.IC.parseurl">
+<code class="descclassname">IC.</code><code class="descname">parseurl</code><span class="sig-paren">(</span><em>data</em><span class="optional">[</span>, <em>start</em><span class="optional">[</span>, <em>end</em><span class="optional">[</span>, <em>hint</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ic.IC.parseurl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find a URL somewhere in <em>data</em> and return start position, end position and the
+URL. The optional <em>start</em> and <em>end</em> can be used to limit the search, so for
+instance if a user clicks in a long text field you can pass the whole text field
+and the click-position in <em>start</em> and this routine will return the whole URL in
+which the user clicked.  As above, <em>hint</em> is an optional scheme used to complete
+incomplete URLs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ic.IC.mapfile">
+<code class="descclassname">IC.</code><code class="descname">mapfile</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#ic.IC.mapfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the mapping entry for the given <em>file</em>, which can be passed as either a
+filename or an <code class="xref py py-func docutils literal notranslate"><span class="pre">FSSpec()</span></code> result, and which need not exist.</p>
+<p>The mapping entry is returned as a tuple <code class="docutils literal notranslate"><span class="pre">(version,</span> <span class="pre">type,</span> <span class="pre">creator,</span> <span class="pre">postcreator,</span>
+<span class="pre">flags,</span> <span class="pre">extension,</span> <span class="pre">appname,</span> <span class="pre">postappname,</span> <span class="pre">mimetype,</span> <span class="pre">entryname)</span></code>, where <em>version</em>
+is the entry version number, <em>type</em> is the 4-character filetype, <em>creator</em> is
+the 4-character creator type, <em>postcreator</em> is the 4-character creator code of
+an optional application to post-process the file after downloading, <em>flags</em> are
+various bits specifying whether to transfer in binary or ascii and such,
+<em>extension</em> is the filename extension for this file type, <em>appname</em> is the
+printable name of the application to which this file belongs, <em>postappname</em> is
+the name of the postprocessing application, <em>mimetype</em> is the MIME type of this
+file and <em>entryname</em> is the name of this entry.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ic.IC.maptypecreator">
+<code class="descclassname">IC.</code><code class="descname">maptypecreator</code><span class="sig-paren">(</span><em>type</em>, <em>creator</em><span class="optional">[</span>, <em>filename</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ic.IC.maptypecreator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the mapping entry for files with given 4-character <em>type</em> and <em>creator</em>
+codes. The optional <em>filename</em> may be specified to further help finding the
+correct entry (if the creator code is <code class="docutils literal notranslate"><span class="pre">'????'</span></code>, for instance).</p>
+<p>The mapping entry is returned in the same format as for <em>mapfile</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ic.IC.settypecreator">
+<code class="descclassname">IC.</code><code class="descname">settypecreator</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#ic.IC.settypecreator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an existing <em>file</em>, specified either as a filename or as an <code class="xref py py-func docutils literal notranslate"><span class="pre">FSSpec()</span></code>
+result, set its creator and type correctly based on its extension.  The finder
+is told about the change, so the finder icon will be updated quickly.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">37.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">ic</span></code> — Access to the Mac OS X Internet Config</a><ul>
+<li><a class="reference internal" href="#ic-objects">37.1.1. IC Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mac.html"
+                        title="previous chapter">37. Mac OS X specific services</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="macos.html"
+                        title="next chapter">37.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">MacOS</span></code> — Access to Mac OS interpreter features</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/ic.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="macos.html" title="37.2. MacOS — Access to Mac OS interpreter features"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mac.html" title="37. Mac OS X specific services"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="mac.html" >37. Mac OS X specific services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>8.7. sets — Unordered collections of unique elements &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="8.8. sched — Event scheduler" href="sched.html" />
+    <link rel="prev" title="8.6. array — Efficient arrays of numeric values" href="array.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/sets.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sched.html" title="8.8. sched — Event scheduler"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="array.html" title="8.6. array — Efficient arrays of numeric values"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" accesskey="U">8. Data Types</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sets">
+<span id="sets-unordered-collections-of-unique-elements"></span><h1>8.7. <a class="reference internal" href="#module-sets" title="sets: Implementation of sets of unique elements. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sets</span></code></a> — Unordered collections of unique elements<a class="headerlink" href="#module-sets" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.3.</span></p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The built-in <a class="reference internal" href="stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>/<a class="reference internal" href="stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> types replace this module.</p>
+</div>
+<p>The <a class="reference internal" href="#module-sets" title="sets: Implementation of sets of unique elements. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sets</span></code></a> module provides classes for constructing and manipulating
+unordered collections of unique elements.  Common uses include membership
+testing, removing duplicates from a sequence, and computing standard math
+operations on sets such as intersection, union, difference, and symmetric
+difference.</p>
+<p>Like other collections, sets support <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">in</span> <span class="pre">set</span></code>, <code class="docutils literal notranslate"><span class="pre">len(set)</span></code>, and <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">x</span> <span class="pre">in</span>
+<span class="pre">set</span></code>.  Being an unordered collection, sets do not record element position or
+order of insertion.  Accordingly, sets do not support indexing, slicing, or
+other sequence-like behavior.</p>
+<p>Most set applications use the <a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a> class which provides every set method
+except for <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__hash__()</span></code></a>. For advanced applications requiring a hash method,
+the <a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a> class adds a <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__hash__()</span></code></a> method but omits methods
+which alter the contents of the set. Both <a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a> and <a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a>
+derive from <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSet</span></code>, an abstract class useful for determining whether
+something is a set: <code class="docutils literal notranslate"><span class="pre">isinstance(obj,</span> <span class="pre">BaseSet)</span></code>.</p>
+<p>The set classes are implemented using dictionaries.  Accordingly, the
+requirements for set elements are the same as those for dictionary keys; namely,
+that the element defines both <a class="reference internal" href="../reference/datamodel.html#object.__eq__" title="object.__eq__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__eq__()</span></code></a> and <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__hash__()</span></code></a>. As a result,
+sets cannot contain mutable elements such as lists or dictionaries. However,
+they can contain immutable collections such as tuples or instances of
+<a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a>.  For convenience in implementing sets of sets, inner sets
+are automatically converted to immutable form, for example,
+<code class="docutils literal notranslate"><span class="pre">Set([Set(['dog'])])</span></code> is transformed to <code class="docutils literal notranslate"><span class="pre">Set([ImmutableSet(['dog'])])</span></code>.</p>
+<dl class="class">
+<dt id="sets.Set">
+<em class="property">class </em><code class="descclassname">sets.</code><code class="descname">Set</code><span class="sig-paren">(</span><span class="optional">[</span><em>iterable</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#sets.Set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a new empty <a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a> object.  If the optional <em>iterable</em>
+parameter is supplied, updates the set with elements obtained from iteration.
+All of the elements in <em>iterable</em> should be immutable or be transformable to an
+immutable using the protocol described in section <a class="reference internal" href="#immutable-transforms"><span class="std std-ref">Protocol for automatic conversion to immutable</span></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sets.ImmutableSet">
+<em class="property">class </em><code class="descclassname">sets.</code><code class="descname">ImmutableSet</code><span class="sig-paren">(</span><span class="optional">[</span><em>iterable</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#sets.ImmutableSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a new empty <a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a> object.  If the optional <em>iterable</em>
+parameter is supplied, updates the set with elements obtained from iteration.
+All of the elements in <em>iterable</em> should be immutable or be transformable to an
+immutable using the protocol described in section <a class="reference internal" href="#immutable-transforms"><span class="std std-ref">Protocol for automatic conversion to immutable</span></a>.</p>
+<p>Because <a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a> objects provide a <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__hash__()</span></code></a> method, they
+can be used as set elements or as dictionary keys.  <a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a>
+objects do not have methods for adding or removing elements, so all of the
+elements must be known when the constructor is called.</p>
+</dd></dl>
+
+<div class="section" id="set-objects">
+<span id="id1"></span><h2>8.7.1. Set Objects<a class="headerlink" href="#set-objects" title="Permalink to this headline">¶</a></h2>
+<p>Instances of <a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a> and <a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a> both provide the following
+operations:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 16%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Equivalent</p></th>
+<th class="head"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">len(s)</span></code></p></td>
+<td></td>
+<td><p>number of elements in set <em>s</em>
+(cardinality)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">in</span> <span class="pre">s</span></code></p></td>
+<td></td>
+<td><p>test <em>x</em> for membership in <em>s</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">not</span> <span class="pre">in</span> <span class="pre">s</span></code></p></td>
+<td></td>
+<td><p>test <em>x</em> for non-membership in
+<em>s</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">s.issubset(t)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">&lt;=</span> <span class="pre">t</span></code></p></td>
+<td><p>test whether every element in
+<em>s</em> is in <em>t</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">s.issuperset(t)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">&gt;=</span> <span class="pre">t</span></code></p></td>
+<td><p>test whether every element in
+<em>t</em> is in <em>s</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">s.union(t)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">|</span> <span class="pre">t</span></code></p></td>
+<td><p>new set with elements from both
+<em>s</em> and <em>t</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">s.intersection(t)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">&amp;</span> <span class="pre">t</span></code></p></td>
+<td><p>new set with elements common to
+<em>s</em> and <em>t</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">s.difference(t)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">-</span> <span class="pre">t</span></code></p></td>
+<td><p>new set with elements in <em>s</em>
+but not in <em>t</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">s.symmetric_difference(t)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">^</span> <span class="pre">t</span></code></p></td>
+<td><p>new set with elements in either
+<em>s</em> or <em>t</em> but not both</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">s.copy()</span></code></p></td>
+<td></td>
+<td><p>new set with a shallow copy of
+<em>s</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>Note, the non-operator versions of <code class="xref py py-meth docutils literal notranslate"><span class="pre">union()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">intersection()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">difference()</span></code>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">symmetric_difference()</span></code> will accept any iterable as
+an argument. In contrast, their operator based counterparts require their
+arguments to be sets.  This precludes error-prone constructions like
+<code class="docutils literal notranslate"><span class="pre">Set('abc')</span> <span class="pre">&amp;</span> <span class="pre">'cbs'</span></code> in favor of the more readable
+<code class="docutils literal notranslate"><span class="pre">Set('abc').intersection('cbs')</span></code>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.3.1: </span>Formerly all arguments were required to be sets.</p>
+</div>
+<p>In addition, both <a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a> and <a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a> support set to set
+comparisons.  Two sets are equal if and only if every element of each set is
+contained in the other (each is a subset of the other). A set is less than
+another set if and only if the first set is a proper subset of the second set
+(is a subset, but is not equal). A set is greater than another set if and only
+if the first set is a proper superset of the second set (is a superset, but is
+not equal).</p>
+<p>The subset and equality comparisons do not generalize to a complete ordering
+function.  For example, any two disjoint sets are not equal and are not subsets
+of each other, so <em>all</em> of the following return <code class="docutils literal notranslate"><span class="pre">False</span></code>:  <code class="docutils literal notranslate"><span class="pre">a&lt;b</span></code>, <code class="docutils literal notranslate"><span class="pre">a==b</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">a&gt;b</span></code>. Accordingly, sets do not implement the <a class="reference internal" href="../reference/datamodel.html#object.__cmp__" title="object.__cmp__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__cmp__()</span></code></a> method.</p>
+<p>Since sets only define partial ordering (subset relationships), the output of
+the <code class="xref py py-meth docutils literal notranslate"><span class="pre">list.sort()</span></code> method is undefined for lists of sets.</p>
+<p>The following table lists operations available in <a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a> but not
+found in <a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a>:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hash(s)</span></code></p></td>
+<td><p>returns a hash value for <em>s</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>The following table lists operations available in <a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a> but not found in
+<a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a>:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 15%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Equivalent</p></th>
+<th class="head"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">s.update(t)</span></code></p></td>
+<td><p><em>s</em> |= <em>t</em></p></td>
+<td><p>return set <em>s</em> with elements
+added from <em>t</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">s.intersection_update(t)</span></code></p></td>
+<td><p><em>s</em> &amp;= <em>t</em></p></td>
+<td><p>return set <em>s</em> keeping only
+elements also found in <em>t</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">s.difference_update(t)</span></code></p></td>
+<td><p><em>s</em> -= <em>t</em></p></td>
+<td><p>return set <em>s</em> after removing
+elements found in <em>t</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">s.symmetric_difference_update(t)</span></code></p></td>
+<td><p><em>s</em> ^= <em>t</em></p></td>
+<td><p>return set <em>s</em> with elements
+from <em>s</em> or <em>t</em> but not both</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">s.add(x)</span></code></p></td>
+<td></td>
+<td><p>add element <em>x</em> to set <em>s</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">s.remove(x)</span></code></p></td>
+<td></td>
+<td><p>remove <em>x</em> from set <em>s</em>; raises
+<a class="reference internal" href="exceptions.html#exceptions.KeyError" title="exceptions.KeyError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> if not present</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">s.discard(x)</span></code></p></td>
+<td></td>
+<td><p>removes <em>x</em> from set <em>s</em> if
+present</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">s.pop()</span></code></p></td>
+<td></td>
+<td><p>remove and return an arbitrary
+element from <em>s</em>; raises
+<a class="reference internal" href="exceptions.html#exceptions.KeyError" title="exceptions.KeyError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> if empty</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">s.clear()</span></code></p></td>
+<td></td>
+<td><p>remove all elements from set
+<em>s</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>Note, the non-operator versions of <code class="xref py py-meth docutils literal notranslate"><span class="pre">update()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">intersection_update()</span></code>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">difference_update()</span></code>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">symmetric_difference_update()</span></code> will accept
+any iterable as an argument.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.3.1: </span>Formerly all arguments were required to be sets.</p>
+</div>
+<p>Also note, the module also includes a <code class="xref py py-meth docutils literal notranslate"><span class="pre">union_update()</span></code> method which is an
+alias for <code class="xref py py-meth docutils literal notranslate"><span class="pre">update()</span></code>.  The method is included for backwards compatibility.
+Programmers should prefer the <code class="xref py py-meth docutils literal notranslate"><span class="pre">update()</span></code> method because it is supported by
+the built-in <a class="reference internal" href="stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set()</span></code></a> and <a class="reference internal" href="stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset()</span></code></a> types.</p>
+</div>
+<div class="section" id="example">
+<span id="set-example"></span><h2>8.7.2. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sets</span> <span class="k">import</span> <span class="n">Set</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engineers</span> <span class="o">=</span> <span class="n">Set</span><span class="p">([</span><span class="s1">&#39;John&#39;</span><span class="p">,</span> <span class="s1">&#39;Jane&#39;</span><span class="p">,</span> <span class="s1">&#39;Jack&#39;</span><span class="p">,</span> <span class="s1">&#39;Janice&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">programmers</span> <span class="o">=</span> <span class="n">Set</span><span class="p">([</span><span class="s1">&#39;Jack&#39;</span><span class="p">,</span> <span class="s1">&#39;Sam&#39;</span><span class="p">,</span> <span class="s1">&#39;Susan&#39;</span><span class="p">,</span> <span class="s1">&#39;Janice&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">managers</span> <span class="o">=</span> <span class="n">Set</span><span class="p">([</span><span class="s1">&#39;Jane&#39;</span><span class="p">,</span> <span class="s1">&#39;Jack&#39;</span><span class="p">,</span> <span class="s1">&#39;Susan&#39;</span><span class="p">,</span> <span class="s1">&#39;Zack&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">employees</span> <span class="o">=</span> <span class="n">engineers</span> <span class="o">|</span> <span class="n">programmers</span> <span class="o">|</span> <span class="n">managers</span>           <span class="c1"># union</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engineering_management</span> <span class="o">=</span> <span class="n">engineers</span> <span class="o">&amp;</span> <span class="n">managers</span>            <span class="c1"># intersection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fulltime_management</span> <span class="o">=</span> <span class="n">managers</span> <span class="o">-</span> <span class="n">engineers</span> <span class="o">-</span> <span class="n">programmers</span> <span class="c1"># difference</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engineers</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;Marvin&#39;</span><span class="p">)</span>                                  <span class="c1"># add element</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">engineers</span> <span class="c1"># doctest: +SKIP</span>
+<span class="go">Set([&#39;Jane&#39;, &#39;Marvin&#39;, &#39;Janice&#39;, &#39;John&#39;, &#39;Jack&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">employees</span><span class="o">.</span><span class="n">issuperset</span><span class="p">(</span><span class="n">engineers</span><span class="p">)</span>     <span class="c1"># superset test</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">employees</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">engineers</span><span class="p">)</span>         <span class="c1"># update from another set</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">employees</span><span class="o">.</span><span class="n">issuperset</span><span class="p">(</span><span class="n">engineers</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="p">[</span><span class="n">engineers</span><span class="p">,</span> <span class="n">programmers</span><span class="p">,</span> <span class="n">managers</span><span class="p">,</span> <span class="n">employees</span><span class="p">]:</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">... </span>    <span class="n">group</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;Susan&#39;</span><span class="p">)</span>          <span class="c1"># unconditionally remove element</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">group</span>
+<span class="gp">...</span>
+<span class="go">Set([&#39;Jane&#39;, &#39;Marvin&#39;, &#39;Janice&#39;, &#39;John&#39;, &#39;Jack&#39;])</span>
+<span class="go">Set([&#39;Janice&#39;, &#39;Jack&#39;, &#39;Sam&#39;])</span>
+<span class="go">Set([&#39;Jane&#39;, &#39;Zack&#39;, &#39;Jack&#39;])</span>
+<span class="go">Set([&#39;Jack&#39;, &#39;Sam&#39;, &#39;Jane&#39;, &#39;Marvin&#39;, &#39;Janice&#39;, &#39;John&#39;, &#39;Zack&#39;])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="protocol-for-automatic-conversion-to-immutable">
+<span id="immutable-transforms"></span><h2>8.7.3. Protocol for automatic conversion to immutable<a class="headerlink" href="#protocol-for-automatic-conversion-to-immutable" title="Permalink to this headline">¶</a></h2>
+<p>Sets can only contain immutable elements.  For convenience, mutable <a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a>
+objects are automatically copied to an <a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a> before being added
+as a set element.</p>
+<p>The mechanism is to always add a <a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">hashable</span></a> element, or if it is not
+hashable, the element is checked to see if it has an <code class="xref py py-meth docutils literal notranslate"><span class="pre">__as_immutable__()</span></code>
+method which returns an immutable equivalent.</p>
+<p>Since <a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a> objects have a <code class="xref py py-meth docutils literal notranslate"><span class="pre">__as_immutable__()</span></code> method returning an
+instance of <a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a>, it is possible to construct sets of sets.</p>
+<p>A similar mechanism is needed by the <a class="reference internal" href="../reference/datamodel.html#object.__contains__" title="object.__contains__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__contains__()</span></code></a> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code>
+methods which need to hash an element to check for membership in a set.  Those
+methods check an element for hashability and, if not, check for a
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">__as_temporarily_immutable__()</span></code> method which returns the element wrapped by
+a class that provides temporary methods for <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__hash__()</span></code></a>, <a class="reference internal" href="../reference/datamodel.html#object.__eq__" title="object.__eq__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__eq__()</span></code></a>,
+and <a class="reference internal" href="../reference/datamodel.html#object.__ne__" title="object.__ne__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__ne__()</span></code></a>.</p>
+<p>The alternate mechanism spares the need to build a separate copy of the original
+mutable object.</p>
+<p><a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a> objects implement the <code class="xref py py-meth docutils literal notranslate"><span class="pre">__as_temporarily_immutable__()</span></code> method
+which returns the <a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a> object wrapped by a new class
+<code class="xref py py-class docutils literal notranslate"><span class="pre">_TemporarilyImmutableSet</span></code>.</p>
+<p>The two mechanisms for adding hashability are normally invisible to the user;
+however, a conflict can arise in a multi-threaded environment where one thread
+is updating a set while another has temporarily wrapped it in
+<code class="xref py py-class docutils literal notranslate"><span class="pre">_TemporarilyImmutableSet</span></code>.  In other words, sets of mutable sets are not
+thread-safe.</p>
+</div>
+<div class="section" id="comparison-to-the-built-in-set-types">
+<span id="comparison-to-builtin-set"></span><h2>8.7.4. Comparison to the built-in <a class="reference internal" href="stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> types<a class="headerlink" href="#comparison-to-the-built-in-set-types" title="Permalink to this headline">¶</a></h2>
+<p>The built-in <a class="reference internal" href="stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> and <a class="reference internal" href="stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> types were designed based on
+lessons learned from the <a class="reference internal" href="#module-sets" title="sets: Implementation of sets of unique elements. (deprecated)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sets</span></code></a> module.  The key differences are:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#sets.Set" title="sets.Set"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a> and <a class="reference internal" href="#sets.ImmutableSet" title="sets.ImmutableSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImmutableSet</span></code></a> were renamed to <a class="reference internal" href="stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> and
+<a class="reference internal" href="stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>.</p></li>
+<li><p>There is no equivalent to <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSet</span></code>.  Instead, use <code class="docutils literal notranslate"><span class="pre">isinstance(x,</span>
+<span class="pre">(set,</span> <span class="pre">frozenset))</span></code>.</p></li>
+<li><p>The hash algorithm for the built-ins performs significantly better (fewer
+collisions) for most datasets.</p></li>
+<li><p>The built-in versions have more space efficient pickles.</p></li>
+<li><p>The built-in versions do not have a <code class="xref py py-meth docutils literal notranslate"><span class="pre">union_update()</span></code> method. Instead, use
+the <code class="xref py py-meth docutils literal notranslate"><span class="pre">update()</span></code> method which is equivalent.</p></li>
+<li><p>The built-in versions do not have a <code class="docutils literal notranslate"><span class="pre">_repr(sorted=True)</span></code> method.
+Instead, use the built-in <a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code></a> and <a class="reference internal" href="functions.html#sorted" title="sorted"><code class="xref py py-func docutils literal notranslate"><span class="pre">sorted()</span></code></a> functions:
+<code class="docutils literal notranslate"><span class="pre">repr(sorted(s))</span></code>.</p></li>
+<li><p>The built-in version does not have a protocol for automatic conversion to
+immutable.  Many found this feature to be confusing and no one in the community
+reported having found real uses for it.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sets</span></code> — Unordered collections of unique elements</a><ul>
+<li><a class="reference internal" href="#set-objects">8.7.1. Set Objects</a></li>
+<li><a class="reference internal" href="#example">8.7.2. Example</a></li>
+<li><a class="reference internal" href="#protocol-for-automatic-conversion-to-immutable">8.7.3. Protocol for automatic conversion to immutable</a></li>
+<li><a class="reference internal" href="#comparison-to-the-built-in-set-types">8.7.4. Comparison to the built-in <code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code> types</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="array.html"
+                        title="previous chapter">8.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">array</span></code> — Efficient arrays of numeric values</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sched.html"
+                        title="next chapter">8.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sched</span></code> — Event scheduler</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/sets.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sched.html" title="8.8. sched — Event scheduler"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="array.html" title="8.6. array — Efficient arrays of numeric values"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" >8. Data Types</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

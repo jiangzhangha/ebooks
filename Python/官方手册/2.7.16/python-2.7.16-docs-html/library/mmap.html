@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>16.7. mmap — Memory-mapped file support &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="16.8. readline — GNU readline interface" href="readline.html" />
+    <link rel="prev" title="16.6. multiprocessing — Process-based “threading” interface" href="multiprocessing.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/mmap.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="readline.html" title="16.8. readline — GNU readline interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="multiprocessing.html" title="16.6. multiprocessing — Process-based “threading” interface"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="someos.html" accesskey="U">16. Optional Operating System Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-mmap">
+<span id="mmap-memory-mapped-file-support"></span><h1>16.7. <a class="reference internal" href="#module-mmap" title="mmap: Interface to memory-mapped files for Unix and Windows."><code class="xref py py-mod docutils literal notranslate"><span class="pre">mmap</span></code></a> — Memory-mapped file support<a class="headerlink" href="#module-mmap" title="Permalink to this headline">¶</a></h1>
+<p>Memory-mapped file objects behave like both strings and like file objects.
+Unlike normal string objects, however, these are mutable.  You can use mmap
+objects in most places where strings are expected; for example, you can use
+the <a class="reference internal" href="re.html#module-re" title="re: Regular expression operations."><code class="xref py py-mod docutils literal notranslate"><span class="pre">re</span></code></a> module to search through a memory-mapped file.  Since they’re
+mutable, you can change a single character by doing <code class="docutils literal notranslate"><span class="pre">obj[index]</span> <span class="pre">=</span> <span class="pre">'a'</span></code>, or
+change a substring by assigning to a slice: <code class="docutils literal notranslate"><span class="pre">obj[i1:i2]</span> <span class="pre">=</span> <span class="pre">'...'</span></code>.  You can
+also read and write data starting at the current file position, and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">seek()</span></code> through the file to different positions.</p>
+<p>A memory-mapped file is created by the <a class="reference internal" href="#mmap.mmap" title="mmap.mmap"><code class="xref py py-class docutils literal notranslate"><span class="pre">mmap</span></code></a> constructor, which is
+different on Unix and on Windows.  In either case you must provide a file
+descriptor for a file opened for update. If you wish to map an existing Python
+file object, use its <code class="xref py py-meth docutils literal notranslate"><span class="pre">fileno()</span></code> method to obtain the correct value for the
+<em>fileno</em> parameter.  Otherwise, you can open the file using the
+<a class="reference internal" href="os.html#os.open" title="os.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.open()</span></code></a> function, which returns a file descriptor directly (the file
+still needs to be closed when done).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to create a memory-mapping for a writable, buffered file, you
+should <a class="reference internal" href="io.html#io.IOBase.flush" title="io.IOBase.flush"><code class="xref py py-func docutils literal notranslate"><span class="pre">flush()</span></code></a> the file first.  This is necessary to ensure
+that local modifications to the buffers are actually available to the
+mapping.</p>
+</div>
+<p>For both the Unix and Windows versions of the constructor, <em>access</em> may be
+specified as an optional keyword parameter. <em>access</em> accepts one of three
+values: <code class="xref py py-const docutils literal notranslate"><span class="pre">ACCESS_READ</span></code>, <code class="xref py py-const docutils literal notranslate"><span class="pre">ACCESS_WRITE</span></code>, or <code class="xref py py-const docutils literal notranslate"><span class="pre">ACCESS_COPY</span></code>
+to specify read-only, write-through or copy-on-write memory respectively.
+<em>access</em> can be used on both Unix and Windows.  If <em>access</em> is not specified,
+Windows mmap returns a write-through mapping.  The initial memory values for
+all three access types are taken from the specified file.  Assignment to an
+<code class="xref py py-const docutils literal notranslate"><span class="pre">ACCESS_READ</span></code> memory map raises a <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> exception.
+Assignment to an <code class="xref py py-const docutils literal notranslate"><span class="pre">ACCESS_WRITE</span></code> memory map affects both memory and the
+underlying file.  Assignment to an <code class="xref py py-const docutils literal notranslate"><span class="pre">ACCESS_COPY</span></code> memory map affects
+memory but does not update the underlying file.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.5: </span>To map anonymous memory, -1 should be passed as the fileno along with the
+length.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.6: </span>mmap.mmap has formerly been a factory function creating mmap objects. Now
+mmap.mmap is the class itself.</p>
+</div>
+<dl class="class">
+<dt id="mmap.mmap">
+<em class="property">class </em><code class="descclassname">mmap.</code><code class="descname">mmap</code><span class="sig-paren">(</span><em>fileno</em>, <em>length</em><span class="optional">[</span>, <em>tagname</em><span class="optional">[</span>, <em>access</em><span class="optional">[</span>, <em>offset</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>(Windows version)</strong> Maps <em>length</em> bytes from the file specified by the
+file handle <em>fileno</em>, and creates a mmap object.  If <em>length</em> is larger
+than the current size of the file, the file is extended to contain <em>length</em>
+bytes.  If <em>length</em> is <code class="docutils literal notranslate"><span class="pre">0</span></code>, the maximum length of the map is the current
+size of the file, except that if the file is empty Windows raises an
+exception (you cannot create an empty mapping on Windows).</p>
+<p><em>tagname</em>, if specified and not <code class="docutils literal notranslate"><span class="pre">None</span></code>, is a string giving a tag name for
+the mapping.  Windows allows you to have many different mappings against
+the same file.  If you specify the name of an existing tag, that tag is
+opened, otherwise a new tag of this name is created.  If this parameter is
+omitted or <code class="docutils literal notranslate"><span class="pre">None</span></code>, the mapping is created without a name.  Avoiding the
+use of the tag parameter will assist in keeping your code portable between
+Unix and Windows.</p>
+<p><em>offset</em> may be specified as a non-negative integer offset. mmap references
+will be relative to the offset from the beginning of the file. <em>offset</em>
+defaults to 0.  <em>offset</em> must be a multiple of the <code class="xref py py-const docutils literal notranslate"><span class="pre">ALLOCATIONGRANULARITY</span></code>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="descclassname">mmap.</code><code class="descname">mmap</code><span class="sig-paren">(</span><em>fileno</em>, <em>length</em><span class="optional">[</span>, <em>flags</em><span class="optional">[</span>, <em>prot</em><span class="optional">[</span>, <em>access</em><span class="optional">[</span>, <em>offset</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><p><strong>(Unix version)</strong> Maps <em>length</em> bytes from the file specified by the file
+descriptor <em>fileno</em>, and returns a mmap object.  If <em>length</em> is <code class="docutils literal notranslate"><span class="pre">0</span></code>, the
+maximum length of the map will be the current size of the file when
+<a class="reference internal" href="#mmap.mmap" title="mmap.mmap"><code class="xref py py-class docutils literal notranslate"><span class="pre">mmap</span></code></a> is called.</p>
+<p><em>flags</em> specifies the nature of the mapping. <code class="xref py py-const docutils literal notranslate"><span class="pre">MAP_PRIVATE</span></code> creates a
+private copy-on-write mapping, so changes to the contents of the mmap
+object will be private to this process, and <code class="xref py py-const docutils literal notranslate"><span class="pre">MAP_SHARED</span></code> creates a
+mapping that’s shared with all other processes mapping the same areas of
+the file.  The default value is <code class="xref py py-const docutils literal notranslate"><span class="pre">MAP_SHARED</span></code>.</p>
+<p><em>prot</em>, if specified, gives the desired memory protection; the two most
+useful values are <code class="xref py py-const docutils literal notranslate"><span class="pre">PROT_READ</span></code> and <code class="xref py py-const docutils literal notranslate"><span class="pre">PROT_WRITE</span></code>, to specify
+that the pages may be read or written.  <em>prot</em> defaults to
+<code class="xref py py-const docutils literal notranslate"><span class="pre">PROT_READ</span> <span class="pre">|</span> <span class="pre">PROT_WRITE</span></code>.</p>
+<p><em>access</em> may be specified in lieu of <em>flags</em> and <em>prot</em> as an optional
+keyword parameter.  It is an error to specify both <em>flags</em>, <em>prot</em> and
+<em>access</em>.  See the description of <em>access</em> above for information on how to
+use this parameter.</p>
+<p><em>offset</em> may be specified as a non-negative integer offset. mmap references
+will be relative to the offset from the beginning of the file. <em>offset</em>
+defaults to 0. <em>offset</em> must be a multiple of <code class="xref py py-const docutils literal notranslate"><span class="pre">ALLOCATIONGRANULARITY</span></code>
+which is equal to <code class="xref py py-const docutils literal notranslate"><span class="pre">PAGESIZE</span></code> on Unix systems.</p>
+<p>To ensure validity of the created memory mapping the file specified
+by the descriptor <em>fileno</em> is internally automatically synchronized
+with physical backing store on Mac OS X and OpenVMS.</p>
+<p>This example shows a simple way of using <a class="reference internal" href="#mmap.mmap" title="mmap.mmap"><code class="xref py py-class docutils literal notranslate"><span class="pre">mmap</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mmap</span>
+
+<span class="c1"># write a simple example file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;hello.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Hello Python!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;hello.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;r+b&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="c1"># memory-map the file, size 0 means whole file</span>
+    <span class="n">mm</span> <span class="o">=</span> <span class="n">mmap</span><span class="o">.</span><span class="n">mmap</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># read content via standard file methods</span>
+    <span class="nb">print</span> <span class="n">mm</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>  <span class="c1"># prints &quot;Hello Python!&quot;</span>
+    <span class="c1"># read content via slice notation</span>
+    <span class="nb">print</span> <span class="n">mm</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>  <span class="c1"># prints &quot;Hello&quot;</span>
+    <span class="c1"># update content using slice notation;</span>
+    <span class="c1"># note that new content must have same size</span>
+    <span class="n">mm</span><span class="p">[</span><span class="mi">6</span><span class="p">:]</span> <span class="o">=</span> <span class="s2">&quot; world!</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="c1"># ... and read again using standard file methods</span>
+    <span class="n">mm</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">mm</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>  <span class="c1"># prints &quot;Hello  world!&quot;</span>
+    <span class="c1"># close the map</span>
+    <span class="n">mm</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The next example demonstrates how to create an anonymous map and exchange
+data between the parent and child processes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mmap</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">mm</span> <span class="o">=</span> <span class="n">mmap</span><span class="o">.</span><span class="n">mmap</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+<span class="n">mm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Hello world!&quot;</span><span class="p">)</span>
+
+<span class="n">pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># In a child process</span>
+    <span class="n">mm</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">mm</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+    <span class="n">mm</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Memory-mapped file objects support the following methods:</p>
+<dl class="method">
+<dt id="mmap.mmap.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the mmap. Subsequent calls to other methods of the object will
+result in a ValueError exception being raised. This will not close
+the open file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.find">
+<code class="descname">find</code><span class="sig-paren">(</span><em>string</em><span class="optional">[</span>, <em>start</em><span class="optional">[</span>, <em>end</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the lowest index in the object where the substring <em>string</em> is
+found, such that <em>string</em> is contained in the range [<em>start</em>, <em>end</em>].
+Optional arguments <em>start</em> and <em>end</em> are interpreted as in slice notation.
+Returns <code class="docutils literal notranslate"><span class="pre">-1</span></code> on failure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.flush">
+<code class="descname">flush</code><span class="sig-paren">(</span><span class="optional">[</span><em>offset</em>, <em>size</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flushes changes made to the in-memory copy of a file back to disk. Without
+use of this call there is no guarantee that changes are written back before
+the object is destroyed.  If <em>offset</em> and <em>size</em> are specified, only
+changes to the given range of bytes will be flushed to disk; otherwise, the
+whole extent of the mapping is flushed.  <em>offset</em> must be a multiple of the
+<code class="xref py py-const docutils literal notranslate"><span class="pre">PAGESIZE</span></code> or <code class="xref py py-const docutils literal notranslate"><span class="pre">ALLOCATIONGRANULARITY</span></code>.</p>
+<p><strong>(Windows version)</strong> A nonzero value returned indicates success; zero
+indicates failure.</p>
+<p><strong>(Unix version)</strong> A zero value is returned to indicate success. An
+exception is raised when the call failed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.move">
+<code class="descname">move</code><span class="sig-paren">(</span><em>dest</em>, <em>src</em>, <em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy the <em>count</em> bytes starting at offset <em>src</em> to the destination index
+<em>dest</em>.  If the mmap was created with <code class="xref py py-const docutils literal notranslate"><span class="pre">ACCESS_READ</span></code>, then calls to
+move will raise a <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> exception.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>num</em><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string containing up to <em>num</em> bytes starting from the current
+file position; the file position is updated to point after the bytes that
+were returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.read_byte">
+<code class="descname">read_byte</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.read_byte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string of length 1 containing the character at the current file
+position, and advances the file position by 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.readline">
+<code class="descname">readline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.readline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a single line, starting at the current file position and up to the
+next newline.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.resize">
+<code class="descname">resize</code><span class="sig-paren">(</span><em>newsize</em><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.resize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resizes the map and the underlying file, if any. If the mmap was created
+with <code class="xref py py-const docutils literal notranslate"><span class="pre">ACCESS_READ</span></code> or <code class="xref py py-const docutils literal notranslate"><span class="pre">ACCESS_COPY</span></code>, resizing the map will
+raise a <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> exception.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.rfind">
+<code class="descname">rfind</code><span class="sig-paren">(</span><em>string</em><span class="optional">[</span>, <em>start</em><span class="optional">[</span>, <em>end</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.rfind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the highest index in the object where the substring <em>string</em> is
+found, such that <em>string</em> is contained in the range [<em>start</em>, <em>end</em>].
+Optional arguments <em>start</em> and <em>end</em> are interpreted as in slice notation.
+Returns <code class="docutils literal notranslate"><span class="pre">-1</span></code> on failure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.seek">
+<code class="descname">seek</code><span class="sig-paren">(</span><em>pos</em><span class="optional">[</span>, <em>whence</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.seek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the file’s current position.  <em>whence</em> argument is optional and
+defaults to <code class="docutils literal notranslate"><span class="pre">os.SEEK_SET</span></code> or <code class="docutils literal notranslate"><span class="pre">0</span></code> (absolute file positioning); other
+values are <code class="docutils literal notranslate"><span class="pre">os.SEEK_CUR</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code> (seek relative to the current
+position) and <code class="docutils literal notranslate"><span class="pre">os.SEEK_END</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code> (seek relative to the file’s end).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.size">
+<code class="descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the length of the file, which can be larger than the size of the
+memory-mapped area.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.tell">
+<code class="descname">tell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.tell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current position of the file pointer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the bytes in <em>string</em> into memory at the current position of the
+file pointer; the file position is updated to point after the bytes that
+were written. If the mmap was created with <code class="xref py py-const docutils literal notranslate"><span class="pre">ACCESS_READ</span></code>, then
+writing to it will raise a <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> exception.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mmap.mmap.write_byte">
+<code class="descname">write_byte</code><span class="sig-paren">(</span><em>byte</em><span class="sig-paren">)</span><a class="headerlink" href="#mmap.mmap.write_byte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the single-character string <em>byte</em> into memory at the current
+position of the file pointer; the file position is advanced by <code class="docutils literal notranslate"><span class="pre">1</span></code>. If
+the mmap was created with <code class="xref py py-const docutils literal notranslate"><span class="pre">ACCESS_READ</span></code>, then writing to it will
+raise a <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> exception.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="multiprocessing.html"
+                        title="previous chapter">16.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">multiprocessing</span></code> — Process-based “threading” interface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="readline.html"
+                        title="next chapter">16.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">readline</span></code> — GNU readline interface</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/mmap.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="readline.html" title="16.8. readline — GNU readline interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="multiprocessing.html" title="16.6. multiprocessing — Process-based “threading” interface"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="someos.html" >16. Optional Operating System Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

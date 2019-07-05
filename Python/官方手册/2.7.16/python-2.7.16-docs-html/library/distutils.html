@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>27.1. distutils — Building and installing Python modules &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="27.2. ensurepip — Bootstrapping the pip installer" href="ensurepip.html" />
+    <link rel="prev" title="27. Software Packaging and Distribution" href="distribution.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/distutils.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ensurepip.html" title="27.2. ensurepip — Bootstrapping the pip installer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="distribution.html" title="27. Software Packaging and Distribution"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="distribution.html" accesskey="U">27. Software Packaging and Distribution</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-distutils">
+<span id="distutils-building-and-installing-python-modules"></span><h1>27.1. <a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> — Building and installing Python modules<a class="headerlink" href="#module-distutils" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> package provides support for building and installing
+additional modules into a Python installation.  The new modules may be either
+100%-pure Python, or may be extension modules written in C, or may be
+collections of Python packages which include modules coded in both Python and C.</p>
+<p>Most Python users will <em>not</em> want to use this module directly, but instead
+use the cross-version tools maintained by the Python Packaging Authority. In
+particular,
+<a class="reference external" href="https://setuptools.readthedocs.io/en/latest/">setuptools</a> is an
+enhanced alternative to <a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> that provides:</p>
+<ul class="simple">
+<li><p>support for declaring project dependencies</p></li>
+<li><p>additional mechanisms for configuring which files to include in source
+releases (including plugins for integration with version control systems)</p></li>
+<li><p>the ability to declare project “entry points”, which can be used as the
+basis for application plugin systems</p></li>
+<li><p>the ability to automatically generate Windows command line executables at
+installation time rather than needing to prebuild them</p></li>
+<li><p>consistent behaviour across all supported Python versions</p></li>
+</ul>
+<p>The recommended <a class="reference external" href="https://pip.pypa.io/">pip</a> installer runs all
+<code class="docutils literal notranslate"><span class="pre">setup.py</span></code> scripts with <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>, even if the script itself only
+imports <code class="docutils literal notranslate"><span class="pre">distutils</span></code>. Refer to the
+<a class="reference external" href="https://packaging.python.org">Python Packaging User Guide</a> for more
+information.</p>
+<p>For the benefits of packaging tool authors and users seeking a deeper
+understanding of the details of the current packaging and distribution
+system, the legacy <a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> based user documentation and API
+reference remain available:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../install/index.html#install-index"><span class="std std-ref">Installing Python Modules (Legacy version)</span></a></p></li>
+<li><p><a class="reference internal" href="../distutils/index.html#distutils-index"><span class="std std-ref">Distributing Python Modules (Legacy version)</span></a></p></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="distribution.html"
+                        title="previous chapter">27. Software Packaging and Distribution</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ensurepip.html"
+                        title="next chapter">27.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">ensurepip</span></code> — Bootstrapping the <code class="docutils literal notranslate"><span class="pre">pip</span></code> installer</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/distutils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ensurepip.html" title="27.2. ensurepip — Bootstrapping the pip installer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="distribution.html" title="27. Software Packaging and Distribution"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="distribution.html" >27. Software Packaging and Distribution</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

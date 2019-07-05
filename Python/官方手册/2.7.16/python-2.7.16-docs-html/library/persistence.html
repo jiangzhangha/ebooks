@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>11. Data Persistence &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="11.1. pickle — Python object serialization" href="pickle.html" />
+    <link rel="prev" title="10.12. macpath — Mac OS 9 path manipulation functions" href="macpath.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/persistence.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pickle.html" title="11.1. pickle — Python object serialization"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="macpath.html" title="10.12. macpath — Mac OS 9 path manipulation functions"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="data-persistence">
+<span id="persistence"></span><h1>11. Data Persistence<a class="headerlink" href="#data-persistence" title="Permalink to this headline">¶</a></h1>
+<p>The modules described in this chapter support storing Python data in a
+persistent form on disk.  The <a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code></a> and <a class="reference internal" href="marshal.html#module-marshal" title="marshal: Convert Python objects to streams of bytes and back (with different constraints)."><code class="xref py py-mod docutils literal notranslate"><span class="pre">marshal</span></code></a> modules can turn
+many Python data types into a stream of bytes and then recreate the objects from
+the bytes.  The various DBM-related modules support a family of hash-based file
+formats that store a mapping of strings to other strings.  The <a class="reference internal" href="bsddb.html#module-bsddb" title="bsddb: Interface to Berkeley DB database library"><code class="xref py py-mod docutils literal notranslate"><span class="pre">bsddb</span></code></a>
+module also provides such disk-based string-to-string mappings based on hashing,
+and also supports B-Tree and record-based formats.</p>
+<p>The list of modules described in this chapter is:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pickle.html">11.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> — Python object serialization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pickle.html#relationship-to-other-python-modules">11.1.1. Relationship to other Python modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pickle.html#data-stream-format">11.1.2. Data stream format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pickle.html#usage">11.1.3. Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pickle.html#what-can-be-pickled-and-unpickled">11.1.4. What can be pickled and unpickled?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pickle.html#the-pickle-protocol">11.1.5. The pickle protocol</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pickle.html#pickling-and-unpickling-normal-class-instances">11.1.5.1. Pickling and unpickling normal class instances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pickle.html#pickling-and-unpickling-extension-types">11.1.5.2. Pickling and unpickling extension types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pickle.html#pickling-and-unpickling-external-objects">11.1.5.3. Pickling and unpickling external objects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pickle.html#subclassing-unpicklers">11.1.6. Subclassing Unpicklers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pickle.html#example">11.1.7. Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pickle.html#module-cPickle">11.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">cPickle</span></code> — A faster <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="copy_reg.html">11.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">copy_reg</span></code> — Register <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> support functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="copy_reg.html#example">11.3.1. Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shelve.html">11.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">shelve</span></code> — Python object persistence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="shelve.html#restrictions">11.4.1. Restrictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shelve.html#example">11.4.2. Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="marshal.html">11.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">marshal</span></code> — Internal Python object serialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anydbm.html">11.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">anydbm</span></code> — Generic access to DBM-style databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whichdb.html">11.7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">whichdb</span></code> — Guess which DBM module created a database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dbm.html">11.8. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dbm</span></code> — Simple “database” interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gdbm.html">11.9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">gdbm</span></code> — GNU’s reinterpretation of dbm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dbhash.html">11.10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dbhash</span></code> — DBM-style interface to the BSD database library</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dbhash.html#database-objects">11.10.1. Database Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bsddb.html">11.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">bsddb</span></code> — Interface to Berkeley DB library</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bsddb.html#hash-btree-and-record-objects">11.11.1. Hash, BTree and Record Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dumbdbm.html">11.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">dumbdbm</span></code> — Portable DBM implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dumbdbm.html#dumbdbm-objects">11.12.1. Dumbdbm Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sqlite3.html">11.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlite3</span></code> — DB-API 2.0 interface for SQLite databases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sqlite3.html#module-functions-and-constants">11.13.1. Module functions and constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite3.html#connection-objects">11.13.2. Connection Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite3.html#cursor-objects">11.13.3. Cursor Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite3.html#row-objects">11.13.4. Row Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite3.html#sqlite-and-python-types">11.13.5. SQLite and Python types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sqlite3.html#introduction">11.13.5.1. Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlite3.html#using-adapters-to-store-additional-python-types-in-sqlite-databases">11.13.5.2. Using adapters to store additional Python types in SQLite databases</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sqlite3.html#letting-your-object-adapt-itself">11.13.5.2.1. Letting your object adapt itself</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sqlite3.html#registering-an-adapter-callable">11.13.5.2.2. Registering an adapter callable</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sqlite3.html#converting-sqlite-values-to-custom-python-types">11.13.5.3. Converting SQLite values to custom Python types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlite3.html#default-adapters-and-converters">11.13.5.4. Default adapters and converters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite3.html#controlling-transactions">11.13.6. Controlling Transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite3.html#using-sqlite3-efficiently">11.13.7. Using <code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlite3</span></code> efficiently</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sqlite3.html#using-shortcut-methods">11.13.7.1. Using shortcut methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlite3.html#accessing-columns-by-name-instead-of-by-index">11.13.7.2. Accessing columns by name instead of by index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlite3.html#using-the-connection-as-a-context-manager">11.13.7.3. Using the connection as a context manager</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite3.html#common-issues">11.13.8. Common issues</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sqlite3.html#multithreading">11.13.8.1. Multithreading</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="macpath.html"
+                        title="previous chapter">10.12. <code class="xref py py-mod docutils literal notranslate"><span class="pre">macpath</span></code> — Mac OS 9 path manipulation functions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pickle.html"
+                        title="next chapter">11.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> — Python object serialization</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/persistence.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pickle.html" title="11.1. pickle — Python object serialization"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="macpath.html" title="10.12. macpath — Mac OS 9 path manipulation functions"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>

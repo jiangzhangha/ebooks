@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>39.12. jpeg — Read and write JPEG files &#8212; Python 2.7.16 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.16 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="40. SunOS Specific Services" href="sun.html" />
+    <link rel="prev" title="39.11. imgfile — Support for SGI imglib files" href="imgfile.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/2/library/jpeg.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/switchers.js"></script>
+ 
+    
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sun.html" title="40. SunOS Specific Services"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imgfile.html" title="39.11. imgfile — Support for SGI imglib files"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="sgi.html" accesskey="U">39. SGI IRIX Specific Services</a> &#187;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-jpeg">
+<span id="jpeg-read-and-write-jpeg-files"></span><h1>39.12. <a class="reference internal" href="#module-jpeg" title="jpeg: Read and write image files in compressed JPEG format. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jpeg</span></code></a> — Read and write JPEG files<a class="headerlink" href="#module-jpeg" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-jpeg" title="jpeg: Read and write image files in compressed JPEG format. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jpeg</span></code></a> module has been removed in Python 3.</p>
+</div>
+<p id="index-0">The module <a class="reference internal" href="#module-jpeg" title="jpeg: Read and write image files in compressed JPEG format. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jpeg</span></code></a> provides access to the jpeg compressor and decompressor
+written by the Independent JPEG Group (IJG). JPEG is a standard for compressing
+pictures; it is defined in ISO 10918.  For details on JPEG or the Independent
+JPEG Group software refer to the JPEG standard or the documentation provided
+with the software.</p>
+<p id="index-1">A portable interface to JPEG image files is available with the Python Imaging
+Library (PIL) by Fredrik Lundh.  Information on PIL is available at
+<a class="reference external" href="http://www.pythonware.com/products/pil/">http://www.pythonware.com/products/pil/</a>.</p>
+<p>The <a class="reference internal" href="#module-jpeg" title="jpeg: Read and write image files in compressed JPEG format. (deprecated) (IRIX)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jpeg</span></code></a> module defines an exception and some functions.</p>
+<dl class="exception">
+<dt id="jpeg.error">
+<em class="property">exception </em><code class="descclassname">jpeg.</code><code class="descname">error</code><a class="headerlink" href="#jpeg.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised by <a class="reference internal" href="#jpeg.compress" title="jpeg.compress"><code class="xref py py-func docutils literal notranslate"><span class="pre">compress()</span></code></a> and <a class="reference internal" href="#jpeg.decompress" title="jpeg.decompress"><code class="xref py py-func docutils literal notranslate"><span class="pre">decompress()</span></code></a> in case of errors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jpeg.compress">
+<code class="descclassname">jpeg.</code><code class="descname">compress</code><span class="sig-paren">(</span><em>data</em>, <em>w</em>, <em>h</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#jpeg.compress" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">Treat data as a pixmap of width <em>w</em> and height <em>h</em>, with <em>b</em> bytes per pixel.
+The data is in SGI GL order, so the first pixel is in the lower-left corner.
+This means that <code class="xref py py-func docutils literal notranslate"><span class="pre">gl.lrectread()</span></code> return data can immediately be passed to
+<a class="reference internal" href="#jpeg.compress" title="jpeg.compress"><code class="xref py py-func docutils literal notranslate"><span class="pre">compress()</span></code></a>. Currently only 1 byte and 4 byte pixels are allowed, the
+former being treated as greyscale and the latter as RGB color. <a class="reference internal" href="#jpeg.compress" title="jpeg.compress"><code class="xref py py-func docutils literal notranslate"><span class="pre">compress()</span></code></a>
+returns a string that contains the compressed picture, in JFIF format.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jpeg.decompress">
+<code class="descclassname">jpeg.</code><code class="descname">decompress</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#jpeg.decompress" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-3">Data is a string containing a picture in JFIF format. It returns a tuple
+<code class="docutils literal notranslate"><span class="pre">(data,</span> <span class="pre">width,</span> <span class="pre">height,</span> <span class="pre">bytesperpixel)</span></code>.  Again, the data is suitable to pass
+to <code class="xref py py-func docutils literal notranslate"><span class="pre">gl.lrectwrite()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jpeg.setoption">
+<code class="descclassname">jpeg.</code><code class="descname">setoption</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#jpeg.setoption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set various options.  Subsequent <a class="reference internal" href="#jpeg.compress" title="jpeg.compress"><code class="xref py py-func docutils literal notranslate"><span class="pre">compress()</span></code></a> and <a class="reference internal" href="#jpeg.decompress" title="jpeg.decompress"><code class="xref py py-func docutils literal notranslate"><span class="pre">decompress()</span></code></a> calls
+will use these options.  The following options are available:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 73%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Effect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'forcegray'</span></code></p></td>
+<td><p>Force output to be grayscale, even if input
+is RGB.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'quality'</span></code></p></td>
+<td><p>Set the quality of the compressed image to
+a value between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">100</span></code> (default
+is <code class="docutils literal notranslate"><span class="pre">75</span></code>).  This only affects compression.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'optimize'</span></code></p></td>
+<td><p>Perform Huffman table optimization.  Takes
+longer, but results in smaller compressed
+image.  This only affects compression.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'smooth'</span></code></p></td>
+<td><p>Perform inter-block smoothing on
+uncompressed image.  Only useful for low-
+quality images.  This only affects
+decompression.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>JPEG Still Image Data Compression Standard</dt><dd><p>The canonical reference for the JPEG image format, by Pennebaker and Mitchell.</p>
+</dd>
+<dt><a class="reference external" href="http://www.w3.org/Graphics/JPEG/itu-t81.pdf">Information Technology - Digital Compression and Coding of Continuous-tone Still Images - Requirements and Guidelines</a></dt><dd><p>The ISO standard for JPEG is also published as ITU T.81.  This is available
+online in PDF form.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="imgfile.html"
+                        title="previous chapter">39.11. <code class="xref py py-mod docutils literal notranslate"><span class="pre">imgfile</span></code> — Support for SGI imglib files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sun.html"
+                        title="next chapter">40. SunOS Specific Services</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/library/jpeg.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sun.html" title="40. SunOS Specific Services"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imgfile.html" title="39.11. imgfile — Support for SGI imglib files"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="language_switcher_placeholder">en</span>
+          <span class="version_switcher_placeholder">2.7.16</span>
+          <a href="../index.html">Documentation</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Standard Library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="sgi.html" >39. SGI IRIX Specific Services</a> &#187;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2019, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Jun 04, 2019.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1.
+    </div>
+
+  </body>
+</html>
