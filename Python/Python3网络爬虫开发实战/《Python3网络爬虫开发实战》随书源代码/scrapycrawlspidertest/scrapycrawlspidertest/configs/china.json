@@ -1,0 +1,103 @@
+{
+  "spider": "universal",
+  "website": "中华网科技",
+  "type": "新闻",
+  "index": "http://tech.china.com/",
+  "settings": {
+    "USER_AGENT": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36"
+  },
+  "start_urls": {
+    "type": "dynamic",
+    "method": "china",
+    "args": [
+      5, 10
+    ]
+  },
+  "allowed_domains": [
+    "tech.china.com"
+  ],
+  "rules": "(Rule(LinkExtractor(allow='article\/.*\\.html', restrict_xpaths='//div[@id=\"left_side\"]//div[@class=\"con_item\"]'),callback='parse_item'),Rule(LinkExtractor(restrict_xpaths='//div[@id=\"pageStyle\"]//a[contains(., \"下一页\")]')))",
+  "item": {
+    "class": "NewsItem",
+    "attrs": {
+      "title": [
+        {
+          "method": "xpath",
+          "args": [
+            "//h1[@id='chan_newsTitle']/text()"
+          ]
+        },
+        {
+          "method": "extract_first"
+        }
+      ],
+      "url": [
+        {
+          "method": "get_attr",
+          "args": [
+            "url"
+          ],
+          "type": "wrap"
+        }
+      ],
+      "text": [
+        {
+          "method": "xpath",
+          "args": [
+            "//div[@id='chan_newsDetail']//text()"
+          ]
+        },
+        {
+          "method": "extract"
+        },
+        {
+          "method": "list2str",
+          "type": "wrap"
+        },
+        {
+          "method": "strip"
+        }
+      ],
+      "datetime": [
+        {
+          "method": "xpath",
+          "args": [
+            "//div[@id='chan_newsInfo']/text()"
+          ]
+        },
+        {
+          "method": "re_first",
+          "args": [
+            "(\\d+\\-\\d+\\-\\d+\\s\\d+\\:\\d+\\:\\d+)"
+          ]
+        }
+      ],
+      "source": [
+        {
+          "method": "xpath",
+          "args": [
+            "//div[@id='chan_newsInfo']/text()"
+          ]
+        },
+        {
+          "method": "re_first",
+          "args": [
+            "来源：(.*)"
+          ]
+        },
+        {
+          "method": "strip"
+        }
+      ],
+      "website": [
+        {
+          "method": "set_value",
+          "args": [
+            "中华网"
+          ],
+          "type": "wrap"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,462 @@
+2017-08-12 23:31:15 [scrapy] DEBUG: Crawled (404) <GET http://quotes.toscrape.com/robots.txt> (referer: None)
+2017-08-12 23:31:15 [scrapy] DEBUG: Crawled (200) <GET http://quotes.toscrape.com/> (referer: None)
+2017-08-12 23:31:15 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/>
+{'author': 'Albert Einstein',
+ 'tags': ['change', 'deep-thoughts', 'thinking', 'world'],
+ 'text': '“The world as we have created it is a process of o...'}
+2017-08-12 23:31:15 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/>
+{'author': 'J.K. Rowling',
+ 'tags': ['abilities', 'choices'],
+ 'text': '“It is our choices, Harry, that show what we truly...'}
+2017-08-12 23:31:15 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/>
+{'author': 'Albert Einstein',
+ 'tags': ['inspirational', 'life', 'live', 'miracle', 'miracles'],
+ 'text': '“There are only two ways to live your life. One is...'}
+2017-08-12 23:31:15 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/>
+{'author': 'Jane Austen',
+ 'tags': ['aliteracy', 'books', 'classic', 'humor'],
+ 'text': '“The person, be it gentleman or lady, who has not...'}
+2017-08-12 23:31:15 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/>
+{'author': 'Marilyn Monroe',
+ 'tags': ['be-yourself', 'inspirational'],
+ 'text': "“Imperfection is beauty, madness is genius and it'..."}
+2017-08-12 23:31:15 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/>
+{'author': 'Albert Einstein',
+ 'tags': ['adulthood', 'success', 'value'],
+ 'text': '“Try not to become a man of success. Rather become...'}
+2017-08-12 23:31:15 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/>
+{'author': 'André Gide',
+ 'tags': ['life', 'love'],
+ 'text': '“It is better to be hated for what you are than to...'}
+2017-08-12 23:31:15 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/>
+{'author': 'Thomas A. Edison',
+ 'tags': ['edison', 'failure', 'inspirational', 'paraphrased'],
+ 'text': "“I have not failed. I've just found 10,000 ways th..."}
+2017-08-12 23:31:15 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/>
+{'author': 'Eleanor Roosevelt',
+ 'tags': ['misattributed-eleanor-roosevelt'],
+ 'text': '“A woman is like a tea bag; you never know how str...'}
+2017-08-12 23:31:15 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/>
+{'author': 'Steve Martin',
+ 'tags': ['humor', 'obvious', 'simile'],
+ 'text': '“A day without sunshine is like, you know, night.”'}
+2017-08-12 23:31:15 [scrapy] DEBUG: Crawled (200) <GET http://quotes.toscrape.com/page/2/> (referer: http://quotes.toscrape.com/)
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/2/>
+{'author': 'Marilyn Monroe',
+ 'tags': ['friends', 'heartbreak', 'inspirational', 'life', 'love', 'sisters'],
+ 'text': '“This life is what you make it. No matter what, yo...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/2/>
+{'author': 'J.K. Rowling',
+ 'tags': ['courage', 'friends'],
+ 'text': '“It takes a great deal of bravery to stand up to o...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/2/>
+{'author': 'Albert Einstein',
+ 'tags': ['simplicity', 'understand'],
+ 'text': "“If you can't explain it to a six year old, you do..."}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/2/>
+{'author': 'Bob Marley',
+ 'tags': ['love'],
+ 'text': '“You may not be her first, her last, or her only....'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/2/>
+{'author': 'Dr. Seuss',
+ 'tags': ['fantasy'],
+ 'text': '“I like nonsense, it wakes up the brain cells. Fan...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/2/>
+{'author': 'Douglas Adams',
+ 'tags': ['life', 'navigation'],
+ 'text': '“I may not have gone where I intended to go, but I...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/2/>
+{'author': 'Elie Wiesel',
+ 'tags': ['activism',
+          'apathy',
+          'hate',
+          'indifference',
+          'inspirational',
+          'love',
+          'opposite',
+          'philosophy'],
+ 'text': "“The opposite of love is not hate, it's indifferen..."}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/2/>
+{'author': 'Friedrich Nietzsche',
+ 'tags': ['friendship',
+          'lack-of-friendship',
+          'lack-of-love',
+          'love',
+          'marriage',
+          'unhappy-marriage'],
+ 'text': '“It is not a lack of love, but a lack of friendshi...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/2/>
+{'author': 'Mark Twain',
+ 'tags': ['books', 'contentment', 'friends', 'friendship', 'life'],
+ 'text': '“Good friends, good books, and a sleepy conscience...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/2/>
+{'author': 'Allen Saunders',
+ 'tags': ['fate', 'life', 'misattributed-john-lennon', 'planning', 'plans'],
+ 'text': '“Life is what happens to us while we are making ot...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Crawled (200) <GET http://quotes.toscrape.com/page/3/> (referer: http://quotes.toscrape.com/page/2/)
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/3/>
+{'author': 'Pablo Neruda',
+ 'tags': ['love', 'poetry'],
+ 'text': '“I love you without knowing how, or when, or from...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/3/>
+{'author': 'Ralph Waldo Emerson',
+ 'tags': ['happiness'],
+ 'text': '“For every minute you are angry you lose sixty sec...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/3/>
+{'author': 'Mother Teresa',
+ 'tags': ['attributed-no-source'],
+ 'text': '“If you judge people, you have no time to love the...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/3/>
+{'author': 'Garrison Keillor',
+ 'tags': ['humor', 'religion'],
+ 'text': '“Anyone who thinks sitting in church can make you...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/3/>
+{'author': 'Jim Henson',
+ 'tags': ['humor'],
+ 'text': '“Beauty is in the eye of the beholder and it may b...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/3/>
+{'author': 'Dr. Seuss',
+ 'tags': ['comedy', 'life', 'yourself'],
+ 'text': '“Today you are You, that is truer than true. There...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/3/>
+{'author': 'Albert Einstein',
+ 'tags': ['children', 'fairy-tales'],
+ 'text': '“If you want your children to be intelligent, read...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/3/>
+{'author': 'J.K. Rowling',
+ 'tags': [],
+ 'text': '“It is impossible to live without failing at somet...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/3/>
+{'author': 'Albert Einstein',
+ 'tags': ['imagination'],
+ 'text': '“Logic will get you from A to Z; imagination will...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/3/>
+{'author': 'Bob Marley',
+ 'tags': ['music'],
+ 'text': '“One good thing about music, when it hits you, you...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Crawled (200) <GET http://quotes.toscrape.com/page/4/> (referer: http://quotes.toscrape.com/page/3/)
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/4/>
+{'author': 'Dr. Seuss',
+ 'tags': ['learning', 'reading', 'seuss'],
+ 'text': '“The more that you read, the more things you will...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/4/>
+{'author': 'J.K. Rowling',
+ 'tags': ['dumbledore'],
+ 'text': '“Of course it is happening inside your head, Harry...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/4/>
+{'author': 'Bob Marley',
+ 'tags': ['friendship'],
+ 'text': '“The truth is, everyone is going to hurt you. You...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/4/>
+{'author': 'Mother Teresa',
+ 'tags': ['misattributed-to-mother-teresa', 'paraphrased'],
+ 'text': '“Not all of us can do great things. But we can do...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/4/>
+{'author': 'J.K. Rowling',
+ 'tags': ['death', 'inspirational'],
+ 'text': '“To the well-organized mind, death is but the next...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/4/>
+{'author': 'Charles M. Schulz',
+ 'tags': ['chocolate', 'food', 'humor'],
+ 'text': '“All you need is love. But a little chocolate now...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/4/>
+{'author': 'William Nicholson',
+ 'tags': ['misattributed-to-c-s-lewis', 'reading'],
+ 'text': "“We read to know we're not alone.”"}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/4/>
+{'author': 'Albert Einstein',
+ 'tags': ['knowledge', 'learning', 'understanding', 'wisdom'],
+ 'text': '“Any fool can know. The point is to understand.”'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/4/>
+{'author': 'Jorge Luis Borges',
+ 'tags': ['books', 'library'],
+ 'text': '“I have always imagined that Paradise will be a ki...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/4/>
+{'author': 'George Eliot',
+ 'tags': ['inspirational'],
+ 'text': '“It is never too late to be what you might have be...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Crawled (200) <GET http://quotes.toscrape.com/page/5/> (referer: http://quotes.toscrape.com/page/4/)
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/5/>
+{'author': 'George R.R. Martin',
+ 'tags': ['read', 'readers', 'reading', 'reading-books'],
+ 'text': '“A reader lives a thousand lives before he dies, s...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/5/>
+{'author': 'C.S. Lewis',
+ 'tags': ['books', 'inspirational', 'reading', 'tea'],
+ 'text': '“You can never get a cup of tea large enough or a...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/5/>
+{'author': 'Marilyn Monroe',
+ 'tags': [],
+ 'text': '“You believe lies so you eventually learn to trust...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/5/>
+{'author': 'Marilyn Monroe',
+ 'tags': ['girls', 'love'],
+ 'text': '“If you can make a woman laugh, you can make her d...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/5/>
+{'author': 'Albert Einstein',
+ 'tags': ['life', 'simile'],
+ 'text': '“Life is like riding a bicycle. To keep your balan...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/5/>
+{'author': 'Marilyn Monroe',
+ 'tags': ['love'],
+ 'text': '“The real lover is the man who can thrill you by k...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/5/>
+{'author': 'Marilyn Monroe',
+ 'tags': ['attributed-no-source'],
+ 'text': "“A wise girl kisses but doesn't love, listens but..."}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/5/>
+{'author': 'Martin Luther King Jr.',
+ 'tags': ['hope', 'inspirational'],
+ 'text': '“Only in the darkness can you see the stars.”'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/5/>
+{'author': 'J.K. Rowling',
+ 'tags': ['dumbledore'],
+ 'text': '“It matters not what someone is born, but what the...'}
+2017-08-12 23:31:16 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/5/>
+{'author': 'James Baldwin',
+ 'tags': ['love'],
+ 'text': '“Love does not begin and end the way we seem to th...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Crawled (200) <GET http://quotes.toscrape.com/page/6/> (referer: http://quotes.toscrape.com/page/5/)
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/6/>
+{'author': 'Jane Austen',
+ 'tags': ['friendship', 'love'],
+ 'text': '“There is nothing I would not do for those who are...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/6/>
+{'author': 'Eleanor Roosevelt',
+ 'tags': ['attributed', 'fear', 'inspiration'],
+ 'text': '“Do one thing every day that scares you.”'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/6/>
+{'author': 'Marilyn Monroe',
+ 'tags': ['attributed-no-source'],
+ 'text': '“I am good, but not an angel. I do sin, but I am n...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/6/>
+{'author': 'Albert Einstein',
+ 'tags': ['music'],
+ 'text': '“If I were not a physicist, I would probably be a...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/6/>
+{'author': 'Haruki Murakami',
+ 'tags': ['books', 'thought'],
+ 'text': '“If you only read the books that everyone else is...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/6/>
+{'author': 'Alexandre Dumas fils',
+ 'tags': ['misattributed-to-einstein'],
+ 'text': '“The difference between genius and stupidity is: g...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/6/>
+{'author': 'Stephenie Meyer',
+ 'tags': ['drug', 'romance', 'simile'],
+ 'text': "“He's like a drug for you, Bella.”"}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/6/>
+{'author': 'Ernest Hemingway',
+ 'tags': ['books', 'friends', 'novelist-quotes'],
+ 'text': '“There is no friend as loyal as a book.”'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/6/>
+{'author': 'Helen Keller',
+ 'tags': ['inspirational'],
+ 'text': '“When one door of happiness closes, another opens;...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/6/>
+{'author': 'George Bernard Shaw',
+ 'tags': ['inspirational', 'life', 'yourself'],
+ 'text': "“Life isn't about finding yourself. Life is about..."}
+2017-08-12 23:31:17 [scrapy] DEBUG: Crawled (200) <GET http://quotes.toscrape.com/page/7/> (referer: http://quotes.toscrape.com/page/6/)
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/7/>
+{'author': 'Charles Bukowski',
+ 'tags': ['alcohol'],
+ 'text': "“That's the problem with drinking, I thought, as I..."}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/7/>
+{'author': 'Suzanne Collins',
+ 'tags': ['the-hunger-games'],
+ 'text': '“You don’t forget the face of the person who was y...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/7/>
+{'author': 'Suzanne Collins',
+ 'tags': ['humor'],
+ 'text': "“Remember, we're madly in love, so it's all right..."}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/7/>
+{'author': 'C.S. Lewis',
+ 'tags': ['love'],
+ 'text': '“To love at all is to be vulnerable. Love anything...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/7/>
+{'author': 'J.R.R. Tolkien',
+ 'tags': ['bilbo', 'journey', 'lost', 'quest', 'travel', 'wander'],
+ 'text': '“Not all those who wander are lost.”'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/7/>
+{'author': 'J.K. Rowling',
+ 'tags': ['live-death-love'],
+ 'text': '“Do not pity the dead, Harry. Pity the living, and...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/7/>
+{'author': 'Ernest Hemingway',
+ 'tags': ['good', 'writing'],
+ 'text': '“There is nothing to writing. All you do is sit do...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/7/>
+{'author': 'Ralph Waldo Emerson',
+ 'tags': ['life', 'regrets'],
+ 'text': '“Finish each day and be done with it. You have don...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/7/>
+{'author': 'Mark Twain',
+ 'tags': ['education'],
+ 'text': '“I have never let my schooling interfere with my e...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/7/>
+{'author': 'Dr. Seuss',
+ 'tags': ['troubles'],
+ 'text': '“I have heard there are troubles of more than one...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Crawled (200) <GET http://quotes.toscrape.com/page/8/> (referer: http://quotes.toscrape.com/page/7/)
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/8/>
+{'author': 'Alfred Tennyson',
+ 'tags': ['friendship', 'love'],
+ 'text': '“If I had a flower for every time I thought of you...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/8/>
+{'author': 'Charles Bukowski',
+ 'tags': ['humor'],
+ 'text': '“Some people never go crazy. What truly horrible l...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/8/>
+{'author': 'Terry Pratchett',
+ 'tags': ['humor', 'open-mind', 'thinking'],
+ 'text': '“The trouble with having an open mind, of course,...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/8/>
+{'author': 'Dr. Seuss',
+ 'tags': ['humor', 'philosophy'],
+ 'text': '“Think left and think right and think low and thin...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/8/>
+{'author': 'J.D. Salinger',
+ 'tags': ['authors', 'books', 'literature', 'reading', 'writing'],
+ 'text': '“What really knocks me out is a book that, when yo...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/8/>
+{'author': 'George Carlin',
+ 'tags': ['humor', 'insanity', 'lies', 'lying', 'self-indulgence', 'truth'],
+ 'text': '“The reason I talk to myself is because I’m the on...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/8/>
+{'author': 'John Lennon',
+ 'tags': ['beatles',
+          'connection',
+          'dreamers',
+          'dreaming',
+          'dreams',
+          'hope',
+          'inspirational',
+          'peace'],
+ 'text': "“You may say I'm a dreamer, but I'm not the only o..."}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/8/>
+{'author': 'W.C. Fields',
+ 'tags': ['humor', 'sinister'],
+ 'text': '“I am free of all prejudice. I hate everyone equal...'}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/8/>
+{'author': 'Ayn Rand',
+ 'tags': [],
+ 'text': "“The question isn't who is going to let me; it's w..."}
+2017-08-12 23:31:17 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/8/>
+{'author': 'Mark Twain',
+ 'tags': ['books', 'classic', 'reading'],
+ 'text': "“′Classic′ - a book which people praise and don't..."}
+2017-08-12 23:31:18 [scrapy] DEBUG: Crawled (200) <GET http://quotes.toscrape.com/page/9/> (referer: http://quotes.toscrape.com/page/8/)
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/9/>
+{'author': 'Albert Einstein',
+ 'tags': ['mistakes'],
+ 'text': '“Anyone who has never made a mistake has never tri...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/9/>
+{'author': 'Jane Austen',
+ 'tags': ['humor', 'love', 'romantic', 'women'],
+ 'text': "“A lady's imagination is very rapid; it jumps from..."}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/9/>
+{'author': 'J.K. Rowling',
+ 'tags': ['integrity'],
+ 'text': '“Remember, if the time should come when you have t...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/9/>
+{'author': 'Jane Austen',
+ 'tags': ['books', 'library', 'reading'],
+ 'text': '“I declare after all there is no enjoyment like re...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/9/>
+{'author': 'Jane Austen',
+ 'tags': ['elizabeth-bennet', 'jane-austen'],
+ 'text': '“There are few people whom I really love, and stil...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/9/>
+{'author': 'C.S. Lewis',
+ 'tags': ['age', 'fairytales', 'growing-up'],
+ 'text': '“Some day you will be old enough to start reading...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/9/>
+{'author': 'C.S. Lewis',
+ 'tags': ['god'],
+ 'text': '“We are not necessarily doubting that God will do...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/9/>
+{'author': 'Mark Twain',
+ 'tags': ['death', 'life'],
+ 'text': '“The fear of death follows from the fear of life....'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/9/>
+{'author': 'Mark Twain',
+ 'tags': ['misattributed-mark-twain', 'truth'],
+ 'text': '“A lie can travel half way around the world while...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/9/>
+{'author': 'C.S. Lewis',
+ 'tags': ['christianity', 'faith', 'religion', 'sun'],
+ 'text': '“I believe in Christianity as I believe that the s...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Crawled (200) <GET http://quotes.toscrape.com/page/10/> (referer: http://quotes.toscrape.com/page/9/)
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/10/>
+{'author': 'J.K. Rowling',
+ 'tags': ['truth'],
+ 'text': '“The truth." Dumbledore sighed. "It is a beautiful...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/10/>
+{'author': 'Jimi Hendrix',
+ 'tags': ['death', 'life'],
+ 'text': "“I'm the one that's got to die when it's time for..."}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/10/>
+{'author': 'J.M. Barrie',
+ 'tags': ['adventure', 'love'],
+ 'text': '“To die will be an awfully big adventure.”'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/10/>
+{'author': 'E.E. Cummings',
+ 'tags': ['courage'],
+ 'text': '“It takes courage to grow up and become who you re...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/10/>
+{'author': 'Khaled Hosseini',
+ 'tags': ['life'],
+ 'text': '“But better to get hurt by the truth than comforte...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/10/>
+{'author': 'Harper Lee',
+ 'tags': ['better-life-empathy'],
+ 'text': '“You never really understand a person until you co...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/10/>
+{'author': "Madeleine L'Engle",
+ 'tags': ['books',
+          'children',
+          'difficult',
+          'grown-ups',
+          'write',
+          'writers',
+          'writing'],
+ 'text': '“You have to write the book that wants to be writt...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/10/>
+{'author': 'Mark Twain',
+ 'tags': ['truth'],
+ 'text': '“Never tell the truth to people who are not worthy...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/10/>
+{'author': 'Dr. Seuss',
+ 'tags': ['inspirational'],
+ 'text': "“A person's a person, no matter how small.”"}
+2017-08-12 23:31:18 [scrapy] DEBUG: Scraped from <200 http://quotes.toscrape.com/page/10/>
+{'author': 'George R.R. Martin',
+ 'tags': ['books', 'mind'],
+ 'text': '“... a mind needs books as a sword needs a whetsto...'}
+2017-08-12 23:31:18 [scrapy] DEBUG: Filtered duplicate request: <GET http://quotes.toscrape.com/page/10/> - no more duplicates will be shown (see DUPEFILTER_DEBUG to show all duplicates)
+2017-08-12 23:31:18 [scrapy] INFO: Closing spider (finished)
+2017-08-12 23:31:18 [scrapy] INFO: Dumping Scrapy stats:
+{'downloader/request_bytes': 2892,
+ 'downloader/request_count': 11,
+ 'downloader/request_method_count/GET': 11,
+ 'downloader/response_bytes': 24812,
+ 'downloader/response_count': 11,
+ 'downloader/response_status_count/200': 10,
+ 'downloader/response_status_count/404': 1,
+ 'dupefilter/filtered': 1,
+ 'finish_reason': 'finished',
+ 'finish_time': datetime.datetime(2017, 8, 12, 15, 31, 18, 600482),
+ 'item_scraped_count': 100,
+ 'log_count/DEBUG': 112,
+ 'log_count/INFO': 6,
+ 'memusage/max': 56090624,
+ 'memusage/startup': 56090624,
+ 'request_depth_max': 10,
+ 'response_received_count': 11,
+ 'scheduler/dequeued': 10,
+ 'scheduler/dequeued/memory': 10,
+ 'scheduler/enqueued': 10,
+ 'scheduler/enqueued/memory': 10,
+ 'start_time': datetime.datetime(2017, 8, 12, 15, 31, 14, 263139)}
+2017-08-12 23:31:18 [scrapy] INFO: Spider closed (finished)
